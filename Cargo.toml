@@ -1,0 +1,23 @@
+[package]
+name = "dash-mpd-cli"
+version = "0.1.0"
+authors = ["Eric Marsden <eric.marsden@risk-engineering.org>"]
+license = "MIT"
+description = "Download content from a DASH-MPEG or DASH-WebM MPD manifest"
+readme = "README.md"
+repository = "https://github.com/emarsden/dash-mpd-cli"
+keywords = ["cli", "video", "streaming", "DASH", "MPEG"]
+categories = ["command-line-utilities", "multimedia", "multimedia::video"]
+edition = "2021"
+
+
+[dependencies]
+dash-mpd = "^0.4"
+reqwest = { version = "0.11", default-features = false, features = ["blocking", "gzip", "brotli", "rustls-tls", "socks"] }
+colored = "2"
+indicatif = "0.16"
+clap = "3"
+anyhow = "1"
+log = "0.4"
+env_logger = "0.9"
+
