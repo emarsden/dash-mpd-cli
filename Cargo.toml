@@ -9,6 +9,7 @@ repository = "https://github.com/emarsden/dash-mpd-cli"
 keywords = ["cli", "video", "streaming", "DASH", "MPEG"]
 categories = ["command-line-utilities", "multimedia", "multimedia::video"]
 edition = "2021"
+publish = true
 
 
 [dependencies]
