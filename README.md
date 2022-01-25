@@ -30,6 +30,8 @@ crate.
 
 ## Installation
 
+With an [installed Rust development environment](https://www.rust-lang.org/tools/install): 
+
 ```shell
 cargo install dash-mpd-cli
 ```
@@ -92,8 +94,8 @@ OPTIONS:
 ```
 
 
-If your filesystem supports extended attributes, the application will save the following
-metainformation:
+If your filesystem supports **extended attributes**, the application will save the following
+metainformation in the output file:
 
 - `user.xdg.origin.url`: the URL of the MPD manifest
 - `user.dublincore.title`: the title, if specified in the manifest metainformation
@@ -150,7 +152,7 @@ This project is licensed under the MIT license. For more information, see the `L
 
 ## Similar tools
 
-Similar commandline tools that are able to download content from a DASH manifest
+Similar commandline tools that are able to download content from a DASH manifest:
 
 - youtube-dl and forks like yt-dlp are able to download content from a DASH manifest
 
@@ -177,8 +179,8 @@ $ target/release/dash-mpd-cli --help
 ```
 
 The application can also be built statically with the musl-libc target on Linux. First install the
-MUSL library on your system. Add linux-musl as a target to your Rust toolchain, then rebuild for the
-relevant target:
+[MUSL C standard library](https://musl.libc.org/) on your system. Add linux-musl as a target to your
+Rust toolchain, then rebuild for the relevant target:
 
 ```
 $ sudo apt install musl-dev
