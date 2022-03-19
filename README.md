@@ -40,7 +40,7 @@ cargo install dash-mpd-cli
 ## Usage
 
 ```
-dash-mpd-cli 0.1.0
+dash-mpd-cli 0.1.1
 Download content from a DASH streaming media manifest
 
 USAGE:
@@ -53,6 +53,9 @@ OPTIONS:
         --add-header <add-header>
             Add a custom HTTP header and its value, separated by a colon ':'. You can use this
             option multiple times.
+
+        --ffmpeg-location <ffmpeg-location>
+            Path to the ffmpeg binary (necessary if not located in your PATH)
 
     -h, --help
             Print help information
@@ -113,6 +116,7 @@ This crate is tested on the following platforms:
 - Linux
 - MacOS
 - Microsoft Windows 10
+- Android 11 on Aarch64 via termux (you'll need to install the rust, binutils and ffmpeg packages)
 
 The underlying library `dash-mpd-rs` has two methods for muxing audio and video streams together. If
 the library feature `libav` is enabled (which is not the default configuration), muxing support is

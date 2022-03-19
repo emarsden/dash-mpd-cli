@@ -42,7 +42,7 @@ impl DownloadProgressBar {
     pub fn new() -> Self {
         let b = ProgressBar::new(100)
             .with_style(ProgressStyle::default_bar()
-                        .template("[{elapsed}] {bar:50.cyan/blue} {wide_msg}")
+                        .template("[{elapsed}] [{bar:50.cyan/blue}] {wide_msg}")
                         .progress_chars("#>-"));
         Self { bar: b }
     }
@@ -65,7 +65,7 @@ fn main () -> Result<()> {
     env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init();
     let matches = clap::App::new("dash-mpd-cli")
         .about("Download content from a DASH streaming media manifest")
-        .version("0.1.0")
+        .version("0.1.1")
         .arg(Arg::new("user-agent")
              .long("user-agent")
              .takes_value(true))
@@ -110,6 +110,10 @@ fn main () -> Result<()> {
              .long("no-xattr")
              .takes_value(false)
              .help("Don't record metainformation as extended attributes in the output file"))
+        .arg(Arg::new("ffmpeg-location")
+             .long("ffmpeg-location")
+             .takes_value(true)
+             .help("Path to the ffmpeg binary (necessary if not located in your PATH)"))
         .arg(Arg::new("version")
              .long("version")
              .takes_value(false))
@@ -187,6 +191,9 @@ fn main () -> Result<()> {
     }
     if matches.is_present("no-xattr") {
         dl = dl.record_metainformation(false)
+    }
+    if let Some(ffmpeg_path) = matches.value_of("ffmpeg-location") {
+        dl = dl.with_ffmpeg(ffmpeg_path);
     }
     if let Some(q) = matches.value_of("quality") {
         if q.eq("best") {
