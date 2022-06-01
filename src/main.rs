@@ -76,6 +76,10 @@ fn main () -> Result<()> {
              .long("timeout")
              .takes_value(true)
              .help("Timeout for network requests (from the start to the end of the request), in seconds"))
+        .arg(Arg::new("sleep-requests")
+             .long("sleep-requests")
+             .takes_value(true)
+             .help("Number of seconds to sleep between network requests (default 0)"))
         .arg(Arg::new("source-address")
              .long("source-address")
              .takes_value(true)
@@ -165,7 +169,6 @@ fn main () -> Result<()> {
     } else {
         cb = cb.timeout(Duration::new(30, 0));
     }
-
     if let Some(hvs) = matches.values_of("add-header") {
         let mut headers = HashMap::new();
         for hv in hvs.collect::<Vec<_>>() {
@@ -189,8 +192,15 @@ fn main () -> Result<()> {
     if !matches.is_present("no-progress") && !matches.is_present("quiet") {
         dl = dl.add_progress_observer(Arc::new(DownloadProgressBar::new()));
     }
+    if let Some(seconds) = matches.value_of("sleep-requests") {
+        if let Ok(secs) = seconds.parse::<u8>() {
+            dl = dl.sleep_between_requests(secs);
+        } else {
+            eprintln!("Ignoring invalid value for --sleep-requests: {}", seconds);
+        }
+    }
     if matches.is_present("no-xattr") {
-        dl = dl.record_metainformation(false)
+        dl = dl.record_metainformation(false);
     }
     if let Some(ffmpeg_path) = matches.value_of("ffmpeg-location") {
         dl = dl.with_ffmpeg(ffmpeg_path);
