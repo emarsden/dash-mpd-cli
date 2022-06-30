@@ -65,7 +65,7 @@ fn main () -> Result<()> {
     env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init();
     let matches = clap::Command::new("dash-mpd-cli")
         .about("Download content from a DASH streaming media manifest")
-        .version("0.1.1")
+        .version("0.1.2")
         .arg(Arg::new("user-agent")
              .long("user-agent")
              .takes_value(true))
@@ -90,6 +90,20 @@ fn main () -> Result<()> {
              .possible_value("best")
              .possible_value("worst")
              .help("Prefer best quality (and highest bandwidth) representation, or lowest quality"))
+        .arg(Arg::new("prefer-language")
+             .long("prefer-language")
+             .takes_value(true)
+             .help("Preferred language when multiple audio streams with different languages are available. Must be in RFC 5646 format (eg. fr or en-AU). If a preference is not specified and multiple audio streams are present, the first one listed in the DASH manifest will be downloaded."))
+        .arg(Arg::new("video-only")
+             .long("video-only")
+             .takes_value(false)
+             .conflicts_with("audio-only")
+             .help("If the media stream has separate audio and video streams, only download the video stream"))
+        .arg(Arg::new("audio-only")
+             .long("audio-only")
+             .takes_value(false)
+             .conflicts_with("video-only")
+             .help("If the media stream has separate audio and video streams, only download the audio stream"))
         .arg(Arg::new("add-header")
              .long("add-header")
              .takes_value(true)
@@ -199,6 +213,12 @@ fn main () -> Result<()> {
             eprintln!("Ignoring invalid value for --sleep-requests: {}", seconds);
         }
     }
+    if matches.is_present("audio-only") {
+        dl = dl.audio_only();
+    }
+    if matches.is_present("video-only") {
+        dl = dl.video_only();
+    }
     if matches.is_present("no-xattr") {
         dl = dl.record_metainformation(false);
     }
@@ -210,6 +230,9 @@ fn main () -> Result<()> {
             // DashDownloader defaults to worst quality
             dl = dl.best_quality();
         }
+    }
+    if let Some(lang) = matches.value_of("prefer-language") {
+        dl = dl.prefer_language(lang.to_string());
     }
     dl = dl.verbosity(verbosity);
     if let Some(out) = matches.value_of("output") {

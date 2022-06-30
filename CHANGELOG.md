@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.3] - 2022-07
+
+- Add commandline arguments --audio-only and --video-only, to retrieve only the audio stream, or
+  only the video stream (for streams in which audio and video content are available separately).
+
+- Add commmandline argument --prefer-language to allow the user to specify the preferred language
+  when multiple audio streams with different languages are available. The argument must be in RFC
+  5646 format (eg. "fr" or "en-AU"). If a preference is not specified and multiple audio streams are
+  present, the first one listed in the DASH manifest will be downloaded.
 
 ## [0.1.2] - 2022-06-01
 
