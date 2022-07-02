@@ -65,7 +65,7 @@ fn main () -> Result<()> {
     env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init();
     let matches = clap::Command::new("dash-mpd-cli")
         .about("Download content from a DASH streaming media manifest")
-        .version("0.1.2")
+        .version(clap::crate_version!())
         .arg(Arg::new("user-agent")
              .long("user-agent")
              .takes_value(true))
@@ -76,7 +76,7 @@ fn main () -> Result<()> {
              .long("timeout")
              .takes_value(true)
              .help("Timeout for network requests (from the start to the end of the request), in seconds"))
-        .arg(Arg::new("sleep-requests")
+        .arg(Arg::new("sleep-seconds")
              .long("sleep-requests")
              .takes_value(true)
              .help("Number of seconds to sleep between network requests (default 0)"))
@@ -90,7 +90,7 @@ fn main () -> Result<()> {
              .possible_value("best")
              .possible_value("worst")
              .help("Prefer best quality (and highest bandwidth) representation, or lowest quality"))
-        .arg(Arg::new("prefer-language")
+        .arg(Arg::new("lang")
              .long("prefer-language")
              .takes_value(true)
              .help("Preferred language when multiple audio streams with different languages are available. Must be in RFC 5646 format (eg. fr or en-AU). If a preference is not specified and multiple audio streams are present, the first one listed in the DASH manifest will be downloaded."))
@@ -104,7 +104,7 @@ fn main () -> Result<()> {
              .takes_value(false)
              .conflicts_with("video-only")
              .help("If the media stream has separate audio and video streams, only download the audio stream"))
-        .arg(Arg::new("add-header")
+        .arg(Arg::new("extra-header")
              .long("add-header")
              .takes_value(true)
              .multiple_occurrences(true)
@@ -135,7 +135,7 @@ fn main () -> Result<()> {
         .arg(Arg::new("version")
              .long("version")
              .takes_value(false))
-        .arg(Arg::new("output")
+        .arg(Arg::new("output-file")
              .long("output")
              .short('o')
              .takes_value(true)
@@ -183,7 +183,7 @@ fn main () -> Result<()> {
     } else {
         cb = cb.timeout(Duration::new(30, 0));
     }
-    if let Some(hvs) = matches.values_of("add-header") {
+    if let Some(hvs) = matches.values_of("extra-header") {
         let mut headers = HashMap::new();
         for hv in hvs.collect::<Vec<_>>() {
             if let Some(pos) = hv.find(':') {
@@ -206,7 +206,7 @@ fn main () -> Result<()> {
     if !matches.is_present("no-progress") && !matches.is_present("quiet") {
         dl = dl.add_progress_observer(Arc::new(DownloadProgressBar::new()));
     }
-    if let Some(seconds) = matches.value_of("sleep-requests") {
+    if let Some(seconds) = matches.value_of("sleep-seconds") {
         if let Ok(secs) = seconds.parse::<u8>() {
             dl = dl.sleep_between_requests(secs);
         } else {
@@ -231,11 +231,11 @@ fn main () -> Result<()> {
             dl = dl.best_quality();
         }
     }
-    if let Some(lang) = matches.value_of("prefer-language") {
+    if let Some(lang) = matches.value_of("lang") {
         dl = dl.prefer_language(lang.to_string());
     }
     dl = dl.verbosity(verbosity);
-    if let Some(out) = matches.value_of("output") {
+    if let Some(out) = matches.value_of("output-file") {
         dl.download_to(out)?;
     } else {
         let out = dl.download()?;

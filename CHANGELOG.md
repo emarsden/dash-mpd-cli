@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.1.3] - 2022-07
+## [0.1.3] - 2022-07-02
 
 - Add commandline arguments --audio-only and --video-only, to retrieve only the audio stream, or
   only the video stream (for streams in which audio and video content are available separately).

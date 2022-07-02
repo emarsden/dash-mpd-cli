@@ -40,7 +40,7 @@ cargo install dash-mpd-cli
 ## Usage
 
 ```
-dash-mpd-cli 0.1.1
+dash-mpd-cli 0.1.3
 Download content from a DASH streaming media manifest
 
 USAGE:
@@ -50,9 +50,12 @@ ARGS:
     <MPD-URL>    URL of the DASH manifest to retrieve
 
 OPTIONS:
-        --add-header <add-header>
+        --add-header <extra-header>
             Add a custom HTTP header and its value, separated by a colon ':'. You can use this
             option multiple times.
+
+        --audio-only
+            If the media stream has separate audio and video streams, only download the audio stream
 
         --ffmpeg-location <ffmpeg-location>
             Path to the ffmpeg binary (necessary if not located in your PATH)
@@ -66,8 +69,14 @@ OPTIONS:
         --no-xattr
             Don't record metainformation as extended attributes in the output file
 
-    -o, --output <output>
+    -o, --output <output-file>
             Save media content to this file
+
+        --prefer-language <lang>
+            Preferred language when multiple audio streams with different languages are available.
+            Must be in RFC 5646 format (eg. fr or en-AU). If a preference is not specified and
+            multiple audio streams are present, the first one listed in the DASH manifest will be
+            downloaded.
 
         --proxy <proxy>
             
@@ -78,6 +87,9 @@ OPTIONS:
         --quality <quality>
             Prefer best quality (and highest bandwidth) representation, or lowest quality [possible
             values: best, worst]
+
+        --sleep-requests <sleep-seconds>
+            Number of seconds to sleep between network requests (default 0)
 
         --source-address <source-address>
             Source IP address to use for network requests, either IPv4 or IPv6. Network requests
@@ -94,6 +106,10 @@ OPTIONS:
             Level of verbosity (can be used several times)
 
         --version
+            
+
+        --video-only
+            If the media stream has separate audio and video streams, only download the video stream
 ```
 
 
