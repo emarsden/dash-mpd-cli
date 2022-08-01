@@ -43,6 +43,7 @@ impl DownloadProgressBar {
         let b = ProgressBar::new(100)
             .with_style(ProgressStyle::default_bar()
                         .template("[{elapsed}] [{bar:50.cyan/blue}] {wide_msg}")
+                        .expect("building progress bar")
                         .progress_chars("#>-"));
         Self { bar: b }
     }

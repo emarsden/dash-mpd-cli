@@ -122,7 +122,7 @@ metainformation in the output file:
 - `user.dublincore.rights`: copyright information, if specified in the manifest metainformation
 
 You can examine these attributes using `xattr -l` (you may need to install your distribution's
-`xattr` package).
+`xattr` package). Disable this feature using the `--no-xattr` commandline argument.
 
 
 ## Platforms
@@ -132,7 +132,7 @@ This crate is tested on the following platforms:
 - Linux
 - MacOS
 - Microsoft Windows 10
-- Android 11 on Aarch64 via termux (you'll need to install the rust, binutils and ffmpeg packages)
+- Android 11 on Aarch64 via termux (you’ll need to install the rust, binutils and ffmpeg packages)
 
 The underlying library `dash-mpd-rs` has two methods for muxing audio and video streams together. If
 the library feature `libav` is enabled (which is not the default configuration), muxing support is
@@ -208,5 +208,5 @@ $ rustup target add x86_64-unknown-linux-musl
 $ cargo build --release --target x86_64-unknown-linux-musl
 ```
 
-Static musl-libc builds don't work with OpenSSL, which is why we disable default features on the
+Static musl-libc builds don’t work with OpenSSL, which is why we disable default features on the
 reqwest crate and build it with rustls-tls support. 
