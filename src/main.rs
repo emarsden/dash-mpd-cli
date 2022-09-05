@@ -133,6 +133,14 @@ fn main () -> Result<()> {
              .long("ffmpeg-location")
              .takes_value(true)
              .help("Path to the ffmpeg binary (necessary if not located in your PATH)"))
+        .arg(Arg::new("vlc-location")
+             .long("vlc-location")
+             .takes_value(true)
+             .help("Path to the VLC binary (necessary if not located in your PATH)"))
+        .arg(Arg::new("mkvmerge-location")
+             .long("mkvmerge-location")
+             .takes_value(true)
+             .help("Path to the mkvmerge binary (necessary if not located in your PATH)"))
         .arg(Arg::new("version")
              .long("version")
              .takes_value(false))
@@ -225,6 +233,12 @@ fn main () -> Result<()> {
     }
     if let Some(ffmpeg_path) = matches.value_of("ffmpeg-location") {
         dl = dl.with_ffmpeg(ffmpeg_path);
+    }
+    if let Some(path) = matches.value_of("vlc-location") {
+        dl = dl.with_vlc(path);
+    }
+    if let Some(path) = matches.value_of("mkvmerge-location") {
+        dl = dl.with_mkvmerge(path);
     }
     if let Some(q) = matches.value_of("quality") {
         if q.eq("best") {

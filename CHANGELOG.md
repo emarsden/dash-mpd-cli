@@ -1,5 +1,12 @@
 # Changelog
 
+
+## [0.1.4] - 2022-09-XX
+
+- Add commandline arguments --vlc-location=<path> and --mkvmerge-location=<path> to allow specification
+  of a non-standard location for the VLC and mkvmerge binaries, respectively.
+
+
 ## [0.1.3] - 2022-07-02
 
 - Add commandline arguments --audio-only and --video-only, to retrieve only the audio stream, or
@@ -18,7 +25,7 @@
 
 ## [0.1.1] - 2022-03-19
 
-- Add --ffmpeg-location commandline argument, to use an ffmpeg which is not in the PATH. 
+- Add --ffmpeg-location commandline argument, to use an ffmpeg which is not in the PATH.
 
 
 ## [0.1.0] - 2022-01-25
