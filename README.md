@@ -40,8 +40,8 @@ cargo install dash-mpd-cli
 ## Usage
 
 ```
-dash-mpd-cli 0.1.3
-Download content from a DASH streaming media manifest
+dash-mpd-cli 0.1.4
+Download content from an MPEG-DASH streaming media manifest
 
 USAGE:
     dash-mpd-cli [OPTIONS] <MPD-URL>
@@ -62,6 +62,9 @@ OPTIONS:
 
     -h, --help
             Print help information
+
+        --mkvmerge-location <mkvmerge-location>
+            Path to the mkvmerge binary (necessary if not located in your PATH)
 
         --no-progress
             Disable the progress bar
@@ -110,6 +113,9 @@ OPTIONS:
 
         --video-only
             If the media stream has separate audio and video streams, only download the video stream
+
+        --vlc-location <vlc-location>
+            Path to the VLC binary (necessary if not located in your PATH)
 ```
 
 
@@ -136,13 +142,21 @@ This crate is tested on the following platforms:
 
 The underlying library `dash-mpd-rs` has two methods for muxing audio and video streams together. If
 the library feature `libav` is enabled (which is not the default configuration), muxing support is
-provided by ffmpeg’s libav library, via the `ac_ffmpeg` crate. Otherwise, muxing is implemented by
-calling `ffmpeg` (and if that fails, `vlc`) as a subprocess. The ffmpeg commandline application
-implements a number of checks and workarounds to fix invalid input streams that tend to exist in the
-wild. Some of these workarounds, but not all, are implemented here when using libav as a library, so
-download support tends to be more robust with the default configuration (using ffmpeg or vlc as a
-subprocess). The `libav` feature currently only works on Linux.
+provided by ffmpeg’s libav library, via the `ac_ffmpeg` crate. 
+Otherwise, muxing is implemented by calling an external muxer, mkvmerge (from the
+[MkvToolnix](https://mkvtoolnix.download/) suite), [ffmpeg](https://ffmpeg.org/) or
+[vlc](https://www.videolan.org/vlc/) as a subprocess. Note that these commandline applications
+implement a number of checks and workarounds to fix invalid input streams that tend to exist in the
+wild. Some of these workarounds are implemented here when using libav as a library, but not all of
+them, so download support tends to be more robust with the default configuration (using an external
+application as a subprocess). The `libav` feature currently only works on Linux. 
 
+The choice of external muxer depends on the filename extension of the path supplied to `--output`
+or `-o` (which will be ".mp4" if you don't specify the output path explicitly):
+
+- .mkv: call mkvmerge first, then if that fails call ffmpeg
+- .mp4: call ffmpeg first, then if that fails call vlc
+- other: try ffmpeg, which supports many container formats
 
 
 ## DASH features supported

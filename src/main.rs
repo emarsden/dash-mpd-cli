@@ -65,7 +65,7 @@ impl ProgressObserver for DownloadProgressBar {
 fn main () -> Result<()> {
     env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init();
     let matches = clap::Command::new("dash-mpd-cli")
-        .about("Download content from a DASH streaming media manifest")
+        .about("Download content from an MPEG-DASH streaming media manifest")
         .version(clap::crate_version!())
         .arg(Arg::new("user-agent")
              .long("user-agent")

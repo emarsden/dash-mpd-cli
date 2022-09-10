@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [0.1.4] - 2022-09-XX
+## [0.1.4] - 2022-09-10
 
 - Add commandline arguments --vlc-location=<path> and --mkvmerge-location=<path> to allow specification
   of a non-standard location for the VLC and mkvmerge binaries, respectively.
