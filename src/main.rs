@@ -27,7 +27,7 @@ use std::sync::Arc;
 use std::collections::HashMap;
 use env_logger::Env;
 use reqwest::header;
-use clap::Arg;
+use clap::{Arg, ArgAction};
 use indicatif::{ProgressBar, ProgressStyle};
 use anyhow::Result;
 use dash_mpd::fetch::DashDownloader;
@@ -101,11 +101,13 @@ fn main () -> Result<()> {
              .help("Preferred language when multiple audio streams with different languages are available. Must be in RFC 5646 format (eg. fr or en-AU). If a preference is not specified and multiple audio streams are present, the first one listed in the DASH manifest will be downloaded."))
         .arg(Arg::new("video-only")
              .long("video-only")
+             .action(ArgAction::SetTrue)
              .num_args(0)
              .conflicts_with("audio-only")
              .help("If the media stream has separate audio and video streams, only download the video stream"))
         .arg(Arg::new("audio-only")
              .long("audio-only")
+             .action(ArgAction::SetTrue)
              .num_args(0)
              .conflicts_with("video-only")
              .help("If the media stream has separate audio and video streams, only download the audio stream"))
@@ -118,6 +120,7 @@ fn main () -> Result<()> {
         .arg(Arg::new("quiet")
              .short('q')
              .long("quiet")
+             .action(ArgAction::SetTrue)
              .num_args(0)
              .conflicts_with("verbose"))
         .arg(Arg::new("verbose")
@@ -127,10 +130,12 @@ fn main () -> Result<()> {
              .help("Level of verbosity (can be used several times)"))
         .arg(Arg::new("no-progress")
              .long("no-progress")
+             .action(ArgAction::SetTrue)
              .num_args(0)
              .help("Disable the progress bar"))
         .arg(Arg::new("no-xattr")
              .long("no-xattr")
+             .action(ArgAction::SetTrue)
              .num_args(0)
              .help("Don't record metainformation as extended attributes in the output file"))
         .arg(Arg::new("ffmpeg-location")
@@ -219,19 +224,20 @@ fn main () -> Result<()> {
     let url = matches.get_one::<String>("url").unwrap();
     let mut dl = DashDownloader::new(url)
         .with_http_client(client);
-    if !matches.contains_id("no-progress") && !matches.contains_id("quiet") {
+    if !matches.get_flag("no-progress") && !matches.get_flag("quiet") {
         dl = dl.add_progress_observer(Arc::new(DownloadProgressBar::new()));
     }
     if let Some(seconds) = matches.get_one::<u8>("sleep-requests") {
         dl = dl.sleep_between_requests(*seconds);
     }
-    if matches.contains_id("audio-only") {
+    if matches.get_flag("audio-only") {
+        eprintln!("@@ asking for audio only");
         dl = dl.audio_only();
     }
-    if matches.contains_id("video-only") {
+    if matches.get_flag("video-only") {
         dl = dl.video_only();
     }
-    if matches.contains_id("no-xattr") {
+    if matches.get_flag("no-xattr") {
         dl = dl.record_metainformation(false);
     }
     if let Some(ffmpeg_path) = matches.get_one::<String>("ffmpeg-location") {
