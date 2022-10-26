@@ -40,7 +40,7 @@ cargo install dash-mpd-cli
 ## Usage
 
 ```
-dash-mpd-cli 0.1.4
+dash-mpd-cli 0.1.5
 Download content from an MPEG-DASH streaming media manifest
 
 USAGE:

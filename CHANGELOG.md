@@ -1,8 +1,10 @@
 # Changelog
 
-## [0.1.5] - 2022-10
+## [0.1.5] - 2022-10-26
 
-- 
+- Produce release binaries for Linux/AMD64, Windows and MacOS/AMD64 using Github Actions.
+
+- Update the version of the clap crate used to parse commandline arguments.
 
 
 ## [0.1.4] - 2022-09-10
