@@ -170,7 +170,7 @@ fn main () -> Result<()> {
     // TODO: add --fragment-retries arg
     // TODO: add --mtime arg (Last-modified header)
     // TODO: limit download rate once reqwest crate can do so
-    let verbosity = matches.get_count("verbose") as u8;
+    let verbosity = matches.get_count("verbose");
     let ua = match matches.get_one::<String>("user-agent") {
         Some(ua) => ua,
         None => concat!("dash-mpd-cli/", env!("CARGO_PKG_VERSION")),
