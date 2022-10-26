@@ -188,15 +188,15 @@ This project is licensed under the MIT license. For more information, see the `L
 
 Similar commandline tools that are able to download content from a DASH manifest:
 
-- youtube-dl and forks like yt-dlp are able to download content from a DASH manifest
+- `yt-dlp <MPD-URL>`
 
-- streamlink -o /tmp/output.mp4 <MPD-URL> worst
+- `streamlink -o /tmp/output.mp4 <MPD-URL> worst`
 
-- ffmpeg -i <MPD-URL> -vcodec copy /tmp/output.mp4
+- `ffmpeg -i <MPD-URL> -vcodec copy /tmp/output.mp4`
 
-- vlc <MPD-URL>
+- `vlc <MPD-URL>`
 
-- gst-launch-1.0 playbin uri=<MPD-URL>
+- `gst-launch-1.0 playbin uri=<MPD-URL>`
 
 This application is able to download content from certain streams that do not work with other
 applications (for example xHE-AAC streams which are unsupported by ffmpeg, streamlink, VLC,
