@@ -28,5 +28,5 @@ jobs:
         with:
           RUSTTARGET: ${{ matrix.target }}
           ARCHIVE_TYPES: ${{ matrix.archive }}
-          EXTRA_FILES: "LICENSE"
+          EXTRA_FILES: "LICENSE-MIT"
           TOOLCHAIN_VERSION: nightly
