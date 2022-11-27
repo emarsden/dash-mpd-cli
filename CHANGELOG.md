@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.6] - 2022-11-27
+
+- Add commandline arguments --keep-video and --keep-audio to retain the files containing video and
+  audio content after muxing.
+- Add commandline argument --ignore-content-type to disable checks that content-type of fragments is
+  compatible with audio or video media (may be required for some poorly configured servers).
+
+
 ## [0.1.5] - 2022-10-26
 
 - Produce release binaries for Linux/AMD64, Windows and MacOS/AMD64 using Github Actions.

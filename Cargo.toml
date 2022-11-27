@@ -13,14 +13,14 @@ publish = true
 
 
 [dependencies]
-dash-mpd = ">=0.5.1"
+dash-mpd = ">=0.6.2"
 reqwest = { version = "0.11", default-features = false, features = ["blocking", "gzip", "brotli", "rustls-tls", "socks"] }
 colored = "2"
 indicatif = "0.17"
 clap = { version = "4", features = ["cargo", "unicode"] }
 anyhow = "1"
 log = "0.4"
-env_logger = "0.9"
+env_logger = "0.10"
 
 [profile.release]
 opt-level = "z"  # optimize for size

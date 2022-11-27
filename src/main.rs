@@ -111,6 +111,21 @@ fn main () -> Result<()> {
              .num_args(0)
              .conflicts_with("video-only")
              .help("If the media stream has separate audio and video streams, only download the audio stream"))
+        .arg(Arg::new("keep-video")
+             .long("keep-video")
+             .action(ArgAction::SetTrue)
+             .num_args(0)
+             .help("Don't delete the file containing video once muxing is complete."))
+        .arg(Arg::new("keep-audio")
+             .long("keep-audio")
+             .action(ArgAction::SetTrue)
+             .num_args(0)
+             .help("Don't delete the file containing audio once muxing is complete."))
+        .arg(Arg::new("ignore-content-type")
+             .long("ignore-content-type")
+             .action(ArgAction::SetTrue)
+             .num_args(0)
+             .help("Don't check the content-type of media fragments (may be required for some poorly configured servers)"))
         .arg(Arg::new("add-header")
              .long("add-header")
              .value_name("NAME:VALUE")
@@ -177,7 +192,6 @@ fn main () -> Result<()> {
     };
     let mut cb = reqwest::blocking::Client::builder()
         .user_agent(ua)
-	.tcp_nodelay(true)
         .gzip(true)
         .brotli(true);
     if verbosity > 2 {
@@ -231,11 +245,19 @@ fn main () -> Result<()> {
         dl = dl.sleep_between_requests(*seconds);
     }
     if matches.get_flag("audio-only") {
-        eprintln!("@@ asking for audio only");
         dl = dl.audio_only();
     }
     if matches.get_flag("video-only") {
         dl = dl.video_only();
+    }
+    if matches.get_flag("keep-video") {
+        dl = dl.keep_video();
+    }
+    if matches.get_flag("keep-audio") {
+        dl = dl.keep_audio();
+    }
+    if matches.get_flag("ignore-content-type") {
+        dl = dl.without_content_type_checks();
     }
     if matches.get_flag("no-xattr") {
         dl = dl.record_metainformation(false);
@@ -260,10 +282,17 @@ fn main () -> Result<()> {
     }
     dl = dl.verbosity(verbosity);
     if let Some(out) = matches.get_one::<String>("output-file") {
-        dl.download_to(out)?;
+        if let Err(e) = dl.download_to(out) {
+            eprintln!("Download error: {:?}", e);
+        }
     } else {
-        let out = dl.download()?;
-        println!("Downloaded DASH content to {:?}", out);
+        match dl.download() {
+            Ok(out) => println!("Downloaded DASH content to {out:?}"),
+            Err(e) => {
+                eprintln!("Download error: {e}");
+                std::process::exit(2);
+            },
+        }
     }
     std::process::exit(0)
 }
