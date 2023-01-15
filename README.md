@@ -5,7 +5,7 @@ replay of TV content and video streaming services like YouTube.
 
 [![Crates.io](https://img.shields.io/crates/v/dash-mpd-cli)](https://crates.io/crates/dash-mpd-cli)
 [![Released API docs](https://docs.rs/dash-mpd-cli/badge.svg)](https://docs.rs/dash-mpd-cli/)
-[![CI](https://github.com/emarsden/dash-mpd-cli/workflows/build/badge.svg)](https://github.com/emarsden/dash-mpd-cli/workflows/build/badge.svg)
+[![CI](https://github.com/emarsden/dash-mpd-cli/workflows/build/badge.svg)](https://github.com/emarsden/dash-mpd-cli/actions/)
 [![Dependency status](https://deps.rs/repo/github/emarsden/dash-mpd-cli/status.svg)](https://deps.rs/repo/github/emarsden/dash-mpd-cli)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE-MIT)
 
@@ -17,105 +17,123 @@ streaming over HTTP), also called MPEG-DASH, is a technology used for media stre
 commonly used for video on demand (VOD) services. The Media Presentation Description (MPD) is a
 description of the resources (manifest or “playlist”) forming a streaming service, that a DASH
 client uses to determine which assets to request in order to perform adaptive streaming of the
-content. DASH MPD manifests can be used both with content encoded as MPEG and as WebM. There is a
-good explanation of adaptive bitrate video streaming at
-[howvideo.works](https://howvideo.works/#dash).
+content. DASH MPD manifests can be used with content encoded in different formats and containers,
+including H264/MP4, HEVC/MP4 and VP9/WebM. There is a good explanation of adaptive bitrate video
+streaming at [howvideo.works](https://howvideo.works/#dash).
 
 This commandline application allows you to download content (audio or video) described by an MPD
 manifest. This involves selecting the alternative with the most appropriate encoding (in terms of
 bitrate, codec, etc.), fetching segments of the content using HTTP or HTTPS requests and muxing
-audio and video segments together. It builds on the [dash-mpd](https://crates.io/crates/dash-mpd)
-crate.
+audio and video segments together. There is also some preliminary support for downloading subtitles
+(mostly WebVTT, TTML and SMIL formats, with some support for wvtt format). 
+
+This application builds on the [dash-mpd](https://crates.io/crates/dash-mpd) crate.
 
 
 ## Installation
 
-With an [installed Rust development environment](https://www.rust-lang.org/tools/install): 
+**Binary releases** are [available on GitHub](https://github.com/emarsden/dash-mpd-cli/releases) for
+GNU/Linux on AMD64 (statically linked against musl libc to avoid glibc versioning problems), Microsoft
+Windows on AMD64 and MacOS on AMD64. These are built automatically on the GitHub continuous
+integration infrastructure.
+
+You can also **build from source** using an [installed Rust development
+environment](https://www.rust-lang.org/tools/install):
 
 ```shell
 cargo install dash-mpd-cli
 ```
 
+You should also install the following **dependencies**:
+
+- the mkvmerge commandline utility from the [MkvToolnix](https://mkvtoolnix.download/) suite, if you
+  download to the Matroska container format (`.mkv` filename extension). mkvmerge is used as a
+  subprocess for muxing (combining) audio and video streams. See the `--mkvmerge-location`
+  commandline argument if it's not installed in a standard location.
+
+- [ffmpeg](https://ffmpeg.org/) or [vlc](https://www.videolan.org/vlc/) to download to the MP4
+  container format, also for muxing audio and video streams (see the `--ffmpeg-location` and
+  `--vlc-location` commandline arguments if these are installed in non-standard locations).
+
+- the MP4Box commandline utility from the [GPAC](https://gpac.wp.imt.fr/) project, if you want to
+  test the preliminary support for retrieving subtitles in wvtt format. If it's installed, MP4Box
+  will be used to convert the wvtt stream to more widely recognized SRT format.
+
+
+This crate is tested on the following **platforms**:
+
+- Linux on AMD64 (x86-64) and Aarch64 architectures
+
+- MacOS on AMD64 and Aarch64 architectures
+
+- Microsoft Windows 10 on AMD64
+
+- Android 11 on Aarch64 via [termux](https://termux.dev/) (you'll need to install the rust, binutils
+  and ffmpeg packages)
+
+- OpenBSD on AMD64 (occasionally)
+
+
 
 ## Usage
 
 ```
-dash-mpd-cli 0.1.5
 Download content from an MPEG-DASH streaming media manifest
 
-USAGE:
-    dash-mpd-cli [OPTIONS] <MPD-URL>
+Usage: dash-mpd-cli [OPTIONS] <MPD-URL>
 
-ARGS:
-    <MPD-URL>    URL of the DASH manifest to retrieve
+Arguments:
+  <MPD-URL>  URL of the DASH manifest to retrieve
 
-OPTIONS:
-        --add-header <extra-header>
-            Add a custom HTTP header and its value, separated by a colon ':'. You can use this
-            option multiple times.
-
-        --audio-only
-            If the media stream has separate audio and video streams, only download the audio stream
-
-        --ffmpeg-location <ffmpeg-location>
-            Path to the ffmpeg binary (necessary if not located in your PATH)
-
-    -h, --help
-            Print help information
-
-        --mkvmerge-location <mkvmerge-location>
-            Path to the mkvmerge binary (necessary if not located in your PATH)
-
-        --no-progress
-            Disable the progress bar
-
-        --no-xattr
-            Don't record metainformation as extended attributes in the output file
-
-    -o, --output <output-file>
-            Save media content to this file
-
-        --prefer-language <lang>
-            Preferred language when multiple audio streams with different languages are available.
-            Must be in RFC 5646 format (eg. fr or en-AU). If a preference is not specified and
-            multiple audio streams are present, the first one listed in the DASH manifest will be
-            downloaded.
-
-        --proxy <proxy>
-            
-
-    -q, --quiet
-            
-
-        --quality <quality>
-            Prefer best quality (and highest bandwidth) representation, or lowest quality [possible
-            values: best, worst]
-
-        --sleep-requests <sleep-seconds>
-            Number of seconds to sleep between network requests (default 0)
-
-        --source-address <source-address>
-            Source IP address to use for network requests, either IPv4 or IPv6. Network requests
-            will be made using the version of this IP address (eg. using an IPv6 source-address will
-            select IPv6 network traffic).
-
-        --timeout <timeout>
-            Timeout for network requests (from the start to the end of the request), in seconds
-
-        --user-agent <user-agent>
-            
-
-    -v, --verbose
-            Level of verbosity (can be used several times)
-
-        --version
-            
-
-        --video-only
-            If the media stream has separate audio and video streams, only download the video stream
-
-        --vlc-location <vlc-location>
-            Path to the VLC binary (necessary if not located in your PATH)
+Options:
+      --user-agent <user-agent>
+          
+      --proxy <URL>
+          URL of Socks or HTTP proxy (eg. https://example.net/ or socks5://example.net/)
+      --timeout <SECONDS>
+          Timeout for network requests (from the start to the end of the request), in seconds
+      --sleep-requests <SECONDS>
+          Number of seconds to sleep between network requests (default 0)
+      --source-address <source-address>
+          Source IP address to use for network requests, either IPv4 or IPv6. Network requests will be made using the version of this IP address (eg. using an IPv6 source-address will select IPv6 network traffic).
+      --quality <quality>
+          Prefer best quality (and highest bandwidth) representation, or lowest quality [possible values: best, worst]
+      --prefer-language <LANG>
+          Preferred language when multiple audio streams with different languages are available. Must be in RFC 5646 format (eg. fr or en-AU). If a preference is not specified and multiple audio streams are present, the first one listed in the DASH manifest will be downloaded.
+      --video-only
+          If the media stream has separate audio and video streams, only download the video stream
+      --audio-only
+          If the media stream has separate audio and video streams, only download the audio stream
+      --write-subs
+          Write subtitle file, if subtitles are available
+      --keep-video
+          Don't delete the file containing video once muxing is complete.
+      --keep-audio
+          Don't delete the file containing audio once muxing is complete.
+      --ignore-content-type
+          Don't check the content-type of media fragments (may be required for some poorly configured servers)
+      --add-header <NAME:VALUE>
+          Add a custom HTTP header and its value, separated by a colon ':'. You can use this option multiple times.
+  -q, --quiet
+          
+  -v, --verbose...
+          Level of verbosity (can be used several times)
+      --no-progress
+          Disable the progress bar
+      --no-xattr
+          Don't record metainformation as extended attributes in the output file
+      --ffmpeg-location <PATH>
+          Path to the ffmpeg binary (necessary if not located in your PATH)
+      --vlc-location <PATH>
+          Path to the VLC binary (necessary if not located in your PATH)
+      --mkvmerge-location <PATH>
+          Path to the mkvmerge binary (necessary if not located in your PATH)
+  -o, --output <PATH>
+          Save media content to this file
+  -h, --help
+          Print help
+  -V, --version
+          Print version
 ```
 
 

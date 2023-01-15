@@ -111,6 +111,11 @@ fn main () -> Result<()> {
              .num_args(0)
              .conflicts_with("video-only")
              .help("If the media stream has separate audio and video streams, only download the audio stream"))
+        .arg(Arg::new("write-subs")
+             .long("write-subs")
+             .action(ArgAction::SetTrue)
+             .num_args(0)
+             .help("Write subtitle file, if subtitles are available"))
         .arg(Arg::new("keep-video")
              .long("keep-video")
              .action(ArgAction::SetTrue)
@@ -206,14 +211,14 @@ fn main () -> Result<()> {
        if let Ok(local_addr) = IpAddr::from_str(src) {
           cb = cb.local_address(local_addr);
        } else {
-          eprintln!("Ignoring invalid argument to --source-address: {}", src);
+          eprintln!("Ignoring invalid argument to --source-address: {src}");
        }
     }
     if let Some(seconds) = matches.get_one::<String>("timeout") {
         if let Ok(secs) = seconds.parse::<u64>() {
             cb = cb.timeout(Duration::new(secs, 0));
         } else {
-            eprintln!("Ignoring invalid value for --timeout: {}", seconds);
+            eprintln!("Ignoring invalid value for --timeout: {seconds}");
         }
     } else {
         cb = cb.timeout(Duration::new(30, 0));
@@ -256,6 +261,9 @@ fn main () -> Result<()> {
     if matches.get_flag("keep-audio") {
         dl = dl.keep_audio();
     }
+    if matches.get_flag("write-subs") {
+        dl = dl.fetch_subtitles();
+    }
     if matches.get_flag("ignore-content-type") {
         dl = dl.without_content_type_checks();
     }
@@ -283,7 +291,7 @@ fn main () -> Result<()> {
     dl = dl.verbosity(verbosity);
     if let Some(out) = matches.get_one::<String>("output-file") {
         if let Err(e) = dl.download_to(out) {
-            eprintln!("Download error: {:?}", e);
+            eprintln!("Download error: {e:?}");
         }
     } else {
         match dl.download() {

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7] - 2023-01-15
+
+- Add commandline argument `--write-subs` to download subtitles, if they are available. Subtitles
+  are downloaded to a file with the same name as the audio-video content, but a filename extension
+  dependent on the subtitle format (`.vtt`, `.ttml`, `.srt`).
+
+
 ## [0.1.6] - 2022-11-27
 
 - Add commandline arguments `--keep-video` and `--keep-audio` to retain the files containing video and
