@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.8] - 2023-01-29
+
+- Move to async API used by version 0.7.0 of the dash-mpd crate. There should be no user-visible
+  changes in this version.
+
+
 ## [0.1.7] - 2023-01-15
 
 - Add commandline argument `--write-subs` to download subtitles, if they are available. Subtitles

@@ -62,7 +62,8 @@ impl ProgressObserver for DownloadProgressBar {
 }
 
 
-fn main () -> Result<()> {
+#[tokio::main]
+async fn main () -> Result<()> {
     env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init();
     let matches = clap::Command::new("dash-mpd-cli")
         .about("Download content from an MPEG-DASH streaming media manifest")
@@ -195,7 +196,7 @@ fn main () -> Result<()> {
         Some(ua) => ua,
         None => concat!("dash-mpd-cli/", env!("CARGO_PKG_VERSION")),
     };
-    let mut cb = reqwest::blocking::Client::builder()
+    let mut cb = reqwest::Client::builder()
         .user_agent(ua)
         .gzip(true)
         .brotli(true);
@@ -290,11 +291,11 @@ fn main () -> Result<()> {
     }
     dl = dl.verbosity(verbosity);
     if let Some(out) = matches.get_one::<String>("output-file") {
-        if let Err(e) = dl.download_to(out) {
+        if let Err(e) = dl.download_to(out).await {
             eprintln!("Download error: {e:?}");
         }
     } else {
-        match dl.download() {
+        match dl.download().await {
             Ok(out) => println!("Downloaded DASH content to {out:?}"),
             Err(e) => {
                 eprintln!("Download error: {e}");
