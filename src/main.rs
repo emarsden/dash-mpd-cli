@@ -292,7 +292,7 @@ async fn main () -> Result<()> {
     dl = dl.verbosity(verbosity);
     if let Some(out) = matches.get_one::<String>("output-file") {
         if let Err(e) = dl.download_to(out).await {
-            eprintln!("Download error: {e:?}");
+            eprintln!("Download error: {e}");
         }
     } else {
         match dl.download().await {

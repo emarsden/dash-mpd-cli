@@ -149,14 +149,7 @@ You can examine these attributes using `xattr -l` (you may need to install your 
 `xattr` package). Disable this feature using the `--no-xattr` commandline argument.
 
 
-## Platforms
-
-This crate is tested on the following platforms:
-
-- Linux
-- MacOS
-- Microsoft Windows 10
-- Android 11 on Aarch64 via termux (you’ll need to install the rust, binutils and ffmpeg packages)
+## Muxing
 
 The underlying library `dash-mpd-rs` has two methods for muxing audio and video streams together. If
 the library feature `libav` is enabled (which is not the default configuration), muxing support is
