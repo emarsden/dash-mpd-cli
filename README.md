@@ -177,14 +177,16 @@ or `-o` (which will be ".mp4" if you don't specify the output path explicitly):
 - XLink elements (only with actuate=onLoad semantics), including resolve-to-zero
 - All forms of segment index info: SegmentBase@indexRange, SegmentTimeline,
   SegmentTemplate@duration, SegmentTemplate@index, SegmentList
-- Media containers of types supported by ffmpeg or VLC (this includes ISO-BMFF / CMAF / MP4, WebM, MPEG-2 TS)
+- Media containers of types supported by mkvmerge, ffmpeg or VLC (this includes ISO-BMFF / CMAF / MP4, WebM, MPEG-2 TS)
+- Subtitles: preliminary support for WebVTT and TTML streams
+- Subtitles: preliminary download support for WebVTT, TTML and SMIL streams, as well as some support for
+  the wvtt format.
 
 
 ## Limitations / unsupported features
 
 - Can't download from dynamic MPD manifests, that are used for live streaming/OTT TV
 - Encrypted content using DRM such as Encrypted Media Extensions (EME) and Media Source Extension (MSE)
-- Subtitles (eg. WebVTT and TTML streams)
 - XLink with actuate=onRequest
 
 
