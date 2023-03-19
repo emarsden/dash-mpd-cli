@@ -68,7 +68,7 @@ This crate is tested on the following **platforms**:
 
 - Microsoft Windows 10 on AMD64
 
-- Android 11 on Aarch64 via [termux](https://termux.dev/) (you'll need to install the rust, binutils
+- Android 12 on Aarch64 via [termux](https://termux.dev/) (you'll need to install the rust, binutils
   and ffmpeg packages)
 
 - OpenBSD on AMD64 (occasionally)
@@ -178,7 +178,6 @@ or `-o` (which will be ".mp4" if you don't specify the output path explicitly):
 - All forms of segment index info: SegmentBase@indexRange, SegmentTimeline,
   SegmentTemplate@duration, SegmentTemplate@index, SegmentList
 - Media containers of types supported by mkvmerge, ffmpeg or VLC (this includes ISO-BMFF / CMAF / MP4, WebM, MPEG-2 TS)
-- Subtitles: preliminary support for WebVTT and TTML streams
 - Subtitles: preliminary download support for WebVTT, TTML and SMIL streams, as well as some support for
   the wvtt format.
 
@@ -212,7 +211,7 @@ Similar commandline tools that are able to download content from a DASH manifest
 - `gst-launch-1.0 playbin uri=<MPD-URL>`
 
 This application is able to download content from certain streams that do not work with other
-applications (for example xHE-AAC streams which are unsupported by ffmpeg, streamlink, VLC,
+applications (for example xHE-AAC streams which are currently unsupported by ffmpeg, streamlink, VLC,
 gstreamer).
 
 
@@ -236,4 +235,4 @@ $ cargo build --release --target x86_64-unknown-linux-musl
 ```
 
 Static musl-libc builds don’t work with OpenSSL, which is why we disable default features on the
-reqwest crate and build it with rustls-tls support. 
+dash-mpd crate and build it with rustls-tls support.

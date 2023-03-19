@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.9] - 2023-03-19
+
+- Update to version 0.7.2 of the rust-mpd crate. This provides support for downloading additional
+  types of subtitles in DASH streams. This version also makes it possible to select between
+  native-tls and rustls-tls TLS implementations. We build with rustls-tls in order to build static
+  Linux binaries using musl-libc, and to simplify building on Android.
+
+
 ## [0.1.8] - 2023-01-29
 
 - Move to async API used by version 0.7.0 of the dash-mpd crate. There should be no user-visible
