@@ -7,7 +7,8 @@
   on some manifests using Time-based or Number-based SegmentLists for which the packager calculates
   a number of segments which is different to our calculation (in which case the last segment can
   generate an HTTP 404 error).
-- Update to version 0.7.3 of the dash-mpd crate.
+- Update to version 0.7.3 of the dash-mpd crate, which provides better handling of transient and
+  non-transient network errors.
 - Fix bug in the handling the value of the `--sleep-requests` commandline argument.
 
 
@@ -62,6 +63,7 @@
   when multiple audio streams with different languages are available. The argument must be in RFC
   5646 format (eg. "fr" or "en-AU"). If a preference is not specified and multiple audio streams are
   present, the first one listed in the DASH manifest will be downloaded.
+
 
 ## [0.1.2] - 2022-06-01
 
