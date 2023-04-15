@@ -88,10 +88,16 @@ async fn main () -> Result<()> {
              .num_args(1)
              .value_parser(clap::value_parser!(u8))
              .help("Number of seconds to sleep between network requests (default 0)"))
+        .arg(Arg::new("max-error-count")
+             .long("max-error-count")
+             .value_name("COUNT")
+             .num_args(1)
+             .value_parser(clap::value_parser!(u32))
+             .help("Maximum number of non-transient network errors that should be ignored before a download is aborted (default is 10)"))
         .arg(Arg::new("source-address")
              .long("source-address")
              .num_args(1)
-	     .help("Source IP address to use for network requests, either IPv4 or IPv6. Network requests will be made using the version of this IP address (eg. using an IPv6 source-address will select IPv6 network traffic)."))
+	     .help("Source IP address to use for network requests, either IPv4 or IPv6. Network requests will be made using the version of this IP address (e.g. using an IPv6 source-address will select IPv6 network traffic)."))
         .arg(Arg::new("quality")
              .long("quality")
              .num_args(1)
@@ -101,7 +107,7 @@ async fn main () -> Result<()> {
              .long("prefer-language")
              .value_name("LANG")
              .num_args(1)
-             .help("Preferred language when multiple audio streams with different languages are available. Must be in RFC 5646 format (eg. fr or en-AU). If a preference is not specified and multiple audio streams are present, the first one listed in the DASH manifest will be downloaded."))
+             .help("Preferred language when multiple audio streams with different languages are available. Must be in RFC 5646 format (e.g. fr or en-AU). If a preference is not specified and multiple audio streams are present, the first one listed in the DASH manifest will be downloaded."))
         .arg(Arg::new("video-only")
              .long("video-only")
              .action(ArgAction::SetTrue)
@@ -242,7 +248,7 @@ async fn main () -> Result<()> {
     }
 
     let client = cb.build()
-        .expect("creating reqwest HTTP client");
+        .expect("creating HTTP client");
     let url = matches.get_one::<String>("url").unwrap();
     let mut dl = DashDownloader::new(url)
         .with_http_client(client);
@@ -251,6 +257,9 @@ async fn main () -> Result<()> {
     }
     if let Some(seconds) = matches.get_one::<u8>("sleep-requests") {
         dl = dl.sleep_between_requests(*seconds);
+    }
+    if let Some(count) = matches.get_one::<u32>("max-error-count") {
+        dl = dl.max_error_count(*count);
     }
     if matches.get_flag("audio-only") {
         dl = dl.audio_only();

@@ -14,7 +14,7 @@ publish = true
 
 [dependencies]
 tokio = { version = ">=1.24.2", features = ["rt-multi-thread", "macros"] }
-dash-mpd = { version = ">=0.7.2", default-features = false, features = ["fetch", "compression", "rustls-tls"] }
+dash-mpd = { path = "../dash-mpd-rs", version = ">=0.7.3", default-features = false, features = ["fetch", "compression", "rustls-tls"] }
 reqwest = { version = "0.11", default-features = false, features = ["gzip", "brotli", "rustls-tls", "socks"] }
 colored = "2"
 indicatif = "0.17"

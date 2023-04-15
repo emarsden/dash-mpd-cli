@@ -66,7 +66,7 @@ This crate is tested on the following **platforms**:
 
 - MacOS on AMD64 and Aarch64 architectures
 
-- Microsoft Windows 10 on AMD64
+- Microsoft Windows 10 and Windows 11 on AMD64
 
 - Android 12 on Aarch64 via [termux](https://termux.dev/) (you'll need to install the rust, binutils
   and ffmpeg packages)
@@ -86,7 +86,7 @@ Arguments:
   <MPD-URL>  URL of the DASH manifest to retrieve
 
 Options:
-      --user-agent <user-agent>
+  -U, --user-agent <user-agent>
           
       --proxy <URL>
           URL of Socks or HTTP proxy (eg. https://example.net/ or socks5://example.net/)
@@ -94,12 +94,14 @@ Options:
           Timeout for network requests (from the start to the end of the request), in seconds
       --sleep-requests <SECONDS>
           Number of seconds to sleep between network requests (default 0)
+      --max-error-count <COUNT>
+          Maximum number of non-transient network errors that should be ignored before a download is aborted (default is 10)
       --source-address <source-address>
-          Source IP address to use for network requests, either IPv4 or IPv6. Network requests will be made using the version of this IP address (eg. using an IPv6 source-address will select IPv6 network traffic).
+          Source IP address to use for network requests, either IPv4 or IPv6. Network requests will be made using the version of this IP address (e.g. using an IPv6 source-address will select IPv6 network traffic).
       --quality <quality>
           Prefer best quality (and highest bandwidth) representation, or lowest quality [possible values: best, worst]
       --prefer-language <LANG>
-          Preferred language when multiple audio streams with different languages are available. Must be in RFC 5646 format (eg. fr or en-AU). If a preference is not specified and multiple audio streams are present, the first one listed in the DASH manifest will be downloaded.
+          Preferred language when multiple audio streams with different languages are available. Must be in RFC 5646 format (e.g. fr or en-AU). If a preference is not specified and multiple audio streams are present, the first one listed in the DASH manifest will be downloaded.
       --video-only
           If the media stream has separate audio and video streams, only download the video stream
       --audio-only

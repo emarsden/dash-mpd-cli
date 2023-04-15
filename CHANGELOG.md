@@ -1,8 +1,19 @@
 # Changelog
 
+## [0.1.10] - 2023-04
+
+- New commandline argument `--max-error-count` to specify the maximum number of non-transient
+  network errors that should be ignored before a download is aborted. This is useful in particular
+  on some manifests using Time-based or Number-based SegmentLists for which the packager calculates
+  a number of segments which is different to our calculation (in which case the last segment can
+  generate an HTTP 404 error).
+- Update to version 0.7.3 of the dash-mpd crate.
+- Fix bug in the handling the value of the `--sleep-requests` commandline argument.
+
+
 ## [0.1.9] - 2023-03-19
 
-- Update to version 0.7.2 of the rust-mpd crate. This provides support for downloading additional
+- Update to version 0.7.2 of the dash-mpd crate. This provides support for downloading additional
   types of subtitles in DASH streams. This version also makes it possible to select between
   native-tls and rustls-tls TLS implementations. We build with rustls-tls in order to build static
   Linux binaries using musl-libc, and to simplify building on Android.
