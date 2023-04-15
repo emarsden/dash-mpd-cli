@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.1.10] - 2023-04
+## [0.1.10] - 2023-04-15
 
 - New commandline argument `--max-error-count` to specify the maximum number of non-transient
   network errors that should be ignored before a download is aborted. This is useful in particular

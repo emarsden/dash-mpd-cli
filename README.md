@@ -57,7 +57,7 @@ You should also install the following **dependencies**:
 
 - the MP4Box commandline utility from the [GPAC](https://gpac.wp.imt.fr/) project, if you want to
   test the preliminary support for retrieving subtitles in wvtt format. If it's installed, MP4Box
-  will be used to convert the wvtt stream to more widely recognized SRT format.
+  will be used to convert the wvtt stream to the more widely recognized SRT format.
 
 
 This crate is tested on the following **platforms**:
