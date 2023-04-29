@@ -28,6 +28,7 @@ use std::collections::HashMap;
 use env_logger::Env;
 use reqwest::header;
 use clap::{Arg, ArgAction};
+use number_prefix::{NumberPrefix, Prefix};
 use indicatif::{ProgressBar, ProgressStyle};
 use anyhow::Result;
 use dash_mpd::fetch::DashDownloader;
@@ -88,6 +89,11 @@ async fn main () -> Result<()> {
              .num_args(1)
              .value_parser(clap::value_parser!(u8))
              .help("Number of seconds to sleep between network requests (default 0)"))
+        .arg(Arg::new("limit-rate")
+             .long("limit-rate")
+             .short('r')
+             .num_args(1)
+             .help("Maximum network bandwidth in octets per second (default no limit), e.g. 200K, 1M"))
         .arg(Arg::new("max-error-count")
              .long("max-error-count")
              .value_name("COUNT")
@@ -257,6 +263,31 @@ async fn main () -> Result<()> {
     }
     if let Some(seconds) = matches.get_one::<u8>("sleep-requests") {
         dl = dl.sleep_between_requests(*seconds);
+    }
+    if let Some(limit) = matches.get_one::<String>("limit-rate") {
+        // We allow k, M, G, T suffixes, as per 100k, 1M, 0.4G
+        if let Ok(np) = limit.parse::<NumberPrefix<f64>>() {
+            let bps = match np {
+                NumberPrefix::Standalone(bps) => bps,
+                NumberPrefix::Prefixed(pfx, n) => match pfx {
+                    Prefix::Kilo => n * 1024.0,
+                    Prefix::Mega => n * 1024.0 * 1024.0,
+                    Prefix::Giga => n * 1024.0 * 1024.0 * 1024.0,
+                    Prefix::Tera => n * 1024.0 * 1024.0 * 1024.0 * 1024.0,
+                    _ => {
+                        eprintln!("Ignoring unrecognized suffix on limit-rate");
+                        0.0
+                    },
+                },
+            };
+            if bps > 0.0 {
+                dl = dl.with_rate_limit(bps as u64);
+            } else {
+                eprintln!("Ignoring negative value for limit-rate");
+            }
+        } else {
+            eprintln!("Ignoring badly formed value for limit-rate");
+        }
     }
     if let Some(count) = matches.get_one::<u32>("max-error-count") {
         dl = dl.max_error_count(*count);

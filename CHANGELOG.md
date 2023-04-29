@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.11] - Unreleased
+
+- New commandline argument `--limit-rate` to throttle the network bandwidth used to download media
+  segments, expressed in octets per second. The limit can be expressed with a k, M or G suffix to
+  indicate kB/s, MB/s or GB/s (fractional suffixed quantities are allowed, such as `1.5M`). The
+  default is not to throttle bandwidth.
+
+
 ## [0.1.10] - 2023-04-15
 
 - New commandline argument `--max-error-count` to specify the maximum number of non-transient
