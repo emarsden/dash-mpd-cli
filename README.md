@@ -94,6 +94,8 @@ Options:
           Timeout for network requests (from the start to the end of the request), in seconds
       --sleep-requests <SECONDS>
           Number of seconds to sleep between network requests (default 0)
+  -r, --limit-rate <limit-rate>
+          Maximum network bandwidth in octets per second (default no limit), e.g. 200K, 1M
       --max-error-count <COUNT>
           Maximum number of non-transient network errors that should be ignored before a download is aborted (default is 10)
       --source-address <source-address>
@@ -155,21 +157,21 @@ You can examine these attributes using `xattr -l` (you may need to install your 
 
 The underlying library `dash-mpd-rs` has two methods for muxing audio and video streams together. If
 the library feature `libav` is enabled (which is not the default configuration), muxing support is
-provided by ffmpeg’s libav library, via the `ac_ffmpeg` crate. 
-Otherwise, muxing is implemented by calling an external muxer, mkvmerge (from the
-[MkvToolnix](https://mkvtoolnix.download/) suite), [ffmpeg](https://ffmpeg.org/) or
-[vlc](https://www.videolan.org/vlc/) as a subprocess. Note that these commandline applications
-implement a number of checks and workarounds to fix invalid input streams that tend to exist in the
-wild. Some of these workarounds are implemented here when using libav as a library, but not all of
-them, so download support tends to be more robust with the default configuration (using an external
-application as a subprocess). The `libav` feature currently only works on Linux. 
+provided by ffmpeg’s libav library, via the `ac_ffmpeg` crate. Otherwise, muxing is implemented by
+calling an external muxer, mkvmerge (from the [MkvToolnix](https://mkvtoolnix.download/) suite),
+[ffmpeg](https://ffmpeg.org/), [vlc](https://www.videolan.org/vlc/) or
+[MP4Box](https://github.com/gpac/gpac/wiki/MP4Box) as a subprocess. Note that these commandline
+applications implement a number of checks and workarounds to fix invalid input streams that tend to
+exist in the wild. Some of these workarounds are implemented here when using libav as a library, but
+not all of them, so download support tends to be more robust with the default configuration (using
+an external application as a subprocess). The `libav` feature currently only works on Linux.
 
 The choice of external muxer depends on the filename extension of the path supplied to `--output`
 or `-o` (which will be ".mp4" if you don't specify the output path explicitly):
 
-- .mkv: call mkvmerge first, then if that fails call ffmpeg
-- .mp4: call ffmpeg first, then if that fails call vlc
-- other: try ffmpeg, which supports many container formats
+- `.mkv`: call mkvmerge first, then if that fails call ffmpeg, then try MP4Box
+- `.mp4`: call ffmpeg first, then if that fails call vlc, then try MP4Box
+- other: try ffmpeg, which supports many container formats, then try MP4Box
 
 
 ## DASH features supported
@@ -179,7 +181,7 @@ or `-o` (which will be ".mp4" if you don't specify the output path explicitly):
 - XLink elements (only with actuate=onLoad semantics), including resolve-to-zero
 - All forms of segment index info: SegmentBase@indexRange, SegmentTimeline,
   SegmentTemplate@duration, SegmentTemplate@index, SegmentList
-- Media containers of types supported by mkvmerge, ffmpeg or VLC (this includes ISO-BMFF / CMAF / MP4, WebM, MPEG-2 TS)
+- Media containers of types supported by mkvmerge, ffmpeg, VLC or MP4Box (this includes ISO-BMFF / CMAF / MP4, WebM, MPEG-2 TS)
 - Subtitles: preliminary download support for WebVTT, TTML and SMIL streams, as well as some support for
   the wvtt format.
 
@@ -214,7 +216,7 @@ Similar commandline tools that are able to download content from a DASH manifest
 
 This application is able to download content from certain streams that do not work with other
 applications (for example xHE-AAC streams which are currently unsupported by ffmpeg, streamlink, VLC,
-gstreamer).
+gstreamer). It also has better support for multi-period manifests than these tools.
 
 
 ## Building

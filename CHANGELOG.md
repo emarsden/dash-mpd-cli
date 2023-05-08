@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.1.11] - Unreleased
+## [0.1.11] - 2023-05-08
 
 - New commandline argument `--limit-rate` to throttle the network bandwidth used to download media
   segments, expressed in octets per second. The limit can be expressed with a k, M or G suffix to
