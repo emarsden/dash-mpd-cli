@@ -4,7 +4,6 @@ A commandline application for downloading media content from a DASH MPD file, as
 replay of TV content and video streaming services like YouTube.
 
 [![Crates.io](https://img.shields.io/crates/v/dash-mpd-cli)](https://crates.io/crates/dash-mpd-cli)
-[![Released API docs](https://docs.rs/dash-mpd-cli/badge.svg)](https://docs.rs/dash-mpd-cli/)
 [![CI](https://github.com/emarsden/dash-mpd-cli/workflows/build/badge.svg)](https://github.com/emarsden/dash-mpd-cli/actions/)
 [![Dependency status](https://deps.rs/repo/github/emarsden/dash-mpd-cli/status.svg)](https://deps.rs/repo/github/emarsden/dash-mpd-cli)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE-MIT)
@@ -44,6 +43,9 @@ environment](https://www.rust-lang.org/tools/install):
 cargo install dash-mpd-cli
 ```
 
+This installs the binary to your installation root's `bin` directory, which is typically
+`$HOME/.cargo/bin`.
+
 You should also install the following **dependencies**:
 
 - the mkvmerge commandline utility from the [MkvToolnix](https://mkvtoolnix.download/) suite, if you
@@ -57,7 +59,9 @@ You should also install the following **dependencies**:
 
 - the MP4Box commandline utility from the [GPAC](https://gpac.wp.imt.fr/) project, if you want to
   test the preliminary support for retrieving subtitles in wvtt format. If it's installed, MP4Box
-  will be used to convert the wvtt stream to the more widely recognized SRT format.
+  will be used to convert the wvtt stream to the more widely recognized SRT format. MP4Box can also
+  be used for muxing audio and video streams to an MP4 container, as a fallback if ffmpeg and vlc
+  are not available.
 
 
 This crate is tested on the following **platforms**:
@@ -69,7 +73,7 @@ This crate is tested on the following **platforms**:
 - Microsoft Windows 10 and Windows 11 on AMD64
 
 - Android 12 on Aarch64 via [termux](https://termux.dev/) (you'll need to install the rust, binutils
-  and ffmpeg packages)
+  and ffmpeg packages, and optionally the mkvtoolnix, vlc and gpac packages)
 
 - OpenBSD on AMD64 (occasionally)
 
@@ -174,23 +178,26 @@ or `-o` (which will be ".mp4" if you don't specify the output path explicitly):
 - other: try ffmpeg, which supports many container formats, then try MP4Box
 
 
-## DASH features supported
+## Supported features
 
 - VOD (static) stream manifests
 - Multi-period content
 - XLink elements (only with actuate=onLoad semantics), including resolve-to-zero
 - All forms of segment index info: SegmentBase@indexRange, SegmentTimeline,
-  SegmentTemplate@duration, SegmentTemplate@index, SegmentList
-- Media containers of types supported by mkvmerge, ffmpeg, VLC or MP4Box (this includes ISO-BMFF / CMAF / MP4, WebM, MPEG-2 TS)
+  SegmentTemplate@duration, SegmentTemplate@index, SegmentList.
+- Media containers of types supported by mkvmerge, ffmpeg, VLC or MP4Box (this includes ISO-BMFF /
+  CMAF / MP4, Matroska, WebM, MPEG-2 TS).
 - Subtitles: preliminary download support for WebVTT, TTML and SMIL streams, as well as some support for
   the wvtt format.
+- Content available over HTTP, HTTPS, HTTP/2, with support for SOCKS and HTTP proxies and for
+  throttling network bandwidth.
 
 
 ## Limitations / unsupported features
 
 - Can't download from dynamic MPD manifests, that are used for live streaming/OTT TV
-- Encrypted content using DRM such as Encrypted Media Extensions (EME) and Media Source Extension (MSE)
-- XLink with actuate=onRequest
+- Content encrypted with ContentProtection DRM mechanisms such as Clear Key, FairPlay, PlayReady, Widevine
+- XLink with actuate=onRequest semantics
 
 
 
