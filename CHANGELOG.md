@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.12] - Unreleased
+
+- Add commandline argument `--mp4box-location=<path>` to allow a non-standard location for the
+  MP4Box binary (from the GPAC suite) to be specified.
+
+
 ## [0.1.11] - 2023-05-08
 
 - New commandline argument `--limit-rate` to throttle the network bandwidth used to download media

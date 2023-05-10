@@ -92,6 +92,7 @@ async fn main () -> Result<()> {
         .arg(Arg::new("limit-rate")
              .long("limit-rate")
              .short('r')
+             .value_name("RATE")
              .num_args(1)
              .help("Maximum network bandwidth in octets per second (default no limit), e.g. 200K, 1M"))
         .arg(Arg::new("max-error-count")
@@ -188,6 +189,11 @@ async fn main () -> Result<()> {
              .value_name("PATH")
              .num_args(1)
              .help("Path to the mkvmerge binary (necessary if not located in your PATH)"))
+        .arg(Arg::new("mp4box-location")
+             .long("mp4box-location")
+             .value_name("PATH")
+             .num_args(1)
+             .help("Path to the MP4Box binary (necessary if not located in your PATH)"))
         .arg(Arg::new("output-file")
              .long("output")
              .value_name("PATH")
@@ -321,6 +327,9 @@ async fn main () -> Result<()> {
     }
     if let Some(path) = matches.get_one::<String>("mkvmerge-location") {
         dl = dl.with_mkvmerge(path);
+    }
+    if let Some(path) = matches.get_one::<String>("mp4box-location") {
+        dl = dl.with_mp4box(path);
     }
     if let Some(q) = matches.get_one::<String>("quality") {
         if q.eq("best") {
