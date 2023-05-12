@@ -98,7 +98,7 @@ Options:
           Timeout for network requests (from the start to the end of the request), in seconds
       --sleep-requests <SECONDS>
           Number of seconds to sleep between network requests (default 0)
-  -r, --limit-rate <limit-rate>
+  -r, --limit-rate <RATE>
           Maximum network bandwidth in octets per second (default no limit), e.g. 200K, 1M
       --max-error-count <COUNT>
           Maximum number of non-transient network errors that should be ignored before a download is aborted (default is 10)
@@ -118,6 +118,8 @@ Options:
           Don't delete the file containing video once muxing is complete.
       --keep-audio
           Don't delete the file containing audio once muxing is complete.
+      --save-fragments <FRAGMENTS-DIR>
+          Save media fragments to this directory (will be created if it does not exist)
       --ignore-content-type
           Don't check the content-type of media fragments (may be required for some poorly configured servers)
       --add-header <NAME:VALUE>
@@ -136,6 +138,8 @@ Options:
           Path to the VLC binary (necessary if not located in your PATH)
       --mkvmerge-location <PATH>
           Path to the mkvmerge binary (necessary if not located in your PATH)
+      --mp4box-location <PATH>
+          Path to the MP4Box binary (necessary if not located in your PATH)
   -o, --output <PATH>
           Save media content to this file
   -h, --help

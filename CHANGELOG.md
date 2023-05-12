@@ -1,11 +1,13 @@
 # Changelog
 
-## [0.1.12] - Unreleased
+## [0.1.12] - 2023-05-12
 
 - Add commandline argument `--save-fragments` to save media fragments (individual DASH audio and
   video segments) to the specified directory.
+
 - Add commandline argument `--mp4box-location=<path>` to allow a non-standard location for the
   MP4Box binary (from the GPAC suite) to be specified.
+
 - Update to version 0.9.0 of the dash-mpd crate, which is more tolerant of unexpected extensions to
   the DASH schema.
 
@@ -25,8 +27,10 @@
   on some manifests using Time-based or Number-based SegmentLists for which the packager calculates
   a number of segments which is different to our calculation (in which case the last segment can
   generate an HTTP 404 error).
+
 - Update to version 0.7.3 of the dash-mpd crate, which provides better handling of transient and
   non-transient network errors.
+
 - Fix bug in the handling the value of the `--sleep-requests` commandline argument.
 
 
@@ -55,6 +59,7 @@
 
 - Add commandline arguments `--keep-video` and `--keep-audio` to retain the files containing video and
   audio content after muxing.
+
 - Add commandline argument `--ignore-content-type` to disable checks that content-type of fragments
   is compatible with audio or video media (may be required for some poorly configured servers).
 
