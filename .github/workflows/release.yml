@@ -38,6 +38,6 @@ jobs:
       - uses: taiki-e/upload-rust-binary-action@v1
         with:
           bin: dash-mpd-cli
-          include: LICENSE,README.md,CHANGELOG.md
+          include: LICENSE-MIT,README.md,CHANGELOG.md
           target: ${{ matrix.target }}
           token: ${{ secrets.GITHUB_TOKEN }}
