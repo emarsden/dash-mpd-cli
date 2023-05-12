@@ -2,8 +2,12 @@
 
 ## [0.1.12] - Unreleased
 
+- Add commandline argument `--save-fragments` to save media fragments (individual DASH audio and
+  video segments) to the specified directory.
 - Add commandline argument `--mp4box-location=<path>` to allow a non-standard location for the
   MP4Box binary (from the GPAC suite) to be specified.
+- Update to version 0.9.0 of the dash-mpd crate, which is more tolerant of unexpected extensions to
+  the DASH schema.
 
 
 ## [0.1.11] - 2023-05-08

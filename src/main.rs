@@ -20,6 +20,7 @@
 // Example usage: dash-mpd-cli --timeout 5 --output=/tmp/foo.mp4 https://v.redd.it/zv89llsvexdz/DASHPlaylist.mpd
 
 use std::env;
+use std::path::Path;
 use std::net::IpAddr;
 use std::str::FromStr;
 use std::time::Duration;
@@ -142,6 +143,11 @@ async fn main () -> Result<()> {
              .action(ArgAction::SetTrue)
              .num_args(0)
              .help("Don't delete the file containing audio once muxing is complete."))
+        .arg(Arg::new("save-fragments")
+             .long("save-fragments")
+             .value_name("FRAGMENTS-DIR")
+             .num_args(1)
+             .help("Save media fragments to this directory (will be created if it does not exist)"))
         .arg(Arg::new("ignore-content-type")
              .long("ignore-content-type")
              .action(ArgAction::SetTrue)
@@ -210,7 +216,6 @@ async fn main () -> Result<()> {
     // TODO: add --abort-on-error
     // TODO: add --fragment-retries arg
     // TODO: add --mtime arg (Last-modified header)
-    // TODO: limit download rate once reqwest crate can do so
     let verbosity = matches.get_count("verbose");
     let ua = match matches.get_one::<String>("user-agent") {
         Some(ua) => ua,
@@ -309,6 +314,9 @@ async fn main () -> Result<()> {
     }
     if matches.get_flag("keep-audio") {
         dl = dl.keep_audio();
+    }
+    if let Some(fragments_dir) = matches.get_one::<String>("save-fragments") {
+        dl = dl.save_fragments_to(Path::new(fragments_dir));
     }
     if matches.get_flag("write-subs") {
         dl = dl.fetch_subtitles();
