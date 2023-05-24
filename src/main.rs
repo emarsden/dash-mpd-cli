@@ -28,6 +28,7 @@ use std::sync::Arc;
 use std::collections::HashMap;
 use env_logger::Env;
 use reqwest::header;
+use bench_scraper::{find_cookies, KnownBrowser};
 use clap::{Arg, ArgAction};
 use number_prefix::{NumberPrefix, Prefix};
 use indicatif::{ProgressBar, ProgressStyle};
@@ -132,7 +133,7 @@ async fn main () -> Result<()> {
              .long("write-subs")
              .action(ArgAction::SetTrue)
              .num_args(0)
-             .help("Write subtitle file, if subtitles are available"))
+             .help("Write subtitle file, if subtitles are available."))
         .arg(Arg::new("keep-video")
              .long("keep-video")
              .action(ArgAction::SetTrue)
@@ -147,7 +148,7 @@ async fn main () -> Result<()> {
              .long("save-fragments")
              .value_name("FRAGMENTS-DIR")
              .num_args(1)
-             .help("Save media fragments to this directory (will be created if it does not exist)"))
+             .help("Save media fragments to this directory (will be created if it does not exist)."))
         .arg(Arg::new("ignore-content-type")
              .long("ignore-content-type")
              .action(ArgAction::SetTrue)
@@ -159,6 +160,11 @@ async fn main () -> Result<()> {
              .num_args(1)
              .action(clap::ArgAction::Append)
              .help("Add a custom HTTP header and its value, separated by a colon ':'. You can use this option multiple times."))
+        .arg(Arg::new("cookies-from-browser")
+             .long("cookies-from-browser")
+             .value_name("BROWSER")
+             .num_args(1)
+             .help("Load cookies from BROWSER (Firefox, Chrome, ChromeBeta or Chromium)."))
         .arg(Arg::new("quiet")
              .short('q')
              .long("quiet")
@@ -169,7 +175,7 @@ async fn main () -> Result<()> {
              .short('v')
              .long("verbose")
              .action(clap::ArgAction::Count)
-             .help("Level of verbosity (can be used several times)"))
+             .help("Level of verbosity (can be used several times)."))
         .arg(Arg::new("no-progress")
              .long("no-progress")
              .action(ArgAction::SetTrue)
@@ -179,39 +185,39 @@ async fn main () -> Result<()> {
              .long("no-xattr")
              .action(ArgAction::SetTrue)
              .num_args(0)
-             .help("Don't record metainformation as extended attributes in the output file"))
+             .help("Don't record metainformation as extended attributes in the output file."))
         .arg(Arg::new("ffmpeg-location")
              .long("ffmpeg-location")
              .value_name("PATH")
              .num_args(1)
-             .help("Path to the ffmpeg binary (necessary if not located in your PATH)"))
+             .help("Path to the ffmpeg binary (necessary if not located in your PATH)."))
         .arg(Arg::new("vlc-location")
              .long("vlc-location")
              .value_name("PATH")
              .num_args(1)
-             .help("Path to the VLC binary (necessary if not located in your PATH)"))
+             .help("Path to the VLC binary (necessary if not located in your PATH)."))
         .arg(Arg::new("mkvmerge-location")
              .long("mkvmerge-location")
              .value_name("PATH")
              .num_args(1)
-             .help("Path to the mkvmerge binary (necessary if not located in your PATH)"))
+             .help("Path to the mkvmerge binary (necessary if not located in your PATH)."))
         .arg(Arg::new("mp4box-location")
              .long("mp4box-location")
              .value_name("PATH")
              .num_args(1)
-             .help("Path to the MP4Box binary (necessary if not located in your PATH)"))
+             .help("Path to the MP4Box binary (necessary if not located in your PATH)."))
         .arg(Arg::new("output-file")
              .long("output")
              .value_name("PATH")
              .short('o')
              .num_args(1)
-             .help("Save media content to this file"))
+             .help("Save media content to this file."))
         .arg(Arg::new("url")
              .value_name("MPD-URL")
              .required(true)
              .num_args(1)
              .index(1)
-             .help("URL of the DASH manifest to retrieve"))
+             .help("URL of the DASH manifest to retrieve."))
         .get_matches();
     // TODO: add --abort-on-error
     // TODO: add --fragment-retries arg
@@ -225,6 +231,42 @@ async fn main () -> Result<()> {
         .user_agent(ua)
         .gzip(true)
         .brotli(true);
+    if let Some(browser) = matches.get_one::<String>("cookies-from-browser") {
+        if let Some(wanted) = match browser.as_str() {
+            "Firefox" => Some(KnownBrowser::Firefox),
+            "Chrome" => Some(KnownBrowser::Chrome),
+            "ChromeBeta" => Some(KnownBrowser::ChromeBeta),
+            "Chromium" => Some(KnownBrowser::Chromium),
+            _ => None,
+        } {
+            let jar = reqwest::cookie::Jar::default();
+            let browsers = find_cookies()
+                .expect("reading cookies from browser");
+            let targets = browsers.iter()
+                .filter(|b| b.browser == wanted);
+            let mut targets_found = false;
+            for b in targets {
+                targets_found = true;
+                for c in &b.cookies {
+                    let set_cookie = c.get_set_cookie_header();
+                    if let Ok(url) = reqwest::Url::parse(&c.get_url()) {
+                        jar.add_cookie_str(&set_cookie, &url);
+                    }
+                }
+            }
+            if targets_found {
+                cb = cb.cookie_store(true).cookie_provider(Arc::new(jar));
+            } else {
+                eprintln!("Can't access cookies from {browser}.");
+                eprintln!("Cookies are available from the following browsers:");
+                for b in browsers.iter() {
+                    eprintln!("  {:?} ({} cookies)", b.browser, b.cookies.len());
+                }
+            }
+        } else {
+            eprintln!("Ignoring unknown browser {browser}. Try one of Firefox, Chrome, ChromeBeta, Chromium.");
+        }
+    }
     if verbosity > 2 {
        cb = cb.connection_verbose(true);
     }

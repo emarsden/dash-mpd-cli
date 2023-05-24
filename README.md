@@ -29,6 +29,32 @@ audio and video segments together. There is also some preliminary support for do
 This application builds on the [dash-mpd](https://crates.io/crates/dash-mpd) crate.
 
 
+## Features
+
+The following features are supported: 
+
+- VOD (static) stream manifests (this application can't download from dynamic MPD manifests, that
+  are used for live streaming and OTT television).
+- Multi-period content.
+- The application can download content available over HTTP, HTTPS and HTTP/2, with support for SOCKS
+  and HTTP proxies. Network bandwidth can be throttled.
+- Subtitles: preliminary download support for WebVTT, TTML and SMIL streams, as well as some support for
+  the wvtt format.
+- The application can read cookies from the Firefox, Chromium, Chrome, and ChromeBeta browsers on
+  Linux, Windows and MacOS, thanks to the [bench_scraper](https://crates.io/crates/bench_scraper) crate.
+- XLink elements (only with actuate=onLoad semantics), including resolve-to-zero
+- All forms of segment index info: SegmentBase@indexRange, SegmentTimeline,
+  SegmentTemplate@duration, SegmentTemplate@index, SegmentList.
+- Media containers of types supported by mkvmerge, ffmpeg, VLC or MP4Box (this includes ISO-BMFF /
+  CMAF / MP4, Matroska, WebM, MPEG-2 TS).
+
+The following are not supported: 
+
+- Content encrypted with ContentProtection DRM mechanisms such as Clear Key, FairPlay, PlayReady, Widevine.
+- XLink elements with actuate=onRequest semantics
+
+
+
 ## Installation
 
 **Binary releases** are [available on GitHub](https://github.com/emarsden/dash-mpd-cli/releases) for
@@ -180,28 +206,6 @@ or `-o` (which will be ".mp4" if you don't specify the output path explicitly):
 - `.mkv`: call mkvmerge first, then if that fails call ffmpeg, then try MP4Box
 - `.mp4`: call ffmpeg first, then if that fails call vlc, then try MP4Box
 - other: try ffmpeg, which supports many container formats, then try MP4Box
-
-
-## Supported features
-
-- VOD (static) stream manifests
-- Multi-period content
-- XLink elements (only with actuate=onLoad semantics), including resolve-to-zero
-- All forms of segment index info: SegmentBase@indexRange, SegmentTimeline,
-  SegmentTemplate@duration, SegmentTemplate@index, SegmentList.
-- Media containers of types supported by mkvmerge, ffmpeg, VLC or MP4Box (this includes ISO-BMFF /
-  CMAF / MP4, Matroska, WebM, MPEG-2 TS).
-- Subtitles: preliminary download support for WebVTT, TTML and SMIL streams, as well as some support for
-  the wvtt format.
-- Content available over HTTP, HTTPS, HTTP/2, with support for SOCKS and HTTP proxies and for
-  throttling network bandwidth.
-
-
-## Limitations / unsupported features
-
-- Can't download from dynamic MPD manifests, that are used for live streaming/OTT TV
-- Content encrypted with ContentProtection DRM mechanisms such as Clear Key, FairPlay, PlayReady, Widevine
-- XLink with actuate=onRequest semantics
 
 
 

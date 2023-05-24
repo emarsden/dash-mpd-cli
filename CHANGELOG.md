@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.13] - Unreleased
+
+- New commandline argument `--cookies-from-browser` to load HTTP cookies from a web browser (support
+  for Firefox, Chromium, Chrome and ChromeBeta on Linux, Windows and MacOS, via the bench_scraper
+  crate.
+
+
 ## [0.1.12] - 2023-05-12
 
 - Add commandline argument `--save-fragments` to save media fragments (individual DASH audio and
