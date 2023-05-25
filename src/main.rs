@@ -172,6 +172,8 @@ async fn main () -> Result<()> {
              .help(format!("Load cookies from BROWSER ({known_browser_names}).")))
         .arg(Arg::new("list-cookie-sources")
              .long("list-cookie-sources")
+             .action(ArgAction::SetTrue)
+             .num_args(0)
              .help("Show valid values for the BROWSER argument to --cookies-from-browser on this computer, then exit."))
         .arg(Arg::new("quiet")
              .short('q')
