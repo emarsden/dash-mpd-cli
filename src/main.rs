@@ -26,6 +26,7 @@ use std::str::FromStr;
 use std::time::Duration;
 use std::sync::Arc;
 use std::collections::HashMap;
+use strum::IntoEnumIterator;
 use env_logger::Env;
 use reqwest::header;
 use bench_scraper::{find_cookies, KnownBrowser};
@@ -68,6 +69,10 @@ impl ProgressObserver for DownloadProgressBar {
 #[tokio::main]
 async fn main () -> Result<()> {
     env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init();
+    let known_browser_names = KnownBrowser::iter()
+        .map(|b| format!("{b:?}"))
+        .collect::<Vec<_>>()
+        .join(", ");
     let matches = clap::Command::new("dash-mpd-cli")
         .about("Download content from an MPEG-DASH streaming media manifest")
         .version(clap::crate_version!())
@@ -164,7 +169,10 @@ async fn main () -> Result<()> {
              .long("cookies-from-browser")
              .value_name("BROWSER")
              .num_args(1)
-             .help("Load cookies from BROWSER (Firefox, Chrome, ChromeBeta or Chromium)."))
+             .help(format!("Load cookies from BROWSER ({known_browser_names}).")))
+        .arg(Arg::new("list-cookie-sources")
+             .long("list-cookie-sources")
+             .help("Show valid values for the BROWSER argument to --cookies-from-browser on this computer, then exit."))
         .arg(Arg::new("quiet")
              .short('q')
              .long("quiet")
@@ -222,6 +230,15 @@ async fn main () -> Result<()> {
     // TODO: add --abort-on-error
     // TODO: add --fragment-retries arg
     // TODO: add --mtime arg (Last-modified header)
+    if matches.get_flag("list-cookie-sources") {
+        eprintln!("On this computer, cookies are available from the following browsers :");
+        let browsers = find_cookies()
+            .expect("reading cookies from browser");
+        for b in browsers.iter() {
+            eprintln!("  {:?} ({} cookies)", b.browser, b.cookies.len());
+        }
+        std::process::exit(3);
+    }
     let verbosity = matches.get_count("verbose");
     let ua = match matches.get_one::<String>("user-agent") {
         Some(ua) => ua,
@@ -237,6 +254,10 @@ async fn main () -> Result<()> {
             "Chrome" => Some(KnownBrowser::Chrome),
             "ChromeBeta" => Some(KnownBrowser::ChromeBeta),
             "Chromium" => Some(KnownBrowser::Chromium),
+            #[cfg(target_os = "windows")]
+            "Edge" => Some(KnownBrowser::Edge),
+            #[cfg(target_os = "macos")]
+            "Safari" => Some(KnownBrowser::Safari),
             _ => None,
         } {
             let jar = reqwest::cookie::Jar::default();
@@ -258,13 +279,13 @@ async fn main () -> Result<()> {
                 cb = cb.cookie_store(true).cookie_provider(Arc::new(jar));
             } else {
                 eprintln!("Can't access cookies from {browser}.");
-                eprintln!("Cookies are available from the following browsers:");
+                eprintln!("On this computer, cookies are available from the following browsers:");
                 for b in browsers.iter() {
                     eprintln!("  {:?} ({} cookies)", b.browser, b.cookies.len());
                 }
             }
         } else {
-            eprintln!("Ignoring unknown browser {browser}. Try one of Firefox, Chrome, ChromeBeta, Chromium.");
+            eprintln!("Ignoring unknown browser {browser}. Try one of {known_browser_names}.");
         }
     }
     if verbosity > 2 {

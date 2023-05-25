@@ -40,8 +40,11 @@ The following features are supported:
   and HTTP proxies. Network bandwidth can be throttled.
 - Subtitles: preliminary download support for WebVTT, TTML and SMIL streams, as well as some support for
   the wvtt format.
-- The application can read cookies from the Firefox, Chromium, Chrome, and ChromeBeta browsers on
-  Linux, Windows and MacOS, thanks to the [bench_scraper](https://crates.io/crates/bench_scraper) crate.
+- The application can read cookies from the Firefox, Chromium, Chrome, ChromeBeta, Safari and Edge
+  browsers on Linux, Windows and MacOS, thanks to the
+  [bench_scraper](https://crates.io/crates/bench_scraper) crate. See the `--cookies-from-browser`
+  commandline argument.
+  Browsers that support multiple profiles will have all their profiles scraped for cookies.
 - XLink elements (only with actuate=onLoad semantics), including resolve-to-zero
 - All forms of segment index info: SegmentBase@indexRange, SegmentTimeline,
   SegmentTemplate@duration, SegmentTemplate@index, SegmentList.
