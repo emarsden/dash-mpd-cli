@@ -30,7 +30,7 @@ use strum::IntoEnumIterator;
 use env_logger::Env;
 use reqwest::header;
 use bench_scraper::{find_cookies, KnownBrowser};
-use clap::{Arg, ArgAction};
+use clap::{Arg, ArgAction, ValueHint};
 use number_prefix::{NumberPrefix, Prefix};
 use indicatif::{ProgressBar, ProgressStyle};
 use anyhow::Result;
@@ -152,6 +152,7 @@ async fn main () -> Result<()> {
         .arg(Arg::new("save-fragments")
              .long("save-fragments")
              .value_name("FRAGMENTS-DIR")
+             .value_hint(ValueHint::DirPath)
              .num_args(1)
              .help("Save media fragments to this directory (will be created if it does not exist)."))
         .arg(Arg::new("ignore-content-type")
@@ -174,6 +175,7 @@ async fn main () -> Result<()> {
              .long("list-cookie-sources")
              .action(ArgAction::SetTrue)
              .num_args(0)
+             .exclusive(true)
              .help("Show valid values for the BROWSER argument to --cookies-from-browser on this computer, then exit."))
         .arg(Arg::new("quiet")
              .short('q')
@@ -199,31 +201,37 @@ async fn main () -> Result<()> {
         .arg(Arg::new("ffmpeg-location")
              .long("ffmpeg-location")
              .value_name("PATH")
+             .value_hint(ValueHint::ExecutablePath)
              .num_args(1)
              .help("Path to the ffmpeg binary (necessary if not located in your PATH)."))
         .arg(Arg::new("vlc-location")
              .long("vlc-location")
              .value_name("PATH")
+             .value_hint(ValueHint::ExecutablePath)
              .num_args(1)
              .help("Path to the VLC binary (necessary if not located in your PATH)."))
         .arg(Arg::new("mkvmerge-location")
              .long("mkvmerge-location")
              .value_name("PATH")
+             .value_hint(ValueHint::ExecutablePath)
              .num_args(1)
              .help("Path to the mkvmerge binary (necessary if not located in your PATH)."))
         .arg(Arg::new("mp4box-location")
              .long("mp4box-location")
              .value_name("PATH")
+             .value_hint(ValueHint::ExecutablePath)
              .num_args(1)
              .help("Path to the MP4Box binary (necessary if not located in your PATH)."))
         .arg(Arg::new("output-file")
              .long("output")
              .value_name("PATH")
+             .value_hint(ValueHint::FilePath)
              .short('o')
              .num_args(1)
              .help("Save media content to this file."))
         .arg(Arg::new("url")
              .value_name("MPD-URL")
+             .value_hint(ValueHint::Url)
              .required(true)
              .num_args(1)
              .index(1)
