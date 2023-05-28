@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.1.13] - Unreleased
+## [0.1.13] - 2023-05-28
 
 - New commandline argument `--cookies-from-browser` to load HTTP cookies from a web browser (support
   for Firefox, Chromium, Chrome, ChromeBeta, Edge and Safari on Linux, Windows and MacOS, via the
