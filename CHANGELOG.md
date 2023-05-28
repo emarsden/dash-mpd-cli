@@ -3,8 +3,10 @@
 ## [0.1.13] - Unreleased
 
 - New commandline argument `--cookies-from-browser` to load HTTP cookies from a web browser (support
-  for Firefox, Chromium, Chrome and ChromeBeta on Linux, Windows and MacOS, via the bench_scraper
-  crate.
+  for Firefox, Chromium, Chrome, ChromeBeta, Edge and Safari on Linux, Windows and MacOS, via the
+  bench_scraper crate). This support is gated by the `cookies` feature, which is enabled by default.
+  Disable it (with `--no-default-features`) to build on platforms which are not supported by the
+  bench_scraper crate, such as Android/Termux.
 
 
 ## [0.1.12] - 2023-05-12

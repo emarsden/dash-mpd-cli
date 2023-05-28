@@ -102,9 +102,10 @@ This crate is tested on the following **platforms**:
 - Microsoft Windows 10 and Windows 11 on AMD64
 
 - Android 12 on Aarch64 via [termux](https://termux.dev/) (you'll need to install the rust, binutils
-  and ffmpeg packages, and optionally the mkvtoolnix, vlc and gpac packages)
+  and ffmpeg packages, and optionally the mkvtoolnix, vlc and gpac packages). You'll need to disable
+  the `cookies` feature by building with `--no-default-features`.
 
-- OpenBSD on AMD64 (occasionally)
+- OpenBSD on AMD64 (occasionally). You'll need to disable the `cookies` feature.
 
 
 
@@ -116,63 +117,99 @@ Download content from an MPEG-DASH streaming media manifest
 Usage: dash-mpd-cli [OPTIONS] <MPD-URL>
 
 Arguments:
-  <MPD-URL>  URL of the DASH manifest to retrieve
+  <MPD-URL>
+          URL of the DASH manifest to retrieve.
 
 Options:
   -U, --user-agent <user-agent>
           
+
       --proxy <URL>
-          URL of Socks or HTTP proxy (eg. https://example.net/ or socks5://example.net/)
+          URL of Socks or HTTP proxy (e.g. https://example.net/ or socks5://example.net/).
+
       --timeout <SECONDS>
-          Timeout for network requests (from the start to the end of the request), in seconds
+          Timeout for network requests (from the start to the end of the request), in seconds.
+
       --sleep-requests <SECONDS>
-          Number of seconds to sleep between network requests (default 0)
+          Number of seconds to sleep between network requests (default 0).
+
   -r, --limit-rate <RATE>
-          Maximum network bandwidth in octets per second (default no limit), e.g. 200K, 1M
+          Maximum network bandwidth in octets per second (default no limit), e.g. 200K, 1M.
+
       --max-error-count <COUNT>
-          Maximum number of non-transient network errors that should be ignored before a download is aborted (default is 10)
+          Maximum number of non-transient network errors that should be ignored before a download is aborted (default is 10).
+
       --source-address <source-address>
           Source IP address to use for network requests, either IPv4 or IPv6. Network requests will be made using the version of this IP address (e.g. using an IPv6 source-address will select IPv6 network traffic).
+
       --quality <quality>
-          Prefer best quality (and highest bandwidth) representation, or lowest quality [possible values: best, worst]
+          Prefer best quality (and highest bandwidth) representation, or lowest quality.
+          
+          [possible values: best, worst]
+
       --prefer-language <LANG>
           Preferred language when multiple audio streams with different languages are available. Must be in RFC 5646 format (e.g. fr or en-AU). If a preference is not specified and multiple audio streams are present, the first one listed in the DASH manifest will be downloaded.
+
       --video-only
-          If the media stream has separate audio and video streams, only download the video stream
+          If media stream has separate audio and video streams, only download the video stream.
+
       --audio-only
-          If the media stream has separate audio and video streams, only download the audio stream
+          If media stream has separate audio and video streams, only download the audio stream.
+
       --write-subs
-          Write subtitle file, if subtitles are available
+          Write subtitle file, if subtitles are available.
+
       --keep-video
           Don't delete the file containing video once muxing is complete.
+
       --keep-audio
           Don't delete the file containing audio once muxing is complete.
+
       --save-fragments <FRAGMENTS-DIR>
-          Save media fragments to this directory (will be created if it does not exist)
+          Save media fragments to this directory (will be created if it does not exist).
+
       --ignore-content-type
-          Don't check the content-type of media fragments (may be required for some poorly configured servers)
+          Don't check the content-type of media fragments (may be required for some poorly configured servers).
+
       --add-header <NAME:VALUE>
           Add a custom HTTP header and its value, separated by a colon ':'. You can use this option multiple times.
+
   -q, --quiet
           
+
   -v, --verbose...
-          Level of verbosity (can be used several times)
+          Level of verbosity (can be used several times).
+
       --no-progress
           Disable the progress bar
+
       --no-xattr
-          Don't record metainformation as extended attributes in the output file
+          Don't record metainformation as extended attributes in the output file.
+
       --ffmpeg-location <PATH>
-          Path to the ffmpeg binary (necessary if not located in your PATH)
+          Path to the ffmpeg binary (necessary if not located in your PATH).
+
       --vlc-location <PATH>
-          Path to the VLC binary (necessary if not located in your PATH)
+          Path to the VLC binary (necessary if not located in your PATH).
+
       --mkvmerge-location <PATH>
-          Path to the mkvmerge binary (necessary if not located in your PATH)
+          Path to the mkvmerge binary (necessary if not located in your PATH).
+
       --mp4box-location <PATH>
-          Path to the MP4Box binary (necessary if not located in your PATH)
+          Path to the MP4Box binary (necessary if not located in your PATH).
+
   -o, --output <PATH>
-          Save media content to this file
+          Save media content to this file.
+
+      --cookies-from-browser <BROWSER>
+          Load cookies from BROWSER (Firefox, Chrome, ChromeBeta, Chromium).
+
+      --list-cookie-sources
+          Show valid values for BROWSER argument to --cookies-from-browser on this computer, then exit.
+
   -h, --help
-          Print help
+          Print help (see a summary with '-h')
+
   -V, --version
           Print version
 ```
