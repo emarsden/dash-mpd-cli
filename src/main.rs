@@ -86,6 +86,7 @@ fn known_browser_names() -> String {
 #[tokio::main]
 async fn main () -> Result<()> {
     env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init();
+    #[allow(unused_mut)]
     let mut clap = clap::Command::new("dash-mpd-cli")
         .about("Download content from an MPEG-DASH streaming media manifest")
         .version(clap::crate_version!())
@@ -239,6 +240,7 @@ async fn main () -> Result<()> {
              .num_args(1)
              .index(1)
              .help("URL of the DASH manifest to retrieve."));
+    #[allow(unused_variables)]
     let known_browser_names = known_browser_names();
     #[cfg(feature = "cookies")] {
         clap = clap
