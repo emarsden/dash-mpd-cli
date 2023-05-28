@@ -26,16 +26,19 @@ use std::str::FromStr;
 use std::time::Duration;
 use std::sync::Arc;
 use std::collections::HashMap;
-use strum::IntoEnumIterator;
 use env_logger::Env;
 use reqwest::header;
-use bench_scraper::{find_cookies, KnownBrowser};
 use clap::{Arg, ArgAction, ValueHint};
 use number_prefix::{NumberPrefix, Prefix};
 use indicatif::{ProgressBar, ProgressStyle};
 use anyhow::Result;
 use dash_mpd::fetch::DashDownloader;
 use dash_mpd::fetch::ProgressObserver;
+
+#[cfg(feature = "cookies")]
+use strum::IntoEnumIterator;
+#[cfg(feature = "cookies")]
+use bench_scraper::{find_cookies, KnownBrowser};
 
 
 struct DownloadProgressBar {
@@ -66,14 +69,23 @@ impl ProgressObserver for DownloadProgressBar {
 }
 
 
+#[cfg(feature = "cookies")]
+fn known_browser_names() -> String {
+    KnownBrowser::iter()
+        .map(|b| format!("{b:?}"))
+        .collect::<Vec<_>>()
+        .join(", ")
+}
+
+#[cfg(not(feature = "cookies"))]
+fn known_browser_names() -> String {
+    String::from("")
+}
+
+
 #[tokio::main]
 async fn main () -> Result<()> {
     env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init();
-    let known_browser_names = KnownBrowser::iter()
-        .map(|b| format!("{b:?}"))
-        .collect::<Vec<_>>()
-        .join(", ");
-
     let mut clap = clap::Command::new("dash-mpd-cli")
         .about("Download content from an MPEG-DASH streaming media manifest")
         .version(clap::crate_version!())
@@ -227,19 +239,20 @@ async fn main () -> Result<()> {
              .num_args(1)
              .index(1)
              .help("URL of the DASH manifest to retrieve."));
+    let known_browser_names = known_browser_names();
     #[cfg(feature = "cookies")] {
-    clap = clap
-        .arg(Arg::new("cookies-from-browser")
-             .long("cookies-from-browser")
-             .value_name("BROWSER")
-             .num_args(1)
-             .help(format!("Load cookies from BROWSER ({known_browser_names}).")))
-        .arg(Arg::new("list-cookie-sources")
-             .long("list-cookie-sources")
-             .action(ArgAction::SetTrue)
-             .num_args(0)
-             .exclusive(true)
-             .help("Show valid values for BROWSER argument to --cookies-from-browser on this computer, then exit."));
+        clap = clap
+            .arg(Arg::new("cookies-from-browser")
+                 .long("cookies-from-browser")
+                 .value_name("BROWSER")
+                 .num_args(1)
+                 .help(format!("Load cookies from BROWSER ({known_browser_names}).")))
+            .arg(Arg::new("list-cookie-sources")
+                 .long("list-cookie-sources")
+                 .action(ArgAction::SetTrue)
+                 .num_args(0)
+                 .exclusive(true)
+                 .help("Show valid values for BROWSER argument to --cookies-from-browser on this computer, then exit."));
     }
     let matches = clap.get_matches();
 
