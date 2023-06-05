@@ -294,4 +294,9 @@ $ cargo build --release --target x86_64-unknown-linux-musl
 ```
 
 Static musl-libc builds don’t work with OpenSSL, which is why we disable default features on the
-dash-mpd crate and build it with rustls-tls support.
+dash-mpd crate and build it with [rustls](https://github.com/rustls/rustls) support (a Rust TLS
+stack). You may encounter some situations where rustls fails to connect (handshake errors, for
+example) but other applications on your system can connect. These differences in behaviour are
+typically due to different configurations for the set of root certificates. If you prefer to use
+your machine's native TLS stack, replace both instances of `rustls-tls` by `native-tls` in
+`Cargo.toml` and rebuild.
