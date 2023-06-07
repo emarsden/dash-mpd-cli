@@ -36,8 +36,13 @@ The following features are supported:
 - VOD (static) stream manifests (this application can't download from dynamic MPD manifests, that
   are used for live streaming and OTT television).
 - Multi-period content.
-- The application can download content available over HTTP, HTTPS and HTTP/2, with support for SOCKS
-  and HTTP proxies. Network bandwidth can be throttled.
+- The application can download content available over HTTP, HTTPS and HTTP/2. Network bandwidth can
+  be throttled.
+- Support for SOCKS and HTTP proxies, via the `--proxy` commandline argument. The following
+  environment variables can also be used to specify the proxy at a system level: `HTTP_PROXY` or
+  `http_proxy` for HTTP connections, `HTTPS_PROXY` or `https_proxy` for HTTPS connections, and
+  `ALL_PROXY` or `all_proxy` for all connection types. The system proxy can be disabled using the
+  `--no-proxy` commandline argument.
 - Subtitles: preliminary download support for WebVTT, TTML and SMIL streams, as well as some support for
   the wvtt format.
 - The application can read cookies from the Firefox, Chromium, Chrome, ChromeBeta, Safari and Edge
@@ -126,6 +131,9 @@ Options:
 
       --proxy <URL>
           URL of Socks or HTTP proxy (e.g. https://example.net/ or socks5://example.net/).
+
+      --no-proxy
+          Disable use of Socks or HTTP proxy even if related environment variables are set.
 
       --timeout <SECONDS>
           Timeout for network requests (from the start to the end of the request), in seconds.

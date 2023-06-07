@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.14] - Unreleased
+
+- New commandline argument `--no-proxy` to disable use of a proxy, even if related enviroment
+  variables (`HTTP_PROXY` etc.) are set.
+
+
 ## [0.1.13] - 2023-05-28
 
 - New commandline argument `--cookies-from-browser` to load HTTP cookies from a web browser (support

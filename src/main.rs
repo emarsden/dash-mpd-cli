@@ -99,6 +99,12 @@ async fn main () -> Result<()> {
              .value_name("URL")
              .num_args(1)
              .help("URL of Socks or HTTP proxy (e.g. https://example.net/ or socks5://example.net/)."))
+        .arg(Arg::new("no-proxy")
+             .long("no-proxy")
+             .action(ArgAction::SetTrue)
+             .num_args(0)
+             .conflicts_with("proxy")
+             .help("Disable use of Socks or HTTP proxy even if related environment variables are set."))
         .arg(Arg::new("timeout")
              .long("timeout")
              .value_name("SECONDS")
@@ -328,6 +334,9 @@ async fn main () -> Result<()> {
         let proxy = reqwest::Proxy::all(p)
             .expect("connecting to HTTP proxy");
         cb = cb.proxy(proxy);
+    }
+    if matches.get_flag("no-proxy") {
+        cb = cb.no_proxy();
     }
     if let Some(src) = matches.get_one::<String>("source-address") {
        if let Ok(local_addr) = IpAddr::from_str(src) {
