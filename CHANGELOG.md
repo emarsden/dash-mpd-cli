@@ -2,6 +2,9 @@
 
 ## [0.1.14] - Unreleased
 
+- New commandline argument `--add-root-certificate` to add an X.509 certificate to the list of root
+  certificates used to check TLS connections to servers. Certificates should be provided in PEM format.
+
 - New commandline argument `--no-proxy` to disable use of a proxy, even if related enviroment
   variables (`HTTP_PROXY` etc.) are set.
 

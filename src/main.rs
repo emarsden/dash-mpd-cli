@@ -26,6 +26,7 @@ use std::str::FromStr;
 use std::time::Duration;
 use std::sync::Arc;
 use std::collections::HashMap;
+use fs_err as fs;
 use env_logger::Env;
 use reqwest::header;
 use clap::{Arg, ArgAction, ValueHint};
@@ -133,6 +134,12 @@ async fn main () -> Result<()> {
              .long("source-address")
              .num_args(1)
 	     .long_help("Source IP address to use for network requests, either IPv4 or IPv6. Network requests will be made using the version of this IP address (e.g. using an IPv6 source-address will select IPv6 network traffic)."))
+        .arg(Arg::new("add-root-certificate")
+             .long("add-root-certificate")
+             .value_name("CERT")
+             .num_args(1)
+             .value_hint(ValueHint::FilePath)
+             .help("Add a root certificate (in PEM format) to be used when verifying TLS network connections."))
         .arg(Arg::new("quality")
              .long("quality")
              .num_args(1)
@@ -368,7 +375,27 @@ async fn main () -> Result<()> {
             .expect("valid HTTP headers");
         cb = cb.default_headers(hmap);
     }
-
+    if let Some(rcs) = matches.get_many::<String>("add-root-certificate") {
+        for rc in rcs {
+            match fs::read(rc) {
+                Ok(pem) => {
+                    match reqwest::Certificate::from_pem(&pem) {
+                        Ok(cert) => {
+                            cb = cb.add_root_certificate(cert);
+                        },
+                        Err(e) => {
+                            eprintln!("Can't decode certificate: {e}");
+                            std::process::exit(6);
+                        },
+                    }
+                },
+                Err(e) => {
+                    eprintln!("Can't read root certificate: {e}");
+                    std::process::exit(5);
+                },
+            }
+        }
+    }
     let client = cb.build()
         .expect("creating HTTP client");
     let url = matches.get_one::<String>("url").unwrap();
