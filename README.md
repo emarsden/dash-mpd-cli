@@ -150,6 +150,9 @@ Options:
       --source-address <source-address>
           Source IP address to use for network requests, either IPv4 or IPv6. Network requests will be made using the version of this IP address (e.g. using an IPv6 source-address will select IPv6 network traffic).
 
+      --add-root-certificate <CERT>
+          Add a root certificate (in PEM format) to be used when verifying TLS network connections.
+
       --quality <quality>
           Prefer best quality (and highest bandwidth) representation, or lowest quality.
           

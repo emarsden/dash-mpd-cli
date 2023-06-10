@@ -1,12 +1,15 @@
 # Changelog
 
-## [0.1.14] - Unreleased
+## [0.1.14] - 2023-06-10
 
 - New commandline argument `--add-root-certificate` to add an X.509 certificate to the list of root
   certificates used to check TLS connections to servers. Certificates should be provided in PEM format.
 
 - New commandline argument `--no-proxy` to disable use of a proxy, even if related enviroment
   variables (`HTTP_PROXY` etc.) are set.
+
+- Connection errors at the network level are handled as permanent, rather than transient, errors. In
+  particular, TLS certificate verification errors will no longer be treated as transient errors.
 
 
 ## [0.1.13] - 2023-05-28
