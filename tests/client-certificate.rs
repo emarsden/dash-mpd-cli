@@ -1,28 +1,34 @@
-// Test scaffolding to verify the --add-root-certificate functionality.
+// Test scaffolding to verify the --client-identity-certificate functionality.
 //
 // To run tests while enabling printing to stdout/stderr, "cargo test -- --show-output" (from the
 // root crate directory).
 //
 // What happens in this test:
 //
-//   - Start an axum https server using a certificate signed by our own (non-recognized) certificate
-//   authority and valid for localhost.
+//   - Start an axum https server using a certificate signed by our own (private) certificate
+//   authority and valid for localhost. The server is configured only to allow requests from
+//   authenticated clients (ones that present a TLS client certificated signed by our certificate
+//   authority).
 //
 //   - The axum server serves a MPD file, an MP4 segment (at "/init.mp4") and a status counter (at
 //   "/status"). The MPD file refers to the MP4 segment. The status counter is initially zero and
 //   increments for each request to download the MP4 segment.
 //
-//   - You can check that curl can connect to the server when our certificate authority is specified using 
-//     curl --cacert tests/fixtures/root-CA.crt https://localhost:6666/mpd
+//   - You can check that curl can connect to the server when our certificate authority is specified
+//   and a client certificate provided using (with an extra sleep at the end of the test):
+//
+//     curl --cacert tests/fixtures/root-CA.crt --cert tests/fixtures/client-id.pem https://localhost:6666/mpd
 //
 //   - Check that the initial status counter is zero, using a reqwest client configured with our
-//   certificate authority as a root certificate.
+//   certificate authority as a root certificate and with the client identity specified.
 //
-//   - Run dash-mpd-cli (this crate using "cargo run") on the MPD URL, without adding our
-//   certificate authority as a root certificate, and check that the request fails.
+//   - Run dash-mpd-cli (this crate using "cargo run") on the MPD URL, with our certificate
+//   authority as a root certificate but without a client certificate, and check that the request
+//   fails.
 //
 //   - Run dash-mpd-cli on the MPD URL, this time adding our certificate authority as a root
-//   certificate. This should make a request for the MP4 segment and increment the status counter.
+//   certificate and specifying the client identity. This should make a request for the MP4 segment
+//   and increment the status counter.
 //
 //   - Check that the status counter has been incremented to one.
 //
@@ -31,6 +37,7 @@
 use fs_err as fs;
 use std::net::SocketAddr;
 use std::time::Duration;
+use std::io::BufReader;
 use std::process::Command;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
@@ -40,6 +47,8 @@ use axum::response::{Response, IntoResponse};
 use axum::http::{header, StatusCode};
 use axum::body::{Full, Bytes};
 use axum_server::tls_rustls::RustlsConfig;
+use rustls::RootCertStore;
+use rustls::server::AllowAnyAuthenticatedClient;
 use dash_mpd::{MPD, Period, AdaptationSet, Representation, BaseURL};
 use anyhow::{Context, Result};
 
@@ -56,7 +65,7 @@ impl AppState {
 }
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
-async fn test_add_root_cert() -> Result<(), anyhow::Error> {
+async fn test_add_client_identity() -> Result<(), anyhow::Error> {
     let base = BaseURL {
         base: "https://localhost:6666/init.mp4".to_string(),
         ..Default::default()
@@ -115,14 +124,32 @@ async fn test_add_root_cert() -> Result<(), anyhow::Error> {
         .route("/status", get(send_status))
         .with_state(shared_state);
     let addr = SocketAddr::from(([127, 0, 0, 1], 6666));
-    let config = RustlsConfig::from_pem_file(
-        "tests/fixtures/localhost-cert.crt",
-        "tests/fixtures/localhost-cert.key",
-    )
-        .await
-        .context("rustls configuration")?;
+    let mut client_auth_roots = RootCertStore::empty();
+    let certfile = fs::File::open("tests/fixtures/root-CA.crt")?;
+    rustls_pemfile::certs(&mut BufReader::new(certfile))
+        .unwrap()
+        .iter()
+        .map(|v| rustls::Certificate(v.clone()))
+        .for_each(|r| { client_auth_roots.add(&r).unwrap(); });
+    let client_auth = AllowAnyAuthenticatedClient::new(client_auth_roots).boxed();
+    let keyfile = fs::File::open("tests/fixtures/localhost-cert.key")?;
+    let mut reader = BufReader::new(keyfile);
+    let localhost_keys = rustls_pemfile::pkcs8_private_keys(&mut reader)
+        .context("reading localhost private keys")?;
+    let localhost_key = rustls::PrivateKey(localhost_keys[0].clone());
+    let crt_file = fs::File::open("tests/fixtures/localhost-cert.crt")?;
+    let mut reader = BufReader::new(crt_file);
+    let localhost_cert = rustls_pemfile::certs(&mut reader)?
+        .iter()
+        .map(|v| rustls::Certificate(v.clone()))
+        .collect::<Vec<_>>();
+    let config = rustls::ServerConfig::builder()
+        .with_safe_defaults()
+        .with_client_cert_verifier(client_auth)
+        .with_single_cert(localhost_cert, localhost_key)
+        .expect("bad certificates/private key");
     let backend = async move {
-        axum_server::bind_rustls(addr, config)
+        axum_server::bind_rustls(addr, RustlsConfig::from_config(config.into()))
             .serve(app.into_make_service())
             .await
             .unwrap()
@@ -130,11 +157,15 @@ async fn test_add_root_cert() -> Result<(), anyhow::Error> {
     tokio::spawn(backend);
     tokio::time::sleep(Duration::from_millis(1000)).await;
     // Check that the initial value of our request counter is zero.
+    let client_id = fs::read("tests/fixtures/client-id.pem")?;
+    let id = reqwest::Identity::from_pem(&client_id)
+        .context("reading client identity from certificate")?;
     let crt = fs::read("tests/fixtures/root-CA.crt")?;
-    let cert = reqwest::Certificate::from_pem(&crt)?;
+    let root_cert = reqwest::Certificate::from_pem(&crt)?;
     let client = reqwest::Client::builder()
         .timeout(Duration::new(30, 0))
-        .add_root_certificate(cert)
+        .identity(id)
+        .add_root_certificate(root_cert)
         .build()
         .context("creating HTTP client")?;
     let txt = client.get("https://localhost:6666/status")
@@ -144,23 +175,23 @@ async fn test_add_root_cert() -> Result<(), anyhow::Error> {
         .text()
         .await
         .context("fetching status")?;
+    // The initial request count should be zero.
     assert!(txt.eq("0"));
 
-    // Without the --add-root-certificate, should see an error from dash-mpd-cli "invalid peer
-    // certificate: UnknownIssuer".
+    // Without the --client-identity-certificate, should see an error from dash-mpd-cli due to the
+    // server refusing the connection (with rustls, is "channel closed").
     let failed = Command::new("cargo")
-        .args(["run", "--", "https://localhost:6666/mpd"])
+        .args(["run", "--",
+               "--add-root-certificate", "tests/fixtures/root-CA.crt",
+               "https://localhost:6666/mpd"])
         .output()
-        .expect("failure spawning cargo run / dash-mpd-cli");
+        .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(!failed.status.success());
-    let stderr = String::from_utf8_lossy(&failed.stderr);
-    // we are assuming that we build reqwest with rustls here, rather than with native-tls
-    assert!(stderr.contains("UnknownIssuer"));
     let cli = Command::new("cargo")
         .args(["run", "--",
                "-v", "-v", "-v",
-               "--add-root-certificate",
-               "tests/fixtures/root-CA.crt",
+               "--add-root-certificate", "tests/fixtures/root-CA.crt",
+               "--client-identity-certificate", "tests/fixtures/client-id.pem",
                "https://localhost:6666/mpd"])
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
