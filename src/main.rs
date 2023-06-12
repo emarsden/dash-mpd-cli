@@ -140,6 +140,12 @@ async fn main () -> Result<()> {
              .num_args(1)
              .value_hint(ValueHint::FilePath)
              .help("Add a root certificate (in PEM format) to be used when verifying TLS network connections."))
+        .arg(Arg::new("client-identity-certificate")
+             .long("client-identity-certificate")
+             .value_name("CERT")
+             .num_args(1)
+             .value_hint(ValueHint::FilePath)
+             .help("Client private key and certificate (in PEM format) to be used when authenticating TLS network connections."))
         .arg(Arg::new("quality")
              .long("quality")
              .num_args(1)
@@ -384,7 +390,7 @@ async fn main () -> Result<()> {
                             cb = cb.add_root_certificate(cert);
                         },
                         Err(e) => {
-                            eprintln!("Can't decode certificate: {e}");
+                            eprintln!("Can't decode root certificate: {e}");
                             std::process::exit(6);
                         },
                     }
@@ -394,6 +400,25 @@ async fn main () -> Result<()> {
                     std::process::exit(5);
                 },
             }
+        }
+    }
+    if let Some(cc) = matches.get_one::<String>("client-identity-certificate") {
+        match fs::read(cc) {
+            Ok(pem) => {
+                match reqwest::Identity::from_pem(&pem) {
+                    Ok(id) => {
+                        cb = cb.identity(id);
+                    },
+                    Err(e) => {
+                        eprintln!("Can't decode client certificate: {e}");
+                        std::process::exit(8);
+                    },
+                }
+            },
+            Err(e) => {
+                eprintln!("Can't read client certificate: {e}");
+                std::process::exit(7);
+            },
         }
     }
     let client = cb.build()

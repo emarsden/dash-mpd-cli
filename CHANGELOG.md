@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.15] - Unreleased
+
+- New commandline argument `--client-identity-certificate` to provide a file containing a private
+  key and certificate (both encoded in PEM format). These will be used to authenticate TLS network
+  connections.
+
+
 ## [0.1.14] - 2023-06-10
 
 - New commandline argument `--add-root-certificate` to add an X.509 certificate to the list of root
