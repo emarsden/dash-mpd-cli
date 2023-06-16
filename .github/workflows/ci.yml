@@ -12,6 +12,7 @@ jobs:
       - run: cargo check
       - run: cargo build
       - run: cargo build --no-default-features
+      - run: cargo test
 
   build-macos:
     runs-on: macos-latest
