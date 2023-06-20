@@ -181,14 +181,14 @@ async fn test_add_client_identity() -> Result<(), anyhow::Error> {
     // Without the --client-identity-certificate, should see an error from dash-mpd-cli due to the
     // server refusing the connection (with rustls, is "channel closed").
     let failed = Command::new("cargo")
-        .args(["run", "--",
+        .args(["run", "--no-default-features", "--",
                "--add-root-certificate", "tests/fixtures/root-CA.crt",
                "https://localhost:6666/mpd"])
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(!failed.status.success());
     let cli = Command::new("cargo")
-        .args(["run", "--",
+        .args(["run", "--no-default-features", "--",
                "-v", "-v", "-v",
                "--add-root-certificate", "tests/fixtures/root-CA.crt",
                "--client-identity-certificate", "tests/fixtures/client-id.pem",

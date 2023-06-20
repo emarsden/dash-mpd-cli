@@ -149,7 +149,7 @@ async fn test_add_root_cert() -> Result<(), anyhow::Error> {
     // Without the --add-root-certificate, should see an error from dash-mpd-cli "invalid peer
     // certificate: UnknownIssuer".
     let failed = Command::new("cargo")
-        .args(["run", "--", "https://localhost:6666/mpd"])
+        .args(["run", "--no-default-features", "--", "https://localhost:6666/mpd"])
         .output()
         .expect("failure spawning cargo run / dash-mpd-cli");
     assert!(!failed.status.success());
@@ -157,7 +157,7 @@ async fn test_add_root_cert() -> Result<(), anyhow::Error> {
     // we are assuming that we build reqwest with rustls here, rather than with native-tls
     assert!(stderr.contains("UnknownIssuer"));
     let cli = Command::new("cargo")
-        .args(["run", "--",
+        .args(["run", "--no-default-features", "--",
                "-v", "-v", "-v",
                "--add-root-certificate",
                "tests/fixtures/root-CA.crt",
