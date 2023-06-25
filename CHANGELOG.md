@@ -1,10 +1,18 @@
 # Changelog
 
-## [0.1.15] - Unreleased
+## [0.2.0] - 2023-06-25
+
+- Incompatible change to the `--keep_audio` and `keep_video` commandline arguments, to allow
+  the user to specify the path for the audio and video files. Instead of operating as flags, they
+  allow the user to specify the filename to which the corresponding stream will be saved (and not
+  deleted after muxing).
 
 - New commandline argument `--client-identity-certificate` to provide a file containing a private
   key and certificate (both encoded in PEM format). These will be used to authenticate TLS network
   connections.
+
+- Print information on the different media streams available (resolution, bitrate, codec) in a
+  manifest when requested verbosity is non-zero.
 
 
 ## [0.1.14] - 2023-06-10

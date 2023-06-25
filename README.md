@@ -153,6 +153,9 @@ Options:
       --add-root-certificate <CERT>
           Add a root certificate (in PEM format) to be used when verifying TLS network connections.
 
+      --client-identity-certificate <CERT>
+          Client private key and certificate (in PEM format) to be used when authenticating TLS network connections.
+
       --quality <quality>
           Prefer best quality (and highest bandwidth) representation, or lowest quality.
           
@@ -170,11 +173,11 @@ Options:
       --write-subs
           Write subtitle file, if subtitles are available.
 
-      --keep-video
-          Don't delete the file containing video once muxing is complete.
+      --keep-video <VIDEO-PATH>
+          Keep video stream in file specified by VIDEO-PATH.
 
-      --keep-audio
-          Don't delete the file containing audio once muxing is complete.
+      --keep-audio <AUDIO-PATH>
+          Keep audio stream (if audio is available as a separate media stream) in file specified by AUDIO-PATH.
 
       --save-fragments <FRAGMENTS-DIR>
           Save media fragments to this directory (will be created if it does not exist).
