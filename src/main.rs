@@ -37,8 +37,6 @@ use dash_mpd::fetch::DashDownloader;
 use dash_mpd::fetch::ProgressObserver;
 
 #[cfg(feature = "cookies")]
-use strum::IntoEnumIterator;
-#[cfg(feature = "cookies")]
 use bench_scraper::{find_cookies, KnownBrowser};
 
 
@@ -72,6 +70,8 @@ impl ProgressObserver for DownloadProgressBar {
 
 #[cfg(feature = "cookies")]
 fn known_browser_names() -> String {
+    use strum::IntoEnumIterator;
+
     KnownBrowser::iter()
         .map(|b| format!("{b:?}"))
         .collect::<Vec<_>>()
@@ -175,14 +175,16 @@ async fn main () -> Result<()> {
              .help("Write subtitle file, if subtitles are available."))
         .arg(Arg::new("keep-video")
              .long("keep-video")
-             .action(ArgAction::SetTrue)
-             .num_args(0)
-             .help("Don't delete the file containing video once muxing is complete."))
+             .value_name("VIDEO-PATH")
+             .num_args(1)
+             .value_hint(ValueHint::FilePath)
+             .help("Keep video stream in file specified by VIDEO-PATH."))
         .arg(Arg::new("keep-audio")
              .long("keep-audio")
-             .action(ArgAction::SetTrue)
-             .num_args(0)
-             .help("Don't delete the file containing audio once muxing is complete."))
+             .value_name("AUDIO-PATH")
+             .num_args(1)
+             .value_hint(ValueHint::FilePath)
+             .help("Keep audio stream (if audio is available as a separate media stream) in file specified by AUDIO-PATH."))
         .arg(Arg::new("save-fragments")
              .long("save-fragments")
              .value_name("FRAGMENTS-DIR")
@@ -282,7 +284,7 @@ async fn main () -> Result<()> {
     // TODO: add --mtime arg (Last-modified header)
     #[cfg(feature = "cookies")]
     if matches.get_flag("list-cookie-sources") {
-        eprintln!("On this computer, cookies are available from the following browsers :");
+        eprintln!("On this computer, cookies are available from the following browsers:");
         let browsers = find_cookies()
             .expect("reading cookies from browser");
         for b in browsers.iter() {
@@ -297,8 +299,7 @@ async fn main () -> Result<()> {
     };
     let mut cb = reqwest::Client::builder()
         .user_agent(ua)
-        .gzip(true)
-        .brotli(true);
+        .gzip(true);
     #[cfg(feature = "cookies")]
     if let Some(browser) = matches.get_one::<String>("cookies-from-browser") {
         if let Some(wanted) = match browser.as_str() {
@@ -466,11 +467,11 @@ async fn main () -> Result<()> {
     if matches.get_flag("video-only") {
         dl = dl.video_only();
     }
-    if matches.get_flag("keep-video") {
-        dl = dl.keep_video();
+    if let Some(path) = matches.get_one::<String>("keep-video") {
+        dl = dl.keep_video_as(path);
     }
-    if matches.get_flag("keep-audio") {
-        dl = dl.keep_audio();
+    if let Some(path) = matches.get_one::<String>("keep-audio") {
+        dl = dl.keep_audio_as(path);
     }
     if let Some(fragments_dir) = matches.get_one::<String>("save-fragments") {
         dl = dl.save_fragments_to(Path::new(fragments_dir));
