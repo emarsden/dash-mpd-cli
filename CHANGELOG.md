@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.1] - 2023-07-08
+
+- Support for decrypting encrypted media streams that use ContentProtection, via the Bento4
+  mp4decrypt commandline application. See the `--key` commandline argument to allow kid:key pairs to
+  be specified, and the `--mp4decrypt-location` commandline argument to specify a non-standard
+  location for the mp4decrypt binary.
+
+- Fix a bug in the handling of the `--add-header` commandline argument.
+
+
 ## [0.2.0] - 2023-06-25
 
 - Incompatible change to the `--keep_audio` and `keep_video` commandline arguments, to allow

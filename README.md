@@ -37,7 +37,7 @@ The following features are supported:
   are used for live streaming and OTT television).
 - Multi-period content.
 - The application can download content available over HTTP, HTTPS and HTTP/2. Network bandwidth can
-  be throttled.
+  be throttled (see the `--limit-rate` commandline argument).
 - Support for SOCKS and HTTP proxies, via the `--proxy` commandline argument. The following
   environment variables can also be used to specify the proxy at a system level: `HTTP_PROXY` or
   `http_proxy` for HTTP connections, `HTTPS_PROXY` or `https_proxy` for HTTPS connections, and
@@ -55,10 +55,14 @@ The following features are supported:
   SegmentTemplate@duration, SegmentTemplate@index, SegmentList.
 - Media containers of types supported by mkvmerge, ffmpeg, VLC or MP4Box (this includes ISO-BMFF /
   CMAF / MP4, Matroska, WebM, MPEG-2 TS).
+- Support for decrypting media streams that use MPEG Common Encryption (cenc) ContentProtection.
+  This requires the `mp4decrypt` commandline application from the [Bento4
+  suite](https://github.com/axiomatic-systems/Bento4/) to be installed ([binaries are
+  available](https://www.bento4.com/downloads/) for common platforms). See the
+  `--key` commandline argument.
 
 The following are not supported: 
 
-- Content encrypted with ContentProtection DRM mechanisms such as Clear Key, FairPlay, PlayReady, Widevine.
 - XLink elements with actuate=onRequest semantics
 
 
@@ -66,9 +70,9 @@ The following are not supported:
 ## Installation
 
 **Binary releases** are [available on GitHub](https://github.com/emarsden/dash-mpd-cli/releases) for
-GNU/Linux on AMD64 (statically linked against musl libc to avoid glibc versioning problems), Microsoft
-Windows on AMD64 and MacOS on AMD64. These are built automatically on the GitHub continuous
-integration infrastructure.
+GNU/Linux on AMD64 (statically linked against musl libc to avoid glibc versioning problems),
+Microsoft Windows on AMD64 and MacOS on aarch64 (“Apple Silicon”) and AMD64. These are built
+automatically on the GitHub continuous integration infrastructure.
 
 You can also **build from source** using an [installed Rust development
 environment](https://www.rust-lang.org/tools/install):
@@ -95,7 +99,13 @@ You should also install the following **dependencies**:
   test the preliminary support for retrieving subtitles in wvtt format. If it's installed, MP4Box
   will be used to convert the wvtt stream to the more widely recognized SRT format. MP4Box can also
   be used for muxing audio and video streams to an MP4 container, as a fallback if ffmpeg and vlc
-  are not available.
+  are not available. See the `--mp4box-location` commandline argument if this is installed in a
+  non-standard location.
+
+- the mp4decrypt commandline application from the [Bento4
+  suite](https://github.com/axiomatic-systems/Bento4/), if you need to fetch encrypted content.
+  [Binaries are available](https://www.bento4.com/downloads/) for common platforms. See the
+  `--mp4decrypt-location` commandline argument if this is installed in a non-standard location.
 
 
 This crate is tested on the following **platforms**:
@@ -179,6 +189,9 @@ Options:
       --keep-audio <AUDIO-PATH>
           Keep audio stream (if audio is available as a separate media stream) in file specified by AUDIO-PATH.
 
+      --key <KID:KEY>
+          Use KID:KEY to decrypt encrypted media streams. KID should be either a track id in decimal (e.g. 1), or a 128-bit keyid (32 hexadecimal characters). KEY should be 32 hexadecimal characters. Example: --key eb676abbcb345e96bbcf616630f1a3da:100b6c20940f779a4589152b57d2dacb. You can use this option multiple times.
+
       --save-fragments <FRAGMENTS-DIR>
           Save media fragments to this directory (will be created if it does not exist).
 
@@ -211,6 +224,9 @@ Options:
 
       --mp4box-location <PATH>
           Path to the MP4Box binary (necessary if not located in your PATH).
+
+      --mp4decrypt-location <PATH>
+          Path to the mp4decrypt binary (necessary if not located in your PATH).
 
   -o, --output <PATH>
           Save media content to this file.

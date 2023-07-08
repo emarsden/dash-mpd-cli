@@ -185,6 +185,12 @@ async fn main () -> Result<()> {
              .num_args(1)
              .value_hint(ValueHint::FilePath)
              .help("Keep audio stream (if audio is available as a separate media stream) in file specified by AUDIO-PATH."))
+        .arg(Arg::new("key")
+             .long("key")
+             .value_name("KID:KEY")
+             .num_args(1)
+             .action(clap::ArgAction::Append)
+             .long_help("Use KID:KEY to decrypt encrypted media streams. KID should be either a track id in decimal (e.g. 1), or a 128-bit keyid (32 hexadecimal characters). KEY should be 32 hexadecimal characters. Example: --key eb676abbcb345e96bbcf616630f1a3da:100b6c20940f779a4589152b57d2dacb. You can use this option multiple times."))
         .arg(Arg::new("save-fragments")
              .long("save-fragments")
              .value_name("FRAGMENTS-DIR")
@@ -247,6 +253,12 @@ async fn main () -> Result<()> {
              .value_hint(ValueHint::ExecutablePath)
              .num_args(1)
              .help("Path to the MP4Box binary (necessary if not located in your PATH)."))
+        .arg(Arg::new("mp4decrypt-location")
+             .long("mp4decrypt-location")
+             .value_name("PATH")
+             .value_hint(ValueHint::ExecutablePath)
+             .num_args(1)
+             .help("Path to the mp4decrypt binary (necessary if not located in your PATH)."))
         .arg(Arg::new("output-file")
              .long("output")
              .value_name("PATH")
@@ -371,8 +383,7 @@ async fn main () -> Result<()> {
     if let Some(hvs) = matches.get_many::<String>("add-header") {
         let mut headers = HashMap::new();
         for hv in hvs.collect::<Vec<_>>() {
-            if let Some(pos) = hv.find(':') {
-                let (h, v) = hv.split_at(pos);
+            if let Some((h, v)) = hv.split_once(':') {
                 headers.insert(h.to_string(), v.to_string());
             } else {
                 eprintln!("Ignoring badly formed header:value argument to --add-header");
@@ -473,6 +484,19 @@ async fn main () -> Result<()> {
     if let Some(path) = matches.get_one::<String>("keep-audio") {
         dl = dl.keep_audio_as(path);
     }
+    if let Some(kvs) = matches.get_many::<String>("key") {
+        for kv in kvs.collect::<Vec<_>>() {
+            if let Some((kid, key)) = kv.split_once(':') {
+                if key.len() != 32 {
+                    eprintln!("Ignoring invalid format for KEY (should be 32 hex digits)");
+                } else {
+                    dl = dl.add_decryption_key(String::from(kid), String::from(key));
+                }
+            } else {
+                eprintln!("Ignoring badly formed KID:KEY argument to --key");
+            }
+        }
+    }
     if let Some(fragments_dir) = matches.get_one::<String>("save-fragments") {
         dl = dl.save_fragments_to(Path::new(fragments_dir));
     }
@@ -497,6 +521,9 @@ async fn main () -> Result<()> {
     if let Some(path) = matches.get_one::<String>("mp4box-location") {
         dl = dl.with_mp4box(path);
     }
+    if let Some(path) = matches.get_one::<String>("mp4decrypt-location") {
+        dl = dl.with_mp4decrypt(path);
+    }
     if let Some(q) = matches.get_one::<String>("quality") {
         if q.eq("best") {
             // DashDownloader defaults to worst quality
@@ -509,13 +536,13 @@ async fn main () -> Result<()> {
     dl = dl.verbosity(verbosity);
     if let Some(out) = matches.get_one::<String>("output-file") {
         if let Err(e) = dl.download_to(out).await {
-            eprintln!("Download error: {e}");
+            eprintln!("Download failed: {e}");
         }
     } else {
         match dl.download().await {
             Ok(out) => println!("Downloaded DASH content to {out:?}"),
             Err(e) => {
-                eprintln!("Download error: {e}");
+                eprintln!("Download failed: {e}");
                 std::process::exit(2);
             },
         }
