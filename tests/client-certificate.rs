@@ -169,11 +169,9 @@ async fn test_add_client_identity() -> Result<(), anyhow::Error> {
         .build()
         .context("creating HTTP client")?;
     let txt = client.get("https://localhost:6666/status")
-        .send()
-        .await?
+        .send().await?
         .error_for_status()?
-        .text()
-        .await
+        .text().await
         .context("fetching status")?;
     // The initial request count should be zero.
     assert!(txt.eq("0"));
@@ -199,11 +197,9 @@ async fn test_add_client_identity() -> Result<(), anyhow::Error> {
 
     // Check that the init.mp4 segment was fetched: request counter should be 1.
     let txt = client.get("https://localhost:6666/status")
-        .send()
-        .await?
+        .send().await?
         .error_for_status()?
-        .text()
-        .await
+        .text().await
         .context("fetching status")?;
     assert!(txt.eq("1"));
 
