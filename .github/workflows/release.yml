@@ -34,12 +34,14 @@ jobs:
             os: macos-latest
           - target: x86_64-pc-windows-gnu
             os: windows-latest
+          - target: aarch64-pc-windows-msvc
+            os: ubuntu-latest
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
       - uses: taiki-e/upload-rust-binary-action@v1
         with:
           bin: dash-mpd-cli
-          include: LICENSE-MIT,README.md,CHANGELOG.md
+          include: LICENSE-MIT,README.md
           target: ${{ matrix.target }}
           token: ${{ secrets.GITHUB_TOKEN }}
