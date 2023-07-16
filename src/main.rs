@@ -27,7 +27,6 @@ use std::time::Duration;
 use std::sync::Arc;
 use std::collections::HashMap;
 use fs_err as fs;
-use env_logger::Env;
 use reqwest::header;
 use clap::{Arg, ArgAction, ValueHint};
 use number_prefix::{NumberPrefix, Prefix};
@@ -86,7 +85,7 @@ fn known_browser_names() -> String {
 
 #[tokio::main]
 async fn main () -> Result<()> {
-    env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init();
+    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("reqwest=trace")).init();
     #[allow(unused_mut)]
     let mut clap = clap::Command::new("dash-mpd-cli")
         .about("Download content from an MPEG-DASH streaming media manifest")
@@ -168,6 +167,10 @@ async fn main () -> Result<()> {
              .num_args(0)
              .conflicts_with("video-only")
              .help("If media stream has separate audio and video streams, only download the audio stream."))
+        .arg(Arg::new("simulate")
+             .long("simulate")
+             .action(ArgAction::SetTrue)
+             .num_args(0))
         .arg(Arg::new("write-subs")
              .long("write-subs")
              .action(ArgAction::SetTrue)
@@ -478,6 +481,11 @@ async fn main () -> Result<()> {
     if matches.get_flag("video-only") {
         dl = dl.video_only();
     }
+    if matches.get_flag("simulate") {
+        dl = dl.fetch_audio(false)
+            .fetch_video(false)
+            .fetch_subtitles(false);
+    }
     if let Some(path) = matches.get_one::<String>("keep-video") {
         dl = dl.keep_video_as(path);
     }
@@ -501,7 +509,7 @@ async fn main () -> Result<()> {
         dl = dl.save_fragments_to(Path::new(fragments_dir));
     }
     if matches.get_flag("write-subs") {
-        dl = dl.fetch_subtitles();
+        dl = dl.fetch_subtitles(true);
     }
     if matches.get_flag("ignore-content-type") {
         dl = dl.without_content_type_checks();
@@ -540,7 +548,11 @@ async fn main () -> Result<()> {
         }
     } else {
         match dl.download().await {
-            Ok(out) => println!("Downloaded DASH content to {out:?}"),
+            Ok(out) => {
+                if !matches.get_flag("simulate") {
+                    println!("Downloaded DASH content to {out:?}");
+                }
+            },
             Err(e) => {
                 eprintln!("Download failed: {e}");
                 std::process::exit(2);

@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.2] - 2023-07-16
+
+- New commandline argument `--simulate` to retrieve the MPD manifest but not download any audio,
+  video or subtitle content.
+
+- Improve support for retrieving subtitles that are distributed in fragmented MP4 streams (in
+  particular WebVTT/STPP formats).
+
+- More diagnostics information is printed concerning the selected audio/video streams.
+
+
 ## [0.2.1] - 2023-07-08
 
 - Support for decrypting encrypted media streams that use ContentProtection, via the Bento4
