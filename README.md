@@ -180,6 +180,9 @@ Options:
       --audio-only
           If media stream has separate audio and video streams, only download the audio stream.
 
+      --simulate
+          Download the manifest and print diagnostic information, but do not download audio, video or subtitle content, and write nothing to disk.
+
       --write-subs
           Write subtitle file, if subtitles are available.
 
