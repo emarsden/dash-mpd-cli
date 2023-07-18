@@ -1,5 +1,13 @@
 # Changelog
 
+
+## [0.2.3] - Unreleased
+
+- Fix regression: restore printing of logged diagnostics.
+
+- Add support for EIA-608 aka CEA-608 subtitles/closed captions.
+
+
 ## [0.2.2] - 2023-07-16
 
 - New commandline argument `--simulate` to retrieve the MPD manifest but not download any audio,
