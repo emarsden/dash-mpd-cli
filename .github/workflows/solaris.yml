@@ -1,6 +1,8 @@
 # Run cargo tests in a Solaris VM. This needs to run on one of the GitHub macos runners, because
 # they are currently the only ones to support virtualization.
 #
+# A normal rustup install fails on Solaris (2023-08), so we install via pkg.
+#
 # See https://github.com/vmactions/solaris-vm
 
 on: [push]
@@ -18,14 +20,12 @@ jobs:
         usesh: true
         prepare: |
           pkgutil -y -i curl
-          curl https://sh.rustup.rs -sSf --output rustup.sh
-          sh rustup.sh -y --profile minimal --default-toolchain stable
-          export PATH="${HOME}/.cargo/bin:$PATH"
+          pkg install developer/rust/rustc developer/rust/cargo
           echo "~~~~ rustc --version ~~~~"
           rustc --version
 
         run: |
           export PATH="${HOME}/.cargo/bin:$PATH"
           ls -la
-          cargo build --verbose
-          cargo test --verbose
+          cargo build --no-default-features --verbose
+          cargo test --no-default-features --verbose
