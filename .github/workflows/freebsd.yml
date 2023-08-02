@@ -19,6 +19,9 @@ jobs:
       uses: vmactions/freebsd-vm@v0
       with:
         usesh: true
+        sync: rsync
+        copyback: false
+        mem: 2048
         prepare: |
           pkg install -y curl
           curl https://sh.rustup.rs -sSf --output rustup.sh
