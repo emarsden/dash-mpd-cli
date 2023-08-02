@@ -3,6 +3,9 @@
 
 ## [0.2.3] - Unreleased
 
+- New commandline argument `--referer` to specify the value of the Referer HTTP header. This is an
+  alternative to the use of the `--add-header` commandline argument.
+
 - Fix regression: restore printing of logged diagnostics.
 
 - Add support for EIA-608 aka CEA-608 subtitles/closed captions.

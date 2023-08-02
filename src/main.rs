@@ -215,6 +215,12 @@ async fn main () -> Result<()> {
              .num_args(1)
              .action(clap::ArgAction::Append)
              .long_help("Add a custom HTTP header and its value, separated by a colon ':'. You can use this option multiple times."))
+        .arg(Arg::new("referer")
+             .long("referer")
+             .alias("referrer")
+             .value_name("URL")
+             .num_args(1)
+             .help("Specify content of Referer HTTP header."))
         .arg(Arg::new("quiet")
              .short('q')
              .long("quiet")
@@ -395,6 +401,9 @@ async fn main () -> Result<()> {
             } else {
                 eprintln!("Ignoring badly formed header:value argument to --add-header");
             }
+        }
+        if let Some(url) = matches.get_one::<String>("referer") {
+            headers.insert("referer".to_string(), url.to_string());
         }
         let hmap: header::HeaderMap = (&headers).try_into()
             .expect("valid HTTP headers");

@@ -204,6 +204,9 @@ Options:
       --add-header <NAME:VALUE>
           Add a custom HTTP header and its value, separated by a colon ':'. You can use this option multiple times.
 
+      --referer <URL>
+          Specify content of Referer HTTP header.
+
   -q, --quiet
           
 
