@@ -1,6 +1,9 @@
 # Run cargo tests in a FreeBSD VM. This needs to run on one of the GitHub macos runners, because
 # they are currently the only ones to support virtualization.
 #
+# We need to build without default features (in particular without the "cookies" feature), because
+# the bench_scraper crate doesn't compile on FreeBSD.
+#
 # See https://github.com/vmactions/freebsd-vm
 
 on: [push]
@@ -27,5 +30,5 @@ jobs:
         run: |
           export PATH="${HOME}/.cargo/bin:$PATH"
           ls -la
-          cargo build --verbose
-          cargo test --verbose
+          cargo build --no-default-features --verbose
+          cargo test --no-default-features --verbose
