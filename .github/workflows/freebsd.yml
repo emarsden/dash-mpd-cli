@@ -29,6 +29,8 @@ jobs:
           export PATH="${HOME}/.cargo/bin:$PATH"
           echo "~~~~ rustc --version ~~~~"
           rustc --version
+          pkg install -y Bento4
+          mp4decrypt
 
         run: |
           export PATH="${HOME}/.cargo/bin:$PATH"
