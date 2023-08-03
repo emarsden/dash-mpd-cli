@@ -131,3 +131,24 @@ fn test_decryption_marlin_cbcs () {
     }
 }
 
+
+
+// A small decryption test case that we can run on the CI infrastructure.
+#[test]
+fn test_decryption_small () {
+    let mpd = "https://m.dtv.fi/dash/dasherh264/drm/manifest_clearkey.mpd";
+    let outpath = env::temp_dir().join("caminandes.mp4");
+    let cli = Command::new("cargo")
+        .args(["run", "--no-default-features", "--",
+               "-v",
+               "--quality", "worst",
+               "--key", "43215678123412341234123412341234:12341234123412341234123412341234",
+               "-o", &outpath.to_string_lossy(), mpd])
+        .output()
+        .expect("failed spawning cargo run / dash-mpd-cli");
+    assert!(cli.status.success());
+    if let Ok(meta) = fs::metadata(Path::new(&outpath)) {
+        let ratio = meta.len() as f64 / 6_975_147.0;
+        assert!(0.95 < ratio && ratio < 1.05);
+    }
+}
