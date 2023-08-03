@@ -12,6 +12,11 @@ jobs:
       - run: cargo check
       - run: cargo build
       - run: cargo build --no-default-features
+      - name: Install Bento4 mp4decrypt
+        run: |
+          wget -O /tmp/bento4.zip https://www.bok.net/Bento4/binaries/Bento4-SDK-1-6-0-640.x86_64-unknown-linux.zip
+          unzip /tmp/bento4.zip "Bento4-SDK-*/bin/mp4decrypt" -d /tmp
+          sudo mv /tmp/Bento4-SDK*/bin/mp4decrypt /usr/local/bin
       - run: cargo test
 
   build-macos:
@@ -20,6 +25,12 @@ jobs:
     - uses: actions/checkout@v3
     - uses: dtolnay/rust-toolchain@stable
     - run: cargo build --verbose
+    - name: Install Bento4 mp4decrypt
+      run: |
+        wget -O /tmp/bento4.zip https://www.bok.net/Bento4/binaries/Bento4-SDK-1-6-0-640.universal-apple-macosx.zip
+        unzip /tmp/bento4.zip "Bento4-SDK-*/bin/mp4decrypt" -d /tmp
+        sudo mv /tmp/Bento4-SDK*/bin/mp4decrypt /usr/local/bin
+    - run: cargo test
 
   build-windows:
     runs-on: windows-latest
