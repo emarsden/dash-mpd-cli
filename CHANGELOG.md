@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [0.2.3] - Unreleased
+## [0.2.3] - 2023-08-05
 
 - New commandline argument `--referer` to specify the value of the Referer HTTP header. This is an
   alternative to the use of the `--add-header` commandline argument.
@@ -9,6 +9,10 @@
 - Fix regression: restore printing of logged diagnostics.
 
 - Add support for EIA-608 aka CEA-608 subtitles/closed captions.
+
+- More diagnostics information is printed concerning the selected audio/video streams. In
+  particular, pssh information will be printed for streams with ContentProtection whose pssh is
+  embedded in the initialization segments rather than in the DASH manifest.
 
 
 ## [0.2.2] - 2023-07-16

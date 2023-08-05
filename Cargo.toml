@@ -1,6 +1,6 @@
 [package]
 name = "dash-mpd-cli"
-version = "0.2.2"
+version = "0.2.3"
 authors = ["Eric Marsden <eric.marsden@risk-engineering.org>"]
 license = "MIT"
 description = "Download content from a DASH-MPEG or DASH-WebM MPD manifest"
@@ -13,16 +13,16 @@ publish = true
 
 
 [dependencies]
-tokio = { version = ">=1.24.2", features = ["rt-multi-thread", "macros"] }
-dash-mpd = { version = ">=0.12.0", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
+tokio = { version = "1.29", features = ["rt-multi-thread", "macros"] }
+dash-mpd = { version = ">=0.13.0", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
 reqwest = { version = "0.11", default-features = false, features = ["gzip", "rustls-tls", "socks"] }
 strum = { version = "0.24", features = ["derive"] }
-colored = "2"
+colored = "2.0"
 indicatif = "0.17"
-clap = { version = "4", features = ["cargo", "unicode"] }
+clap = { version = "4.3", features = ["cargo", "unicode"] }
 fs-err = "2.9"
 number_prefix = "0.4"
-anyhow = "1"
+anyhow = "1.0"
 log = "0.4"
 env_logger = "0.10"
 bench_scraper = { version = "0.4", features = ["reqwest"], optional = true }
@@ -30,7 +30,7 @@ bench_scraper = { version = "0.4", features = ["reqwest"], optional = true }
 [dev-dependencies]
 rustls = "0.21"
 rustls-pemfile = "1.0"
-tokio = { version = ">=1.24.2", features = ["rt-multi-thread", "time", "macros"] }
+tokio = { version = "1.29", features = ["rt-multi-thread", "time", "macros"] }
 axum = "0.6"
 axum-server = { version = "0.5", features = ["tls-rustls"] }
 quick-xml = { version = "0.29", features = ["serialize"] }

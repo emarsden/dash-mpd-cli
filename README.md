@@ -23,8 +23,8 @@ streaming at [howvideo.works](https://howvideo.works/#dash).
 This commandline application allows you to download content (audio or video) described by an MPD
 manifest. This involves selecting the alternative with the most appropriate encoding (in terms of
 bitrate, codec, etc.), fetching segments of the content using HTTP or HTTPS requests and muxing
-audio and video segments together. There is also some preliminary support for downloading subtitles
-(mostly WebVTT, TTML and SMIL formats, with some support for wvtt format). 
+audio and video segments together. There is also support for downloading subtitles (mostly WebVTT,
+TTML and SMIL formats, with some support for wvtt format).
 
 This application builds on the [dash-mpd](https://crates.io/crates/dash-mpd) crate.
 
@@ -35,26 +35,35 @@ The following features are supported:
 
 - VOD (static) stream manifests (this application can't download from dynamic MPD manifests, that
   are used for live streaming and OTT television).
+
 - Multi-period content.
+
 - The application can download content available over HTTP, HTTPS and HTTP/2. Network bandwidth can
   be throttled (see the `--limit-rate` commandline argument).
+
 - Support for SOCKS and HTTP proxies, via the `--proxy` commandline argument. The following
   environment variables can also be used to specify the proxy at a system level: `HTTP_PROXY` or
   `http_proxy` for HTTP connections, `HTTPS_PROXY` or `https_proxy` for HTTPS connections, and
   `ALL_PROXY` or `all_proxy` for all connection types. The system proxy can be disabled using the
   `--no-proxy` commandline argument.
-- Subtitles: preliminary download support for WebVTT, TTML and SMIL streams, as well as some support for
-  the wvtt format.
+
+- Subtitles: download support for WebVTT, TTML and SMIL streams, as well as some support for the
+  wvtt format.
+
 - The application can read cookies from the Firefox, Chromium, Chrome, ChromeBeta, Safari and Edge
   browsers on Linux, Windows and MacOS, thanks to the
   [bench_scraper](https://crates.io/crates/bench_scraper) crate. See the `--cookies-from-browser`
   commandline argument.
   Browsers that support multiple profiles will have all their profiles scraped for cookies.
-- XLink elements (only with actuate=onLoad semantics), including resolve-to-zero
+
+- XLink elements (only with actuate=onLoad semantics), including resolve-to-zero.
+
 - All forms of segment index info: SegmentBase@indexRange, SegmentTimeline,
   SegmentTemplate@duration, SegmentTemplate@index, SegmentList.
+
 - Media containers of types supported by mkvmerge, ffmpeg, VLC or MP4Box (this includes ISO-BMFF /
   CMAF / MP4, Matroska, WebM, MPEG-2 TS).
+
 - Support for decrypting media streams that use MPEG Common Encryption (cenc) ContentProtection.
   This requires the `mp4decrypt` commandline application from the [Bento4
   suite](https://github.com/axiomatic-systems/Bento4/) to be installed ([binaries are
@@ -120,7 +129,7 @@ This crate is tested on the following **platforms**:
   and ffmpeg packages, and optionally the mkvtoolnix, vlc and gpac packages). You'll need to disable
   the `cookies` feature by building with `--no-default-features`.
 
-- OpenBSD on AMD64 (occasionally). You'll need to disable the `cookies` feature.
+- FreeBSD/AMD64 and OpenBSD/AMD64. You'll need to disable the `cookies` feature.
 
 
 
@@ -297,6 +306,8 @@ Similar commandline tools that are able to download content from a DASH manifest
 
 - `yt-dlp <MPD-URL>`
 
+- `N_m3u8DL-RE <MPD-URL>`
+
 - `streamlink -o /tmp/output.mp4 <MPD-URL> worst`
 
 - `ffmpeg -i <MPD-URL> -vcodec copy /tmp/output.mp4`
@@ -305,9 +316,12 @@ Similar commandline tools that are able to download content from a DASH manifest
 
 - `gst-launch-1.0 playbin uri=<MPD-URL>`
 
-This application is able to download content from certain streams that do not work with other
-applications (for example xHE-AAC streams which are currently unsupported by ffmpeg, streamlink, VLC,
-gstreamer). It also has better support for multi-period manifests than these tools.
+However, dash-mpd-cli (this application) is able to download content from certain streams that do
+not work with other applications:
+
+- streams using xHE-AAC codecs are currently unsupported by ffmpeg, streamlink, VLC, and gstreamer
+- streams in multi-period manifests
+- streams using XLink elements
 
 
 ## Building
@@ -334,5 +348,5 @@ dash-mpd crate and build it with [rustls](https://github.com/rustls/rustls) supp
 stack). You may encounter some situations where rustls fails to connect (handshake errors, for
 example) but other applications on your system can connect. These differences in behaviour are
 typically due to different configurations for the set of root certificates. If you prefer to use
-your machine's native TLS stack, replace both instances of `rustls-tls` by `native-tls` in
+your machine’s native TLS stack, replace both instances of `rustls-tls` by `native-tls` in
 `Cargo.toml` and rebuild.
