@@ -12,7 +12,7 @@ name: freebsd
 
 jobs:
   test:
-    runs-on: macos-12
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v3
     - name: Run tests in FreeBSD VM
@@ -31,6 +31,7 @@ jobs:
           rustc --version
           pkg install -y Bento4
           mp4decrypt || true
+          pkg install -y ffmpeg
 
         run: |
           export PATH="${HOME}/.cargo/bin:$PATH"
