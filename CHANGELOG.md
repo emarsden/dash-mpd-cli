@@ -1,6 +1,13 @@
 # Changelog
 
 
+## [0.2.4] - Unreleased
+
+- New commandline argument `--header` (alias `-H`) which is compatible with cURL. This can be
+  convenient when using “Copy as cURL” functionality in Chromium DevTools. The syntax for the
+  argument is slightly different from the existing `--add-header` commandline argument.
+
+
 ## [0.2.3] - 2023-08-05
 
 - New commandline argument `--referer` to specify the value of the Referer HTTP header. This is an

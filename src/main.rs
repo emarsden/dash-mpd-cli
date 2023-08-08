@@ -215,6 +215,13 @@ async fn main () -> Result<()> {
              .num_args(1)
              .action(clap::ArgAction::Append)
              .long_help("Add a custom HTTP header and its value, separated by a colon ':'. You can use this option multiple times."))
+        .arg(Arg::new("header")
+             .long("header")
+             .short('H')
+             .value_name("HEADER")
+             .num_args(1)
+             .action(clap::ArgAction::Append)
+             .long_help("Add a custom HTTP header, in cURL-compatible format. You can use this option multiple times."))
         .arg(Arg::new("referer")
              .long("referer")
              .alias("referrer")
@@ -393,8 +400,20 @@ async fn main () -> Result<()> {
     } else {
         cb = cb.timeout(Duration::new(30, 0));
     }
+    let mut headers = HashMap::new();
+    if let Some(url) = matches.get_one::<String>("referer") {
+        headers.insert("referer".to_string(), url.to_string());
+    }
+    if let Some(hvs) = matches.get_many::<String>("header") {
+        for hv in hvs.collect::<Vec<_>>() {
+            if let Some((h, v)) = hv.split_once(':') {
+                headers.insert(h.to_string(), v.trim_start().to_string());
+            } else {
+                eprintln!("Ignoring badly formed argument to --header");
+            }
+        }
+    }
     if let Some(hvs) = matches.get_many::<String>("add-header") {
-        let mut headers = HashMap::new();
         for hv in hvs.collect::<Vec<_>>() {
             if let Some((h, v)) = hv.split_once(':') {
                 headers.insert(h.to_string(), v.to_string());
@@ -402,9 +421,8 @@ async fn main () -> Result<()> {
                 eprintln!("Ignoring badly formed header:value argument to --add-header");
             }
         }
-        if let Some(url) = matches.get_one::<String>("referer") {
-            headers.insert("referer".to_string(), url.to_string());
-        }
+    }
+    if !headers.is_empty() {
         let hmap: header::HeaderMap = (&headers).try_into()
             .expect("valid HTTP headers");
         cb = cb.default_headers(hmap);
