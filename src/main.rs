@@ -83,6 +83,33 @@ fn known_browser_names() -> String {
 }
 
 
+// Check whether a newer release is available on GitHub.
+async fn check_newer_version() -> Result<()> {
+    use versions::Versioning;
+
+    let api = "https://api.github.com/repos/emarsden/dash-mpd-cli/releases/latest";
+    let gh = reqwest::Client::builder()
+        .gzip(true)
+        .build()?
+        .get(api)
+        .header("Accept", "application/vnd.github+json")
+        .header("User-agent", concat!("dash-mpd-cli/", env!("CARGO_PKG_VERSION")))
+        .send().await?
+        .json::<serde_json::Value>().await?;
+    if let Some(gh_release) = gh["name"].as_str() {
+        if let Some(gh_version) = Versioning::new(gh_release) {
+            if let Some(this_version) = Versioning::new(env!("CARGO_PKG_VERSION")) {
+                if gh_version > this_version {
+                    println!("dash-mpd-cli {}", env!("CARGO_PKG_VERSION"));
+                    println!("A newer version ({gh_release}) is available from https://github.com/emarsden/dash-mpd-cli.");
+                }
+            }
+        }
+    }
+    Ok(())
+}
+
+
 #[tokio::main]
 async fn main () -> Result<()> {
     env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info,reqwest=warn")).init();
@@ -249,6 +276,11 @@ async fn main () -> Result<()> {
              .action(ArgAction::SetTrue)
              .num_args(0)
              .help("Don't record metainformation as extended attributes in the output file."))
+        .arg(Arg::new("no-version-check")
+             .long("no-version-check")
+             .action(ArgAction::SetTrue)
+             .num_args(0)
+             .help("Disable the check for availability of a more recent version on startup."))
         .arg(Arg::new("ffmpeg-location")
              .long("ffmpeg-location")
              .value_name("PATH")
@@ -309,11 +341,14 @@ async fn main () -> Result<()> {
                  .exclusive(true)
                  .help("Show valid values for BROWSER argument to --cookies-from-browser on this computer, then exit."));
     }
-    let matches = clap.get_matches();
-
     // TODO: add --abort-on-error
     // TODO: add --fragment-retries arg
     // TODO: add --mtime arg (Last-modified header)
+    let matches = clap.get_matches();
+
+    if ! matches.get_flag("disable-version-check") {
+        let _ = check_newer_version().await;
+    }
     #[cfg(feature = "cookies")]
     if matches.get_flag("list-cookie-sources") {
         eprintln!("On this computer, cookies are available from the following browsers:");

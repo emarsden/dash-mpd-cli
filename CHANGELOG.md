@@ -7,6 +7,9 @@
   convenient when using “Copy as cURL” functionality in Chromium DevTools. The syntax for the
   argument is slightly different from the existing `--add-header` commandline argument.
 
+- On startup, check whether a newer version is available as a GitHub release, unless the
+  `--no-version-check` commandline option is enabled.
+
 
 ## [0.2.3] - 2023-08-05
 
