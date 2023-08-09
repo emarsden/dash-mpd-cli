@@ -346,7 +346,7 @@ async fn main () -> Result<()> {
     // TODO: add --mtime arg (Last-modified header)
     let matches = clap.get_matches();
 
-    if ! matches.get_flag("disable-version-check") {
+    if ! matches.get_flag("no-version-check") {
         let _ = check_newer_version().await;
     }
     #[cfg(feature = "cookies")]
