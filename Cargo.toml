@@ -13,29 +13,29 @@ publish = true
 
 
 [dependencies]
-tokio = { version = "1.29", features = ["rt-multi-thread", "macros"] }
-dash-mpd = { version = ">=0.13.0", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
-reqwest = { version = "0.11", default-features = false, features = ["gzip", "rustls-tls", "socks", "json"] }
-strum = { version = "0.24", features = ["derive"] }
-colored = "2.0"
-indicatif = "0.17"
-clap = { version = "4.3", features = ["cargo", "unicode"] }
-serde_json = "1.0"
-versions = "5.0"
-fs-err = "2.9"
-number_prefix = "0.4"
-anyhow = "1.0"
-log = "0.4"
-env_logger = "0.10"
-bench_scraper = { version = "0.4", features = ["reqwest"], optional = true }
+tokio = { version = "1.30.0", features = ["rt-multi-thread", "macros"] }
+dash-mpd = { version = "0.13.0", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
+reqwest = { version = "0.11.18", default-features = false, features = ["gzip", "rustls-tls", "socks", "json"] }
+strum = { version = "0.24.1", features = ["derive"] }
+colored = "2.0.4"
+indicatif = "0.17.6"
+clap = { version = "4.3.21", features = ["cargo", "unicode"] }
+serde_json = "1.0.104"
+versions = "5.0.0"
+fs-err = "2.9.0"
+number_prefix = "0.4.0"
+anyhow = "1.0.72"
+log = "0.4.19"
+env_logger = "0.10.0"
+bench_scraper = { version = "0.4.1", features = ["reqwest"], optional = true }
 
 [dev-dependencies]
-rustls = "0.21"
-rustls-pemfile = "1.0"
-tokio = { version = "1.29", features = ["rt-multi-thread", "time", "macros"] }
-axum = "0.6"
-axum-server = { version = "0.5", features = ["tls-rustls"] }
-quick-xml = { version = "0.30", features = ["serialize"] }
+rustls = "0.21.6"
+rustls-pemfile = "1.0.3"
+tokio = { version = "1.30.0", features = ["rt-multi-thread", "time", "macros"] }
+axum = "0.6.20"
+axum-server = { version = "0.5.1", features = ["tls-rustls"] }
+quick-xml = { version = "0.30.0", features = ["serialize"] }
 
 [features]
 default = ["cookies"]
