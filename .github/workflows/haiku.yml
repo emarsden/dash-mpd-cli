@@ -1,0 +1,25 @@
+# Attempt to build on Haiku, running in a podman container. This fails in August 2023 because the
+# mio crate (needed by tokio) does not build ("unsupported target for mio::unix::pipe").
+# 
+# See https://github.com/hectorm/docker-qemu-haiku
+
+on: workflow_dispatch
+
+name: haiku
+
+jobs:
+  haiku:
+    runs-on: ubuntu-latest
+    name: Haiku
+    container: docker.io/hectorm/qemu-haiku:latest
+    steps:
+    - name: Wait until the VM is ready
+      run: container-init & timeout 600 vmshell exit 0
+    - name: Setup Haiku dependencies
+      run: vmshell pkgman install -y gcc rust_bin ffmpeg mkvtoolnix git haiku_devel
+    - name: Restart VM
+      run: sv force-restart qemu; timeout 600 vmshell exit 0
+    - name: Checkout sources
+      run: vmshell git clone --depth 1 https://github.com/emarsden/dash-mpd-cli 
+    - name: Build
+      run: vmshell "cd dash-mpd-cli; cargo build"
