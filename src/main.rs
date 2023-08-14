@@ -219,6 +219,11 @@ async fn main () -> Result<()> {
              .num_args(1)
              .value_hint(ValueHint::FilePath)
              .help("Keep audio stream (if audio is available as a separate media stream) in file specified by AUDIO-PATH."))
+        .arg(Arg::new("no-period-concatenation")
+             .long("no-period-concatenation")
+             .num_args(0)
+             .action(ArgAction::SetTrue)
+             .help("Never attempt to concatenate media from different Periods (keep one output file per Period)."))
         .arg(Arg::new("key")
              .long("key")
              .value_name("KID:KEY")
@@ -557,6 +562,11 @@ async fn main () -> Result<()> {
     }
     if let Some(path) = matches.get_one::<String>("keep-audio") {
         dl = dl.keep_audio_as(path);
+    }
+    if matches.get_flag("no-period-concatenation") {
+        dl = dl.concatenate_periods(false);
+    } else {
+        dl = dl.concatenate_periods(true);
     }
     if let Some(kvs) = matches.get_many::<String>("key") {
         for kv in kvs.collect::<Vec<_>>() {

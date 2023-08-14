@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [0.2.4] - Unreleased
+## [0.2.4] - 2023-08-14
 
 - New commandline argument `--header` (alias `-H`) which is compatible with cURL. This can be
   convenient when using “Copy as cURL” functionality in Chromium DevTools. The syntax for the
@@ -9,6 +9,26 @@
 
 - On startup, check whether a newer version is available as a GitHub release, unless the
   `--no-version-check` commandline option is enabled.
+
+- Improve support for multiperiod manifests. When the contents of the different periods
+  can be joined into a single output container (because they share the same resolution, frame rate
+  and aspect ratio), we concatenate them using ffmpeg (with reencoding in case the codecs in the
+  various periods are different). If they cannot be joined, we save the content in output files
+  named according to the requested output file (whose name is used for the first period). Names
+  ressemble "output-p2.mp4" for the second period, and so on.
+
+- New function `concatenate_periods` on `DashDownloader` to specify whether the concatenation using
+  ffmpeg (which is very CPU-intensive due to the reencoding) of multi-period manifests should be
+  attempted. The default behaviour is to concatenate when the media contents allow it.
+
+- Improved support for certain addressing types on subtitles (AdaptationSet>SegmentList,
+  Representation>SegmentList, SegmentTemplate+SegmentTimeline addressing modes).
+
+- Significantly improved support for XLink semantics on elements (remote elements). In particular, a
+  remote XLinked element may resolve to multiple elements (e.g. a Period with href pointing to a
+  remote MPD fragment may resolve to three final Period elements), and a remote XLinked element may
+  contain a remote XLinked element (the number of repeated resolutions is limited, to avoid DoS
+  attacks).
 
 
 ## [0.2.3] - 2023-08-05

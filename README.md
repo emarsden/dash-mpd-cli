@@ -201,6 +201,9 @@ Options:
       --keep-audio <AUDIO-PATH>
           Keep audio stream (if audio is available as a separate media stream) in file specified by AUDIO-PATH.
 
+      --no-period-concatenation
+          Never attempt to concatenate media from different Periods (keep one output file per Period).
+
       --key <KID:KEY>
           Use KID:KEY to decrypt encrypted media streams. KID should be either a track id in decimal (e.g. 1), or a 128-bit keyid (32 hexadecimal characters). KEY should be 32 hexadecimal characters. Example: --key eb676abbcb345e96bbcf616630f1a3da:100b6c20940f779a4589152b57d2dacb. You can use this option multiple times.
 
@@ -212,6 +215,9 @@ Options:
 
       --add-header <NAME:VALUE>
           Add a custom HTTP header and its value, separated by a colon ':'. You can use this option multiple times.
+
+  -H, --header <HEADER>
+          Add a custom HTTP header, in cURL-compatible format. You can use this option multiple times.
 
       --referer <URL>
           Specify content of Referer HTTP header.
@@ -227,6 +233,9 @@ Options:
 
       --no-xattr
           Don't record metainformation as extended attributes in the output file.
+
+      --no-version-check
+          Disable the check for availability of a more recent version on startup.
 
       --ffmpeg-location <PATH>
           Path to the ffmpeg binary (necessary if not located in your PATH).

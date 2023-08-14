@@ -13,8 +13,8 @@ publish = true
 
 
 [dependencies]
-tokio = { version = "1.30.0", features = ["rt-multi-thread", "macros"] }
-dash-mpd = { version = "0.13.0", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
+tokio = { version = "1.31.0", features = ["rt-multi-thread", "macros"] }
+dash-mpd = { version = "0.13.1", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
 reqwest = { version = "0.11.18", default-features = false, features = ["gzip", "rustls-tls", "socks", "json"] }
 strum = { version = "0.24.1", features = ["derive"] }
 colored = "2.0.4"
@@ -32,7 +32,7 @@ bench_scraper = { version = "0.4.1", features = ["reqwest"], optional = true }
 [dev-dependencies]
 rustls = "0.21.6"
 rustls-pemfile = "1.0.3"
-tokio = { version = "1.30.0", features = ["rt-multi-thread", "time", "macros"] }
+tokio = { version = "1.31.0", features = ["rt-multi-thread", "time", "macros"] }
 axum = "0.6.20"
 axum-server = { version = "0.5.1", features = ["tls-rustls"] }
 quick-xml = { version = "0.30.0", features = ["serialize"] }
