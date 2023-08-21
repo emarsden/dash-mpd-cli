@@ -19,20 +19,20 @@ reqwest = { version = "0.11.18", default-features = false, features = ["gzip", "
 strum = { version = "0.24.1", features = ["derive"] }
 colored = "2.0.4"
 indicatif = "0.17.6"
-clap = { version = "4.3.21", features = ["cargo", "unicode"] }
-serde_json = "1.0.104"
-versions = "5.0.0"
+clap = { version = "4.3.23", features = ["cargo", "unicode"] }
+serde_json = "1.0.105"
+versions = "5.0.1"
 fs-err = "2.9.0"
 number_prefix = "0.4.0"
-anyhow = "1.0.72"
-log = "0.4.19"
+anyhow = "1.0.75"
+log = "0.4.20"
 env_logger = "0.10.0"
 bench_scraper = { version = "0.4.1", features = ["reqwest"], optional = true }
 
 [dev-dependencies]
 rustls = "0.21.6"
 rustls-pemfile = "1.0.3"
-tokio = { version = "1.31.0", features = ["rt-multi-thread", "time", "macros"] }
+tokio = { version = "1.32.0", features = ["rt-multi-thread", "time", "macros"] }
 axum = "0.6.20"
 axum-server = { version = "0.5.1", features = ["tls-rustls"] }
 quick-xml = { version = "0.30.0", features = ["serialize"] }
