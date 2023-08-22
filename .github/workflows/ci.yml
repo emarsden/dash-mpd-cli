@@ -18,6 +18,7 @@ jobs:
           unzip /tmp/bento4.zip "Bento4-SDK-*/bin/mp4decrypt" -d /tmp
           sudo mv /tmp/Bento4-SDK*/bin/mp4decrypt /usr/local/bin
       - run: cargo test
+      - run: cargo doc --no-deps --all-features
 
   build-macos:
     runs-on: macos-latest
