@@ -17,7 +17,7 @@ jobs:
           wget -q -O /tmp/bento4.zip https://www.bok.net/Bento4/binaries/Bento4-SDK-1-6-0-640.x86_64-unknown-linux.zip
           unzip /tmp/bento4.zip "Bento4-SDK-*/bin/mp4decrypt" -d /tmp
           sudo mv /tmp/Bento4-SDK*/bin/mp4decrypt /usr/local/bin
-      - run: cargo test
+      - run: cargo test -- --show-output
       - run: cargo doc --no-deps --all-features
 
   build-macos:
@@ -39,3 +39,4 @@ jobs:
     - uses: actions/checkout@v3
     - uses: dtolnay/rust-toolchain@stable
     - run: cargo build --verbose
+    - run: cargo test -- --show-output
