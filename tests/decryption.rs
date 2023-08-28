@@ -3,15 +3,25 @@
 /// These test cases are from https://refapp.hbbtv.org/videos/. We don't run these tests on CI
 /// infrastructure, because they consume non-negligeable network bandwidth.
 
-// To run tests while enabling printing to stdout/stderr, "cargo test -- --show-output" (from the
-// root crate directory).
+// To run tests while enabling printing to stdout/stderr
+//
+//    cargo test --test decryption -- --show-output
 
 
-use std::fs;
+use fs_err as fs;
 use std::env;
 use std::process::Command;
-use std::path::Path;
+use std::path::PathBuf;
 
+
+// We tolerate significant differences in final output file size, because as encoder performance
+// changes in newer versions of ffmpeg, the resulting file size when reencoding may change
+// significantly.
+fn check_file_size_approx(p: &PathBuf, expected: u64) {
+    let meta = fs::metadata(p).unwrap();
+    let ratio = meta.len() as f64 / expected as f64;
+    assert!(0.9 < ratio && ratio < 1.1);
+}
 
 #[test]
 fn test_decryption_widevine_cenc () {
@@ -31,10 +41,7 @@ fn test_decryption_widevine_cenc () {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
-    if let Ok(meta) = fs::metadata(Path::new(&outpath)) {
-        let ratio = meta.len() as f64 / 33_746_341.0;
-        assert!(0.95 < ratio && ratio < 1.05);
-    }
+    check_file_size_approx(&outpath, 33_746_341);
 }
 
 #[test]
@@ -55,10 +62,7 @@ fn test_decryption_widevine_cbcs () {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
-    if let Ok(meta) = fs::metadata(Path::new(&outpath)) {
-        let ratio = meta.len() as f64 / 79_731_116.0;
-        assert!(0.95 < ratio && ratio < 1.05);
-    }
+    check_file_size_approx(&outpath, 79_731_116);
 }
 
 
@@ -79,10 +83,7 @@ fn test_decryption_playready_cenc () {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
-    if let Ok(meta) = fs::metadata(Path::new(&outpath)) {
-        let ratio = meta.len() as f64 / 26_420_624.0;
-        assert!(0.95 < ratio && ratio < 1.05);
-    }
+    check_file_size_approx(&outpath, 26_420_624);
 }
 
 #[test]
@@ -102,10 +103,7 @@ fn test_decryption_marlin_cenc () {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
-    if let Ok(meta) = fs::metadata(Path::new(&outpath)) {
-        let ratio = meta.len() as f64 / 14_357_917.0;
-        assert!(0.95 < ratio && ratio < 1.05);
-    }
+    check_file_size_approx(&outpath, 14_357_917);
 }
 
 #[test]
@@ -125,10 +123,7 @@ fn test_decryption_marlin_cbcs () {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
-    if let Ok(meta) = fs::metadata(Path::new(&outpath)) {
-        let ratio = meta.len() as f64 / 14_357_925.0;
-        assert!(0.95 < ratio && ratio < 1.05);
-    }
+    check_file_size_approx(&outpath, 14_357_925);
 }
 
 
@@ -147,8 +142,5 @@ fn test_decryption_small () {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
-    if let Ok(meta) = fs::metadata(Path::new(&outpath)) {
-        let ratio = meta.len() as f64 / 6_975_147.0;
-        assert!(0.95 < ratio && ratio < 1.05);
-    }
+    check_file_size_approx(&outpath, 6_975_147);
 }
