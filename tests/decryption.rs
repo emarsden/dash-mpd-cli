@@ -141,6 +141,14 @@ fn test_decryption_small () {
                "-o", &outpath.to_string_lossy(), mpd])
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
+    let msg = String::from_utf8_lossy(&cli.stdout);
+    if msg.len() > 0 {
+        println!("dash-mpd-cli stdout: {msg}");
+    }
+    let msg = String::from_utf8_lossy(&cli.stderr);
+    if msg.len() > 0 {
+        println!("dash-mpd-cli stderr: {msg}");
+    }
     assert!(cli.status.success());
     check_file_size_approx(&outpath, 6_975_147);
 }

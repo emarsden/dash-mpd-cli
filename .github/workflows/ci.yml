@@ -17,6 +17,7 @@ jobs:
           wget -q -O /tmp/bento4.zip https://www.bok.net/Bento4/binaries/Bento4-SDK-1-6-0-640.x86_64-unknown-linux.zip
           unzip /tmp/bento4.zip "Bento4-SDK-*/bin/mp4decrypt" -d /tmp
           sudo mv /tmp/Bento4-SDK*/bin/mp4decrypt /usr/local/bin
+          mp4decrypt
       - run: cargo test -- --show-output
       - run: cargo doc --no-deps --all-features
 
@@ -31,6 +32,7 @@ jobs:
         wget -q -O /tmp/bento4.zip https://www.bok.net/Bento4/binaries/Bento4-SDK-1-6-0-640.universal-apple-macosx.zip
         unzip /tmp/bento4.zip "Bento4-SDK-*/bin/mp4decrypt" -d /tmp
         sudo mv /tmp/Bento4-SDK*/bin/mp4decrypt /usr/local/bin
+        mp4decrypt
     - run: cargo test
 
   build-windows:
@@ -38,5 +40,19 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: dtolnay/rust-toolchain@stable
+
+    # Isn't this fun
+    - name: install Bento4/mp4decrypt
+      run: |
+          Invoke-WebRequest -Uri "https://www.bok.net/Bento4/binaries/Bento4-SDK-1-6-0-640.x86_64-microsoft-win32.zip" -OutFile bento4.zip
+          Expand-Archive -Path bento4.zip -DestinationPath .
+          Get-ChildItem
+          del bento4.zip
+          New-Item -ItemType Directory -Force -Path "C:\tools"
+          cp Bento4-SDK-1-6-0-640.x86_64-microsoft-win32/bin/mp4decrypt.exe "C:\tools\mp4decrypt.exe"
+          Remove-Item -LiteralPath "Bento4-SDK-1-6-0-640.x86_64-microsoft-win32" -Force -Recurse
+          echo "C:\tools" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          Get-ChildItem c:\tools
+
     - run: cargo build --verbose
     - run: cargo test -- --show-output
