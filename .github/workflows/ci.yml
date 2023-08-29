@@ -14,7 +14,7 @@ jobs:
       - run: cargo build --no-default-features
 
       - name: Install ffmpeg and GPAC
-      - run: sudo apt-get install ffmpeg gpac
+        run: sudo apt-get install ffmpeg gpac
 
       - name: Install Bento4 mp4decrypt
         run: |
@@ -22,6 +22,7 @@ jobs:
           unzip /tmp/bento4.zip "Bento4-SDK-*/bin/mp4decrypt" -d /tmp
           sudo mv /tmp/Bento4-SDK*/bin/mp4decrypt /usr/local/bin
           mp4decrypt || true
+
       - run: cargo test -- --show-output
       - run: cargo doc --no-deps --all-features
 
@@ -49,6 +50,7 @@ jobs:
         unzip /tmp/bento4.zip "Bento4-SDK-*/bin/mp4decrypt" -d /tmp
         sudo mv /tmp/Bento4-SDK*/bin/mp4decrypt /usr/local/bin
         mp4decrypt || true
+
     - run: cargo test
 
   build-windows:
