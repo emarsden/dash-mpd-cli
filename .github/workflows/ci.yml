@@ -17,7 +17,7 @@ jobs:
           wget -q -O /tmp/bento4.zip https://www.bok.net/Bento4/binaries/Bento4-SDK-1-6-0-640.x86_64-unknown-linux.zip
           unzip /tmp/bento4.zip "Bento4-SDK-*/bin/mp4decrypt" -d /tmp
           sudo mv /tmp/Bento4-SDK*/bin/mp4decrypt /usr/local/bin
-          mp4decrypt
+          mp4decrypt || true
       - run: cargo test -- --show-output
       - run: cargo doc --no-deps --all-features
 
@@ -32,7 +32,7 @@ jobs:
         wget -q -O /tmp/bento4.zip https://www.bok.net/Bento4/binaries/Bento4-SDK-1-6-0-640.universal-apple-macosx.zip
         unzip /tmp/bento4.zip "Bento4-SDK-*/bin/mp4decrypt" -d /tmp
         sudo mv /tmp/Bento4-SDK*/bin/mp4decrypt /usr/local/bin
-        mp4decrypt
+        mp4decrypt || true
     - run: cargo test
 
   build-windows:
