@@ -101,7 +101,7 @@ async fn test_add_root_cert() -> Result<(), anyhow::Error> {
         Response::builder()
             .status(StatusCode::OK)
             .header(header::CONTENT_TYPE, "video/mp4")
-            .body(Full::from(vec![1, 2, 3, 4]))
+            .body(Full::from(Bytes::from(include_bytes!("fixtures/minimal-valid.mp4").as_slice())))
             .unwrap()
     }
 

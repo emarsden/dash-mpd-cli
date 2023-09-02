@@ -110,7 +110,7 @@ async fn test_add_client_identity() -> Result<(), anyhow::Error> {
         Response::builder()
             .status(StatusCode::OK)
             .header(header::CONTENT_TYPE, "video/mp4")
-            .body(Full::from(vec![1, 2, 3, 4]))
+            .body(Full::from(Bytes::from(include_bytes!("fixtures/minimal-valid.mp4").as_slice())))
             .unwrap()
     }
 
@@ -193,6 +193,10 @@ async fn test_add_client_identity() -> Result<(), anyhow::Error> {
                "https://localhost:6666/mpd"])
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
+    let msg = String::from_utf8_lossy(&cli.stderr);
+    if msg.len() > 0 {
+        eprintln!("cli stderr: {msg}");
+    }
     assert!(cli.status.success());
 
     // Check that the init.mp4 segment was fetched: request counter should be 1.
