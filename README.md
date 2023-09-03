@@ -47,6 +47,10 @@ The following features are supported:
   `ALL_PROXY` or `all_proxy` for all connection types. The system proxy can be disabled using the
   `--no-proxy` commandline argument.
 
+- Support for HTTP Basic authentication (see the `--auth-username` and `--auth-password` commandline
+  arguments). This authentication information is sent both to the server which hosts the DASH
+  manifest, and to the server that hosts the media segments (the latter often being a CDN).
+
 - Subtitles: download support for WebVTT, TTML and SMIL streams, as well as some support for the
   wvtt format.
 
@@ -136,7 +140,7 @@ This crate is tested on the following **platforms**:
 ## Usage
 
 ```
-Download content from an MPEG-DASH streaming media manifest
+Download content from an MPEG-DASH streaming media manifest.
 
 Usage: dash-mpd-cli [OPTIONS] <MPD-URL>
 
@@ -153,6 +157,12 @@ Options:
 
       --no-proxy
           Disable use of Socks or HTTP proxy even if related environment variables are set.
+
+      --auth-username <USER>
+          Username to use for authentication with the server(s) hosting the DASH manifest and the media segments (HTTP Basic authentication only).
+
+      --auth-password <PASSWORD>
+          Password to use for authentication with the server(s) hosting the DASH manifest and the media segments (HTTP Basic authentication only).
 
       --timeout <SECONDS>
           Timeout for network requests (from the start to the end of the request), in seconds.
@@ -175,10 +185,16 @@ Options:
       --client-identity-certificate <CERT>
           Client private key and certificate (in PEM format) to be used when authenticating TLS network connections.
 
+      --prefer-video-width <WIDTH>
+          When multiple video streams are available, choose that with horizontal resolution closest to WIDTH.
+
+      --prefer-video-height <HEIGHT>
+          When multiple video streams are available, choose that with vertical resolution closest to HEIGHT.
+
       --quality <quality>
           Prefer best quality (and highest bandwidth) representation, or lowest quality.
           
-          [possible values: best, worst]
+          [possible values: best, intermediate, worst]
 
       --prefer-language <LANG>
           Preferred language when multiple audio streams with different languages are available. Must be in RFC 5646 format (e.g. fr or en-AU). If a preference is not specified and multiple audio streams are present, the first one listed in the DASH manifest will be downloaded.

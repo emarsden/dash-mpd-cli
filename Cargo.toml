@@ -1,9 +1,9 @@
 [package]
 name = "dash-mpd-cli"
-version = "0.2.4"
+version = "0.2.5"
 authors = ["Eric Marsden <eric.marsden@risk-engineering.org>"]
 license = "MIT"
-description = "Download content from a DASH-MPEG or DASH-WebM MPD manifest"
+description = "Download content from a DASH-MPEG or DASH-WebM MPD manifest."
 readme = "README.md"
 repository = "https://github.com/emarsden/dash-mpd-cli"
 keywords = ["video", "streaming", "DASH", "MPEG", "download"]

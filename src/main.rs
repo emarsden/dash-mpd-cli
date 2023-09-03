@@ -115,7 +115,7 @@ async fn main () -> Result<()> {
     env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info,reqwest=warn")).init();
     #[allow(unused_mut)]
     let mut clap = clap::Command::new("dash-mpd-cli")
-        .about("Download content from an MPEG-DASH streaming media manifest")
+        .about("Download content from an MPEG-DASH streaming media manifest.")
         .version(clap::crate_version!())
         .arg(Arg::new("user-agent")
              .long("user-agent")
@@ -135,11 +135,11 @@ async fn main () -> Result<()> {
         .arg(Arg::new("auth-username")
              .long("auth-username")
              .value_name("USER")
-             .help("Username to use for authentication with the server (HTTP Basic authentication only)."))
+             .help("Username to use for authentication with the server(s) hosting the DASH manifest and the media segments (HTTP Basic authentication only)."))
         .arg(Arg::new("auth-password")
              .long("auth-password")
              .value_name("PASSWORD")
-             .help("Password to use for authentication with the server (HTTP Basic authentication only)."))
+             .help("Password to use for authentication with the server(s) hosting the DASH manifest and the media segments (HTTP Basic authentication only)."))
         .arg(Arg::new("timeout")
              .long("timeout")
              .value_name("SECONDS")

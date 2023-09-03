@@ -22,6 +22,16 @@
   password to be used for authentication with the server. Currently only HTTP Basic authentication
   is supported.
 
+- Improve support for selecting the output container format based on its filename extension.
+  Selecting an output file with an `.mkv` extension will now produce an output file in Matroska
+  container format, even in cases where the manifest only contains a video stream or only an audio
+  stream (shortcircuiting the muxing functionality). In these cases, the stream will be copied if
+  the output container requested is compatible with the downloaded stream format, and otherwise a
+  new media container with the requested format will be created and the audio or video stream will
+  be inserted (and reencoded if necessary) into the output file. This insertion and reencoding is
+  undertaken by the same commandline applications used for muxing: ffmpeg, mkvmerge, mp4box
+  (currently not vlc).
+
 
 ## [0.2.4] - 2023-08-14
 
