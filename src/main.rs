@@ -172,10 +172,22 @@ async fn main () -> Result<()> {
              .num_args(1)
              .value_hint(ValueHint::FilePath)
              .help("Client private key and certificate (in PEM format) to be used when authenticating TLS network connections."))
+        .arg(Arg::new("prefer-video-width")
+             .long("prefer-video-width")
+             .value_name("WIDTH")
+             .value_parser(clap::value_parser!(u64))
+             .num_args(1)
+             .help("When multiple video streams are available, choose that with horizontal resolution closest to WIDTH."))
+        .arg(Arg::new("prefer-video-height")
+             .long("prefer-video-height")
+             .value_name("HEIGHT")
+             .value_parser(clap::value_parser!(u64))
+             .num_args(1)
+             .help("When multiple video streams are available, choose that with vertical resolution closest to HEIGHT."))
         .arg(Arg::new("quality")
              .long("quality")
              .num_args(1)
-             .value_parser(["best", "worst"])
+             .value_parser(["best", "intermediate", "worst"])
              .help("Prefer best quality (and highest bandwidth) representation, or lowest quality."))
         .arg(Arg::new("prefer-language")
              .long("prefer-language")
@@ -608,10 +620,22 @@ async fn main () -> Result<()> {
     if let Some(path) = matches.get_one::<String>("mp4decrypt-location") {
         dl = dl.with_mp4decrypt(path);
     }
+    if let Some(w) = matches.get_one::<u64>("prefer-video-width") {
+        dl = dl.prefer_video_width(*w);
+    }
+    if let Some(h) = matches.get_one::<u64>("prefer-video-height") {
+        dl = dl.prefer_video_height(*h);
+    }
+    // It's possible to specify both prefer-video-width/height and quality. The former is not
+    // relevant concerning the audio stream, where the quality preference will be used. For the
+    // choice of video stream if both are specified, preference will be given to the preferred
+    // width, then height, then quality.
     if let Some(q) = matches.get_one::<String>("quality") {
+        // DashDownloader defaults to worst quality
         if q.eq("best") {
-            // DashDownloader defaults to worst quality
             dl = dl.best_quality();
+        } else if q.eq("intermediate") {
+            dl = dl.intermediate_quality();
         }
     }
     if let Some(lang) = matches.get_one::<String>("prefer-language") {

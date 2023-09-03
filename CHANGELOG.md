@@ -1,6 +1,25 @@
 # Changelog
 
 
+## [0.2.5] - 2023-09-03
+
+- New commandline argument `--prefer-video-width` and `--prefer-video-height` which allow the user
+  to specify the video stream to be downloaded, when multiple video streams with different
+  resolutions are made available. The video stream with the horizontal (respectively vertical)
+  resolution closest to the specified width (respectively height) is chosen. This preference only
+  concerns the video stream; use the `--quality` commandline argument to specify the preferred audio
+  stream when multiple audio streams with different quality levels are available. If a preference
+  for both video width and video height is provided, the preferred width is used. A width or height
+  preference overrides (for the video stream) a specified quality preference.
+
+- New value `intermediate` recognized for the `--quality` commandline argument. If the DASH manifest
+  specifies several Adaptations with different bitrates or quality levels (specified by the
+  `@qualityRanking` attribute in the manifest -- quality ranking may different from bandwidth
+  ranking when different codecs are used), prefer the Adaptation with an intermediate bitrate
+  (closest to the median value).
+
+
+
 ## [0.2.4] - 2023-08-14
 
 - New commandline argument `--header` (alias `-H`) which is compatible with cURL. This can be
