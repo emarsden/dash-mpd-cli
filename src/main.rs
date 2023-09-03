@@ -132,6 +132,14 @@ async fn main () -> Result<()> {
              .num_args(0)
              .conflicts_with("proxy")
              .help("Disable use of Socks or HTTP proxy even if related environment variables are set."))
+        .arg(Arg::new("auth-username")
+             .long("auth-username")
+             .value_name("USER")
+             .help("Username to use for authentication with the server (HTTP Basic authentication only)."))
+        .arg(Arg::new("auth-password")
+             .long("auth-password")
+             .value_name("PASSWORD")
+             .help("Password to use for authentication with the server (HTTP Basic authentication only)."))
         .arg(Arg::new("timeout")
              .long("timeout")
              .value_name("SECONDS")
@@ -640,6 +648,11 @@ async fn main () -> Result<()> {
     }
     if let Some(lang) = matches.get_one::<String>("prefer-language") {
         dl = dl.prefer_language(lang.to_string());
+    }
+    if let Some(user) = matches.get_one::<String>("auth-username") {
+        if let Some(password) = matches.get_one::<String>("auth-password") {
+            dl = dl.with_authentication(user.to_string(), password.to_string());
+        }
     }
     dl = dl.verbosity(verbosity);
     if let Some(out) = matches.get_one::<String>("output-file") {

@@ -3,7 +3,7 @@
 
 ## [0.2.5] - 2023-09-03
 
-- New commandline argument `--prefer-video-width` and `--prefer-video-height` which allow the user
+- New commandline arguments `--prefer-video-width` and `--prefer-video-height` which allow the user
   to specify the video stream to be downloaded, when multiple video streams with different
   resolutions are made available. The video stream with the horizontal (respectively vertical)
   resolution closest to the specified width (respectively height) is chosen. This preference only
@@ -18,6 +18,9 @@
   ranking when different codecs are used), prefer the Adaptation with an intermediate bitrate
   (closest to the median value).
 
+- New commandline arguments `--auth-username` and `--auth-password` to specify the username and
+  password to be used for authentication with the server. Currently only HTTP Basic authentication
+  is supported.
 
 
 ## [0.2.4] - 2023-08-14

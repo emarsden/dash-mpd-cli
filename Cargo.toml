@@ -35,7 +35,9 @@ rustls-pemfile = "1.0.3"
 tokio = { version = "1.32.0", features = ["rt-multi-thread", "time", "macros"] }
 axum = "0.6.20"
 axum-server = { version = "0.5.1", features = ["tls-rustls"] }
+axum-auth = "0.4"
 quick-xml = { version = "0.30.0", features = ["serialize"] }
+mp4 = "0.14.0"
 
 [features]
 default = ["cookies"]
