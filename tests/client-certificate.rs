@@ -51,6 +51,7 @@ use rustls::RootCertStore;
 use rustls::server::AllowAnyAuthenticatedClient;
 use dash_mpd::{MPD, Period, AdaptationSet, Representation, BaseURL};
 use anyhow::{Context, Result};
+use env_logger::Env;
 
 
 #[derive(Debug, Default)]
@@ -118,6 +119,7 @@ async fn test_add_client_identity() -> Result<(), anyhow::Error> {
         ([(header::CONTENT_TYPE, "text/plain")], format!("{}", state.counter.load(Ordering::Relaxed)))
     }
 
+    env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init();
     let app = Router::new()
         .route("/mpd", get(|| async { ([(header::CONTENT_TYPE, "application/dash+xml")], xml) }))
         .route("/init.mp4", get(send_mp4))
