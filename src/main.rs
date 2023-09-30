@@ -140,6 +140,10 @@ async fn main () -> Result<()> {
              .long("auth-password")
              .value_name("PASSWORD")
              .help("Password to use for authentication with the server(s) hosting the DASH manifest and the media segments (HTTP Basic authentication only)."))
+        .arg(Arg::new("auth-bearer")
+             .long("auth-bearer")
+             .value_name("TOKEN")
+             .help("Token to use for authentication with the server(s) hosting the DASH manifest and the media segments, when HTTP Bearer authentication is required."))
         .arg(Arg::new("timeout")
              .long("timeout")
              .value_name("SECONDS")
@@ -653,6 +657,9 @@ async fn main () -> Result<()> {
         if let Some(password) = matches.get_one::<String>("auth-password") {
             dl = dl.with_authentication(user.to_string(), password.to_string());
         }
+    }
+    if let Some(token) = matches.get_one::<String>("auth-bearer") {
+        dl = dl.with_auth_bearer(token.to_string());
     }
     dl = dl.verbosity(verbosity);
     if let Some(out) = matches.get_one::<String>("output-file") {
