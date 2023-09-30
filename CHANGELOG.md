@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.2.6] - 2023-09-30
+
+- New commandline argument `--auth-bearer` to specify the token to be used for Bearer authentication
+  of network requests to retrieve the manifest and the media segments. This is the authentication
+  method specified in RFC 6750, originally designed for OAuth 2.0, but also used in other settings
+  such as JSON Web Tokens (JWT).
+
+- Enable support for MPEG-4 Part 17 (Timed Text) subtitles (tx3g codec). They will be converted to
+  SRT format if the MP4Box commandline application is installed.
+
+- When printing the available media streams, print `Role` and `Label` information if they are
+  specified on an `AdaptationSet` element.
+
+- Fix handling of `MPD.Location` field (thanks to @nissy34).
+
 
 ## [0.2.5] - 2023-09-03
 
