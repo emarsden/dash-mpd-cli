@@ -13,8 +13,8 @@ publish = true
 
 
 [dependencies]
-tokio = { version = "1.32.0", features = ["rt-multi-thread", "macros"] }
-dash-mpd = { version = "0.14.1", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
+tokio = { version = "1.33.0", features = ["rt-multi-thread", "macros"] }
+dash-mpd = { version = "0.14.2", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
 reqwest = { version = "0.11.20", default-features = false, features = ["gzip", "rustls-tls", "socks", "json"] }
 strum = { version = "0.24.1", features = ["derive"] }
 colored = "2.0.4"
@@ -32,12 +32,15 @@ bench_scraper = { version = "0.4.1", features = ["reqwest"], optional = true }
 [dev-dependencies]
 rustls = "0.21.7"
 rustls-pemfile = "1.0.3"
-tokio = { version = "1.32.0", features = ["rt-multi-thread", "time", "macros"] }
+tokio = { version = "1.33.0", features = ["rt-multi-thread", "time", "macros"] }
 axum = "0.6.20"
 axum-server = { version = "0.5.1", features = ["tls-rustls"] }
 axum-auth = "0.4"
 quick-xml = { version = "0.30.0", features = ["serialize"] }
 mp4 = "0.14.0"
+ffprobe = "0.3.3"
+file-format = { version = "0.21.0", features = ["reader"] }
+json = "0.12.4"
 
 [features]
 default = ["cookies"]

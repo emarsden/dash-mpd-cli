@@ -230,7 +230,7 @@ async fn main () -> Result<()> {
              .long("write-subs")
              .action(ArgAction::SetTrue)
              .num_args(0)
-             .help("Write subtitle file, if subtitles are available."))
+             .help("Download and save subtitle file, if subtitles are available."))
         .arg(Arg::new("keep-video")
              .long("keep-video")
              .value_name("VIDEO-PATH")
@@ -248,11 +248,17 @@ async fn main () -> Result<()> {
              .num_args(0)
              .action(ArgAction::SetTrue)
              .help("Never attempt to concatenate media from different Periods (keep one output file per Period)."))
+        .arg(Arg::new("muxer-preference")
+             .long("muxer-preference")
+             .value_name("CONTAINER:ORDERING")
+             .num_args(1)
+             .action(ArgAction::Append)
+             .help("When muxing into CONTAINER, try muxing applications in order ORDERING. You can use this option multiple times."))
         .arg(Arg::new("key")
              .long("key")
              .value_name("KID:KEY")
              .num_args(1)
-             .action(clap::ArgAction::Append)
+             .action(ArgAction::Append)
              .long_help("Use KID:KEY to decrypt encrypted media streams. KID should be either a track id in decimal (e.g. 1), or a 128-bit keyid (32 hexadecimal characters). KEY should be 32 hexadecimal characters. Example: --key eb676abbcb345e96bbcf616630f1a3da:100b6c20940f779a4589152b57d2dacb. You can use this option multiple times."))
         .arg(Arg::new("save-fragments")
              .long("save-fragments")
@@ -269,14 +275,14 @@ async fn main () -> Result<()> {
              .long("add-header")
              .value_name("NAME:VALUE")
              .num_args(1)
-             .action(clap::ArgAction::Append)
+             .action(ArgAction::Append)
              .long_help("Add a custom HTTP header and its value, separated by a colon ':'. You can use this option multiple times."))
         .arg(Arg::new("header")
              .long("header")
              .short('H')
              .value_name("HEADER")
              .num_args(1)
-             .action(clap::ArgAction::Append)
+             .action(ArgAction::Append)
              .long_help("Add a custom HTTP header, in cURL-compatible format. You can use this option multiple times."))
         .arg(Arg::new("referer")
              .long("referer")
@@ -293,7 +299,7 @@ async fn main () -> Result<()> {
         .arg(Arg::new("verbose")
              .short('v')
              .long("verbose")
-             .action(clap::ArgAction::Count)
+             .action(ArgAction::Count)
              .help("Level of verbosity (can be used several times)."))
         .arg(Arg::new("no-progress")
              .long("no-progress")
@@ -591,6 +597,15 @@ async fn main () -> Result<()> {
         dl = dl.concatenate_periods(false);
     } else {
         dl = dl.concatenate_periods(true);
+    }
+    if let Some(mps) = matches.get_many::<String>("muxer-preference") {
+        for mp in mps.collect::<Vec<_>>() {
+            if let Some((container, ordering)) = mp.split_once(':') {
+                dl = dl.with_muxer_preference(container, ordering);
+            } else {
+                eprintln!("Ignoring badly formatted argument to --muxer-preference");
+            }
+        }
     }
     if let Some(kvs) = matches.get_many::<String>("key") {
         for kv in kvs.collect::<Vec<_>>() {

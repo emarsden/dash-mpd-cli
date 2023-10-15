@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.7] - 2023-10-15
+
+- Allow the user to specify the order in which muxer applications are tried, instead of using a
+  hard-coded ordering per container type. The ordering is specified per container type ("mkv",
+  "mp4", "avi", "ts", etc.). The user specifies an ordering such as "ffmpeg,vlc,mp4box" which means
+  that ffmpeg is tried first, and if that fails vlc, and if that fails mp4box. The muxers currently
+  available are ffmpeg, vlc, mkvmerge and mp4box. See commandline arguemnt `--muxer-preference`.
+
+- Work around a bug in VLC, which does not correctly report failure to mux via a non-zero exit code.
+
+
 ## [0.2.6] - 2023-09-30
 
 - New commandline argument `--auth-bearer` to specify the token to be used for Bearer authentication
