@@ -12,6 +12,8 @@ use fs_err as fs;
 use std::env;
 use std::process::Command;
 use std::path::PathBuf;
+use ffprobe::ffprobe;
+use file_format::FileFormat;
 
 
 // We tolerate significant differences in final output file size, because as encoder performance
@@ -128,7 +130,33 @@ fn test_decryption_marlin_cbcs () {
 
 
 
-// A small decryption test case that we can run on the CI infrastructure.
+// Small decryption test cases that we can run on the CI infrastructure.
+#[test]
+fn test_decryption_cenc_kaltura () {
+    let mpd = "https://cdnapisec.kaltura.com/p/2433871/sp/243387100/playManifest/protocol/https//entryId/1_pgssezc1/format/mpegdash/tags/mbr/f/a.mpd";
+    let outpath = env::temp_dir().join("kaltura.mp4");
+    let cli = Command::new("cargo")
+        .args(["run", "--no-default-features", "--",
+               "--mp4decrypt-location", "mp4decrypt",
+               "--key", "a07c5d499dcead0fb416fed5913967be:caee457911302478487e6680bf0b3d1b",
+               "-o", &outpath.to_string_lossy(), mpd])
+        .output()
+        .expect("failed spawning cargo run / dash-mpd-cli");
+    assert!(cli.status.success());
+    check_file_size_approx(&outpath, 1_323_079);
+    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    assert_eq!(format, FileFormat::Mpeg4Part14Video);
+    let meta = ffprobe(outpath.clone()).unwrap();
+    assert_eq!(meta.streams.len(), 2);
+    let audio = &meta.streams[1];
+    assert_eq!(audio.codec_type, Some(String::from("audio")));
+    assert_eq!(audio.codec_name, Some(String::from("aac")));
+    assert!(audio.width.is_none());
+    let tags = audio.tags.as_ref().unwrap();
+    assert_eq!(tags.language, Some(String::from("eng")));
+}
+
+
 #[test]
 fn test_decryption_small () {
     let mpd = "https://m.dtv.fi/dash/dasherh264/drm/manifest_clearkey.mpd";
