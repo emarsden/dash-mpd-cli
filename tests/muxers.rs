@@ -19,7 +19,7 @@ use ffprobe::ffprobe;
 fn check_file_size_approx(p: &PathBuf, expected: u64) {
     let meta = fs::metadata(p).unwrap();
     let ratio = meta.len() as f64 / expected as f64;
-    assert!(0.9 < ratio && ratio < 1.1);
+    assert!(0.9 < ratio && ratio < 1.1, "File sizes: expected {expected}, got {}", meta.len());
 }
 
 // Try to obtain the encoder field in the metadata with the ffprobe crate (works with certain MP4
