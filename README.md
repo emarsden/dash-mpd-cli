@@ -16,9 +16,9 @@ streaming over HTTP), also called MPEG-DASH, is a technology used for media stre
 commonly used for video on demand (VOD) services. The Media Presentation Description (MPD) is a
 description of the resources (manifest or “playlist”) forming a streaming service, that a DASH
 client uses to determine which assets to request in order to perform adaptive streaming of the
-content. DASH MPD manifests can be used with content encoded in different formats and containers,
-including H264/MP4, HEVC/MP4 and VP9/WebM. There is a good explanation of adaptive bitrate video
-streaming at [howvideo.works](https://howvideo.works/#dash).
+content. DASH MPD manifests can be used with content using different codecs (including H264, HEVC,
+AV1, AAC, VP9, MP4A, MP3) and containers (MP4, WebM, Matroska, AVI). There is a good explanation of
+adaptive bitrate video streaming at [howvideo.works](https://howvideo.works/#dash).
 
 This commandline application allows you to download content (audio or video) described by an MPD
 manifest. This involves selecting the alternative with the most appropriate encoding (in terms of
@@ -36,7 +36,10 @@ The following features are supported:
 - VOD (static) stream manifests (this application can't download from dynamic MPD manifests, that
   are used for live streaming and OTT television).
 
-- Multi-period content.
+- Multi-period content. The media in the different streams will be saved in a single media container
+  if the formats are compatible (same resolution, codecs, bitrate and so on) and the
+  `--no-period-concatenation` commandline option is not provided, and otherwise in separate media
+  containers.
 
 - The application can download content available over HTTP, HTTPS and HTTP/2. Network bandwidth can
   be throttled (see the `--limit-rate` commandline argument).
@@ -48,11 +51,13 @@ The following features are supported:
   `--no-proxy` commandline argument.
 
 - Support for HTTP Basic authentication (see the `--auth-username` and `--auth-password` commandline
-  arguments). This authentication information is sent both to the server which hosts the DASH
-  manifest, and to the server that hosts the media segments (the latter often being a CDN).
+  arguments) and for Bearer authentation (see the `--auth-bearer` commandline argument). This
+  authentication information is sent both to the server which hosts the DASH manifest, and to the
+  server that hosts the media segments (the latter often being a CDN).
 
-- Subtitles: download support for WebVTT, TTML and SMIL streams, as well as some support for the
-  wvtt format.
+- Subtitles: download support for WebVTT, TTML, SRT, tx3g and SMIL streams, as well as some support
+  for the wvtt format. We support both subtitles published as a complete file and segmented
+  subtitles made available in media fragments.
 
 - The application can read cookies from the Firefox, Chromium, Chrome, ChromeBeta, Safari and Edge
   browsers on Linux, Windows and MacOS, thanks to the
@@ -66,7 +71,7 @@ The following features are supported:
   SegmentTemplate@duration, SegmentTemplate@index, SegmentList.
 
 - Media containers of types supported by mkvmerge, ffmpeg, VLC or MP4Box (this includes ISO-BMFF /
-  CMAF / MP4, Matroska, WebM, MPEG-2 TS).
+  CMAF / MP4, Matroska, WebM, MPEG-2 TS, AVI), and all the codecs supported by these applications.
 
 - Support for decrypting media streams that use MPEG Common Encryption (cenc) ContentProtection.
   This requires the `mp4decrypt` commandline application from the [Bento4
@@ -76,14 +81,15 @@ The following features are supported:
 
 The following are not supported: 
 
-- XLink elements with actuate=onRequest semantics
+- We can't download content from dynamic MPD manifests, that are used for live streaming/OTT TV
 
+- XLink elements with actuate=onRequest semantics
 
 
 ## Installation
 
 **Binary releases** are [available on GitHub](https://github.com/emarsden/dash-mpd-cli/releases) for
-GNU/Linux on AMD64 (statically linked against musl libc to avoid glibc versioning problems),
+GNU/Linux on AMD64 (statically linked against Musl Libc to avoid glibc versioning problems),
 Microsoft Windows on AMD64 and MacOS on aarch64 (“Apple Silicon”) and AMD64. These are built
 automatically on the GitHub continuous integration infrastructure.
 
@@ -315,7 +321,14 @@ or `-o` (which will be ".mp4" if you don't specify the output path explicitly):
 
 - `.mkv`: call mkvmerge first, then if that fails call ffmpeg, then try MP4Box
 - `.mp4`: call ffmpeg first, then if that fails call vlc, then try MP4Box
+- `.webm`: call vlc, then if that fails ffmpeg
 - other: try ffmpeg, which supports many container formats, then try MP4Box
+
+You can specify a different order of preference for muxing applications using the
+`--muxer-preference` commandline option. For example, `--muxer-preference avi:vlc,ffmpeg` means that
+for an AVI media container the external muxer vlc will be tried first, then ffmpeg in case of
+failure. This commandline option can be used multiple times to specify options for different
+container types.
 
 
 
