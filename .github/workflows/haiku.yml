@@ -18,7 +18,8 @@ jobs:
     - name: Setup Haiku dependencies
       run: vmshell pkgman install -y gcc rust_bin ffmpeg mkvtoolnix git haiku_devel
     - name: Restart VM
-      run: sv force-restart qemu; timeout 600 vmshell exit 0
+      # disabled
+      run: echo sv force-restart qemu; timeout 600 vmshell exit 0
     - name: Checkout sources
       run: vmshell git clone --depth 1 https://github.com/emarsden/dash-mpd-cli 
     - name: Build
