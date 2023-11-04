@@ -22,4 +22,4 @@ jobs:
     - name: Checkout sources
       run: vmshell git clone --depth 1 https://github.com/emarsden/dash-mpd-cli 
     - name: Build
-      run: vmshell "cd dash-mpd-cli; cargo build"
+      run: vmshell "cd dash-mpd-cli; cargo build --jobs 1"

@@ -28,5 +28,5 @@ jobs:
         run: |
           export PATH="${HOME}/.cargo/bin:$PATH"
           ls -la
-          cargo build --no-default-features --verbose
-          cargo test --no-default-features --verbose
+          cargo build --jobs 1 --no-default-features --verbose
+          cargo test --jobs 1 --no-default-features --verbose
