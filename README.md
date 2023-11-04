@@ -170,6 +170,9 @@ Options:
       --auth-password <PASSWORD>
           Password to use for authentication with the server(s) hosting the DASH manifest and the media segments (HTTP Basic authentication only).
 
+      --auth-bearer <TOKEN>
+          Token to use for authentication with the server(s) hosting the DASH manifest and the media segments, when HTTP Bearer authentication is required.
+
       --timeout <SECONDS>
           Timeout for network requests (from the start to the end of the request), in seconds.
 
@@ -205,6 +208,9 @@ Options:
       --prefer-language <LANG>
           Preferred language when multiple audio streams with different languages are available. Must be in RFC 5646 format (e.g. fr or en-AU). If a preference is not specified and multiple audio streams are present, the first one listed in the DASH manifest will be downloaded.
 
+      --xslt-stylesheet <STYLESHEET>
+          XSLT stylesheet with rewrite rules to be applied to the manifest before downloading media content. Stylesheets are applied using the xsltproc commandline application, which implements XSLT 1.0. You can use this option multiple times. This option is currently experimental.
+
       --video-only
           If media stream has separate audio and video streams, only download the video stream.
 
@@ -215,7 +221,7 @@ Options:
           Download the manifest and print diagnostic information, but do not download audio, video or subtitle content, and write nothing to disk.
 
       --write-subs
-          Write subtitle file, if subtitles are available.
+          Download and save subtitle file, if subtitles are available.
 
       --keep-video <VIDEO-PATH>
           Keep video stream in file specified by VIDEO-PATH.
@@ -225,6 +231,9 @@ Options:
 
       --no-period-concatenation
           Never attempt to concatenate media from different Periods (keep one output file per Period).
+
+      --muxer-preference <CONTAINER:ORDERING>
+          When muxing into CONTAINER, try muxing applications in order ORDERING. You can use this option multiple times.
 
       --key <KID:KEY>
           Use KID:KEY to decrypt encrypted media streams. KID should be either a track id in decimal (e.g. 1), or a 128-bit keyid (32 hexadecimal characters). KEY should be 32 hexadecimal characters. Example: --key eb676abbcb345e96bbcf616630f1a3da:100b6c20940f779a4589152b57d2dacb. You can use this option multiple times.

@@ -26,6 +26,7 @@ use std::str::FromStr;
 use std::time::Duration;
 use std::sync::Arc;
 use std::collections::HashMap;
+use colored::*;
 use fs_err as fs;
 use reqwest::header;
 use clap::{Arg, ArgAction, ValueHint};
@@ -206,6 +207,13 @@ async fn main () -> Result<()> {
              .value_name("LANG")
              .num_args(1)
              .long_help("Preferred language when multiple audio streams with different languages are available. Must be in RFC 5646 format (e.g. fr or en-AU). If a preference is not specified and multiple audio streams are present, the first one listed in the DASH manifest will be downloaded."))
+        .arg(Arg::new("xslt-stylesheet")
+             .long("xslt-stylesheet")
+             .value_name("STYLESHEET")
+             .action(ArgAction::Append)
+             .num_args(1)
+             .value_hint(ValueHint::FilePath)
+             .long_help("XSLT stylesheet with rewrite rules to be applied to the manifest before downloading media content. Stylesheets are applied using the xsltproc commandline application, which implements XSLT 1.0. You can use this option multiple times. This option is currently experimental."))
         .arg(Arg::new("video-only")
              .long("video-only")
              .action(ArgAction::SetTrue)
@@ -668,6 +676,9 @@ async fn main () -> Result<()> {
     if let Some(lang) = matches.get_one::<String>("prefer-language") {
         dl = dl.prefer_language(lang.to_string());
     }
+    if let Some(stylesheet) = matches.get_one::<String>("xslt-stylesheet") {
+        dl = dl.with_xslt_stylesheet(stylesheet);
+    }
     if let Some(user) = matches.get_one::<String>("auth-username") {
         if let Some(password) = matches.get_one::<String>("auth-password") {
             dl = dl.with_authentication(user.to_string(), password.to_string());
@@ -679,7 +690,7 @@ async fn main () -> Result<()> {
     dl = dl.verbosity(verbosity);
     if let Some(out) = matches.get_one::<String>("output-file") {
         if let Err(e) = dl.download_to(out).await {
-            eprintln!("Download failed: {e}");
+            eprintln!("{}: {e}", "Download failed".bold().red());
         }
     } else {
         match dl.download().await {
@@ -689,7 +700,8 @@ async fn main () -> Result<()> {
                 }
             },
             Err(e) => {
-                eprintln!("Download failed: {e}");
+                eprintln!("{}: {e}", "Download failed".bold().red());
+                // TODO we could return different exit codes for different error types
                 std::process::exit(2);
             },
         }
