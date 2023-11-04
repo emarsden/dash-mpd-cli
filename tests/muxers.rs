@@ -7,7 +7,6 @@
 
 
 pub mod common;
-use fs_err as fs;
 use std::env;
 use std::process::Command;
 use std::path::PathBuf;

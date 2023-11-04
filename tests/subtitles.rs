@@ -34,7 +34,7 @@ fn test_subtitles_wvtt () {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
-    check_file_size_approx(outpath, 25_950_458);
+    check_file_size_approx(&outpath, 25_950_458);
     assert!(fs::metadata(subpath).is_ok());
     let srt = fs::read_to_string(subpath).unwrap();
     // We didn't specify a preferred language, so the first available one in the manifest (here
@@ -76,7 +76,7 @@ fn test_subtitles_ttml () {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
-    check_file_size_approx(outpath.clone(), 46_299_053);
+    check_file_size_approx(&outpath, 46_299_053);
     assert!(fs::metadata(subpath).is_ok());
     let ttml = fs::read_to_string(subpath).unwrap();
     // We didn't specify a preferred language, so the first available one in the manifest (here
@@ -118,7 +118,7 @@ fn test_subtitles_vtt () {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
-    check_file_size_approx(outpath.clone(), 128_768_482);
+    check_file_size_approx(&outpath, 128_768_482);
     assert!(fs::metadata(subpath).is_ok());
     // This manifest contains a single subtitle track, available in VTT format via BaseURL addressing.
     let vtt = fs::read_to_string(subpath).unwrap();

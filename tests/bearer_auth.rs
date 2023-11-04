@@ -18,7 +18,6 @@ use fs_err as fs;
 use std::env;
 use std::time::Duration;
 use std::process::Command;
-use std::io::Cursor;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use axum::{routing::get, Router};

@@ -9,10 +9,8 @@
 
 
 pub mod common;
-use fs_err as fs;
 use std::env;
 use std::process::Command;
-use std::path::PathBuf;
 use ffprobe::ffprobe;
 use file_format::FileFormat;
 use common::check_file_size_approx;

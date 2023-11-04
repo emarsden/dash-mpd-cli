@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MPD xmlns="urn:mpeg:dash:schema:mpd:2011" id="ea0fd591-e09f-4879-9bac-b36c3ae140de" profiles="urn:mpeg:dash:profile:isoff-live:2011,urn:com:dashif:dash264" type="static" mediaPresentationDuration="PT42M11.32S" minBufferTime="PT4S">
+  <BaseURL>https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/</BaseURL>
+  <Period id="96d40c7b-4de1-4f93-b622-77719e867588" duration="PT14M14.16S">
+    <AdaptationSet mimeType="video/mp4" segmentAlignment="true">
+      <Representation width="1280" height="720" frameRate="25" codecs="avc1.64001F" id="b456bbac-a9eb-48ca-b00a-41b0670e3441" bandwidth="2300000">
+        <SegmentTemplate timescale="25000" presentationTimeOffset="0" startNumber="0" media="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/720/segment_$Number$.m4s" initialization="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/720/init.mp4">
+          <SegmentTimeline>
+            <S d="48000"/>
+            <S d="48000" r="442"/>
+            <S d="42000"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+      <Representation width="1024" height="576" frameRate="25" codecs="avc1.64001F" id="96526bf6-9771-4ad3-ad05-32d21ce7e490" bandwidth="1500000">
+        <SegmentTemplate timescale="25000" presentationTimeOffset="0" startNumber="0" media="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/576/segment_$Number$.m4s" initialization="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/576/init.mp4">
+          <SegmentTimeline>
+            <S d="48000"/>
+            <S d="48000" r="442"/>
+            <S d="42000"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+      <Representation width="1920" height="1080" frameRate="25" codecs="avc1.640028" id="22119e86-3dce-49b8-af02-14bc922f941a" bandwidth="4300000">
+        <SegmentTemplate timescale="25000" presentationTimeOffset="0" startNumber="0" media="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/1080/segment_$Number$.m4s" initialization="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/1080/init.mp4">
+          <SegmentTimeline>
+            <S d="48000"/>
+            <S d="48000" r="442"/>
+            <S d="42000"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+      <Representation width="768" height="432" frameRate="25" codecs="avc1.64001E" id="455932b5-0d27-492f-a05d-33deba86532b" bandwidth="1000000">
+        <SegmentTemplate timescale="25000" presentationTimeOffset="0" startNumber="0" media="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/432/segment_$Number$.m4s" initialization="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/432/init.mp4">
+          <SegmentTimeline>
+            <S d="48000"/>
+            <S d="48000" r="442"/>
+            <S d="42000"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+    </AdaptationSet>
+    <AdaptationSet mimeType="audio/mp4" lang="nl" segmentAlignment="true">
+      <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+      <Representation audioSamplingRate="48000" codecs="mp4a.40.2" id="1fa314f2-335a-4c57-81d0-4f9240a61af6" bandwidth="128000">
+        <SegmentTemplate timescale="48000" presentationTimeOffset="0" startNumber="0" media="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/audio/segment_$Number$.m4s" initialization="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/audio/init.mp4">
+          <SegmentTimeline>
+            <S d="92160"/>
+            <S d="92160" r="442"/>
+            <S d="79872"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+    </AdaptationSet>
+  </Period>
+  <Period id="mid-roll-1-ad-1" duration="PT31.36S">
+    <BaseURL>https://dai.google.com/segments/redirect/c/</BaseURL>
+    <AdaptationSet id="0" contentType="audio">
+      <Representation audioSamplingRate="48000" mimeType="audio/mp4" codecs="mp4a.40.2" id="1fa314f2-335a-4c57-81d0-4f9240a61af6" bandwidth="129000">
+        <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+        <SegmentTemplate timescale="48000" startNumber="1" media="$Number$.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZeacO-KJ6dsP3eeP2AM%26ip%3D84.198.121.126%26id%3Dd84b46e56be3f28b%26itag%3D340%26mime%3Daudio%2Fmp4%26requiressl%3Dyes%26acao%3Dyes%26ctier%3DL%26lmt%3D1694608026962325%26clen%3D509803%26gir%3Dyes%26source%3Ddclk_video_ads%26nc%3D22306128931%26xtags%3Dac%3Daac%3Aaccf%3Dlc%3Aach%3D2%3Aasr%3D48000%3Aatbr%3D128%26mt%3D1698412197%26pcm2cms%3Dyes%26pl%3D13%26mh%3DaC%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26mv%3Dm%26mvi%3D9%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Cid%2Citag%2Cmime%2Crequiressl%2Cacao%2Cctier%2Clmt%2Cclen%2Cgir%2Csource%2Cxtags%2Csusc%2Cxpc%26sig%3DAGM4YrMwRgIhAN4bMsMfT68Adwe-9HtYXVgJ1Y6bNMg2eEkg4G7vHpJSAiEA_33KwlVd0B1DCTIy9ymtDVodae4QwaJr3OtB7paJspA%3D%26lsparams%3Dpcm2cms%2Cpl%2Cmh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%26lsig%3DAK1ks_kwRgIhAIKZdwuY4geyOgbdn5GH-Kc_9tMQBvCvuAFsup01CTu9AiEApuaVrmLvn_Csfb58dgv7wyca-MI6K--8PkYPO9Sct8g%3D" initialization="init.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZeacO-KJ6dsP3eeP2AM%26ip%3D84.198.121.126%26id%3Dd84b46e56be3f28b%26itag%3D340%26mime%3Daudio%2Fmp4%26requiressl%3Dyes%26acao%3Dyes%26ctier%3DL%26lmt%3D1694608026962325%26clen%3D509803%26gir%3Dyes%26source%3Ddclk_video_ads%26nc%3D22306128931%26xtags%3Dac%3Daac%3Aaccf%3Dlc%3Aach%3D2%3Aasr%3D48000%3Aatbr%3D128%26mt%3D1698412197%26pcm2cms%3Dyes%26pl%3D13%26mh%3DaC%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26mv%3Dm%26mvi%3D9%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Cid%2Citag%2Cmime%2Crequiressl%2Cacao%2Cctier%2Clmt%2Cclen%2Cgir%2Csource%2Cxtags%2Csusc%2Cxpc%26sig%3DAGM4YrMwRgIhAN4bMsMfT68Adwe-9HtYXVgJ1Y6bNMg2eEkg4G7vHpJSAiEA_33KwlVd0B1DCTIy9ymtDVodae4QwaJr3OtB7paJspA%3D%26lsparams%3Dpcm2cms%2Cpl%2Cmh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%26lsig%3DAK1ks_kwRgIhAIKZdwuY4geyOgbdn5GH-Kc_9tMQBvCvuAFsup01CTu9AiEApuaVrmLvn_Csfb58dgv7wyca-MI6K--8PkYPO9Sct8g%3D">
+          <SegmentTimeline>
+            <S d="479232" r="2"/>
+            <S d="70656"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+    </AdaptationSet>
+    <AdaptationSet startWithSAP="1" id="1" contentType="video" minFrameRate="25" maxFrameRate="25" segmentAlignment="true">
+      <Representation width="1280" height="720" frameRate="25" mimeType="video/mp4" codecs="avc1.64001f" id="b456bbac-a9eb-48ca-b00a-41b0670e3441" bandwidth="2516000">
+        <SegmentTemplate timescale="90000" startNumber="1" media="$Number$.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZeacO-KJ6dsP3eeP2AM%26ip%3D84.198.121.126%26source%3Ddclk_video_ads%26id%3Dd84b46e56be3f28b%26itag%3D340%26gir%3Dyes%26requiressl%3Dyes%26ctier%3DL%26lmt%3D1694608155693683%26clen%3D9865546%26mime%3Dvideo%2Fmp4%26xtags%3Dvc%3Davc%3Avccf%3Dhigh%3Avfr%3D25%3Avsz%3D1280x720%3Avtbr%3D2500%26acao%3Dyes%26nc%3D22306128931%26mt%3D1698412197%26pcm2cms%3Dyes%26pl%3D13%26mh%3DaC%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26mv%3Dm%26mvi%3D9%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Csource%2Cid%2Citag%2Cgir%2Crequiressl%2Cctier%2Clmt%2Cclen%2Cmime%2Cxtags%2Cacao%2Csusc%2Cxpc%26sig%3DAGM4YrMwRQIhALfRUvcBj0dNs7Uqv0xyhFO5wFuLksEH2VeR1INUUblJAiByzkOZSAbGjq4g40xv2kmlqXS5uq1MS77VsnapkAfIeg%3D%3D%26lsparams%3Dpcm2cms%2Cpl%2Cmh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%26lsig%3DAK1ks_kwRAIgXXp7Zt7FnPnGQ4UX80fTqda51s9MR7cJj5ZJlOmIXpUCIA1811D3qz5KzO5XYVeE_sSdKw_RaSR1yil-scCBm67S" initialization="init.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZeacO-KJ6dsP3eeP2AM%26ip%3D84.198.121.126%26source%3Ddclk_video_ads%26id%3Dd84b46e56be3f28b%26itag%3D340%26gir%3Dyes%26requiressl%3Dyes%26ctier%3DL%26lmt%3D1694608155693683%26clen%3D9865546%26mime%3Dvideo%2Fmp4%26xtags%3Dvc%3Davc%3Avccf%3Dhigh%3Avfr%3D25%3Avsz%3D1280x720%3Avtbr%3D2500%26acao%3Dyes%26nc%3D22306128931%26mt%3D1698412197%26pcm2cms%3Dyes%26pl%3D13%26mh%3DaC%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26mv%3Dm%26mvi%3D9%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Csource%2Cid%2Citag%2Cgir%2Crequiressl%2Cctier%2Clmt%2Cclen%2Cmime%2Cxtags%2Cacao%2Csusc%2Cxpc%26sig%3DAGM4YrMwRQIhALfRUvcBj0dNs7Uqv0xyhFO5wFuLksEH2VeR1INUUblJAiByzkOZSAbGjq4g40xv2kmlqXS5uq1MS77VsnapkAfIeg%3D%3D%26lsparams%3Dpcm2cms%2Cpl%2Cmh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%26lsig%3DAK1ks_kwRAIgXXp7Zt7FnPnGQ4UX80fTqda51s9MR7cJj5ZJlOmIXpUCIA1811D3qz5KzO5XYVeE_sSdKw_RaSR1yil-scCBm67S">
+          <SegmentTimeline>
+            <S d="450000" r="5"/>
+            <S d="122400"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+      <Representation width="1024" height="576" frameRate="25" mimeType="video/mp4" codecs="avc1.4d401f" id="96526bf6-9771-4ad3-ad05-32d21ce7e490" bandwidth="1606000">
+        <SegmentTemplate timescale="90000" startNumber="1" media="$Number$.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZeacO-KJ6dsP3eeP2AM%26ip%3D84.198.121.126%26id%3Dd84b46e56be3f28b%26itag%3D340%26nc%3D22306128931%26mime%3Dvideo%2Fmp4%26xtags%3Dvc%3Davc%3Avccf%3Dmain%3Avfr%3D25%3Avsz%3D1024x576%3Avtbr%3D1600%26lmt%3D1694608124645734%26ctier%3DL%26acao%3Dyes%26source%3Ddclk_video_ads%26clen%3D6298012%26gir%3Dyes%26requiressl%3Dyes%26mt%3D1698412197%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26mv%3Dm%26mvi%3D9%26pcm2cms%3Dyes%26pl%3D13%26mh%3DaC%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Cid%2Citag%2Cmime%2Cxtags%2Clmt%2Cctier%2Cacao%2Csource%2Cclen%2Cgir%2Crequiressl%2Csusc%2Cxpc%26sig%3DAGM4YrMwRAIgDc2rtlenYtifMHVYOwb8zZax8sH1BquTqBF18gZruGECIHDouN2Z-ePO_owbEDEhgEy0y9rChZARIqrjmU_Tpbhq%26lsparams%3Dmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpcm2cms%2Cpl%2Cmh%26lsig%3DAK1ks_kwRAIgCJGBZNOkCKExRC02VmkCmDiS42SG0_xFWKp0d4sckjkCIHOALccWWJN1Iw_Aa0RkQG47shAauOScup8YfCOmmG0g" initialization="init.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZeacO-KJ6dsP3eeP2AM%26ip%3D84.198.121.126%26id%3Dd84b46e56be3f28b%26itag%3D340%26nc%3D22306128931%26mime%3Dvideo%2Fmp4%26xtags%3Dvc%3Davc%3Avccf%3Dmain%3Avfr%3D25%3Avsz%3D1024x576%3Avtbr%3D1600%26lmt%3D1694608124645734%26ctier%3DL%26acao%3Dyes%26source%3Ddclk_video_ads%26clen%3D6298012%26gir%3Dyes%26requiressl%3Dyes%26mt%3D1698412197%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26mv%3Dm%26mvi%3D9%26pcm2cms%3Dyes%26pl%3D13%26mh%3DaC%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Cid%2Citag%2Cmime%2Cxtags%2Clmt%2Cctier%2Cacao%2Csource%2Cclen%2Cgir%2Crequiressl%2Csusc%2Cxpc%26sig%3DAGM4YrMwRAIgDc2rtlenYtifMHVYOwb8zZax8sH1BquTqBF18gZruGECIHDouN2Z-ePO_owbEDEhgEy0y9rChZARIqrjmU_Tpbhq%26lsparams%3Dmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpcm2cms%2Cpl%2Cmh%26lsig%3DAK1ks_kwRAIgCJGBZNOkCKExRC02VmkCmDiS42SG0_xFWKp0d4sckjkCIHOALccWWJN1Iw_Aa0RkQG47shAauOScup8YfCOmmG0g">
+          <SegmentTimeline>
+            <S d="450000" r="5"/>
+            <S d="122400"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+      <Representation width="1920" height="1080" frameRate="25" mimeType="video/mp4" codecs="avc1.640028" id="22119e86-3dce-49b8-af02-14bc922f941a" bandwidth="3903000">
+        <SegmentTemplate timescale="90000" startNumber="1" media="$Number$.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZeacO-KJ6dsP3eeP2AM%26ip%3D84.198.121.126%26clen%3D15301148%26requiressl%3Dyes%26ctier%3DL%26id%3Dd84b46e56be3f28b%26nc%3D22306128931%26lmt%3D1694608159156716%26mime%3Dvideo%2Fmp4%26acao%3Dyes%26source%3Ddclk_video_ads%26itag%3D340%26xtags%3Dvc%3Davc%3Avccf%3Dhigh%3Avfr%3D25%3Avsz%3D1920x1080%3Avtbr%3D3800%26gir%3Dyes%26mt%3D1698412197%26mv%3Dm%26mvi%3D9%26pcm2cms%3Dyes%26pl%3D13%26mh%3DaC%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Cclen%2Crequiressl%2Cctier%2Cid%2Clmt%2Cmime%2Cacao%2Csource%2Citag%2Cxtags%2Cgir%2Csusc%2Cxpc%26sig%3DAGM4YrMwRQIhALXYXTCgrwjVuEd1TiDLDfXTlRymKo3fdgBIGbz20l8sAiAArQe8KrpQxClGiA6g_hZlH0lDQiKwgqkQv29oIYFdCg%3D%3D%26lsparams%3Dmv%2Cmvi%2Cpcm2cms%2Cpl%2Cmh%2Cmm%2Cmn%2Cms%26lsig%3DAK1ks_kwRgIhAK834Ad_N6-A7Kv9CnnBdMm5EfsNpIh8nf-uJgf0Mk9mAiEAlTyBXWAWIK4uLRa1OLHwe7c1w2SXJGvgsrMooVnBmTw%3D" initialization="init.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZeacO-KJ6dsP3eeP2AM%26ip%3D84.198.121.126%26clen%3D15301148%26requiressl%3Dyes%26ctier%3DL%26id%3Dd84b46e56be3f28b%26nc%3D22306128931%26lmt%3D1694608159156716%26mime%3Dvideo%2Fmp4%26acao%3Dyes%26source%3Ddclk_video_ads%26itag%3D340%26xtags%3Dvc%3Davc%3Avccf%3Dhigh%3Avfr%3D25%3Avsz%3D1920x1080%3Avtbr%3D3800%26gir%3Dyes%26mt%3D1698412197%26mv%3Dm%26mvi%3D9%26pcm2cms%3Dyes%26pl%3D13%26mh%3DaC%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Cclen%2Crequiressl%2Cctier%2Cid%2Clmt%2Cmime%2Cacao%2Csource%2Citag%2Cxtags%2Cgir%2Csusc%2Cxpc%26sig%3DAGM4YrMwRQIhALXYXTCgrwjVuEd1TiDLDfXTlRymKo3fdgBIGbz20l8sAiAArQe8KrpQxClGiA6g_hZlH0lDQiKwgqkQv29oIYFdCg%3D%3D%26lsparams%3Dmv%2Cmvi%2Cpcm2cms%2Cpl%2Cmh%2Cmm%2Cmn%2Cms%26lsig%3DAK1ks_kwRgIhAK834Ad_N6-A7Kv9CnnBdMm5EfsNpIh8nf-uJgf0Mk9mAiEAlTyBXWAWIK4uLRa1OLHwe7c1w2SXJGvgsrMooVnBmTw%3D">
+          <SegmentTimeline>
+            <S d="450000" r="5"/>
+            <S d="122400"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+      <Representation width="640" height="360" frameRate="25" mimeType="video/mp4" codecs="avc1.64001e" id="455932b5-0d27-492f-a05d-33deba86532b" bandwidth="998000">
+        <SegmentTemplate timescale="90000" startNumber="1" media="$Number$.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZeacO-KJ6dsP3eeP2AM%26ip%3D84.198.121.126%26acao%3Dyes%26source%3Ddclk_video_ads%26id%3Dd84b46e56be3f28b%26itag%3D340%26nc%3D22306128931%26gir%3Dyes%26requiressl%3Dyes%26ctier%3DL%26mime%3Dvideo%2Fmp4%26xtags%3Dvc%3Davc%3Avccf%3Dhigh%3Avfr%3D25%3Avsz%3D640x360%3Avtbr%3D1000%26lmt%3D1694608121359045%26clen%3D3914625%26mt%3D1698412197%26pcm2cms%3Dyes%26pl%3D13%26mh%3DaC%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26mv%3Dm%26mvi%3D9%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Cacao%2Csource%2Cid%2Citag%2Cgir%2Crequiressl%2Cctier%2Cmime%2Cxtags%2Clmt%2Cclen%2Csusc%2Cxpc%26sig%3DAGM4YrMwRQIhAKqqC76u2jImRAwFdURJxfDGy8llCy3_TqVHT48lYzktAiBnsUrhMldXI0V6488GmhEHi2l85lKG8yhGjrym397NoA%3D%3D%26lsparams%3Dpcm2cms%2Cpl%2Cmh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%26lsig%3DAK1ks_kwRQIgJw3CO0UWWo7_-z8i4FZ5Bq4QgfqkOCnWQ6fhrC5Gq5MCIQDhOMqBNukVMC0gAU7BeV3DodMr-BoFD4X3P_GDh04LDg%3D%3D" initialization="init.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZeacO-KJ6dsP3eeP2AM%26ip%3D84.198.121.126%26acao%3Dyes%26source%3Ddclk_video_ads%26id%3Dd84b46e56be3f28b%26itag%3D340%26nc%3D22306128931%26gir%3Dyes%26requiressl%3Dyes%26ctier%3DL%26mime%3Dvideo%2Fmp4%26xtags%3Dvc%3Davc%3Avccf%3Dhigh%3Avfr%3D25%3Avsz%3D640x360%3Avtbr%3D1000%26lmt%3D1694608121359045%26clen%3D3914625%26mt%3D1698412197%26pcm2cms%3Dyes%26pl%3D13%26mh%3DaC%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26mv%3Dm%26mvi%3D9%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Cacao%2Csource%2Cid%2Citag%2Cgir%2Crequiressl%2Cctier%2Cmime%2Cxtags%2Clmt%2Cclen%2Csusc%2Cxpc%26sig%3DAGM4YrMwRQIhAKqqC76u2jImRAwFdURJxfDGy8llCy3_TqVHT48lYzktAiBnsUrhMldXI0V6488GmhEHi2l85lKG8yhGjrym397NoA%3D%3D%26lsparams%3Dpcm2cms%2Cpl%2Cmh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%26lsig%3DAK1ks_kwRQIgJw3CO0UWWo7_-z8i4FZ5Bq4QgfqkOCnWQ6fhrC5Gq5MCIQDhOMqBNukVMC0gAU7BeV3DodMr-BoFD4X3P_GDh04LDg%3D%3D">
+          <SegmentTimeline>
+            <S d="450000" r="5"/>
+            <S d="122400"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+    </AdaptationSet>
+  </Period>
+  <Period id="a35efa61-c395-4d72-90ce-03575ff5cc45" duration="PT10M5.48S">
+    <AdaptationSet mimeType="video/mp4" segmentAlignment="true">
+      <Representation width="1280" height="720" frameRate="25" codecs="avc1.64001F" id="e08900bf-d824-401e-ace1-b8527c2aa5c6" bandwidth="2300000">
+        <SegmentTemplate timescale="25000" presentationTimeOffset="21354000" startNumber="445" media="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/720/segment_$Number$.m4s" initialization="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/720/init.mp4">
+          <SegmentTimeline>
+            <S t="21354000" d="6000"/>
+            <S d="48000" r="314"/>
+            <S d="11000"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+      <Representation width="1024" height="576" frameRate="25" codecs="avc1.64001F" id="01703463-e7a5-49c6-99c9-62facbf700cc" bandwidth="1500000">
+        <SegmentTemplate timescale="25000" presentationTimeOffset="21354000" startNumber="445" media="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/576/segment_$Number$.m4s" initialization="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/576/init.mp4">
+          <SegmentTimeline>
+            <S t="21354000" d="6000"/>
+            <S d="48000" r="314"/>
+            <S d="11000"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+      <Representation width="1920" height="1080" frameRate="25" codecs="avc1.640028" id="83c9d504-de6d-45ca-9500-6ddb53f64e30" bandwidth="4300000">
+        <SegmentTemplate timescale="25000" presentationTimeOffset="21354000" startNumber="445" media="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/1080/segment_$Number$.m4s" initialization="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/1080/init.mp4">
+          <SegmentTimeline>
+            <S t="21354000" d="6000"/>
+            <S d="48000" r="314"/>
+            <S d="11000"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+      <Representation width="768" height="432" frameRate="25" codecs="avc1.64001E" id="25cf4cd6-d999-4ba4-8bd4-ad03c36c8793" bandwidth="1000000">
+        <SegmentTemplate timescale="25000" presentationTimeOffset="21354000" startNumber="445" media="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/432/segment_$Number$.m4s" initialization="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/432/init.mp4">
+          <SegmentTimeline>
+            <S t="21354000" d="6000"/>
+            <S d="48000" r="314"/>
+            <S d="11000"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+    </AdaptationSet>
+    <AdaptationSet mimeType="audio/mp4" lang="nl" segmentAlignment="true">
+      <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+      <Representation audioSamplingRate="48000" codecs="mp4a.40.2" id="4a374fd1-2325-4296-9fbb-9ae231147613" bandwidth="128000">
+        <SegmentTemplate timescale="48000" presentationTimeOffset="40998912" startNumber="445" media="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/audio/segment_$Number$.m4s" initialization="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/audio/init.mp4">
+          <SegmentTimeline>
+            <S t="40998912" d="12288"/>
+            <S d="92160" r="314"/>
+            <S d="20480"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+    </AdaptationSet>
+  </Period>
+  <Period id="mid-roll-2-ad-1" duration="PT31.36S">
+    <BaseURL>https://dai.google.com/segments/redirect/c/</BaseURL>
+    <AdaptationSet id="0" contentType="audio">
+      <Representation audioSamplingRate="48000" mimeType="audio/mp4" codecs="mp4a.40.2" id="1fa314f2-335a-4c57-81d0-4f9240a61af6" bandwidth="129000">
+        <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+        <SegmentTemplate timescale="48000" startNumber="1" media="$Number$.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZdzCO_uM6dsPiPGF8Aw%26ip%3D84.198.121.126%26id%3Dd84b46e56be3f28b%26nc%3D22306128931%26gir%3Dyes%26requiressl%3Dyes%26acao%3Dyes%26ctier%3DL%26source%3Ddclk_video_ads%26itag%3D340%26xtags%3Dac%3Daac%3Aaccf%3Dlc%3Aach%3D2%3Aasr%3D48000%3Aatbr%3D128%26lmt%3D1694608026962325%26clen%3D509803%26mime%3Daudio%2Fmp4%26mt%3D1698412197%26mvi%3D9%26pl%3D13%26mh%3DaC%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26mv%3Dm%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Cid%2Cgir%2Crequiressl%2Cacao%2Cctier%2Csource%2Citag%2Cxtags%2Clmt%2Cclen%2Cmime%2Csusc%2Cxpc%26sig%3DAGM4YrMwRAIgaAs9w5GG4GRKHJPguevTGsh3ajlu3WB1lnbA4gATVOwCIGDAXcvwVNhGlStiYNSivEq_zjZ_oDLzdCcJ6dacpQF0%26lsparams%3Dmvi%2Cpl%2Cmh%2Cmm%2Cmn%2Cms%2Cmv%26lsig%3DAK1ks_kwRAIgP_3nDNXC18EOkx1UqyCoY818dL3IPa73xr_ctalzXfQCIFTl_4hHlU6j66JUArbzxj_zr3c-g9FD2YvKJ3veuYpB" initialization="init.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZdzCO_uM6dsPiPGF8Aw%26ip%3D84.198.121.126%26id%3Dd84b46e56be3f28b%26nc%3D22306128931%26gir%3Dyes%26requiressl%3Dyes%26acao%3Dyes%26ctier%3DL%26source%3Ddclk_video_ads%26itag%3D340%26xtags%3Dac%3Daac%3Aaccf%3Dlc%3Aach%3D2%3Aasr%3D48000%3Aatbr%3D128%26lmt%3D1694608026962325%26clen%3D509803%26mime%3Daudio%2Fmp4%26mt%3D1698412197%26mvi%3D9%26pl%3D13%26mh%3DaC%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26mv%3Dm%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Cid%2Cgir%2Crequiressl%2Cacao%2Cctier%2Csource%2Citag%2Cxtags%2Clmt%2Cclen%2Cmime%2Csusc%2Cxpc%26sig%3DAGM4YrMwRAIgaAs9w5GG4GRKHJPguevTGsh3ajlu3WB1lnbA4gATVOwCIGDAXcvwVNhGlStiYNSivEq_zjZ_oDLzdCcJ6dacpQF0%26lsparams%3Dmvi%2Cpl%2Cmh%2Cmm%2Cmn%2Cms%2Cmv%26lsig%3DAK1ks_kwRAIgP_3nDNXC18EOkx1UqyCoY818dL3IPa73xr_ctalzXfQCIFTl_4hHlU6j66JUArbzxj_zr3c-g9FD2YvKJ3veuYpB">
+          <SegmentTimeline>
+            <S d="479232" r="2"/>
+            <S d="70656"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+    </AdaptationSet>
+    <AdaptationSet startWithSAP="1" id="1" contentType="video" minFrameRate="25" maxFrameRate="25" segmentAlignment="true">
+      <Representation width="1024" height="576" frameRate="25" mimeType="video/mp4" codecs="avc1.4d401f" id="96526bf6-9771-4ad3-ad05-32d21ce7e490" bandwidth="1606000">
+        <SegmentTemplate timescale="90000" startNumber="1" media="$Number$.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZdzCO_uM6dsPiPGF8Aw%26ip%3D84.198.121.126%26mime%3Dvideo%2Fmp4%26lmt%3D1694608124645734%26clen%3D6298012%26gir%3Dyes%26acao%3Dyes%26source%3Ddclk_video_ads%26id%3Dd84b46e56be3f28b%26nc%3D22306128931%26xtags%3Dvc%3Davc%3Avccf%3Dmain%3Avfr%3D25%3Avsz%3D1024x576%3Avtbr%3D1600%26requiressl%3Dyes%26ctier%3DL%26itag%3D340%26mt%3D1698412197%26mv%3Dm%26mvi%3D9%26pl%3D13%26mh%3DaC%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Cmime%2Clmt%2Cclen%2Cgir%2Cacao%2Csource%2Cid%2Cxtags%2Crequiressl%2Cctier%2Citag%2Csusc%2Cxpc%26sig%3DAGM4YrMwRAIgFE9BIh32bRGOnlMry3tIzfrfmkxr-3XlN-44nLyVT1wCIH8pxz0ywfnDdzdUtvLBhrFWEM4AHdaD8TX8Nen3XwH2%26lsparams%3Dmv%2Cmvi%2Cpl%2Cmh%2Cmm%2Cmn%2Cms%26lsig%3DAK1ks_kwRAIgVO6U5mqef0YBnbX-xK-uB8BCnwJmqZnj75zOhzvHwmECIDXK9FefA9moEvbdW3Mp1sZbVC2a-HHzVC901zZMdZlN" initialization="init.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZdzCO_uM6dsPiPGF8Aw%26ip%3D84.198.121.126%26mime%3Dvideo%2Fmp4%26lmt%3D1694608124645734%26clen%3D6298012%26gir%3Dyes%26acao%3Dyes%26source%3Ddclk_video_ads%26id%3Dd84b46e56be3f28b%26nc%3D22306128931%26xtags%3Dvc%3Davc%3Avccf%3Dmain%3Avfr%3D25%3Avsz%3D1024x576%3Avtbr%3D1600%26requiressl%3Dyes%26ctier%3DL%26itag%3D340%26mt%3D1698412197%26mv%3Dm%26mvi%3D9%26pl%3D13%26mh%3DaC%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Cmime%2Clmt%2Cclen%2Cgir%2Cacao%2Csource%2Cid%2Cxtags%2Crequiressl%2Cctier%2Citag%2Csusc%2Cxpc%26sig%3DAGM4YrMwRAIgFE9BIh32bRGOnlMry3tIzfrfmkxr-3XlN-44nLyVT1wCIH8pxz0ywfnDdzdUtvLBhrFWEM4AHdaD8TX8Nen3XwH2%26lsparams%3Dmv%2Cmvi%2Cpl%2Cmh%2Cmm%2Cmn%2Cms%26lsig%3DAK1ks_kwRAIgVO6U5mqef0YBnbX-xK-uB8BCnwJmqZnj75zOhzvHwmECIDXK9FefA9moEvbdW3Mp1sZbVC2a-HHzVC901zZMdZlN">
+          <SegmentTimeline>
+            <S d="450000" r="5"/>
+            <S d="122400"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+      <Representation width="1920" height="1080" frameRate="25" mimeType="video/mp4" codecs="avc1.640028" id="22119e86-3dce-49b8-af02-14bc922f941a" bandwidth="3903000">
+        <SegmentTemplate timescale="90000" startNumber="1" media="$Number$.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZdzCO_uM6dsPiPGF8Aw%26ip%3D84.198.121.126%26source%3Ddclk_video_ads%26id%3Dd84b46e56be3f28b%26mime%3Dvideo%2Fmp4%26lmt%3D1694608159156716%26acao%3Dyes%26ctier%3DL%26itag%3D340%26nc%3D22306128931%26clen%3D15301148%26gir%3Dyes%26xtags%3Dvc%3Davc%3Avccf%3Dhigh%3Avfr%3D25%3Avsz%3D1920x1080%3Avtbr%3D3800%26requiressl%3Dyes%26mt%3D1698412197%26mh%3DaC%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26mv%3Dm%26mvi%3D9%26pl%3D13%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Csource%2Cid%2Cmime%2Clmt%2Cacao%2Cctier%2Citag%2Cclen%2Cgir%2Cxtags%2Crequiressl%2Csusc%2Cxpc%26sig%3DAGM4YrMwRgIhAKbvui78Yz8mqwoCKHq0o5hP3W__EWjEwlChclZD1qwwAiEAhYJLFjvAhs1SO32fh3I_lfYkZgwCSMebhlGJT7PNW_w%3D%26lsparams%3Dmh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%26lsig%3DAK1ks_kwRgIhAP75fDMqOcqo9sCjQkEv9yFUGOucEkcmPRJklxIg9fpoAiEA7WWitqkxZnZfDLcJyZIexaEiGDnAMgkABJop92Us5iU%3D" initialization="init.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZdzCO_uM6dsPiPGF8Aw%26ip%3D84.198.121.126%26source%3Ddclk_video_ads%26id%3Dd84b46e56be3f28b%26mime%3Dvideo%2Fmp4%26lmt%3D1694608159156716%26acao%3Dyes%26ctier%3DL%26itag%3D340%26nc%3D22306128931%26clen%3D15301148%26gir%3Dyes%26xtags%3Dvc%3Davc%3Avccf%3Dhigh%3Avfr%3D25%3Avsz%3D1920x1080%3Avtbr%3D3800%26requiressl%3Dyes%26mt%3D1698412197%26mh%3DaC%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26mv%3Dm%26mvi%3D9%26pl%3D13%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Csource%2Cid%2Cmime%2Clmt%2Cacao%2Cctier%2Citag%2Cclen%2Cgir%2Cxtags%2Crequiressl%2Csusc%2Cxpc%26sig%3DAGM4YrMwRgIhAKbvui78Yz8mqwoCKHq0o5hP3W__EWjEwlChclZD1qwwAiEAhYJLFjvAhs1SO32fh3I_lfYkZgwCSMebhlGJT7PNW_w%3D%26lsparams%3Dmh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%26lsig%3DAK1ks_kwRgIhAP75fDMqOcqo9sCjQkEv9yFUGOucEkcmPRJklxIg9fpoAiEA7WWitqkxZnZfDLcJyZIexaEiGDnAMgkABJop92Us5iU%3D">
+          <SegmentTimeline>
+            <S d="450000" r="5"/>
+            <S d="122400"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+      <Representation width="640" height="360" frameRate="25" mimeType="video/mp4" codecs="avc1.64001e" id="455932b5-0d27-492f-a05d-33deba86532b" bandwidth="998000">
+        <SegmentTemplate timescale="90000" startNumber="1" media="$Number$.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZdzCO_uM6dsPiPGF8Aw%26ip%3D84.198.121.126%26requiressl%3Dyes%26acao%3Dyes%26id%3Dd84b46e56be3f28b%26itag%3D340%26nc%3D22306128931%26mime%3Dvideo%2Fmp4%26gir%3Dyes%26ctier%3DL%26source%3Ddclk_video_ads%26xtags%3Dvc%3Davc%3Avccf%3Dhigh%3Avfr%3D25%3Avsz%3D640x360%3Avtbr%3D1000%26lmt%3D1694608121359045%26clen%3D3914625%26mt%3D1698412197%26pl%3D13%26mh%3DaC%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26mv%3Dm%26mvi%3D9%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Crequiressl%2Cacao%2Cid%2Citag%2Cmime%2Cgir%2Cctier%2Csource%2Cxtags%2Clmt%2Cclen%2Csusc%2Cxpc%26sig%3DAGM4YrMwRQIgOW5QFneuOmLHVxa16YK8znNVthiS9wwBne2Bdznk6WwCIQCXAPG3clVapJG_iTsWrHcmM5BCCkG5gOmszJy5rHbg8A%3D%3D%26lsparams%3Dpl%2Cmh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%26lsig%3DAK1ks_kwRQIhAL7rrGwRJbUFUdCtkC7lIyQi0F8tIkMu18ARxfB3Yx-xAiBTUTiPCUI7vKCyIjmdQ2_2kK8_7fkVAwLHjHAp2RevLA%3D%3D" initialization="init.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZdzCO_uM6dsPiPGF8Aw%26ip%3D84.198.121.126%26requiressl%3Dyes%26acao%3Dyes%26id%3Dd84b46e56be3f28b%26itag%3D340%26nc%3D22306128931%26mime%3Dvideo%2Fmp4%26gir%3Dyes%26ctier%3DL%26source%3Ddclk_video_ads%26xtags%3Dvc%3Davc%3Avccf%3Dhigh%3Avfr%3D25%3Avsz%3D640x360%3Avtbr%3D1000%26lmt%3D1694608121359045%26clen%3D3914625%26mt%3D1698412197%26pl%3D13%26mh%3DaC%26mm%3D31%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26mv%3Dm%26mvi%3D9%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Crequiressl%2Cacao%2Cid%2Citag%2Cmime%2Cgir%2Cctier%2Csource%2Cxtags%2Clmt%2Cclen%2Csusc%2Cxpc%26sig%3DAGM4YrMwRQIgOW5QFneuOmLHVxa16YK8znNVthiS9wwBne2Bdznk6WwCIQCXAPG3clVapJG_iTsWrHcmM5BCCkG5gOmszJy5rHbg8A%3D%3D%26lsparams%3Dpl%2Cmh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%26lsig%3DAK1ks_kwRQIhAL7rrGwRJbUFUdCtkC7lIyQi0F8tIkMu18ARxfB3Yx-xAiBTUTiPCUI7vKCyIjmdQ2_2kK8_7fkVAwLHjHAp2RevLA%3D%3D">
+          <SegmentTimeline>
+            <S d="450000" r="5"/>
+            <S d="122400"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+      <Representation width="1280" height="720" frameRate="25" mimeType="video/mp4" codecs="avc1.64001f" id="b456bbac-a9eb-48ca-b00a-41b0670e3441" bandwidth="2516000">
+        <SegmentTemplate timescale="90000" startNumber="1" media="$Number$.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZdzCO_uM6dsPiPGF8Aw%26ip%3D84.198.121.126%26clen%3D9865546%26gir%3Dyes%26acao%3Dyes%26ctier%3DL%26source%3Ddclk_video_ads%26nc%3D22306128931%26xtags%3Dvc%3Davc%3Avccf%3Dhigh%3Avfr%3D25%3Avsz%3D1280x720%3Avtbr%3D2500%26requiressl%3Dyes%26id%3Dd84b46e56be3f28b%26itag%3D340%26mime%3Dvideo%2Fmp4%26lmt%3D1694608155693683%26mt%3D1698412197%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26mv%3Dm%26mvi%3D9%26pl%3D13%26mh%3DaC%26mm%3D31%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Cclen%2Cgir%2Cacao%2Cctier%2Csource%2Cxtags%2Crequiressl%2Cid%2Citag%2Cmime%2Clmt%2Csusc%2Cxpc%26sig%3DAGM4YrMwRQIgRGCePzrwG4PUbwPkDSVNmOwKSyu2s_4Ff04cZq7KJBECIQC3BuyBHY8qISH8m5izzpAsAEnuL9UXzx8Ia_-vUuDWFw%3D%3D%26lsparams%3Dmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cmh%2Cmm%26lsig%3DAK1ks_kwRgIhAIkQM0jkxifKvBsv9DEqTBcYxX1KNap8ni9ZMQzEZFaXAiEAgMbNPRjJzGs4YrJkZBO6_mT9UhSRqIGGkqa7ljGSTMw%3D" initialization="init.mp4?orig=https%3A%2F%2Fr9---sn-uxaxoxu-cg0r.googlevideo.com%2Fvideoplayback%3Fexpire%3D1698499091%26ei%3Dk7g7ZdzCO_uM6dsPiPGF8Aw%26ip%3D84.198.121.126%26clen%3D9865546%26gir%3Dyes%26acao%3Dyes%26ctier%3DL%26source%3Ddclk_video_ads%26nc%3D22306128931%26xtags%3Dvc%3Davc%3Avccf%3Dhigh%3Avfr%3D25%3Avsz%3D1280x720%3Avtbr%3D2500%26requiressl%3Dyes%26id%3Dd84b46e56be3f28b%26itag%3D340%26mime%3Dvideo%2Fmp4%26lmt%3D1694608155693683%26mt%3D1698412197%26mn%3Dsn-uxaxoxu-cg0r%26ms%3Dau%26mv%3Dm%26mvi%3D9%26pl%3D13%26mh%3DaC%26mm%3D31%26susc%3Ddvc%26xpc%3DEghovf3BOnoBAQ%3D%3D%26sparams%3Dexpire%2Cei%2Cip%2Cclen%2Cgir%2Cacao%2Cctier%2Csource%2Cxtags%2Crequiressl%2Cid%2Citag%2Cmime%2Clmt%2Csusc%2Cxpc%26sig%3DAGM4YrMwRQIgRGCePzrwG4PUbwPkDSVNmOwKSyu2s_4Ff04cZq7KJBECIQC3BuyBHY8qISH8m5izzpAsAEnuL9UXzx8Ia_-vUuDWFw%3D%3D%26lsparams%3Dmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cmh%2Cmm%26lsig%3DAK1ks_kwRgIhAIkQM0jkxifKvBsv9DEqTBcYxX1KNap8ni9ZMQzEZFaXAiEAgMbNPRjJzGs4YrJkZBO6_mT9UhSRqIGGkqa7ljGSTMw%3D">
+          <SegmentTimeline>
+            <S d="450000" r="5"/>
+            <S d="122400"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+    </AdaptationSet>
+  </Period>
+  <Period id="719e57fe-bfac-4ded-96fd-9a9afa83966a" duration="PT16M48.96S">
+    <AdaptationSet mimeType="video/mp4" segmentAlignment="true">
+      <Representation width="1280" height="720" frameRate="25" codecs="avc1.64001F" id="ed193a18-a250-4226-a4ac-e2e196aa1914" bandwidth="2300000">
+        <SegmentTemplate timescale="25000" presentationTimeOffset="36491000" startNumber="762" media="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/720/segment_$Number$.m4s" initialization="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/720/init.mp4">
+          <SegmentTimeline>
+            <S t="36491000" d="37000"/>
+            <S d="48000" r="523"/>
+            <S d="35000"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+      <Representation width="1024" height="576" frameRate="25" codecs="avc1.64001F" id="efc8d96a-6df1-43c4-8c85-857e38b95042" bandwidth="1500000">
+        <SegmentTemplate timescale="25000" presentationTimeOffset="36491000" startNumber="762" media="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/576/segment_$Number$.m4s" initialization="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/576/init.mp4">
+          <SegmentTimeline>
+            <S t="36491000" d="37000"/>
+            <S d="48000" r="523"/>
+            <S d="35000"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+      <Representation width="1920" height="1080" frameRate="25" codecs="avc1.640028" id="cec54c11-ab88-46c9-9188-f26f958a4cc2" bandwidth="4300000">
+        <SegmentTemplate timescale="25000" presentationTimeOffset="36491000" startNumber="762" media="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/1080/segment_$Number$.m4s" initialization="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/1080/init.mp4">
+          <SegmentTimeline>
+            <S t="36491000" d="37000"/>
+            <S d="48000" r="523"/>
+            <S d="35000"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+      <Representation width="768" height="432" frameRate="25" codecs="avc1.64001E" id="01c500db-60e4-4036-88a1-ec81f9942e02" bandwidth="1000000">
+        <SegmentTemplate timescale="25000" presentationTimeOffset="36491000" startNumber="762" media="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/432/segment_$Number$.m4s" initialization="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/video/432/init.mp4">
+          <SegmentTimeline>
+            <S t="36491000" d="37000"/>
+            <S d="48000" r="523"/>
+            <S d="35000"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+    </AdaptationSet>
+    <AdaptationSet mimeType="audio/mp4" lang="nl" segmentAlignment="true">
+      <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+      <Representation audioSamplingRate="48000" codecs="mp4a.40.2" id="4d5d3a45-dbb0-4345-8784-ca90cf8ca67a" bandwidth="128000">
+        <SegmentTemplate timescale="48000" presentationTimeOffset="70062080" startNumber="762" media="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/audio/segment_$Number$.m4s" initialization="https://stream3-vod.cdn1.sbs.prd.telenet-ops.be/geo/SSAI/NIVEAU_4_BRUSSEL-ZUID/S4/E8/10152250414286812/20231023T120019065/audio/init.mp4">
+          <SegmentTimeline>
+            <S t="70062080" d="71680"/>
+            <S d="92160" r="523"/>
+            <S d="69296"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+    </AdaptationSet>
+  </Period>
+</MPD>

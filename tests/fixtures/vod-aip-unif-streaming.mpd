@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MPD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:mpeg:dash:schema:mpd:2011" xsi:schemaLocation="urn:mpeg:dash:schema:mpd:2011 http://standards.iso.org/ittf/PubliclyAvailableStandards/MPEG-DASH_schema_files/DASH-MPD.xsd" xmlns:daiconnect="urn:daiconnect:dai:2019:xml" profiles="urn:dvb:dash:profile:dvb-dash:2014,urn:dvb:dash:profile:dvb-dash:isoff-ext-live:2014" type="static" mediaPresentationDuration="PT2M26.248000S" minBufferTime="PT10S" maxSegmentDuration="PT3S">
+<Period id="0" start="PT0S" duration="PT6.013000S">
+<BaseURL>https://demo.unified-streaming.com/k8s/avod-scte35-aip/stable/remix/smil-origin/avod-smil/eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==.mp4/dash/</BaseURL>
+<AdaptationSet audioSamplingRate="44100" mimeType="audio/mp4" codecs="mp4a.40.2" startWithSAP="1" id="1" group="1" contentType="audio" segmentAlignment="true">
+<AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+<InbandEventStream schemeIdUri="urn:scte:scte35:2014:xml+bin"/>
+<Role schemeIdUri="urn:mpeg:dash:role:2011" value="main"/>
+<SegmentTemplate timescale="44100" media="eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==-$RepresentationID$-$Time$.dash" initialization="eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==-$RepresentationID$.dash">
+<SegmentTimeline>
+<S d="89088"/>
+<S d="88064" r="1"/>
+</SegmentTimeline>
+</SegmentTemplate>
+<Representation mimeType="audio/mp4" id="audio=130000" bandwidth="130000">
+</Representation>
+</AdaptationSet>
+<AdaptationSet sar="1:1" frameRate="24" mimeType="video/mp4" startWithSAP="1" id="2" group="2" contentType="video" par="16:9" minBandwidth="608000" maxBandwidth="4017000" maxWidth="1920" maxHeight="1080" segmentAlignment="true">
+<InbandEventStream schemeIdUri="urn:scte:scte35:2014:xml+bin"/>
+<Role schemeIdUri="urn:mpeg:dash:role:2011" value="main"/>
+<SegmentTemplate timescale="600" media="eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==-$RepresentationID$-$Time$.dash" initialization="eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==-$RepresentationID$.dash">
+<SegmentTimeline>
+<S d="1200" r="2"/>
+</SegmentTimeline>
+</SegmentTemplate>
+<Representation width="480" height="270" mimeType="video/mp4" codecs="avc3.42C015" scanType="progressive" id="video=608000" bandwidth="608000">
+</Representation>
+<Representation width="480" height="270" mimeType="video/mp4" codecs="avc3.42C015" scanType="progressive" id="video=1193000" bandwidth="1193000">
+</Representation>
+<Representation width="960" height="540" mimeType="video/mp4" codecs="avc3.42C01F" scanType="progressive" id="video=2010000" bandwidth="2010000">
+</Representation>
+<Representation width="1920" height="1080" mimeType="video/mp4" codecs="avc3.42C028" scanType="progressive" id="video=3034000" bandwidth="3034000">
+</Representation>
+<Representation width="1920" height="1080" mimeType="video/mp4" codecs="avc3.42C028" scanType="progressive" id="video=4017000" bandwidth="4017000">
+</Representation>
+</AdaptationSet>
+</Period>
+<Period id="1" start="PT6.013000S" duration="PT19.125000S">
+<BaseURL>https://cdn.daiconnect.com/dev/usp-demo-dash/8c37e3e526ba75f37cafb147dc44a2d1/dash/</BaseURL>
+<AdaptationSet audioSamplingRate="44100" mimeType="audio/mp4" codecs="mp4a.40.2" startWithSAP="1" id="1" group="1" contentType="audio" segmentAlignment="true">
+<AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+<Role schemeIdUri="urn:mpeg:dash:role:2011" value="main"/>
+<SegmentTemplate timescale="44100" media="$RepresentationID$-$Time$.dash" initialization="$RepresentationID$.dash">
+<SegmentTimeline>
+<S d="177152"/>
+<S d="176128" r="1"/>
+<S d="177152"/>
+<S d="135168"/>
+</SegmentTimeline>
+</SegmentTemplate>
+<Representation mimeType="audio/mp4" id="audio=128000" bandwidth="128000">
+</Representation>
+</AdaptationSet>
+<AdaptationSet width="480" height="270" sar="1:1" frameRate="24" mimeType="video/mp4" codecs="avc3.42C015" startWithSAP="1" id="2" group="2" contentType="video" par="16:9" segmentAlignment="true">
+<Role schemeIdUri="urn:mpeg:dash:role:2011" value="main"/>
+<SegmentTemplate timescale="600" media="$RepresentationID$-$Time$.dash" initialization="$RepresentationID$.dash">
+<SegmentTimeline>
+<S d="2400" r="3"/>
+<S d="1875"/>
+</SegmentTimeline>
+</SegmentTemplate>
+<Representation mimeType="video/mp4" scanType="progressive" id="video=1091114" bandwidth="1091114">
+</Representation>
+</AdaptationSet>
+</Period>
+<Period id="2" start="PT25.138000S" duration="PT19.992000S">
+<BaseURL>https://demo.unified-streaming.com/k8s/avod-scte35-aip/stable/remix/smil-origin/avod-smil/eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==.mp4/dash/</BaseURL>
+<AdaptationSet audioSamplingRate="44100" mimeType="audio/mp4" codecs="mp4a.40.2" startWithSAP="1" id="1" group="1" contentType="audio" segmentAlignment="true">
+<AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+<InbandEventStream schemeIdUri="urn:scte:scte35:2014:xml+bin"/>
+<Role schemeIdUri="urn:mpeg:dash:role:2011" value="main"/>
+<SegmentTemplate timescale="44100" presentationTimeOffset="265216" media="eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==-$RepresentationID$-$Time$.dash" initialization="eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==-$RepresentationID$.dash">
+<SegmentTimeline>
+<S t="265216" d="88064" r="3"/>
+<S d="89088"/>
+<S d="88064" r="4"/>
+</SegmentTimeline>
+</SegmentTemplate>
+<Representation mimeType="audio/mp4" id="audio=130000" bandwidth="130000">
+</Representation>
+</AdaptationSet>
+<AdaptationSet sar="1:1" frameRate="24" mimeType="video/mp4" startWithSAP="1" id="2" group="2" contentType="video" par="16:9" minBandwidth="608000" maxBandwidth="4017000" maxWidth="1920" maxHeight="1080" segmentAlignment="true">
+<InbandEventStream schemeIdUri="urn:scte:scte35:2014:xml+bin"/>
+<Role schemeIdUri="urn:mpeg:dash:role:2011" value="main"/>
+<SegmentTemplate timescale="600" presentationTimeOffset="3600" media="eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==-$RepresentationID$-$Time$.dash" initialization="eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==-$RepresentationID$.dash">
+<SegmentTimeline>
+<S t="3600" d="1200" r="9"/>
+</SegmentTimeline>
+</SegmentTemplate>
+<Representation width="480" height="270" mimeType="video/mp4" codecs="avc3.42C015" scanType="progressive" id="video=608000" bandwidth="608000">
+</Representation>
+<Representation width="480" height="270" mimeType="video/mp4" codecs="avc3.42C015" scanType="progressive" id="video=1193000" bandwidth="1193000">
+</Representation>
+<Representation width="960" height="540" mimeType="video/mp4" codecs="avc3.42C01F" scanType="progressive" id="video=2010000" bandwidth="2010000">
+</Representation>
+<Representation width="1920" height="1080" mimeType="video/mp4" codecs="avc3.42C028" scanType="progressive" id="video=3034000" bandwidth="3034000">
+</Representation>
+<Representation width="1920" height="1080" mimeType="video/mp4" codecs="avc3.42C028" scanType="progressive" id="video=4017000" bandwidth="4017000">
+</Representation>
+</AdaptationSet>
+</Period>
+<Period id="3" start="PT45.130000S" duration="PT18S">
+<BaseURL>https://cdn.daiconnect.com/dev/usp-demo-dash/ebb3a808d316d1c1bcee764b5b76878e/dash/</BaseURL>
+<AdaptationSet audioSamplingRate="44100" mimeType="audio/mp4" codecs="mp4a.40.2" startWithSAP="1" id="1" group="1" lang="en" contentType="audio" segmentAlignment="true">
+<AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+<Role schemeIdUri="urn:mpeg:dash:role:2011" value="main"/>
+<SegmentTemplate timescale="44100" media="$RepresentationID$-$Time$.dash" initialization="$RepresentationID$.dash">
+<SegmentTimeline>
+<S d="177152"/>
+<S d="176128" r="1"/>
+<S d="177152"/>
+<S d="87040"/>
+</SegmentTimeline>
+</SegmentTemplate>
+<Representation mimeType="audio/mp4" id="audio_eng=128000" bandwidth="128000">
+</Representation>
+</AdaptationSet>
+<AdaptationSet width="480" height="270" sar="1:1" frameRate="24" mimeType="video/mp4" codecs="avc3.42C015" startWithSAP="1" id="2" group="2" contentType="video" par="16:9" segmentAlignment="true">
+<Role schemeIdUri="urn:mpeg:dash:role:2011" value="main"/>
+<SegmentTemplate timescale="600" media="$RepresentationID$-$Time$.dash" initialization="$RepresentationID$.dash">
+<SegmentTimeline>
+<S d="2400" r="3"/>
+<S d="1200"/>
+</SegmentTimeline>
+</SegmentTemplate>
+<Representation mimeType="video/mp4" scanType="progressive" id="video=1139845" bandwidth="1139845">
+</Representation>
+</AdaptationSet>
+</Period>
+<Period id="4" start="PT1M3.130000S" duration="PT42.004000S">
+<BaseURL>https://demo.unified-streaming.com/k8s/avod-scte35-aip/stable/remix/smil-origin/avod-smil/eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==.mp4/dash/</BaseURL>
+<AdaptationSet audioSamplingRate="44100" mimeType="audio/mp4" codecs="mp4a.40.2" startWithSAP="1" id="1" group="1" contentType="audio" segmentAlignment="true">
+<AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+<InbandEventStream schemeIdUri="urn:scte:scte35:2014:xml+bin"/>
+<Role schemeIdUri="urn:mpeg:dash:role:2011" value="main"/>
+<SegmentTemplate timescale="44100" presentationTimeOffset="1146880" media="eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==-$RepresentationID$-$Time$.dash" initialization="eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==-$RepresentationID$.dash">
+<SegmentTimeline>
+<S t="1146880" d="88064" r="1"/>
+<S d="89088"/>
+<S d="88064" r="5"/>
+<S d="89088"/>
+<S d="88064" r="6"/>
+<S d="89088"/>
+<S d="88064" r="2"/>
+</SegmentTimeline>
+</SegmentTemplate>
+<Representation mimeType="audio/mp4" id="audio=130000" bandwidth="130000">
+</Representation>
+</AdaptationSet>
+<AdaptationSet sar="1:1" frameRate="24" mimeType="video/mp4" startWithSAP="1" id="2" group="2" contentType="video" par="16:9" minBandwidth="608000" maxBandwidth="4017000" maxWidth="1920" maxHeight="1080" segmentAlignment="true">
+<InbandEventStream schemeIdUri="urn:scte:scte35:2014:xml+bin"/>
+<Role schemeIdUri="urn:mpeg:dash:role:2011" value="main"/>
+<SegmentTemplate timescale="600" presentationTimeOffset="15600" media="eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==-$RepresentationID$-$Time$.dash" initialization="eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==-$RepresentationID$.dash">
+<SegmentTimeline>
+<S t="15600" d="1200" r="20"/>
+</SegmentTimeline>
+</SegmentTemplate>
+<Representation width="480" height="270" mimeType="video/mp4" codecs="avc3.42C015" scanType="progressive" id="video=608000" bandwidth="608000">
+</Representation>
+<Representation width="480" height="270" mimeType="video/mp4" codecs="avc3.42C015" scanType="progressive" id="video=1193000" bandwidth="1193000">
+</Representation>
+<Representation width="960" height="540" mimeType="video/mp4" codecs="avc3.42C01F" scanType="progressive" id="video=2010000" bandwidth="2010000">
+</Representation>
+<Representation width="1920" height="1080" mimeType="video/mp4" codecs="avc3.42C028" scanType="progressive" id="video=3034000" bandwidth="3034000">
+</Representation>
+<Representation width="1920" height="1080" mimeType="video/mp4" codecs="avc3.42C028" scanType="progressive" id="video=4017000" bandwidth="4017000">
+</Representation>
+</AdaptationSet>
+</Period>
+<Period id="5" start="PT1M45.134000S" duration="PT19.125000S">
+<BaseURL>https://cdn.daiconnect.com/dev/usp-demo-dash/8c37e3e526ba75f37cafb147dc44a2d1/dash/</BaseURL>
+<AdaptationSet audioSamplingRate="44100" mimeType="audio/mp4" codecs="mp4a.40.2" startWithSAP="1" id="1" group="1" contentType="audio" segmentAlignment="true">
+<AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+<Role schemeIdUri="urn:mpeg:dash:role:2011" value="main"/>
+<SegmentTemplate timescale="44100" media="$RepresentationID$-$Time$.dash" initialization="$RepresentationID$.dash">
+<SegmentTimeline>
+<S d="177152"/>
+<S d="176128" r="1"/>
+<S d="177152"/>
+<S d="135168"/>
+</SegmentTimeline>
+</SegmentTemplate>
+<Representation mimeType="audio/mp4" id="audio=128000" bandwidth="128000">
+</Representation>
+</AdaptationSet>
+<AdaptationSet width="480" height="270" sar="1:1" frameRate="24" mimeType="video/mp4" codecs="avc3.42C015" startWithSAP="1" id="2" group="2" contentType="video" par="16:9" segmentAlignment="true">
+<Role schemeIdUri="urn:mpeg:dash:role:2011" value="main"/>
+<SegmentTemplate timescale="600" media="$RepresentationID$-$Time$.dash" initialization="$RepresentationID$.dash">
+<SegmentTimeline>
+<S d="2400" r="3"/>
+<S d="1875"/>
+</SegmentTimeline>
+</SegmentTemplate>
+<Representation mimeType="video/mp4" scanType="progressive" id="video=1091114" bandwidth="1091114">
+</Representation>
+</AdaptationSet>
+</Period>
+<Period id="6" start="PT2M4.259000S" duration="PT21.989000S">
+<BaseURL>https://demo.unified-streaming.com/k8s/avod-scte35-aip/stable/remix/smil-origin/avod-smil/eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==.mp4/dash/</BaseURL>
+<AdaptationSet audioSamplingRate="44100" mimeType="audio/mp4" codecs="mp4a.40.2" startWithSAP="1" id="1" group="1" contentType="audio" segmentAlignment="true">
+<AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+<InbandEventStream schemeIdUri="urn:scte:scte35:2014:xml+bin"/>
+<Role schemeIdUri="urn:mpeg:dash:role:2011" value="main"/>
+<SegmentTemplate timescale="44100" presentationTimeOffset="2999296" media="eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==-$RepresentationID$-$Time$.dash" initialization="eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==-$RepresentationID$.dash">
+<SegmentTimeline>
+<S t="2999296" d="88064" r="2"/>
+<S d="89088"/>
+<S d="88064" r="6"/>
+</SegmentTimeline>
+</SegmentTemplate>
+<Representation mimeType="audio/mp4" id="audio=130000" bandwidth="130000">
+</Representation>
+</AdaptationSet>
+<AdaptationSet sar="1:1" frameRate="24" mimeType="video/mp4" startWithSAP="1" id="2" group="2" contentType="video" par="16:9" minBandwidth="608000" maxBandwidth="4017000" maxWidth="1920" maxHeight="1080" segmentAlignment="true">
+<InbandEventStream schemeIdUri="urn:scte:scte35:2014:xml+bin"/>
+<Role schemeIdUri="urn:mpeg:dash:role:2011" value="main"/>
+<SegmentTemplate timescale="600" presentationTimeOffset="40800" media="eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==-$RepresentationID$-$Time$.dash" initialization="eyJtYWluIjoiaHR0cDovL3MzLmludGVybmFsLnVuaWZpZWQtc3RyZWFtaW5nLmNvbS9iaWctYnVjay1idW5ueS9iaWctYnVjay1idW5ueV9kcmVmLm1wNCIsImJyZWFrcyI6W3sidGltZSI6NiwiZHVyYXRpb24iOjMwfSx7InRpbWUiOjI3LCJkdXJhdGlvbiI6MzB9LHsidGltZSI6NjksImR1cmF0aW9uIjozMH1dfQ==-$RepresentationID$.dash">
+<SegmentTimeline>
+<S t="40800" d="1200" r="10"/>
+</SegmentTimeline>
+</SegmentTemplate>
+<Representation width="480" height="270" mimeType="video/mp4" codecs="avc3.42C015" scanType="progressive" id="video=608000" bandwidth="608000">
+</Representation>
+<Representation width="480" height="270" mimeType="video/mp4" codecs="avc3.42C015" scanType="progressive" id="video=1193000" bandwidth="1193000">
+</Representation>
+<Representation width="960" height="540" mimeType="video/mp4" codecs="avc3.42C01F" scanType="progressive" id="video=2010000" bandwidth="2010000">
+</Representation>
+<Representation width="1920" height="1080" mimeType="video/mp4" codecs="avc3.42C028" scanType="progressive" id="video=3034000" bandwidth="3034000">
+</Representation>
+<Representation width="1920" height="1080" mimeType="video/mp4" codecs="avc3.42C028" scanType="progressive" id="video=4017000" bandwidth="4017000">
+</Representation>
+</AdaptationSet>
+</Period>
+<SupplementalProperty schemeIdUri="urn:scte:dash:utc-time" value="2023-11-01T21:16:51.348Z"/>
+</MPD>

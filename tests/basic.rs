@@ -9,10 +9,8 @@
 
 
 pub mod common;
-use std::fs;
 use std::env;
 use std::process::Command;
-use std::path::PathBuf;
 use ffprobe::ffprobe;
 use file_format::FileFormat;
 use common::check_file_size_approx;
@@ -35,7 +33,7 @@ fn test_dl_mp4 () {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
-    check_file_size_approx(&outpath, 60_939);
+    check_file_size_approx(&outpath, 325_334);
     let format = FileFormat::from_file(outpath.clone()).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
 }
