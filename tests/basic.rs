@@ -8,22 +8,15 @@
 //    cargo test --test basic -- --show-output
 
 
+pub mod common;
 use std::fs;
 use std::env;
 use std::process::Command;
 use std::path::PathBuf;
 use ffprobe::ffprobe;
 use file_format::FileFormat;
+use common::check_file_size_approx;
 
-
-// We tolerate significant differences in final output file size, because as encoder performance
-// changes in newer versions of ffmpeg, the resulting file size when reencoding may change
-// significantly.
-fn check_file_size_approx(p: &PathBuf, expected: u64) {
-    let meta = fs::metadata(p).unwrap();
-    let ratio = meta.len() as f64 / expected as f64;
-    assert!(0.9 < ratio && ratio < 1.1, "File sizes: expected {expected}, got {}", meta.len());
-}
 
 
 #[test]

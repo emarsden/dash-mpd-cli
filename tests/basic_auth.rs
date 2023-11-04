@@ -14,6 +14,7 @@
 //   the expected remote elements is retrieved.
 
 
+pub mod common;
 use fs_err as fs;
 use std::env;
 use std::time::Duration;
@@ -31,6 +32,7 @@ use dash_mpd::{MPD, Period, AdaptationSet, Representation, SegmentTemplate};
 use anyhow::{Context, Result};
 use env_logger::Env;
 use log::info;
+use common::generate_minimal_mp4;
 
 
 #[derive(Debug, Default)]
@@ -91,6 +93,7 @@ async fn test_basic_auth() -> Result<()> {
     async fn send_mp4(AuthBasic((id, password)): AuthBasic, State(state): State<Arc<AppState>>) -> Response<Full<Bytes>> {
         info!("segment request: auth {id:?}:{password:?}");
         state.counter.fetch_add(1, Ordering::SeqCst);
+        /*
         let config = mp4::Mp4Config {
             major_brand: str::parse("isom").unwrap(),
             minor_version: 512,
@@ -133,6 +136,8 @@ async fn test_basic_auth() -> Result<()> {
         writer.write_sample(1, &sample).unwrap();
         writer.write_end().unwrap();
         let data: Vec<u8> = writer.into_writer().into_inner();
+        */
+        let data = generate_minimal_mp4();
         Response::builder()
             .status(StatusCode::OK)
             .header(header::CONTENT_TYPE, "video/mp4")
