@@ -23,15 +23,16 @@ jobs:
         copyback: false
         mem: 2048
         prepare: |
-          pkg install -y curl
+          pkg install -y --quiet curl
           curl https://sh.rustup.rs -sSf --output rustup.sh
           sh rustup.sh -y --profile minimal --default-toolchain stable
           export PATH="${HOME}/.cargo/bin:$PATH"
           echo "~~~~ rustc --version ~~~~"
           rustc --version
-          pkg install -y Bento4
+          pkg install -y --quiet Bento4
           mp4decrypt || true
-          pkg install -y ffmpeg
+          pkg install -y --quiet ffmpeg
+          sudo pkg install -y --quiet textproc/libxslt
 
         run: |
           export PATH="${HOME}/.cargo/bin:$PATH"

@@ -23,6 +23,9 @@ jobs:
           sudo mv /tmp/Bento4-SDK*/bin/mp4decrypt /usr/local/bin
           mp4decrypt || true
 
+      - name: Install xsltproc
+        run: sudo apt install xsltproc
+
       - run: cargo test -- --show-output
       - run: cargo doc --no-deps --all-features
 
@@ -51,6 +54,9 @@ jobs:
         sudo mv /tmp/Bento4-SDK*/bin/mp4decrypt /usr/local/bin
         mp4decrypt || true
 
+    - name: install xsltproc
+      run: brew install libxslt
+
     - run: cargo test
 
   build-windows:
@@ -78,6 +84,10 @@ jobs:
           Remove-Item -LiteralPath "Bento4-SDK-1-6-0-640.x86_64-microsoft-win32" -Force -Recurse
           echo "C:\tools" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           Get-ChildItem c:\tools
+
+    - name: install xsltproc
+      run: |
+         choco install --yes --limit-output xsltproc
 
     - run: cargo build --verbose
     - run: cargo test -- --show-output
