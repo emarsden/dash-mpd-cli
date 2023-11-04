@@ -8,29 +8,21 @@
 //    cargo test --test decryption -- --show-output
 
 
+pub mod common;
 use fs_err as fs;
 use std::env;
 use std::process::Command;
 use std::path::PathBuf;
 use ffprobe::ffprobe;
 use file_format::FileFormat;
+use common::check_file_size_approx;
 
-
-// We tolerate significant differences in final output file size, because as encoder performance
-// changes in newer versions of ffmpeg, the resulting file size when reencoding may change
-// significantly.
-fn check_file_size_approx(p: &PathBuf, expected: u64) {
-    let meta = fs::metadata(p).unwrap();
-    let ratio = meta.len() as f64 / expected as f64;
-    assert!(0.9 < ratio && ratio < 1.1, "File sizes: expected {expected}, got {}", meta.len());
-}
 
 #[test]
 fn test_decryption_widevine_cenc () {
     if env::var("CI").is_ok() {
         return;
     }
-
     let mpd = "https://refapp.hbbtv.org/videos/spring_h265_v8/cenc/manifest_wvcenc.mpd";
     let outpath = env::temp_dir().join("spring.mp4");
     let cli = Command::new("cargo")
@@ -51,7 +43,6 @@ fn test_decryption_widevine_cbcs () {
     if env::var("CI").is_ok() {
         return;
     }
-
     let mpd = "https://refapp.hbbtv.org/videos/tears_of_steel_h265_v8/cbcs/manifest_wvcenc.mpd";
     let outpath = env::temp_dir().join("tears-steel.mp4");
     let cli = Command::new("cargo")
@@ -73,7 +64,6 @@ fn test_decryption_playready_cenc () {
     if env::var("CI").is_ok() {
         return;
     }
-
     let mpd = "https://refapp.hbbtv.org/videos/00_llama_h264_v8_8s/cenc/manifest_prcenc.mpd";
     let outpath = env::temp_dir().join("llama.mp4");
     let cli = Command::new("cargo")
@@ -93,7 +83,6 @@ fn test_decryption_marlin_cenc () {
     if env::var("CI").is_ok() {
         return;
     }
-
     let mpd = "https://refapp.hbbtv.org/videos/agent327_h264_v8/cenc/manifest_mlcenc.mpd";
     let outpath = env::temp_dir().join("llama.mp4");
     let cli = Command::new("cargo")
@@ -113,7 +102,6 @@ fn test_decryption_marlin_cbcs () {
     if env::var("CI").is_ok() {
         return;
     }
-
     let mpd = "https://refapp.hbbtv.org/videos/agent327_h264_v8/cbcs/manifest_mlcenc.mpd";
     let outpath = env::temp_dir().join("llama.mp4");
     let cli = Command::new("cargo")

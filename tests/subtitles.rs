@@ -7,10 +7,12 @@
 // root crate directory).
 
 
+pub mod common;
 use std::fs;
 use std::env;
 use std::process::Command;
 use std::path::Path;
+use common::check_file_size_approx;
 
 
 #[test]
@@ -18,7 +20,6 @@ fn test_subtitles_wvtt () {
     if env::var("CI").is_ok() {
         return;
     }
-
     let mpd = "https://storage.googleapis.com/shaka-demo-assets/sintel-mp4-wvtt/dash.mpd";
     let outpath = env::temp_dir().join("sintel.mp4");
     let mut subpath = outpath.clone();
@@ -33,10 +34,7 @@ fn test_subtitles_wvtt () {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
-    if let Ok(meta) = fs::metadata(Path::new(&outpath)) {
-        let ratio = meta.len() as f64 / 25_950_458.0;
-        assert!(0.9 < ratio || ratio < 1.1);
-    }
+    check_file_size_approx(outpath, 25_950_458);
     assert!(fs::metadata(subpath).is_ok());
     let srt = fs::read_to_string(subpath).unwrap();
     // We didn't specify a preferred language, so the first available one in the manifest (here
@@ -64,7 +62,6 @@ fn test_subtitles_ttml () {
     if env::var("CI").is_ok() {
         return;
     }
-
     let mpd = "https://dash.akamaized.net/dash264/TestCases/4b/qualcomm/2/TearsOfSteel_onDem5secSegSubTitles.mpd";
     let outpath = env::temp_dir().join("tears-of-steel.mp4");
     let mut subpath = outpath.clone();
@@ -79,10 +76,7 @@ fn test_subtitles_ttml () {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
-    if let Ok(meta) = fs::metadata(outpath.clone()) {
-        let ratio = meta.len() as f64 / 46_299_053.0;
-        assert!(0.9 < ratio || ratio < 1.1);
-    }
+    check_file_size_approx(outpath.clone(), 46_299_053);
     assert!(fs::metadata(subpath).is_ok());
     let ttml = fs::read_to_string(subpath).unwrap();
     // We didn't specify a preferred language, so the first available one in the manifest (here
@@ -124,10 +118,7 @@ fn test_subtitles_vtt () {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
-    if let Ok(meta) = fs::metadata(outpath.clone()) {
-        let ratio = meta.len() as f64 / 128_768_482.0;
-        assert!(0.9 < ratio || ratio < 1.1);
-    }
+    check_file_size_approx(outpath.clone(), 128_768_482);
     assert!(fs::metadata(subpath).is_ok());
     // This manifest contains a single subtitle track, available in VTT format via BaseURL addressing.
     let vtt = fs::read_to_string(subpath).unwrap();
