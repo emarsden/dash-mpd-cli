@@ -244,7 +244,8 @@ fn test_xslt_multiple_stylesheets() {
 }
 
 
-// Note that the error message is structured differently on Unix and Microsoft Windows platforms.
+// Note that the error message is structured differently on Unix and Microsoft Windows platforms
+// ("exit code" vs "exit status").
 #[test]
 fn test_xslt_stylesheet_error() {
     let mpd_url = "https://dash.akamaized.net/akamai/test/index3-original.mpd";
@@ -262,7 +263,8 @@ fn test_xslt_stylesheet_error() {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     let stderr = String::from_utf8_lossy(&cli.stderr);
-    assert!(stderr.contains("xsltproc returned exit status"));
+    println!("STDERR> {stderr}");
+    assert!(stderr.contains("xsltproc returned exit"));
 }
 
 
