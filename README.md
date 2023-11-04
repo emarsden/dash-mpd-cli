@@ -13,18 +13,18 @@ replay of TV content and video streaming services like YouTube.
 
 [DASH](https://en.wikipedia.org/wiki/Dynamic_Adaptive_Streaming_over_HTTP) (dynamic adaptive
 streaming over HTTP), also called MPEG-DASH, is a technology used for media streaming over the web,
-commonly used for video on demand (VOD) services. The Media Presentation Description (MPD) is a
-description of the resources (manifest or “playlist”) forming a streaming service, that a DASH
-client uses to determine which assets to request in order to perform adaptive streaming of the
-content. DASH MPD manifests can be used with content using different codecs (including H264, HEVC,
-AV1, AAC, VP9, MP4A, MP3) and containers (MP4, WebM, Matroska, AVI). There is a good explanation of
-adaptive bitrate video streaming at [howvideo.works](https://howvideo.works/#dash).
+commonly used for video on demand (VOD) services. The Media Presentation Description (MPD) is an XML
+document that lists the resources (manifest or “playlist”) forming a streaming service. A DASH
+client uses the manifest to determine which assets to request in order to perform adaptive streaming
+of the content. DASH MPD manifests can be used with content using different codecs (including H264,
+HEVC, AV1, AAC, VP9, MP4A, MP3) and containers (MP4, WebM, Matroska, AVI). There is a good
+explanation of adaptive bitrate video streaming at [howvideo.works](https://howvideo.works/#dash).
 
 This commandline application allows you to download content (audio or video) described by an MPD
 manifest. This involves selecting the alternative with the most appropriate encoding (in terms of
 bitrate, codec, etc.), fetching segments of the content using HTTP or HTTPS requests and muxing
 audio and video segments together. There is also support for downloading subtitles (mostly WebVTT,
-TTML and SMIL formats, with some support for wvtt format).
+TTML, SRT, tx3g and SMIL formats, with some support for wvtt format).
 
 This application builds on the [dash-mpd](https://crates.io/crates/dash-mpd) crate.
 
