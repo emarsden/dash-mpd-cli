@@ -16,7 +16,7 @@ publish = true
 tokio = { version = "1.33.0", features = ["rt-multi-thread", "macros"] }
 dash-mpd = { version = "0.14.3", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
 reqwest = { version = "0.11.20", default-features = false, features = ["gzip", "rustls-tls", "socks", "json"] }
-strum = { version = "0.25.0", features = ["derive"] }
+strum = { version = "0.24.1", features = ["derive"] }
 colored = "2.0.4"
 indicatif = "0.17.7"
 clap = { version = "4.3.24", features = ["cargo", "unicode"] }
