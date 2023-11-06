@@ -39,7 +39,7 @@ axum-auth = "0.4"
 quick-xml = { version = "0.31.0", features = ["serialize"] }
 mp4 = "0.14.0"
 ffprobe = "0.3.3"
-file-format = { version = "0.21.0", features = ["reader"] }
+file-format = { version = "0.22.0", features = ["reader"] }
 json = "0.12.4"
 
 [features]
