@@ -102,7 +102,8 @@ async fn check_newer_version() -> Result<()> {
             if let Some(this_version) = Versioning::new(env!("CARGO_PKG_VERSION")) {
                 if gh_version > this_version {
                     println!("dash-mpd-cli {}", env!("CARGO_PKG_VERSION"));
-                    println!("A newer version ({gh_release}) is available from https://github.com/emarsden/dash-mpd-cli.");
+                    println!("A {} ({gh_release}) is available from https://github.com/emarsden/dash-mpd-cli.",
+                             "newer version".bold());
                 }
             }
         }
@@ -256,6 +257,12 @@ async fn main () -> Result<()> {
              .num_args(0)
              .action(ArgAction::SetTrue)
              .help("Never attempt to concatenate media from different Periods (keep one output file per Period)."))
+        .arg(Arg::new("register-xslt")
+             .long("register-xslt")
+             .value_name("STYLESHEET")
+             .num_args(1)
+             .action(ArgAction::Append)
+             .help("Run XSLT stylesheet STYLESHEET on the MPD manifest before downloading media content. You can use this option multiple times."))
         .arg(Arg::new("muxer-preference")
              .long("muxer-preference")
              .value_name("CONTAINER:ORDERING")
@@ -487,7 +494,7 @@ async fn main () -> Result<()> {
             if let Some((h, v)) = hv.split_once(':') {
                 headers.insert(h.to_string(), v.trim_start().to_string());
             } else {
-                eprintln!("Ignoring badly formed argument to --header");
+                eprintln!("Ignoring badly formed {} argument to --header", "header:value".italic());
             }
         }
     }
@@ -496,7 +503,7 @@ async fn main () -> Result<()> {
             if let Some((h, v)) = hv.split_once(':') {
                 headers.insert(h.to_string(), v.to_string());
             } else {
-                eprintln!("Ignoring badly formed header:value argument to --add-header");
+                eprintln!("Ignoring badly formed {} argument to --add-header", "header:value".italic());
             }
         }
     }
@@ -578,7 +585,7 @@ async fn main () -> Result<()> {
                 eprintln!("Ignoring negative value for limit-rate");
             }
         } else {
-            eprintln!("Ignoring badly formed value for limit-rate");
+            eprintln!("Ignoring invalid value for limit-rate");
         }
     }
     if let Some(count) = matches.get_one::<u32>("max-error-count") {
@@ -606,12 +613,18 @@ async fn main () -> Result<()> {
     } else {
         dl = dl.concatenate_periods(true);
     }
+    if let Some(stylesheets) = matches.get_many::<String>("register-xslt") {
+        for ss in stylesheets.collect::<Vec<_>>() {
+            dl = dl.with_xslt_stylesheet(ss);
+        }
+    }
     if let Some(mps) = matches.get_many::<String>("muxer-preference") {
         for mp in mps.collect::<Vec<_>>() {
             if let Some((container, ordering)) = mp.split_once(':') {
                 dl = dl.with_muxer_preference(container, ordering);
             } else {
-                eprintln!("Ignoring badly formatted argument to --muxer-preference");
+                eprintln!("Ignoring badly formatted {} argument to --muxer-preference",
+                          "container:ordering".italic());
             }
         }
     }
@@ -624,7 +637,7 @@ async fn main () -> Result<()> {
                     dl = dl.add_decryption_key(String::from(kid), String::from(key));
                 }
             } else {
-                eprintln!("Ignoring badly formed KID:KEY argument to --key");
+                eprintln!("Ignoring badly formed {} argument to --key", "KID:KEY".italic());
             }
         }
     }
