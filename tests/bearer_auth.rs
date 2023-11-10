@@ -94,50 +94,6 @@ async fn test_bearer_auth() -> Result<()> {
     {
         info!("segment request: auth {token:?}");
         state.counter.fetch_add(1, Ordering::SeqCst);
-        /*
-        let config = mp4::Mp4Config {
-            major_brand: str::parse("isom").unwrap(),
-            minor_version: 512,
-            compatible_brands: vec![
-                str::parse("isom").unwrap(),
-                str::parse("iso2").unwrap(),
-                str::parse("avc1").unwrap(),
-                str::parse("mp41").unwrap(),
-            ],
-            timescale: 1000,
-        };
-        let data = Cursor::new(Vec::<u8>::new());
-        let mut writer = mp4::Mp4Writer::write_start(data, &config).unwrap();
-        let media_conf = mp4::MediaConfig::AvcConfig(mp4::AvcConfig {
-            width: 10,
-            height: 10,
-            // from https://github.com/ISSOtm/gb-packing-visualizer/blob/1954066537b373f2ddcd5768131bdb5595734a85/src/render.rs#L260
-            seq_param_set: vec![
-                0, // ???
-                0, // avc_profile_indication
-                0, // profile_compatibility
-                0, // avc_level_indication
-            ],
-            pic_param_set: vec![],
-        });
-        let track_conf = mp4::TrackConfig {
-            track_type: mp4::TrackType::Video,
-            timescale: 1000,
-            language: "und".to_string(),
-            media_conf,
-        };
-        writer.add_track(&track_conf).unwrap();
-        let sample = mp4::Mp4Sample {
-            start_time: 0,
-            duration: 2,
-            rendering_offset: 0,
-            is_sync: true,
-            bytes: mp4::Bytes::from(vec![0x0u8; 751]),
-        };
-        writer.write_sample(1, &sample).unwrap();
-        writer.write_end().unwrap();
-        let data: Vec<u8> = writer.into_writer().into_inner();
-        */
         let data = generate_minimal_mp4();
         Response::builder()
             .status(StatusCode::OK)
