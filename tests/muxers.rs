@@ -11,6 +11,7 @@ use std::env;
 use std::process::Command;
 use std::path::PathBuf;
 use ffprobe::ffprobe;
+use file_format::FileFormat;
 use common::check_file_size_approx;
 
 
@@ -58,10 +59,12 @@ fn test_muxers_mp4 () {
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
     check_file_size_approx(&outpath, 6_975_147);
+    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    assert_eq!(format, FileFormat::Mpeg4Part14Video);
     // Check that the mp4 metadata indicates it was created with ffmpeg (libavformat which contains
     // the muxing support in ffmpeg).
     if let Some(enc) = container_metadata_encoder(&outpath) {
-        assert!(enc.starts_with("Lavf"), "Unexpected mp4 metadata encoder {enc}");
+        assert!(enc.starts_with("Lavf"), "Unexpected encoder {enc} in mp4 metadata");
     }
 
     let outpath = env::temp_dir().join("caminandes-vlc.mp4");
@@ -73,8 +76,10 @@ fn test_muxers_mp4 () {
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
     check_file_size_approx(&outpath, 6_975_147);
+    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    assert_eq!(format, FileFormat::Mpeg4Part14Video);
     if let Some(enc) = container_metadata_encoder(&outpath) {
-        assert!(enc.starts_with("vlc"), "Unexpected mp4 metadata encoder {enc}");
+        assert!(enc.starts_with("vlc"), "Unexpected encoder {enc} in mp4 metadata");
     }
 
     let outpath = env::temp_dir().join("caminandes-mp4box.mp4");
@@ -86,10 +91,12 @@ fn test_muxers_mp4 () {
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
     check_file_size_approx(&outpath, 6_975_147);
+    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    assert_eq!(format, FileFormat::Mpeg4Part14Video);
     if let Some(enc) = container_metadata_encoder(&outpath) {
         // This won't be reached because MP4Box (as of v2.2.1) does not include a Metadata box in
         // the MP4 container it creates.
-        assert!(enc.starts_with("mp4box"), "Unexpected mp4 metadata encoder {enc}");
+        assert!(enc.starts_with("mp4box"), "Unexpected encoder {enc} in mp4 metadata");
     }
 }
 
@@ -109,8 +116,10 @@ fn test_muxers_mkv () {
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
     check_file_size_approx(&outpath, 6_975_147);
+    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    assert_eq!(format, FileFormat::MatroskaVideo);
     if let Some(enc) = container_metadata_encoder(&outpath) {
-        assert!(enc.starts_with("Lavf"), "Unexpected mkv metadata encoder {enc}");
+        assert!(enc.starts_with("Lavf"), "Unexpected encoder {enc} in mkv metadata");
     }
 
     let outpath = env::temp_dir().join("caminandes-vlc.mkv");
@@ -122,8 +131,10 @@ fn test_muxers_mkv () {
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
     check_file_size_approx(&outpath, 6_975_147);
+    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    assert_eq!(format, FileFormat::MatroskaVideo);
     if let Some(enc) = container_metadata_encoder(&outpath) {
-        assert!(enc.starts_with("vlc"), "Unexpected mkv metadata encoder {enc}");
+        assert!(enc.to_lowercase().starts_with("vlc"), "Unexpected encoder {enc} in mkv metadata");
     }
 
     let outpath = env::temp_dir().join("caminandes-mkvmerge.mkv");
@@ -135,8 +146,10 @@ fn test_muxers_mkv () {
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
     check_file_size_approx(&outpath, 6_975_147);
+    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    assert_eq!(format, FileFormat::MatroskaVideo);
     if let Some(enc) = container_metadata_encoder(&outpath) {
-        assert!(enc.contains("libmatroska"), "Unexpected mkv metadata encoder {enc}");
+        assert!(enc.contains("libmatroska"), "Unexpected encoder {enc} in mkv metadata");
     }
 }
 
@@ -155,9 +168,11 @@ fn test_muxers_avi () {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
-    check_file_size_approx(&outpath, 6_975_147);
+    check_file_size_approx(&outpath, 7_128_748);
+    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    assert_eq!(format, FileFormat::AudioVideoInterleave);
     if let Some(enc) = container_metadata_encoder(&outpath) {
-        assert!(enc.starts_with("Lavf"), "Unexpected avi metadata encoder {enc}");
+        assert!(enc.starts_with("Lavf"), "Unexpected encoder {enc} in avi metadata");
     }
 
     let outpath = env::temp_dir().join("caminandes-vlc.avi");
@@ -168,9 +183,11 @@ fn test_muxers_avi () {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
-    check_file_size_approx(&outpath, 6_975_147);
+    check_file_size_approx(&outpath, 5_520_360);
+    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    assert_eq!(format, FileFormat::AudioVideoInterleave);
     if let Some(enc) = container_metadata_encoder(&outpath) {
-        assert!(enc.starts_with("vlc"), "Unexpected avi metadata encoder {enc}");
+        assert!(enc.to_lowercase().starts_with("vlc"), "Unexpected encoder {enc} in avi metadata");
     }
 
     // mkvmerge and MP4Box can't create AVI containers.
