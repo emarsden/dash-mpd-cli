@@ -32,7 +32,7 @@ jobs:
       - name: Install xsltproc
         run: sudo apt install xsltproc
 
-      - run: cargo test -- --show-output
+      - run: cargo test --jobs 1 -- --show-output
       - run: cargo doc --no-deps --all-features
 
   build-macos:
@@ -40,7 +40,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: dtolnay/rust-toolchain@stable
-    - run: cargo build --verbose
+    - run: cargo build --jobs 1 --verbose
 
     # The "|| true" on upgrade is to work around homebrew conflicts between GitHub-installed Python versions
     # and those required by our packages.
@@ -71,7 +71,7 @@ jobs:
     - name: install xsltproc
       run: brew install libxslt
 
-    - run: cargo test
+    - run: cargo test --jobs 1 -- --show-output
 
   build-windows:
     runs-on: windows-latest
@@ -107,5 +107,5 @@ jobs:
       run: |
          choco install --yes --limit-output xsltproc
 
-    - run: cargo build --verbose
-    - run: cargo test -- --show-output
+    - run: cargo build --jobs 1 --verbose
+    - run: cargo test --jobs 1 -- --show-output
