@@ -179,7 +179,7 @@ fn test_xslt_rick() {
     if env::var("CI").is_ok() {
         return;
     }
-    let mpd_url = "https://dash.akamaized.net/akamai/test/index3-original.mpd";
+    let mpd_url = "https://dash.akamaized.net/dash264/TestCases/4b/qualcomm/1/ED_OnDemand_5SecSeg_Subtitles.mpd";
     let out = env::temp_dir().join("ricked.mp4");
     let mut xslt = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     xslt.push("tests");
@@ -194,7 +194,7 @@ fn test_xslt_rick() {
         .output()
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
-    check_file_size_approx(&out, 538_262_020);
+    check_file_size_approx(&out, 7_082_395);
     let format = FileFormat::from_file(out.clone()).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
     let meta = ffprobe(out.clone()).unwrap();
