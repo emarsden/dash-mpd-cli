@@ -157,6 +157,16 @@ async fn main () -> Result<()> {
              .num_args(1)
              .value_parser(clap::value_parser!(u8))
              .help("Number of seconds to sleep between network requests (default 0)."))
+        .arg(Arg::new("enable-live-streams")
+             .long("enable-live-streams")
+             .num_args(0)
+             .help("Attempt to download from a live media stream (dynamic MPD manifest). Downloading from a genuinely live stream won't work well, because we don't implement the clock-related throttling needed to only download media segments when they become available. However, some media sources publish pseudo-live streams where all media segments are in fact available, which we will be able to download. You might also have some success in combination with the --sleep-requests argument."))
+        .arg(Arg::new("force-duration")
+             .long("force-duration")
+             .value_name("SECONDS")
+             .num_args(1)
+             .value_parser(clap::value_parser!(f64))
+             .help("Specify a number of seconds (possibly floating point) to download from the media stream. This may be necessary to download from a live stream, where the duration is often not specified in the DASH manifest. It may also be used to download only the first part of a static stream."))
         .arg(Arg::new("limit-rate")
              .long("limit-rate")
              .short('r')
@@ -257,12 +267,6 @@ async fn main () -> Result<()> {
              .num_args(0)
              .action(ArgAction::SetTrue)
              .help("Never attempt to concatenate media from different Periods (keep one output file per Period)."))
-        .arg(Arg::new("register-xslt")
-             .long("register-xslt")
-             .value_name("STYLESHEET")
-             .num_args(1)
-             .action(ArgAction::Append)
-             .help("Run XSLT stylesheet STYLESHEET on the MPD manifest before downloading media content. You can use this option multiple times."))
         .arg(Arg::new("muxer-preference")
              .long("muxer-preference")
              .value_name("CONTAINER:ORDERING")
@@ -275,6 +279,12 @@ async fn main () -> Result<()> {
              .num_args(1)
              .action(ArgAction::Append)
              .long_help("Use KID:KEY to decrypt encrypted media streams. KID should be either a track id in decimal (e.g. 1), or a 128-bit keyid (32 hexadecimal characters). KEY should be 32 hexadecimal characters. Example: --key eb676abbcb345e96bbcf616630f1a3da:100b6c20940f779a4589152b57d2dacb. You can use this option multiple times."))
+        .arg(Arg::new("decryption-application")
+             .long("decryption-application")
+             .value_name("APP")
+             .num_args(1)
+             .value_parser(["mp4decrypt", "shaka"])
+             .help("Application to use to decrypt encrypted media streams (either mp4decrypt or shaka)."))
         .arg(Arg::new("save-fragments")
              .long("save-fragments")
              .value_name("FRAGMENTS-DIR")
@@ -361,6 +371,12 @@ async fn main () -> Result<()> {
              .value_hint(ValueHint::ExecutablePath)
              .num_args(1)
              .help("Path to the mp4decrypt binary (necessary if not located in your PATH)."))
+        .arg(Arg::new("shaka-packager-location")
+             .long("shaka-packager-location")
+             .value_name("PATH")
+             .value_hint(ValueHint::ExecutablePath)
+             .num_args(1)
+             .help("Path to the shaka-packager binary (necessary if not located in your PATH)."))
         .arg(Arg::new("output-file")
              .long("output")
              .value_name("PATH")
@@ -563,6 +579,12 @@ async fn main () -> Result<()> {
     if let Some(seconds) = matches.get_one::<u8>("sleep-requests") {
         dl = dl.sleep_between_requests(*seconds);
     }
+    if matches.get_flag("enable-live-streams") {
+        dl = dl.allow_live_streams(true);
+    }
+    if let Some(seconds) = matches.get_one::<f64>("force-duration") {
+        dl = dl.force_duration(*seconds);
+    }
     if let Some(limit) = matches.get_one::<String>("limit-rate") {
         // We allow k, M, G, T suffixes, as per 100k, 1M, 0.4G
         if let Ok(np) = limit.parse::<NumberPrefix<f64>>() {
@@ -613,11 +635,6 @@ async fn main () -> Result<()> {
     } else {
         dl = dl.concatenate_periods(true);
     }
-    if let Some(stylesheets) = matches.get_many::<String>("register-xslt") {
-        for ss in stylesheets.collect::<Vec<_>>() {
-            dl = dl.with_xslt_stylesheet(ss);
-        }
-    }
     if let Some(mps) = matches.get_many::<String>("muxer-preference") {
         for mp in mps.collect::<Vec<_>>() {
             if let Some((container, ordering)) = mp.split_once(':') {
@@ -640,6 +657,9 @@ async fn main () -> Result<()> {
                 eprintln!("Ignoring badly formed {} argument to --key", "KID:KEY".italic());
             }
         }
+    }
+    if let Some(app) = matches.get_one::<String>("decryption-application") {
+        dl = dl.with_decryptor_preference(app);
     }
     if let Some(fragments_dir) = matches.get_one::<String>("save-fragments") {
         dl = dl.save_fragments_to(Path::new(fragments_dir));
@@ -667,6 +687,9 @@ async fn main () -> Result<()> {
     }
     if let Some(path) = matches.get_one::<String>("mp4decrypt-location") {
         dl = dl.with_mp4decrypt(path);
+    }
+    if let Some(path) = matches.get_one::<String>("shaka-packager-location") {
+        dl = dl.with_shaka_packager(path);
     }
     if let Some(w) = matches.get_one::<u64>("prefer-video-width") {
         dl = dl.prefer_video_width(*w);

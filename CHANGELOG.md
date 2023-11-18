@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.2.9] - Unreleased
+
+- Add the possibility to use the Shaka packager application for decryption of media with Content Protection,
+  as an alternative to mp4decrypt. The shaka-packager application is able to handle more media
+  formats (e.g. WebM/Matroska containers) and is better maintained than mp4decrypt. See the
+  commandline arguments `--decryption-application` and `--shaka-packager-location`.
+
+- New commandline argument `--enable-live-streams` that makes it possible to attempt to download
+  from a live (dynamic) manifest. Downloading from a genuinely live stream won't work well, because
+  we don't implement the clock-related throttling needed to only download media segments when they
+  become available. However, some media sources publish pseudo-live streams where all media segments
+  are in fact available (they don't update the manifest once the live is complete), which we will be
+  able to download. You might also have some success in combination with the `--sleep-requests`
+  commandline argument.
+
+- New commandline argument `--force-duration` which makes it possible to specify the number of
+  seconds of content to download from the DASH stream. This may be necessary when using
+  `--enable-live-streams`, because live streams often don't specify a duration. It can also be used
+  to download only the first part of a normal (static) stream.
+
+- Fix the selection of the desired Representation (according to the user's quality/resolution
+  preferences) for DASH manifests that include multiple AdaptationSets. This is the case on some
+  manifests that offer media streams using different codecs. We were previously only examining
+  Representation elements in the first AdaptationSet present in the manifest.
+
 
 ## [0.2.8] - 2023-11-04
 

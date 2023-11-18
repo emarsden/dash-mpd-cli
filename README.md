@@ -13,12 +13,13 @@ replay of TV content and video streaming services like YouTube.
 
 [DASH](https://en.wikipedia.org/wiki/Dynamic_Adaptive_Streaming_over_HTTP) (dynamic adaptive
 streaming over HTTP), also called MPEG-DASH, is a technology used for media streaming over the web,
-commonly used for video on demand (VOD) services. The Media Presentation Description (MPD) is an XML
-document that lists the resources (manifest or “playlist”) forming a streaming service. A DASH
-client uses the manifest to determine which assets to request in order to perform adaptive streaming
-of the content. DASH MPD manifests can be used with content using different codecs (including H264,
-HEVC, AV1, AAC, VP9, MP4A, MP3) and containers (MP4, WebM, Matroska, AVI). There is a good
-explanation of adaptive bitrate video streaming at [howvideo.works](https://howvideo.works/#dash).
+commonly used for video on demand (VOD) and “replay/catch-up TV” services. The Media Presentation
+Description (MPD) is an XML document that lists the resources (manifest or “playlist”) forming a
+streaming service. A DASH client uses the manifest to determine which assets to request in order to
+perform adaptive streaming of the content. DASH MPD manifests can be used with content using
+different codecs (including H264, HEVC, AV1, AAC, VP9, MP4A, MP3) and containers (MP4, WebM,
+Matroska, AVI). There is a good explanation of adaptive bitrate video streaming at
+[howvideo.works](https://howvideo.works/#dash).
 
 This commandline application allows you to download content (audio or video) described by an MPD
 manifest. This involves selecting the alternative with the most appropriate encoding (in terms of
@@ -32,9 +33,6 @@ This application builds on the [dash-mpd](https://crates.io/crates/dash-mpd) cra
 ## Features
 
 The following features are supported: 
-
-- VOD (static) stream manifests (this application can't download from dynamic MPD manifests, that
-  are used for live streaming and OTT television).
 
 - Multi-period content. The media in the different streams will be saved in a single media container
   if the formats are compatible (same resolution, codecs, bitrate and so on) and the
@@ -73,17 +71,37 @@ The following features are supported:
 - Media containers of types supported by mkvmerge, ffmpeg, VLC or MP4Box (this includes ISO-BMFF /
   CMAF / MP4, Matroska, WebM, MPEG-2 TS, AVI), and all the codecs supported by these applications.
 
-- Support for decrypting media streams that use MPEG Common Encryption (cenc) ContentProtection.
-  This requires the `mp4decrypt` commandline application from the [Bento4
-  suite](https://github.com/axiomatic-systems/Bento4/) to be installed ([binaries are
-  available](https://www.bento4.com/downloads/) for common platforms). See the
-  `--key` commandline argument.
+- Support for decrypting media streams that use ContentProtection (DRM). This requires either the
+  `mp4decrypt` or `shaka-packager` commandline application to be installed. mp4decrypt is available
+  from the [Bento4 suite](https://github.com/axiomatic-systems/Bento4/) ([binaries are
+  available](https://www.bento4.com/downloads/) for common platforms), and [shaka-packager
+  binaries](https://github.com/shaka-project/shaka-packager) are available from Google for common
+  platforms (see the Releases section on their GitHub page). See the `--key` commandline argument to
+  specify a decryption key (can be used several times if different keys are used for different media
+  streams). See the `--decryption-application` commandline argument to specify which decryption
+  application to use. Shaka packager is able to decrypt more types of media streams (including in
+  particular WebM containers and more encryption formats), whereas mp4decrypt mostly works with MPEG
+  Common Encryption.
+
+- In practice, all features used by real streaming services and on-demand TV. Our test suite
+  includes test streams published by industry groups such as HbbTV and the DASH Industry Forum, and
+  comprises a wide variety of DASH streams using different publishing software, including GPAC (used
+  by Netflix and other services), Amazon MediaTailor, Google’s Shaka packager, Microsoft’s Azure
+  Media Services, and Unified Streaming. Test content is served by different CDNs including Akamai
+  and various telecom providers.
 
 The following are not supported: 
 
-- We can't download content from dynamic MPD manifests, that are used for live streaming/OTT TV
+- **Live streams** (dynamic MPD manifests), that are used for live streaming/OTT TV are not really
+  supported. This is because we don’t implement the clock-related throttling that is needed to only
+  download media segments when they become available. However, some media sources publish
+  “pseudo-live” streams where all media segments are in fact available; they simply don’t update the
+  manifest once the live is complete. We are able to download these streams using the
+  `--enable-live-streams` commandline argument. You might also have some success with a live stream
+  in combination with the `--sleep-requests` commandline argument. The VLC application is a better
+  choice for watching live streams.
 
-- XLink elements with actuate=onRequest semantics
+- XLink elements with actuate=onRequest semantics.
 
 
 ## Installation
@@ -108,11 +126,13 @@ You should also install the following **dependencies**:
 - the mkvmerge commandline utility from the [MkvToolnix](https://mkvtoolnix.download/) suite, if you
   download to the Matroska container format (`.mkv` filename extension). mkvmerge is used as a
   subprocess for muxing (combining) audio and video streams. See the `--mkvmerge-location`
-  commandline argument if it's not installed in a standard location.
+  commandline argument if it’s not installed in a standard location (not on your PATH).
 
 - [ffmpeg](https://ffmpeg.org/) or [vlc](https://www.videolan.org/vlc/) to download to the MP4
   container format, also for muxing audio and video streams (see the `--ffmpeg-location` and
-  `--vlc-location` commandline arguments if these are installed in non-standard locations).
+  `--vlc-location` commandline arguments if these are installed in non-standard locations). See the
+  `--muxer-preference` commandline argument to specify which muxing application to prefer for
+  different container types.
 
 - the MP4Box commandline utility from the [GPAC](https://gpac.wp.imt.fr/) project, if you want to
   test the preliminary support for retrieving subtitles in wvtt format. If it's installed, MP4Box
@@ -125,6 +145,12 @@ You should also install the following **dependencies**:
   suite](https://github.com/axiomatic-systems/Bento4/), if you need to fetch encrypted content.
   [Binaries are available](https://www.bento4.com/downloads/) for common platforms. See the
   `--mp4decrypt-location` commandline argument if this is installed in a non-standard location.
+
+- for some types of streams that the mp4decrypt application is not able to decrypt (for example
+  content in WebM containers), you should install the [Shaka packager
+  application](https://github.com/shaka-project/shaka-packager) developed by Google. See the
+  `--decryption-application` commandline option to specify the choice of decryption application, and
+  the `--shaka-packager-location` commandline argument if it is installed in a non-standard location.
 
 
 This crate is tested on the following **platforms**:
@@ -139,7 +165,8 @@ This crate is tested on the following **platforms**:
   and ffmpeg packages, and optionally the mkvtoolnix, vlc and gpac packages). You'll need to disable
   the `cookies` feature by building with `--no-default-features`.
 
-- FreeBSD/AMD64 and OpenBSD/AMD64. You'll need to disable the `cookies` feature.
+- FreeBSD/AMD64 and OpenBSD/AMD64. You'll need to disable the `cookies` feature. Some of the
+  external applications we depend on (e.g. mp4decrypt, Shaka packager) are poorly supported on OpenBSD.
 
 
 
