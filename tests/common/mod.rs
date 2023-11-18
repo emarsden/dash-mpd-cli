@@ -21,7 +21,8 @@ pub fn check_file_size_approx(p: &Path, expected: u64) {
 
 pub fn ffmpeg_approval(name: &Path) -> bool {
     let ffmpeg = Command::new("ffmpeg")
-        .args(["-v", "error",
+        .args(["-nostdin",
+               "-v", "error",
                "-i", &name.to_string_lossy(),
                "-f", "null", "-"])
         .output()
@@ -82,8 +83,9 @@ pub fn generate_minimal_mp4() -> Vec<u8> {
 pub fn generate_minimal_mp4_ffmpeg(metadata: &str) -> Vec<u8> {
     let tmp = env::temp_dir().join("segment.mp4");
     let ffmpeg = Command::new("ffmpeg")
-        .args(["-f", "lavfi",
+        .args(["-nostdin",
                "-y",  // overwrite output file if it exists
+               "-f", "lavfi",
                "-i", "testsrc=size=10x10:rate=1",
                "-vf", "hue=s=0",
                "-t", "1",
