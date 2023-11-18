@@ -115,6 +115,27 @@ fn test_decryption_marlin_cbcs () {
 }
 
 
+#[test]
+fn test_decryption_cmaf_h265_multikey () {
+    if env::var("CI").is_ok() {
+        return;
+    }
+    let mpd = "https://media.axprod.net/TestVectors/H265/protected_cmaf_1080p_h265_multikey/manifest.mpd";
+    let outpath = env::temp_dir().join("axinom-h264-multikey.mp4");
+    let cli = Command::new("cargo")
+        .args(["run", "--no-default-features", "--",
+               "-v",
+               "--quality", "worst",
+               "--key", "53dc3eaa5164410a8f4ee15113b43040:620045a34e839061ee2e9b7798fdf89b",
+               "--key", "9dbace9e41034c5296aa63227dc5f773:a776f83276a107a3c322f9dbd6d4f48c",
+               "--key", "a76f0ca68e7d40d08a37906f3e24dde2:2a99b42f08005ab4b57af20f4da3cc05",
+               "-o", &outpath.to_string_lossy(), mpd])
+        .output()
+        .expect("failed spawning cargo run / dash-mpd-cli");
+    assert!(cli.status.success());
+    check_file_size_approx(&outpath, 48_233_447);
+}
+
 
 // Small decryption test cases that we can run on the CI infrastructure.
 #[test]
