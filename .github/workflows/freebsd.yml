@@ -16,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Run tests in FreeBSD VM
-      uses: vmactions/freebsd-vm@v0
+      uses: vmactions/freebsd-vm@v1
       with:
         usesh: true
         sync: rsync
@@ -31,6 +31,12 @@ jobs:
           rustc --version
           pkg install -y --quiet Bento4
           mp4decrypt || true
+          # we are depending here on FreeBSD's Linux binary compatibility layer
+          curl https://github.com/shaka-project/shaka-packager/releases/latest/download/packager-linux-x64 --output /tmp/shaka-packager
+          sudo mv /tmp/shaka-packager /usr/local/bin
+          sudo chmod +x /usr/local/bin/shaka-packager
+          export PATH=${PATH}:/usr/local/bin
+          shaka-packager --version
           pkg install -y --quiet ffmpeg
           sudo pkg install -y --quiet textproc/libxslt
 
