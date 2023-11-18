@@ -9,7 +9,7 @@
 pub mod common;
 use std::env;
 use std::process::Command;
-use std::path::PathBuf;
+use std::path::Path;
 use ffprobe::ffprobe;
 use file_format::FileFormat;
 use common::check_file_size_approx;
@@ -18,8 +18,8 @@ use common::check_file_size_approx;
 // Try to obtain the encoder field in the metadata with the ffprobe crate (works with certain MP4
 // files), or using the mediainfo commandline tool if it is installed (works for AVI files where
 // ffprobe fails).
-fn container_metadata_encoder(p: &PathBuf) -> Option<String> {
-    if let Ok(meta) = ffprobe(p.clone()) {
+fn container_metadata_encoder(p: &Path) -> Option<String> {
+    if let Ok(meta) = ffprobe(p) {
         if let Some(tags) = meta.format.tags {
             if let Some(enc) = tags.encoder {
                 return Some(enc);
