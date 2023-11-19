@@ -24,6 +24,9 @@ fn test_decryption_widevine_cenc () {
     }
     let mpd = "https://refapp.hbbtv.org/videos/spring_h265_v8/cenc/manifest_wvcenc.mpd";
     let outpath = env::temp_dir().join("spring.mp4");
+    if outpath.exists() {
+        let _ = fs::remove_file(outpath.clone());
+    }
     let cli = Command::new("cargo")
         .args(["run", "--no-default-features", "--",
                "-v",
@@ -35,6 +38,7 @@ fn test_decryption_widevine_cenc () {
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
     check_file_size_approx(&outpath, 33_746_341);
+    let _ = fs::remove_file(outpath);
 }
 
 #[test]
@@ -44,6 +48,9 @@ fn test_decryption_widevine_cbcs () {
     }
     let mpd = "https://refapp.hbbtv.org/videos/tears_of_steel_h265_v8/cbcs/manifest_wvcenc.mpd";
     let outpath = env::temp_dir().join("tears-steel.mp4");
+    if outpath.exists() {
+        let _ = fs::remove_file(outpath.clone());
+    }
     let cli = Command::new("cargo")
         .args(["run", "--no-default-features", "--",
                "-v",
@@ -55,6 +62,7 @@ fn test_decryption_widevine_cbcs () {
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
     check_file_size_approx(&outpath, 79_731_116);
+    let _ = fs::remove_file(outpath);
 }
 
 
@@ -75,6 +83,7 @@ fn test_decryption_playready_cenc () {
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
     check_file_size_approx(&outpath, 26_420_624);
+    let _ = fs::remove_file(outpath);
 }
 
 #[test]
@@ -83,7 +92,7 @@ fn test_decryption_marlin_cenc () {
         return;
     }
     let mpd = "https://refapp.hbbtv.org/videos/agent327_h264_v8/cenc/manifest_mlcenc.mpd";
-    let outpath = env::temp_dir().join("llama.mp4");
+    let outpath = env::temp_dir().join("llama-cenc.mp4");
     let cli = Command::new("cargo")
         .args(["run", "--no-default-features", "--",
                "-v",
@@ -94,6 +103,7 @@ fn test_decryption_marlin_cenc () {
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
     check_file_size_approx(&outpath, 14_357_917);
+    let _ = fs::remove_file(outpath);
 }
 
 #[test]
@@ -102,7 +112,10 @@ fn test_decryption_marlin_cbcs () {
         return;
     }
     let mpd = "https://refapp.hbbtv.org/videos/agent327_h264_v8/cbcs/manifest_mlcenc.mpd";
-    let outpath = env::temp_dir().join("llama.mp4");
+    let outpath = env::temp_dir().join("llama-cbcs.mp4");
+    if outpath.exists() {
+        let _ = fs::remove_file(outpath.clone());
+    }
     let cli = Command::new("cargo")
         .args(["run", "--no-default-features", "--",
                "-v",
@@ -113,6 +126,7 @@ fn test_decryption_marlin_cbcs () {
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
     check_file_size_approx(&outpath, 14_357_925);
+    let _ = fs::remove_file(outpath);
 }
 
 
@@ -123,6 +137,9 @@ fn test_decryption_cmaf_h265_multikey () {
     }
     let mpd = "https://media.axprod.net/TestVectors/H265/protected_cmaf_1080p_h265_multikey/manifest.mpd";
     let outpath = env::temp_dir().join("axinom-h264-multikey.mp4");
+    if outpath.exists() {
+        let _ = fs::remove_file(outpath.clone());
+    }
     let cli = Command::new("cargo")
         .args(["run", "--no-default-features", "--",
                "-v",
@@ -135,6 +152,7 @@ fn test_decryption_cmaf_h265_multikey () {
         .expect("failed spawning cargo run / dash-mpd-cli");
     assert!(cli.status.success());
     check_file_size_approx(&outpath, 48_233_447);
+    let _ = fs::remove_file(outpath);
 }
 
 
@@ -143,6 +161,9 @@ fn test_decryption_cmaf_h265_multikey () {
 fn test_decryption_cenc_kaltura () {
     let mpd = "https://cdnapisec.kaltura.com/p/2433871/sp/243387100/playManifest/protocol/https//entryId/1_pgssezc1/format/mpegdash/tags/mbr/f/a.mpd";
     let outpath = env::temp_dir().join("kaltura.mp4");
+    if outpath.exists() {
+        let _ = fs::remove_file(outpath.clone());
+    }
     let cli = Command::new("cargo")
         .args(["run", "--no-default-features", "--",
                "--mp4decrypt-location", "mp4decrypt",
@@ -162,13 +183,17 @@ fn test_decryption_cenc_kaltura () {
     assert!(audio.width.is_none());
     let tags = audio.tags.as_ref().unwrap();
     assert_eq!(tags.language, Some(String::from("eng")));
+    let _ = fs::remove_file(outpath);
 }
 
 
 #[test]
 fn test_decryption_small () {
     let mpd = "https://m.dtv.fi/dash/dasherh264/drm/manifest_clearkey.mpd";
-    let outpath = env::temp_dir().join("caminandes.mp4");
+    let outpath = env::temp_dir().join("caminandes-mp4decrypt.mp4");
+    if outpath.exists() {
+        let _ = fs::remove_file(outpath.clone());
+    }
     let cli = Command::new("cargo")
         .args(["run", "--no-default-features", "--",
                "-v",
@@ -187,6 +212,7 @@ fn test_decryption_small () {
     }
     assert!(cli.status.success());
     check_file_size_approx(&outpath, 6_975_147);
+    let _ = fs::remove_file(outpath);
 }
 
 
