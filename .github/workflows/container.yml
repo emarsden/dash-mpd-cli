@@ -1,0 +1,14 @@
+# Build a Docker/Podman container with dash-mpd-cli and its external helper applications.
+
+name: Build container
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build container
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - run: docker build -f Containerfile --tag dash-mpd-cli
