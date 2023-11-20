@@ -8,7 +8,7 @@
 
 
 pub mod common;
-use std::fs;
+use fs_err as fs;
 use std::env;
 use std::process::Command;
 use std::path::Path;
