@@ -1,14 +1,43 @@
 # Build a Docker/Podman container with dash-mpd-cli and its external helper applications.
 
-name: Build container
+name: Build container image
 
 on: workflow_dispatch
 
+env:
+  REGISTRY_USER: ${{ github.actor }}
+  REGISTRY_PASSWORD: ${{ github.token }}
+  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+
 jobs:
-  build:
+  build-push-image:
     runs-on: ubuntu-latest
-    name: Build container/Linux
+
+    permissions:
+      contents: read
+      packages: write
+
+    name: Build and push container/Linux
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - run: podman build -f Containerfile --tag dash-mpd-cli
+
+      - name: Log in to ghcr.io
+        uses: redhat-actions/podman-login@v1
+        with:
+          username: ${{ env.REGISTRY_USER }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+
+      - name: Build container image with podman
+        id: build-image
+        run: podman build -f Containerfile --tag dash-mpd-cli
+
+      - name: Push container image
+        id: push-to-registry
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: dash-mpd-cli
+          tags: latest
+          registry: ${{ env.IMAGE_REGISTRY }}
+
