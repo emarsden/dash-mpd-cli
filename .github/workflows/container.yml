@@ -31,14 +31,7 @@ jobs:
 
       - name: Build container image with podman
         id: build-image
-        run: podman build -f Containerfile --tag dash-mpd-cli \
-          --label org.opencontainers.image.description="Download media content from a DASH-MPEG or DASH-WebM MPD manifest." \
-          --label org.opencontainers.image.title="dash-mpd-cli" \
-          --label org.opencontainers.image.url="https://github.com/emarsden/dash-mpd-cli" \
-          --label org.opencontainers.image.source="https://github.com/emarsden/dash-mpd-cli" \
-          --label org.opencontainers.image.version="0.2.9" \
-          --label org.opencontainers.image.authors="eric.marsden@risk-engineering.org" \
-          --label org.opencontainers.image.licenses="MIT,GPL-2.0-or-later"
+        run: podman build -f Containerfile --tag dash-mpd-cli
 
       - name: Push container image
         id: push-to-registry
