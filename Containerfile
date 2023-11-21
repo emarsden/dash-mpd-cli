@@ -28,7 +28,7 @@
 # To run the container:
 #
 #    podman machine start (optionally, on Windows and MacOS)
-#    podman run -ti -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+#    podman run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
 #
 # On the first run, this will fetch the container image (around 216 MB) from the GitHub Container
 # Registry ghcr.io, and will save it for later uses. You can later delete the image using "podman image
@@ -44,7 +44,7 @@
 # support rootless operation).
 #
 #    sudo apt install runsc
-#    sudo podman --runtime=rusc run --rm -ti -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+#    sudo podman --runtime=rusc run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
 #
 # To build the container locally (not needed for an end user)
 #
@@ -112,7 +112,7 @@ COPY --from=gpacbuilder --chown=root:root --chmod=755 \
 # directory from your host machine on /content so that downloaded media content is available on your
 # host machine, for example with
 #
-#   podman run -ti -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL>
+#   podman run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL>
 #
 # When the download finishes and the container exits, a file with a name determined from MPD-URL
 # should be present in your current directory (you can specify the output file name using something
