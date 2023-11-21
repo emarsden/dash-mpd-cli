@@ -37,7 +37,7 @@ termux:
 
 
 podman:
-    podman -ti -v /tmp:/tmp ghcr.io/emarsden/dash-mpd-cli dash-mpd-cli "$@"
+    podman run -ti -v /tmp:/tmp ghcr.io/emarsden/dash-mpd-cli dash-mpd-cli "$@"
 
 
 
