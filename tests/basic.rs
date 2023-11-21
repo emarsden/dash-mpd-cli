@@ -9,6 +9,7 @@
 
 
 pub mod common;
+use fs_err as fs;
 use std::env;
 use std::process::Command;
 use ffprobe::ffprobe;
@@ -24,8 +25,8 @@ fn test_dl_mp4 () {
     }
     let mpd = "https://cloudflarestream.com/31c9291ab41fac05471db4e73aa11717/manifest/video.mpd";
     let outpath = env::temp_dir().join("cf.mp4");
-    if out.exists() {
-        let _ = fs::remove_file(out.clone());
+    if outpath.exists() {
+        let _ = fs::remove_file(outpath.clone());
     }
     let cli = Command::new("cargo")
         .args(["run", "--no-default-features", "--",
@@ -96,4 +97,19 @@ fn test_dl_audio_flac () {
     assert_eq!(audio.codec_type, Some(String::from("audio")));
     assert_eq!(audio.codec_name, Some(String::from("flac")));
     assert!(audio.width.is_none());
+}
+
+
+// The manifest contains minBufferTime="4S", which is an invalid format for an xs:Duration.
+#[test]
+fn test_parse_failure_duration () {
+    let cli = Command::new("cargo")
+        .args(["run", "--no-default-features", "--",
+               "https://dash.akamaized.net/akamai/test/manifest3.mpd"])
+        .output()
+        .expect("failure spawning dash-mpd-cli");
+    assert!(!cli.status.success());
+    let msg = String::from_utf8_lossy(&cli.stderr);
+    assert!(msg.contains("Download failed"));
+    assert!(msg.contains("invalid Duration"));
 }
