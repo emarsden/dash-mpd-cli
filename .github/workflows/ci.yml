@@ -71,7 +71,14 @@ jobs:
     - name: install xsltproc
       run: brew install libxslt
 
+    - name: install podman
+      run: |
+        brew install podman
+        podman machine init
+        podman machine start
+
     - run: cargo test --jobs 1 -- --show-output
+
 
   build-windows:
     runs-on: windows-latest
@@ -106,6 +113,12 @@ jobs:
     - name: install xsltproc
       run: |
          choco install --yes --limit-output xsltproc
+
+    - name: install podman
+      run: |
+         choco install --yes --limit-output podman
+         podman machine init
+         podman machine start
 
     - run: cargo build --jobs 1 --verbose
     - run: cargo test --jobs 1 -- --show-output
