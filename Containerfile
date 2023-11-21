@@ -1,9 +1,57 @@
-# Build and run the container with
+# Recipe for building a docker container image for dash-mpd-cli + help applications
+#
+# This Containerfile contains the recipe needed to generate a docker/podman/OCI container image
+# including the dash-mpd-cli binary alongside the external helper applications that it uses for
+# muxing media streams, for extracting/converting subtitle streams, and for decrypting content
+# infected with DRM. These are packaged with a minimal Alpine Linux installation so that they can be
+# run on any host that can run Linux/AMD64 containers (using Podman or Docker on Linux, Microsoft
+# Windows and MacOS).
+#
+# Advantages of running in a container, instead of natively on your machine:
+#
+#   - Much safer, because the container isn't able to modify your host machine, except for writing
+#     downloaded media to the directory you specify. This is a very good idea when running random
+#     software you downloaded from the internet!
+#
+#   - No need to install the various helper applications (ffmpeg, mkvmerge, mp4decrypt, MP4Box),
+#     which are already present in the container.
+#
+#   - Automatically run the latest version of dash-mpd-cli and the various helper applications (the
+#     container runtime will pull the latest version for you automatically).
+#
+#   - Podman and Docker also allow you to set various limits on the resources allocated to the
+#     container (number of CPUs, memory); see their respective documentation.
+#
+#
+# ## Usage
+#
+# To run the container:
+#
+#    podman machine start (optionally, on Windows and MacOS)
+#    podman run -ti -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+#
+# On the first run, this will fetch the container image (around 216 MB) from the GitHub Container
+# Registry ghcr.io, and will save it for later uses. You can later delete the image using "podman image
+# rm" and the image id shown by "podman images".
+#
+# Your current working directory (".") will be mounted in the container as "/content", which will be
+# the working directory in the container. This means that an output file specified without a root
+# directory, such as "foo.mp4", will be saved to your current working directory on the host machine.
+#
+# On Linux/AMD64, it's also possible to run the container using the gVisor container runtime runsc,
+# which uses a sandbox to improve security (strong isolation, protection against privilege
+# escalation). This requires installation of runsc and running as root (runsc doesn't currently
+# support rootless operation).
+#
+#    sudo apt install runsc
+#    sudo podman --runtime=rusc run --rm -ti -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+#
+# To build the container locally (not needed for an end user)
 #
 #    podman build -f Containerfile --tag dash-mpd-cli
 #    podman images
-#    podman run -ti -v /tmp:/tmp localhost/dash-mpd-cli dash-mpd-cli -v <MPD-URL> -o /tmp/foo.mp4
-    
+
+
 
 FROM docker.io/rust:latest AS rustbuilder
 RUN rustup target add x86_64-unknown-linux-musl
@@ -48,7 +96,10 @@ LABEL org.opencontainers.image.description="Download media content from a DASH-M
 #   - Shaka packager: MIT
 RUN apk update && \
     apk upgrade && \
-    apk add --no-cache ffmpeg mkvtoolnix bento4 libxslt
+    apk add --no-cache ffmpeg mkvtoolnix bento4 libxslt && \
+    mkdir /content && \
+    chown root.root /content && \
+    chmod a=rwx,o+t /content
 
 COPY --from=docker.io/google/shaka-packager:latest --chown=root:root \
     /usr/bin/packager /usr/local/bin/shaka-packager
@@ -56,6 +107,20 @@ COPY --from=rustbuilder --chown=root:root --chmod=755 \
     /src/target/x86_64-unknown-linux-musl/release/dash-mpd-cli /usr/local/bin
 COPY --from=gpacbuilder --chown=root:root --chmod=755 \
     /src/gpac/bin/gcc/MP4Box /usr/local/bin
+
+# This is the default location for downloaded content, writeable by all users. You should bind a
+# directory from your host machine on /content so that downloaded media content is available on your
+# host machine, for example with
+#
+#   podman run -ti -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL>
+#
+# When the download finishes and the container exits, a file with a name determined from MPD-URL
+# should be present in your current directory (you can specify the output file name using something
+# like "-o foo.mp4").
+
+
+WORKDIR /content
+ENTRYPOINT ["/usr/local/bin/dash-mpd-cli"]
 
 # Size of our container image:
 #   with vlc:     331 MB
