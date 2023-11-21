@@ -24,6 +24,9 @@ fn test_dl_mp4 () {
     }
     let mpd = "https://cloudflarestream.com/31c9291ab41fac05471db4e73aa11717/manifest/video.mpd";
     let outpath = env::temp_dir().join("cf.mp4");
+    if out.exists() {
+        let _ = fs::remove_file(out.clone());
+    }
     let cli = Command::new("cargo")
         .args(["run", "--no-default-features", "--",
                "-v",
@@ -46,6 +49,9 @@ fn test_dl_mp4a () {
     }
     let mpd = "https://dash.akamaized.net/dash264/TestCases/3a/fraunhofer/aac-lc_stereo_without_video/Sintel/sintel_audio_only_aaclc_stereo_sidx.mpd";
     let outpath = env::temp_dir().join("sintel-audio.mp4");
+    if outpath.exists() {
+        let _ = fs::remove_file(outpath.clone());
+    }
     let cli = Command::new("cargo")
         .args(["run", "--no-default-features", "--",
                "-o", &outpath.to_string_lossy(), mpd])
@@ -71,6 +77,9 @@ fn test_dl_audio_flac () {
     }
     let mpd = "http://rdmedia.bbc.co.uk/testcard/vod/manifests/radio-flac-en.mpd";
     let outpath = env::temp_dir().join("bbcradio-flac.mp4");
+    if outpath.exists() {
+        let _ = fs::remove_file(outpath.clone());
+    }
     let cli = Command::new("cargo")
         .args(["run", "--no-default-features", "--",
                "-v",
