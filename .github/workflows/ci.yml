@@ -116,7 +116,7 @@ jobs:
 
     - name: install podman
       run: |
-         choco install --yes --limit-output podman
+         choco install --yes --limit-output podman-cli
          podman machine init
          podman machine start
 
