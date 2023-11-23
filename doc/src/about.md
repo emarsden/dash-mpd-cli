@@ -27,6 +27,8 @@ bitrate, codec, etc.), fetching segments of the content using HTTP or HTTPS requ
 audio and video segments together. There is also support for downloading subtitles (mostly WebVTT,
 TTML, SRT, tx3g and SMIL formats, with some support for wvtt format).
 
+It runs on most common **platforms**, including Linux, Microsoft Windows and MacOS.
+
 This application builds on the [dash-mpd](https://crates.io/crates/dash-mpd) crate.
 
 
@@ -89,6 +91,10 @@ The following features are supported:
   by Netflix and other services), Amazon MediaTailor, Google’s Shaka packager, Microsoft’s Azure
   Media Services, and Unified Streaming. Test content is served by different CDNs including Akamai
   and various telecom providers.
+  
+- dash-mpd-cli is written in the Rust programming language, meaning that it's high performance and
+  protected from a variety of vulnerabilities that can affect more traditional software.
+
 
 The following are not supported: 
 
@@ -102,3 +108,9 @@ The following are not supported:
   choice for watching live streams.
 
 - XLink elements with actuate=onRequest semantics.
+
+
+
+## Licence
+
+dash-mpd-cli is free software distributed according to the terms of the MIT licence.

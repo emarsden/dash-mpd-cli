@@ -2,11 +2,49 @@
 
 ## Quickstart
 
+This is a commandline application, meaning it runs in a terminal (there is no graphical user interface).
+
+To download from a manifest to a file called `MyVideo.mp4`:
+
+    dash-mpd-cli -v --quality best https://example.com/manifest.mpd -o MyVideo.mp4
+
+To download including Finnish subtitles (which should be written to a file named `MyVideo.srt` or
+`MyVideo.vtt`, depending on the type of subtitles):
+
+    dash-mpd-cli -v --quality best --prefer-language fi --write-subs https://example.com/manifest.mpd -o MyVideo.mp4
+
+To know what subtitles and subtitle languages are available, first run: 
+
+    dash-mpd-cli -v -v --simulate https://example.com/manifest.mpd
+
+To save the output to a Matroska container using mkvmerge as a muxer:
+
+    dash-mpd-cli --muxer-preference mkv:mkvmerge https://example.com/manifest.mpd -o MyVideo.mkv
+
+To decrypt DRM on the media streams (assuming there are different keys for the audio and the video streams):
+
+    dash-mpd-cli --key "43215678123412341234123412341237:12341234123412341234123412341237" \
+      --key 43215678123412341234123412341236:12341234123412341234123412341236 \
+       https://example.com/manifest.mpd -o MyVideo.mp4
+
+To use ffmpeg that is installed in a non-standard location which is not in your PATH:
+
+    dash-mpd-cli --ffmpeg-location e:/ffmpeg/ffmpeg.exe https://example.com/manifest.mpd -o MyVideo.mp4
+
+To send necessary cookies to the web server frome Firefox (where you have logged in to the private
+website):
+
+    dash-mpd-cli --cookies-from-browser Firefox https://example.com/manifest.mpd -o MyVideo.mp4
+    
+If you want to interrupt a download, type `Ctrl-C` (this works at least on Linux, Windows, MacOS and
+termux on Android).
+
+
 
 
 ## Commandline options
 
-Usage: dash-mpd-cli [OPTIONS] <MPD-URL>
+**Usage**: `dash-mpd-cli [OPTIONS] MPD-URL`
 
 Options:
 
@@ -249,6 +287,24 @@ Print help (see a summary with `-h`)
     -V, --version
   
 Print version and exit.
+
+
+
+## Relevant environment variables
+
+You can set certain environment variables to modify the behaviour of the application: 
+
+- On Linux and MacOS, the `TMPDIR` environment variable will determine where temporary files used
+  while downloading are saved. These temporary files should be cleaned up by the application, unless
+  you interrupt execution using Ctrl-C.
+  
+- On Microsoft Windows, the `TMP` and `TEMP` environment variables will determine where temporary files
+  are saved (see the documentation of the `GetTempPathA` function in the Win32 API, or the Rust
+  documentation for [`std::env::tmpdir`](https://doc.rust-lang.org/std/env/fn.temp_dir.html)). 
+
+- The `RUST_LOG` environment variable can be used to obtain extra debugging logging (see the
+  [documentation for the env_logger crate](https://docs.rs/env_logger/latest/env_logger/)).
+
 
 
 ## Recording metadata
