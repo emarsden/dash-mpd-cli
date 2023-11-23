@@ -104,7 +104,66 @@ The following are not supported:
 - XLink elements with actuate=onRequest semantics.
 
 
+## Run safely in a Docker container
+
+The application, alongside the external helper applications that it uses for muxing media streams,
+for extracting/converting subtitle streams, and for decrypting content infected with DRM, are
+available as a container, which is probably the easiest and safest way to run it. The container is
+packaged with a minimal Alpine Linux installation and can be run on any host that can run
+Linux/AMD64 containers (using [Podman](https://podman.io/) or [Docker](https://www.docker.com/) on
+Linux, Microsoft Windows and MacOS). It’s available in the GitHub Container Registry ghcr.io and
+automatically built from the sources using GitHub’s useful continuous integration services.
+
+What are the advantages of running in a container, instead of natively on your machine?
+
+- Much safer, because the container isn't able to modify your host machine, except for writing
+  downloaded media to the directory you specify. This is a very good idea when running random
+  software you downloaded from the internet!
+
+- No need to install the various helper applications (ffmpeg, mkvmerge, mp4decrypt, MP4Box),
+  which are already present in the container.
+
+- Automatically run the latest version of dash-mpd-cli and the various helper applications (the
+  container runtime will pull the latest version for you automatically).
+
+- Podman and Docker also allow you to set various limits on the resources allocated to the
+  container (number of CPUs, memory); see their respective documentation.
+
+Unlike running software in a virtual machine, there is only a negligeable performance penalty to
+running in a container. That’s not quite true: if you’re running the container on an aarch64 (“Apple
+Silicon”) Mac, Podman will set up a virtual machine for you. On Windows, Podman will set up a
+low-overhead WSL2 virtual machine for you.
+
+I recommend installing [Podman](https://podman.io/) because it’s fully free software, whereas Docker
+is partly commercial. Podman is also able to run containers “rootless”, without special privileges,
+which is good for security.
+
+To run the container with podman:
+
+   podman machine start (optional step, only required on Windows and MacOS)
+   podman run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+
+On the first run, this will fetch the container image (around 216 MB) from the GitHub Container
+Registry ghcr.io, and will save it on your local disk for later uses. You can later delete the image
+if you not longer need it using `podman image rm` and the image id shown by `podman images`.
+
+Your current working directory (`.`) will be mounted in the container as `/content`, which will be
+the working directory in the container. This means that an output file specified without a root
+directory, such as `foo.mp4`, will be saved to your current working directory on the host machine.
+
+On Linux/AMD64, it’s also possible to run the container using the [gVisor](https://gvisor.dev/)
+container runtime runsc, which uses a sandbox to improve security (strong isolation, protection
+against privilege escalation). This requires installation of runsc and running as root (runsc
+doesn’t currently support rootless operation).
+
+   sudo apt install runsc
+   sudo podman --runtime=rusc run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+
+
 ## Installation
+
+If you prefer to install the software and its dependencies on your computer in the traditional way,
+you can download a prebuilt binary or build from source yourself.
 
 **Binary releases** are [available on GitHub](https://github.com/emarsden/dash-mpd-cli/releases) for
 GNU/Linux on AMD64 (statically linked against Musl Libc to avoid glibc versioning problems),
@@ -118,7 +177,7 @@ environment](https://www.rust-lang.org/tools/install):
 cargo install dash-mpd-cli
 ```
 
-This installs the binary to your installation root's `bin` directory, which is typically
+This installs the binary to your installation root’s `bin` directory, which is typically
 `$HOME/.cargo/bin`.
 
 You should also install the following **dependencies**:
@@ -154,6 +213,8 @@ You should also install the following **dependencies**:
 
 
 This crate is tested on the following **platforms**:
+
+- Our container images are tested using Podman on Linux and Windows
 
 - Linux on AMD64 (x86-64) and Aarch64 architectures
 
