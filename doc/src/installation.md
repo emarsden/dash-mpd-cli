@@ -29,18 +29,22 @@ You should also install the following **dependencies**:
   subprocess for muxing (combining) audio and video streams. See the `--mkvmerge-location`
   commandline argument if it’s not installed in a standard location (not on your PATH).
 
-- [ffmpeg](https://ffmpeg.org/) or [vlc](https://www.videolan.org/vlc/) to download to the MP4
-  container format, also for muxing audio and video streams (see the `--ffmpeg-location` and
-  `--vlc-location` commandline arguments if these are installed in non-standard locations). See the
-  `--muxer-preference` commandline argument to specify which muxing application to prefer for
+- [ffmpeg](https://ffmpeg.org/) for muxing audio and video streams and for concatenating streams
+  from a multi-period manifest. The ffprobe binary (distributed with ffmpeg) is required alongside
+  the ffmpeg binary. See the `--ffmpeg-location` commandline argument if this is installed in a
+  non-standard location.
+  
+- [vlc](https://www.videolan.org/vlc/) as an alternative application for muxing audio and video
+  streams (sometimes VLC is able to mux certain streams that ffmpeg doesn’t support). See the
+  `--vlc-location` commandline argument if this is installed in a non-standard location. Also see
+  the `--muxer-preference` commandline argument to specify which muxing application to prefer for
   different container types.
 
-- the MP4Box commandline utility from the [GPAC](https://gpac.wp.imt.fr/) project, if you want to
-  test the preliminary support for retrieving subtitles in wvtt format. If it's installed, MP4Box
-  will be used to convert the wvtt stream to the more widely recognized SRT format. MP4Box can also
-  be used for muxing audio and video streams to an MP4 container, as a fallback if ffmpeg and vlc
-  are not available. See the `--mp4box-location` commandline argument if this is installed in a
-  non-standard location.
+- the MP4Box commandline utility from the [GPAC](https://gpac.wp.imt.fr/) project, to help with
+  subtitles in wvtt format. If it’s installed, MP4Box will be used to convert the wvtt stream to the
+  more widely recognized SRT format. MP4Box can also be used for muxing audio and video streams to
+  an MP4 container, as a fallback if ffmpeg and vlc are not available. See the `--mp4box-location`
+  commandline argument if this is installed in a non-standard location.
 
 - the mp4decrypt commandline application from the [Bento4
   suite](https://github.com/axiomatic-systems/Bento4/), if you need to fetch encrypted content.
@@ -66,11 +70,11 @@ This crate is tested on the following **platforms**:
 
 - Microsoft Windows 10 and Windows 11 on AMD64
 
-- Android 12 on Aarch64 via [termux](https://termux.dev/) (you'll need to install the rust, binutils
-  and ffmpeg packages, and optionally the mkvtoolnix, vlc and gpac packages). You'll need to disable
+- Android 12 on Aarch64 via [termux](https://termux.dev/) (you’ll need to install the rust, binutils
+  and ffmpeg packages, and optionally the mkvtoolnix, vlc and gpac packages). You’ll need to disable
   the `cookies` feature by building with `--no-default-features`.
 
-- FreeBSD/AMD64 and OpenBSD/AMD64. You'll need to disable the `cookies` feature. Some of the
+- FreeBSD/AMD64 and OpenBSD/AMD64. You’ll need to disable the `cookies` feature. Some of the
   external applications we depend on (e.g. mp4decrypt, Shaka packager) are poorly supported on OpenBSD.
 
 It should also work on more obscure platforms, such as ppc64le and RISC-V, as long as you can

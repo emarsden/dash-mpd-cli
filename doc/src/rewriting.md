@@ -8,7 +8,7 @@ downloading media segments from it. This allows you to:
 
 - delete some Periods that the user is not interested in (based for example on their duration, or
   the origin of the media segments). This can be used to remove advertising segments inserted using
-  dynamic ad insertion (DAI) or server-side ad insert (SSAI) techniques. 
+  dynamic ad insertion (DAI) or server-side ad insertion (SSAI) techniques. 
 
 - delete from the manifest Representations that use undesired codecs. This is a way of making the
   choice of representation fall back to another Representation, which presumably uses an
@@ -30,7 +30,7 @@ This functionality is currently implemented using [XSLT](https://en.wikipedia.or
 language developed for XML rewriting. This is a standards-based approach to filtering/rewriting,
 which is very powerful though not particularly intuitive not very widely adopted. XSLT is
 implemented by calling out to the xsltproc commandline application, which unfortunately only
-supports XSLT v1.0. The version 3.0 of the specification is more powerful, and for example includes
+supports XSLT v1.0. Version 3.0 of the specification is more powerful, and for example includes
 functions for manipulating xs:duration attributes which can be useful for our purposes, but the
 only free implementation of XSLT 3.0 is implemented in Java and inconvenient to package.
 
@@ -40,7 +40,7 @@ only free implementation of XSLT 3.0 is implemented in Java and inconvenient to 
 The XSLT file (stylesheet) shown below will drop any AdaptationSets in the MPD manifest with a
 `@mimeType` matching `audio/*` (leaving only the AdaptationSets containing video).
 
-```xslt
+```xml
 {{#include ../../tests/fixtures/rewrite-drop-audio.xslt}}
 ```
 

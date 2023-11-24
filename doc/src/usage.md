@@ -267,7 +267,7 @@ Path to the mp4decrypt binary (necessary if not located in your PATH).
 
 Path to the shaka-packager binary (necessary if not located in your PATH).
 
-  -o, --output <PATH>
+    -o, --output <PATH>
 
 Save media content to this file.
 
@@ -303,8 +303,21 @@ You can set certain environment variables to modify the behaviour of the applica
   documentation for [`std::env::tmpdir`](https://doc.rust-lang.org/std/env/fn.temp_dir.html)). 
 
 - The `RUST_LOG` environment variable can be used to obtain extra debugging logging (see the
-  [documentation for the env_logger crate](https://docs.rs/env_logger/latest/env_logger/)).
+  [documentation for the env_logger crate](https://docs.rs/env_logger/latest/env_logger/)). For
+  example, you can ask for voluminous logging using
 
+```
+RUST_LOG=trace dash-mpd-cli -o foo.mp4 https://example.com/manifest.mpd
+```
+
+  or if [running in a container](container.html)
+  
+```
+podman run --env RUST_LOG=trace \
+   -v .:/content \ 
+   ghcr.io/emarsden/dash-mpd-cli \
+   https://example.com/manifest.mpd -o foo.mp4
+```
 
 
 ## Recording metadata

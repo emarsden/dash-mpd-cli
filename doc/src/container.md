@@ -5,8 +5,9 @@ for extracting/converting subtitle streams, and for decrypting content infected 
 available as a container, which is probably the easiest and safest way to run it. The container is
 packaged with a minimal Alpine Linux installation and can be run on any host that can run
 Linux/AMD64 containers (using [Podman](https://podman.io/) or [Docker](https://www.docker.com/) on
-Linux, Microsoft Windows and MacOS). It’s available in the GitHub Container Registry ghcr.io and
-automatically built from the sources using GitHub’s useful continuous integration services.
+Linux, Microsoft Windows and MacOS, possibly your NAS device). It’s available in the GitHub
+Container Registry ghcr.io and automatically built from the sources using GitHub’s useful continuous
+integration services.
 
 What are the advantages of running in a container, instead of natively on your machine?
 
@@ -67,4 +68,4 @@ against privilege escalation). This requires installation of runsc and running a
 doesn’t currently support rootless operation).
 
     sudo apt install runsc
-    sudo podman --runtime=rusc run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+    sudo podman --runtime=runsc run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
