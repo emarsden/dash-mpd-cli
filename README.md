@@ -114,7 +114,7 @@ Linux/AMD64 containers (using [Podman](https://podman.io/) or [Docker](https://w
 Linux, Microsoft Windows and MacOS). It’s available in the GitHub Container Registry ghcr.io and
 automatically built from the sources using GitHub’s useful continuous integration services.
 
-What are the advantages of running in a container, instead of natively on your machine?
+What are the **advantages of running in a container**, instead of natively on your machine?
 
 - Much safer, because the container isn't able to modify your host machine, except for writing
   downloaded media to the directory you specify. This is a very good idea when running random
@@ -138,10 +138,10 @@ I recommend installing [Podman](https://podman.io/) because it’s fully free so
 is partly commercial. Podman is also able to run containers “rootless”, without special privileges,
 which is good for security.
 
-To run the container with podman:
+To **run the container** with podman:
 
-   podman machine start (optional step, only required on Windows and MacOS)
-   podman run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+    podman machine start (optional step, only required on Windows and MacOS)
+    podman run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
 
 On the first run, this will fetch the container image (around 216 MB) from the GitHub Container
 Registry ghcr.io, and will save it on your local disk for later uses. You can later delete the image
@@ -156,8 +156,8 @@ container runtime runsc, which uses a sandbox to improve security (strong isolat
 against privilege escalation). This requires installation of runsc and running as root (runsc
 doesn’t currently support rootless operation).
 
-   sudo apt install runsc
-   sudo podman --runtime=rusc run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+    sudo apt install runsc
+    sudo podman --runtime=rusc run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
 
 
 ## Installation
