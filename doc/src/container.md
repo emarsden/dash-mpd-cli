@@ -9,20 +9,21 @@ Linux, Microsoft Windows and MacOS, possibly your NAS device). It’s available 
 Container Registry ghcr.io and automatically built from the sources using GitHub’s useful continuous
 integration services.
 
-What are the advantages of running in a container, instead of natively on your machine?
-
-- Much safer, because the container isn't able to modify your host machine, except for writing
-  downloaded media to the directory you specify. This is a very good idea when running random
-  software you downloaded from the internet!
-
-- No need to install the various helper applications (ffmpeg, mkvmerge, mp4decrypt, MP4Box),
-  which are already present in the container.
-
-- Automatically run the latest version of dash-mpd-cli and the various helper applications (the
-  container runtime will pull the latest version for you automatically).
-
-- Podman and Docker also allow you to set various limits on the resources allocated to the
-  container (number of CPUs, memory); see their respective documentation.
+> [!TIP]
+> What are the advantages of running in a container, instead of natively on your machine?
+>
+> - Much safer, because the container isn't able to modify your host machine, except for writing
+>   downloaded media to the directory you specify. This is a very good idea when running random
+>   software you downloaded from the internet!
+>
+> - No need to install the various helper applications (ffmpeg, mkvmerge, mp4decrypt, MP4Box),
+>   which are already present in the container.
+>
+> - Automatically run the latest version of dash-mpd-cli and the various helper applications (the
+>   container runtime will pull the latest version for you automatically).
+>
+> - Podman and Docker also allow you to set various limits on the resources allocated to the
+>   container (number of CPUs, memory); see their respective documentation.
 
 Unlike running software in a virtual machine, there is only a negligeable performance penalty to
 running in a container. That’s not quite true: if you’re running the container on an aarch64 (“Apple

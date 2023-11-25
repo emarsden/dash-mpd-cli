@@ -21,13 +21,15 @@ different codecs (including H264, HEVC, AV1, AAC, VP9, MP4A, MP3) and containers
 Matroska, AVI). There is a good explanation of adaptive bitrate video streaming at
 [howvideo.works](https://howvideo.works/#dash).
 
-This commandline application allows you to download content (audio or video) described by an MPD
-manifest. This involves selecting the alternative with the most appropriate encoding (in terms of
+This commandline application allows you to **download streaming video** or audio to your local
+device. This involves selecting the alternative with the most appropriate encoding (in terms of
 bitrate, codec, etc.), fetching segments of the content using HTTP or HTTPS requests and muxing
 audio and video segments together. There is also support for downloading subtitles (mostly WebVTT,
 TTML, SRT, tx3g and SMIL formats, with some support for wvtt format).
 
-This application builds on the [dash-mpd](https://crates.io/crates/dash-mpd) crate.
+This application builds on the [dash-mpd](https://crates.io/crates/dash-mpd) crate. It works for
+streaming that uses DASH adaptive streaming (MPD manifests), and doesn't currently have support for
+HLS streaming (m3u8 manifests).
 
 📖 You may be interested in the [user manual](https://emarsden.github.io/dash-mpd-cli/).
 
@@ -73,6 +75,8 @@ The following features are supported:
 - Media containers of types supported by mkvmerge, ffmpeg, VLC or MP4Box (this includes ISO-BMFF /
   CMAF / MP4, Matroska, WebM, MPEG-2 TS, AVI), and all the codecs supported by these applications.
 
+- Any video resolution available on the streaming server, including 1080p and 4K content.
+
 - Support for decrypting media streams that use ContentProtection (DRM 🗝️). This requires either the
   `mp4decrypt` or `shaka-packager` commandline application to be installed. mp4decrypt is available
   from the [Bento4 suite](https://github.com/axiomatic-systems/Bento4/) ([binaries are
@@ -92,7 +96,7 @@ The following features are supported:
   Media Services, and Unified Streaming. Test content is served by different CDNs including Akamai
   and various telecom providers.
 
-The following are not supported: 
+The following are not currently supported:
 
 - **Live streams** (dynamic MPD manifests), that are used for live streaming/OTT TV are not really
   supported. This is because we don’t implement the clock-related throttling that is needed to only
@@ -104,6 +108,9 @@ The following are not supported:
   choice for watching live streams.
 
 - XLink elements with actuate=onRequest semantics.
+
+- HLS streaming (m3u8 manifests).
+
 
 
 ## Run safely in a Docker container
