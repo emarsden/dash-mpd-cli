@@ -10,3 +10,4 @@ src = "src"
 [output.html]
 git-repository-url = "https://github.com/emarsden/dash-mpd-cli"
 git-repository-icon = "fa-github"
+curly-quotes = true

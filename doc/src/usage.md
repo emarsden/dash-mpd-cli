@@ -6,7 +6,9 @@ This is a commandline application, meaning it runs in a terminal (there is no gr
 
 To download from a manifest to a file called `MyVideo.mp4`:
 
-    dash-mpd-cli -v --quality best https://example.com/manifest.mpd -o MyVideo.mp4
+```admonish example
+dash-mpd-cli -v --quality best https://example.com/manifest.mpd -o MyVideo.mp4
+```
 
 To download including Finnish subtitles (which should be written to a file named `MyVideo.srt` or
 `MyVideo.vtt`, depending on the type of subtitles):
@@ -306,13 +308,13 @@ You can set certain environment variables to modify the behaviour of the applica
   [documentation for the env_logger crate](https://docs.rs/env_logger/latest/env_logger/)). For
   example, you can ask for voluminous logging using
 
-```
+```admonish example
 RUST_LOG=trace dash-mpd-cli -o foo.mp4 https://example.com/manifest.mpd
 ```
 
   or if [running in a container](container.html)
   
-```
+```admonish example
 podman run --env RUST_LOG=trace \
    -v .:/content \ 
    ghcr.io/emarsden/dash-mpd-cli \

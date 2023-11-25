@@ -167,7 +167,7 @@ against privilege escalation). This requires installation of runsc and running a
 doesn’t currently support rootless operation).
 
     sudo apt install runsc
-    sudo podman --runtime=rusc run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+    sudo podman --runtime=runsc run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
 
 
 ## Installation

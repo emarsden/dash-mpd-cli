@@ -5,6 +5,8 @@ was developed to allow the author to watch a news programme produced by a public
 whilst at the gym. The programme is published as a DASH stream on the broadcaster’s “replay”
 service, but network service at the gym is sometimes poor. First world problems!
 
+```admonish caution
 The author is not the morality police nor a lawyer, but please note that redistributing media
 content that you have not produced may, depending on the publication licence, be a breach of
 intellectual property laws. Also, circumventing DRM may be prohibited in some countries.
+```
