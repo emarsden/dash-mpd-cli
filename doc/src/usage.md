@@ -308,13 +308,13 @@ You can set certain environment variables to modify the behaviour of the applica
   [documentation for the env_logger crate](https://docs.rs/env_logger/latest/env_logger/)). For
   example, you can ask for voluminous logging using
 
-```admonish example
+```admonish example,shell
 RUST_LOG=trace dash-mpd-cli -o foo.mp4 https://example.com/manifest.mpd
 ```
 
   or if [running in a container](container.html)
   
-```admonish example
+```admonish example,shell
 podman run --env RUST_LOG=trace \
    -v .:/content \ 
    ghcr.io/emarsden/dash-mpd-cli \

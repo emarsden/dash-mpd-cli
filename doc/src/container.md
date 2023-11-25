@@ -41,8 +41,10 @@ commandline interface.
 
 To run the container with podman:
 
-    podman machine start (optional step, only required on Windows and MacOS)
-    podman run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+```shell
+podman machine start (optional step, only required on Windows and MacOS)
+podman run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+```
 
 (Replace `podman` by `docker` if you prefer that option.)
 
@@ -70,5 +72,7 @@ container runtime runsc, which uses a sandbox to improve security (strong isolat
 against privilege escalation). This requires installation of runsc and running as root (runsc
 doesn’t currently support rootless operation).
 
-    sudo apt install runsc
-    sudo podman --runtime=runsc run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+```shell
+sudo apt install runsc
+sudo podman --runtime=runsc run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+```
