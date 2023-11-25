@@ -37,7 +37,7 @@ jobs:
         run: |
           ls -Fs
           mdbook-admonish install doc
-          cd doc && mdbook build
+          mdbook build doc
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v3
