@@ -31,7 +31,8 @@ low-overhead WSL2 virtual machine for you.
 
 I recommend installing [Podman](https://podman.io/) because it’s fully free software, whereas Docker
 is partly commercial. Podman is also able to run containers “rootless”, without special privileges,
-which is good for security.
+which is good for security, and doesn’t require a background daemon. Podman has a docker-compatible
+commandline interface.
 
 
 ## Running the container

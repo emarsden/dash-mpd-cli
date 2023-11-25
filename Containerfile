@@ -1,3 +1,5 @@
+#        -*- Dockerfile -*-
+#
 # Recipe for building a docker container image for dash-mpd-cli + help applications
 #
 # This Containerfile contains the recipe needed to generate a docker/podman/OCI container image
@@ -44,7 +46,7 @@
 # support rootless operation).
 #
 #    sudo apt install runsc
-#    sudo podman --runtime=rusc run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+#    sudo podman --runtime=runsc run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
 #
 # To build the container locally (not needed for an end user)
 #
