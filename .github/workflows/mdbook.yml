@@ -35,7 +35,7 @@ jobs:
 
       - name: Build book
         run: |
-          mdbook-admonish install doc
+          mdbook-admonish install .
           cd doc && mdbook build
 
       - name: Setup GitHub Pages
