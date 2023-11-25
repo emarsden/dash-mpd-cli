@@ -38,12 +38,14 @@ inconvenient to package.
 
 ## Examples
 
+~~~admonish example title="Drop audio AdaptationSets"
 The XSLT file (stylesheet) shown below will drop any AdaptationSets in the MPD manifest with a
 `@mimeType` matching `audio/*` (leaving only the AdaptationSets containing video).
 
 ```xml
 {{#include ../../tests/fixtures/rewrite-drop-audio.xslt}}
 ```
+~~~
 
 Note that the rewriting instruction 
 

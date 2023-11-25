@@ -1,12 +1,13 @@
 # Usage
 
-## Quickstart
-
 This is a commandline application, meaning it runs in a terminal (there is no graphical user interface).
+
+
+## Quickstart
 
 To download from a manifest to a file called `MyVideo.mp4`:
 
-```admonish example
+```shell
 dash-mpd-cli -v --quality best https://example.com/manifest.mpd -o MyVideo.mp4
 ```
 
@@ -229,7 +230,7 @@ Specify the content of the Referer HTTP header.
           
 Disable printing of diagnostics information to the terminal.
 
-    -v, --verbose...
+    -v, --verbose
 
 Level of verbosity (can be used several times).
 
@@ -308,13 +309,13 @@ You can set certain environment variables to modify the behaviour of the applica
   [documentation for the env_logger crate](https://docs.rs/env_logger/latest/env_logger/)). For
   example, you can ask for voluminous logging using
 
-```admonish example,shell
+```shell
 RUST_LOG=trace dash-mpd-cli -o foo.mp4 https://example.com/manifest.mpd
 ```
 
   or if [running in a container](container.html)
   
-```admonish example,shell
+```shell
 podman run --env RUST_LOG=trace \
    -v .:/content \ 
    ghcr.io/emarsden/dash-mpd-cli \

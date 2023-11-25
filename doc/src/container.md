@@ -10,8 +10,9 @@ Container Registry ghcr.io and automatically built from the sources using GitHub
 integration services.
 
 
-```admonish tip
-What are the advantages of running in a container, instead of natively on your machine?
+```admonish info title="Advantages of running in a container"
+Why run the application in a container, instead of natively on your machine?
+
 - Much safer, because the container isn't able to modify your host machine, except for writing
   downloaded media to the directory you specify. This is a very good idea when running random
   software you downloaded from the internet!
@@ -31,22 +32,25 @@ running in a container. That’s not quite true: if you’re running the contain
 Silicon”) Mac, Podman will set up a virtual machine for you. On Windows, Podman will set up a
 low-overhead WSL2 virtual machine for you.
 
+```admonish tip
 I recommend installing [Podman](https://podman.io/) because it’s fully free software, whereas Docker
 is partly commercial. Podman is also able to run containers “rootless”, without special privileges,
 which is good for security, and doesn’t require a background daemon. Podman has a docker-compatible
 commandline interface.
+```
 
 
 ## Running the container
 
-To run the container with podman:
-
+~~~admonish example title="Run the container with podman"
 ```shell
 podman machine start (optional step, only required on Windows and MacOS)
 podman run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
 ```
 
 (Replace `podman` by `docker` if you prefer that option.)
+~~~
+
 
 On the first run, this will fetch the container image (around 216 MB) from the GitHub Container
 Registry ghcr.io, and will save it on your local disk for later uses. You can later delete the image
@@ -66,6 +70,9 @@ specified without a root directory, such as `foo.mp4`, will be saved to your cur
 directory on the host machine. If you specify a fully qualified path for the output file, for
 example `-o /tmp/foo.mp4`, note that this will output to the temporary directory in the container,
 which you won't have access to once the download has finished.
+
+
+## Increased security with gVisor
 
 On Linux/AMD64, it’s also possible to run the container using the [gVisor](https://gvisor.dev/)
 container runtime runsc, which uses a sandbox to improve security (strong isolation, protection
