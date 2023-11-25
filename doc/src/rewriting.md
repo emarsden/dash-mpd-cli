@@ -28,11 +28,12 @@ downloading media segments from it. This allows you to:
 
 This functionality is currently implemented using [XSLT](https://en.wikipedia.org/wiki/XSLT), a
 language developed for XML rewriting. This is a standards-based approach to filtering/rewriting,
-which is very powerful though not particularly intuitive not very widely adopted. XSLT is
-implemented by calling out to the xsltproc commandline application, which unfortunately only
-supports XSLT v1.0. Version 3.0 of the specification is more powerful, and for example includes
-functions for manipulating xs:duration attributes which can be useful for our purposes, but the
-only free implementation of XSLT 3.0 is implemented in Java and inconvenient to package.
+which is very powerful though not particularly intuitive nor very widely adopted. XSLT is
+implemented by calling out to the [xsltproc](http://xmlsoft.org/xslt/xsltproc.html) commandline
+application, which unfortunately only supports XSLT v1.0. Version 3.0 of the specification is more
+powerful, and for example includes functions for manipulating xs:duration attributes which can be
+useful for our purposes, but the only free implementation of XSLT 3.0 is implemented in Java and
+inconvenient to package.
 
 
 ## Examples
@@ -83,8 +84,22 @@ dropped, such as
 
     //mpd:Period[mpd:BaseURL[contains(text(),'mediatailor.eu-west-1.amazonaws.com')]]
 
+or for some OTT VOD services:
+
+    //mpd:Period[duration='PT5.000S']
+    //mpd:Period[.//mpd:BaseURL[contains(text(),'/creative/')]]
+    //mpd:Period[.//mpd:BaseURL[contains(text(),'Ad_Bumper')]]
+
 You can adapt these and add additional templates for advertising services used by your telecoms
-provider or streaming service.
+provider or streaming service. There are a few example of stylesheets in the [tests/fixtures
+directory](https://github.com/emarsden/dash-mpd-cli/tree/main/tests/fixtures).
+
+To download content with a rewritten manifest (here [running dash-mpd-cli in a container](container.html)):
+
+    podman run -v .:/content \
+      --xslt-stylesheet my-rewrites.xslt \
+      ghcr.io/emarsden/dash-mpd-cli \
+      https://example.com/manifest.mpd -o foo.mp4
 
 
 
@@ -102,8 +117,5 @@ dash-mpd-cli:
 
 - A WebAssembly-based interface that could be implemented in any programming language that can
   generate WASM bytecode.
-
-
-
 
 
