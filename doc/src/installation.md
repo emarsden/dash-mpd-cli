@@ -1,8 +1,8 @@
 # Installation
 
-The recommended way of running dash-mpd-cli is as a [Podman container](container.html). If you
-prefer to install the software and its dependencies on your computer in the traditional way, you can
-download a prebuilt binary or build from source yourself.
+The recommended way of running dash-mpd-cli is sandboxed in a [Podman container](container.html). If
+you prefer to install the software and its dependencies on your computer in the traditional way, you
+can download a prebuilt binary or build from source yourself.
 
 **Binary releases** are [available on GitHub](https://github.com/emarsden/dash-mpd-cli/releases) for
 GNU/Linux on AMD64 (statically linked against Musl Libc to avoid glibc versioning problems),

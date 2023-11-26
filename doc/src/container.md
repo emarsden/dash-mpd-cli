@@ -1,4 +1,4 @@
-# Run safely in a Docker container
+# Run safely sandboxed in a Docker container
 
 The application, alongside the external helper applications that it uses for muxing media streams,
 for extracting/converting subtitle streams, and for decrypting content infected with DRM, are
@@ -13,7 +13,7 @@ integration services.
 ```admonish info title="Advantages of running in a container"
 Why run the application in a container, instead of natively on your machine?
 
-- Much safer, because the container isn't able to modify your host machine, except for writing
+- Much safer, because the container is sandboxed: it can't modify your host machine, except for writing
   downloaded media to the directory you specify. This is a very good idea when running random
   software you downloaded from the internet!
 
