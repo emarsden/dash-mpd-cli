@@ -42,42 +42,98 @@ commandline interface.
 
 ## Running the container
 
-~~~admonish example title="Run the container with podman"
+If you’re running on Microsoft Windows or MacOS, you will need to start the virtual machine that’s
+used to run the container:
+
+~~~admonish example title="Start up the container runtime (only Windows/MacOS)"
 ```shell
-podman machine start (optional step, only required on Windows and MacOS)
-podman run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+podman machine start
 ```
 
 (Replace `podman` by `docker` if you prefer that option.)
 ~~~
 
+You can then fetch the container image from the registry and check that it works with:
+
+~~~admonish example title="Fetch and check the container"
+```shell
+podman run ghcr.io/emarsden/dash-mpd-cli --version
+```
+~~~
 
 On the first run, this will fetch the container image (around 216 MB) from the GitHub Container
-Registry ghcr.io, and will save it on your local disk for later uses. You can later delete the image
-if you not longer need it using `podman image rm` and the image id shown by `podman images`.
+Registry ghcr.io, and will save it on your local disk for later use. Then to download some content
+from an MPD manifest:
+
+~~~admonish example title="Run dash-mpd-cli in the container"
+```shell
+podman run -v .:/content ghcr.io/emarsden/dash-mpd-cli https://example.com/manifest.mpd
+```
+~~~
+
+This should save the media to a file named something like `example.com_manifest.mp4` 💪 (you can
+change this name by adding `-o foo.mp4`.
+
+If you want your local copy of the container image to be **updated if a newer one is available** from
+the registry, add `--pull=newer`:
+
+```
+podman run --update=newer \
+  -v .:/content \
+  ghcr.io/emarsden/dash-mpd-cli \
+  -v <MPD-URL> -o foo.mp4
+```
+
+You can later delete the image if you not longer need it using `podman image rm` with the image id
+shown by `podman images`, as illustrated below:
+
+~~~admonish example title="Delete the container image from your local disk"
+```shell
+% podman images
+REPOSITORY                       TAG         IMAGE ID      CREATED         SIZE
+ghcr.io/emarsden/dash-mpd-cli    latest      ae6971bf21ae  4 days ago      216 MB
+...
+% podman image rm ae6971bf21ae
+```
+~~~
 
 
 ## Mounting a directory into the container
 
 By default, your local disk is neither readable nor writable by the application running in the
 container (this is a major security advantage!). Since you want to write the downloaded media onto
-your local disk, you need to mount (bind) a directory into the container, using podman's `-v`
+your local disk, you need to mount (bind) a directory into the container, using podman’s `-v`
 commandline option. 
 
 In the commandline show above, your current working directory (`.`) will be mounted in the container
-as `/content`, which will be the working directory in the container. This means that an output file
-specified without a root directory, such as `foo.mp4`, will be saved to your current working
-directory on the host machine. If you specify a fully qualified path for the output file, for
-example `-o /tmp/foo.mp4`, note that this will output to the temporary directory in the container,
-which you won't have access to once the download has finished.
+as `/content`, which is always the working directory in the container. This means that an output
+file specified without a full path, such as `foo.mp4`, will be saved to your current working
+directory on the host machine. If you specify a full path for the output file, for example `-o
+/tmp/foo.mp4`, note that this will output to the temporary directory in the container, which you
+won’t have access to once the download has finished.
+
+This sandboxing restriction also applies to any files you need to pass into the container, such as
+an XSLT stylesheet for rewriting the manifest. If you’re running podman from your `Videos`
+directory, a stylesheet has to be in `Videos` or a subdirectory, or the container won’t be able to
+see it, and you should provide a relative name rather than an absolute name to the container. If the
+stylesheet is in the `rewrites` directory, for example:
+
+```
+podman run --update=newer \
+  -v .:/content \ 
+  --xslt-stylesheet rewrites/my-rewrites.xslt \
+  ghcr.io/emarsden/dash-mpd-cli \
+  -v <MPD-URL> -o foo.mp4
+```
+
 
 
 ## Increased security with gVisor
 
 On Linux/AMD64, it’s also possible to run the container using the [gVisor](https://gvisor.dev/)
-container runtime runsc, which uses a sandbox to improve security (strong isolation, protection
-against privilege escalation). This requires installation of runsc and running as root (runsc
-doesn’t currently support rootless operation).
+container runtime runsc, which uses specially-designed sandboxing techniques to improve security
+(strong isolation, protection against privilege escalation). This requires installation of runsc and
+running as root (runsc doesn’t currently support rootless operation).
 
 ```shell
 sudo apt install runsc
