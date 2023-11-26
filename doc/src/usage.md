@@ -297,6 +297,14 @@ Print version and exit.
 
 You can set certain environment variables to modify the behaviour of the application: 
 
+- The semi-standardized `HTTP_PROXY` and `http_proxy` environment variables allow you to specify a
+  proxy to be used for HTTP connections, in the format `http://proxy.my.com:8080`. The `HTTPS_PROXY`
+  and `https_proxy` operate likewise for HTTPS connections, and `ALL_PROXY` or `all_proxy` are used
+  for both HTTP and HTTPS. The `NO_PROXY` or `no_proxy` environment variable allows you to specify
+  IP addresses or domains that should not be proxied, in a format like `NO_PROXY=google.com,
+  192.168.1.0/24`. See the [reqwest
+  docs](https://docs.rs/reqwest/latest/reqwest/struct.NoProxy.html) for the full details.
+
 - On Linux and MacOS, the `TMPDIR` environment variable will determine where temporary files used
   while downloading are saved. These temporary files should be cleaned up by the application, unless
   you interrupt execution using Ctrl-C.

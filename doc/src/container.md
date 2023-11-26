@@ -13,15 +13,15 @@ integration services.
 ```admonish info title="Advantages of running in a container"
 Why run the application in a container, instead of natively on your machine?
 
-- Much safer, because the container is sandboxed: it can't modify your host machine, except for writing
-  downloaded media to the directory you specify. This is a very good idea when running random
-  software you downloaded from the internet!
+- Good internet hygiene. It’s much safer, because the container is sandboxed: it can’t modify
+  your host machine, except for writing downloaded media to the directory you specify. This 
+  is a very good idea when running random software you downloaded from the internet!
 
 - No need to install the various helper applications (ffmpeg, mkvmerge, mp4decrypt, MP4Box),
   which are already present in the container.
 
 - Automatically run the latest version of dash-mpd-cli and the various helper applications (the
-  container runtime will pull the latest version for you automatically).
+  container runtime can pull the latest version for you automatically).
 
 - Podman and Docker also allow you to set various limits on the resources allocated to the
   container (number of CPUs, memory); see their respective documentation.
@@ -61,9 +61,9 @@ podman run ghcr.io/emarsden/dash-mpd-cli --version
 ```
 ~~~
 
-On the first run, this will fetch the container image (around 216 MB) from the GitHub Container
-Registry ghcr.io, and will save it on your local disk for later use. Then to download some content
-from an MPD manifest:
+On the first run, this will fetch the container image (currently around 220 MB) from the GitHub
+Container Registry ghcr.io, and will save it on your local disk for later use. Then to download some
+content from an MPD manifest:
 
 ~~~admonish example title="Run dash-mpd-cli in the container"
 ```shell
@@ -72,7 +72,7 @@ podman run -v .:/content ghcr.io/emarsden/dash-mpd-cli https://example.com/manif
 ~~~
 
 This should save the media to a file named something like `example.com_manifest.mp4` 💪 (you can
-change this name by adding `-o foo.mp4`.
+change this name by adding `-o foo.mp4`).
 
 If you want your local copy of the container image to be **updated if a newer one is available** from
 the registry, add `--pull=newer`:
