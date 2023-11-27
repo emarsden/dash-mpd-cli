@@ -12,7 +12,7 @@
 # To build the container locally (not needed for an end user) on an AMD64 host:
 #
 #    podman manifest create dash-mpd-cli
-#    podman build . -f etc/Containerfile_linux_amd64 --arch amd64 --tag dash-mpd-cli-linux-amd64 --manifest dash-mpd-cli
+#    podman build -f etc/Containerfile_linux_amd64 --arch amd64 --tag dash-mpd-cli-linux-amd64 --manifest dash-mpd-cli .
 
 
 FROM docker.io/rust:latest AS rustbuilder

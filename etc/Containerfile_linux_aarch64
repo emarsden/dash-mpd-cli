@@ -10,7 +10,7 @@
 # To build the container locally (not needed for an end user)
 #
 #   podman manifest create dash-mpd-cli
-#   podman build . -f etc/Containerfile_linux_aarch64 --platform linux/arm64/v8 --tag dash-mpd-cli-linux-aarch64 --manifest dash-mpd-cli
+#   podman build -f etc/Containerfile_linux_aarch64 --platform linux/arm64/v8 --tag dash-mpd-cli-linux-aarch64 --manifest dash-mpd-cli .
 
 
 
