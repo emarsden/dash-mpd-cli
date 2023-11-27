@@ -1,6 +1,22 @@
 # Changelog
 
-## [0.2.9] - Unreleased
+## [0.2.10] - Unreleased
+
+- A [user manual](https://emarsden.github.io/dash-mpd-cli/) is available on GitHub pages.
+
+- dash-mpd-cli can be run in a Podman/Docker container, packaged on the GitHub Container Registry at
+  `ghcr.io/emarsden/dash-mpd-cli`. The container conveniently includes most of the external helper
+  applications (ffmpeg, MP4Box, mkvmerge, shaka-packager, mp4decrypt, etc.). It’s a multiarch
+  container, currently packaged for linux/amd64 and linux/arm64. See the user manual for details on
+  running in a container.
+
+- The current download bandwidth is displayed in the progress bar, if it is activated.
+
+- Fix the calculation of audio segments to be downloaded for a live stream for which
+  `--force_duration` has been specified.
+
+
+## [0.2.9] - 2023-11-18
 
 - Add the possibility to use the Shaka packager application for decryption of media with Content Protection,
   as an alternative to mp4decrypt. The shaka-packager application is able to handle more media
