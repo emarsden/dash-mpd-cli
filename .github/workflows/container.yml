@@ -1,4 +1,5 @@
 # Build a Docker/Podman container with dash-mpd-cli and its external helper applications.
+# We currently build for Linux/AMD64 and for Linux/aarch64.
 
 name: Build container image
 
@@ -19,7 +20,10 @@ jobs:
 
     name: Build and push container/Linux
     steps:
-      - name: Checkout
+      - name: Install qemu
+        run: sudo apt install qemu-user-static
+
+      - name: Checkout sources
         uses: actions/checkout@v4
 
       - name: Log in to ghcr.io
@@ -29,9 +33,12 @@ jobs:
           password: ${{ env.REGISTRY_PASSWORD }}
           registry: ${{ env.IMAGE_REGISTRY }}
 
-      - name: Build container image with podman
+      - name: Build container images with podman
         id: build-image
-        run: podman build -f Containerfile --tag dash-mpd-cli
+        run: |
+          podman manifest create dash-mpd-cli
+          podman build . -f etc/Containerfile_linux_amd64 --arch amd64 --tag dash-mpd-cli-linux-amd64 --manifest dash-mpd-cli
+          podman build . -f etc/Containerfile_linux_aarch64 --arch arm64/v8 --tag dash-mpd-cli-linux-aarch64 --manifest dash-mpd-cli
 
       - name: Push container image
         id: push-to-registry
