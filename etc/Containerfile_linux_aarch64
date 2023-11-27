@@ -20,7 +20,7 @@
 #
 # static build of MP4Box from GPAC, which is not packaged for Alpine Linux.
 # https://github.com/gpac/gpac/wiki/GPAC-Build-Guide-for-Linux
-FROM --platform=linux/arm64 alpine:latest AS builder
+FROM --platform=linux/arm64 docker.io/alpine:latest AS builder
 WORKDIR /src
 COPY ./ ./
 RUN apk update && \
@@ -40,7 +40,7 @@ RUN apk update && \
 
 
 # Now build the final image
-FROM --platform=linux/arm64 alpine:latest
+FROM --platform=linux/arm64 docker.io/alpine:latest
 LABEL org.opencontainers.image.description="Download media content from a DASH-MPEG or DASH-WebM MPD manifest." \
     org.opencontainers.image.title="dash-mpd-cli" \
     org.opencontainers.image.url="https://github.com/emarsden/dash-mpd-cli" \
