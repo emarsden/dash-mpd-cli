@@ -73,7 +73,7 @@ COPY --from=gpacbuilder --chown=root:root --chmod=755 \
 WORKDIR /content
 ENTRYPOINT ["/usr/local/bin/dash-mpd-cli"]
 
-# Size of our container image:
+# Size of our container image (for Linux/AMD64):
 #   with vlc:     331 MB
 #   without vlc:  217 MB
 #   static ffmpeg + shaka-packager from docker: 299 MB

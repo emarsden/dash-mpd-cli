@@ -9,6 +9,8 @@ Linux, Microsoft Windows and MacOS, possibly your NAS device). It’s available 
 Container Registry ghcr.io and automatically built from the sources using GitHub’s useful continuous
 integration services.
 
+It’s packaged as a multiarch container, currently available for linux/amd64 and linux/arm64 platforms.
+
 
 ```admonish info title="Advantages of running in a container"
 Why run the application in a container, instead of natively on your machine?
@@ -118,7 +120,7 @@ directory, a stylesheet has to be in `Videos` or a subdirectory, or the containe
 see it, and you should provide a relative name rather than an absolute name to the container. If the
 stylesheet is in the `rewrites` directory, for example:
 
-```
+```shell
 podman run --update=newer \
   -v .:/content \ 
   --xslt-stylesheet rewrites/my-rewrites.xslt \
