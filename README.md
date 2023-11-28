@@ -1,7 +1,7 @@
 # dash-mpd-cli
 
 A commandline application for downloading media content from a DASH MPD file, as used for on-demand
-replay of TV content and video streaming services like YouTube.
+replay of TV content and video streaming services.
 
 [![Crates.io](https://img.shields.io/crates/v/dash-mpd-cli)](https://crates.io/crates/dash-mpd-cli)
 [![CI](https://github.com/emarsden/dash-mpd-cli/workflows/build/badge.svg)](https://github.com/emarsden/dash-mpd-cli/actions/)
@@ -28,7 +28,7 @@ audio and video segments together. There is also support for downloading subtitl
 TTML, SRT, tx3g and SMIL formats, with some support for wvtt format).
 
 This application builds on the [dash-mpd](https://crates.io/crates/dash-mpd) crate. It works for
-streaming that uses DASH adaptive streaming (MPD manifests), and doesn't currently have support for
+streaming that uses DASH adaptive streaming (MPD manifests), and doesn’t currently have support for
 HLS streaming (m3u8 manifests).
 
 📖 You may be interested in the [user manual](https://emarsden.github.io/dash-mpd-cli/).
@@ -169,6 +169,9 @@ doesn’t currently support rootless operation).
     sudo apt install runsc
     sudo podman --runtime=runsc run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
 
+The container image is a multiarch manifest, currently built for linux/amd64 and for linux/arm64
+platforms.
+
 
 ## Installation
 
@@ -228,15 +231,15 @@ This crate is tested on the following **platforms**:
 
 - Linux on AMD64 (x86-64) and Aarch64 architectures
 
-- MacOS on AMD64 and Aarch64 architectures
+- MacOS on AMD64 and Aarch64 (“Apple Silicon”) architectures
 
 - Microsoft Windows 10 and Windows 11 on AMD64
 
-- Android 12 on Aarch64 via [termux](https://termux.dev/) (you'll need to install the rust, binutils
-  and ffmpeg packages, and optionally the mkvtoolnix, vlc and gpac packages). You'll need to disable
+- Android 12 on Aarch64 via [termux](https://termux.dev/) (you’ll need to install the rust, binutils
+  and ffmpeg packages, and optionally the mkvtoolnix, vlc and gpac packages). You’ll need to disable
   the `cookies` feature by building with `--no-default-features`.
 
-- FreeBSD/AMD64 and OpenBSD/AMD64. You'll need to disable the `cookies` feature. Some of the
+- FreeBSD/AMD64 and OpenBSD/AMD64. You’ll need to disable the `cookies` feature. Some of the
   external applications we depend on (e.g. mp4decrypt, Shaka packager) are poorly supported on OpenBSD.
 
 
