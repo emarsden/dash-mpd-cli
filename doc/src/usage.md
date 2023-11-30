@@ -11,12 +11,13 @@ To download from a manifest to a file called `MyVideo.mp4`:
 dash-mpd-cli -v --quality best https://example.com/manifest.mpd -o MyVideo.mp4
 ```
 
-To download including Finnish subtitles (which should be written to a file named `MyVideo.srt` or
+To download including Finnish **subtitles** (which should be written to a file named `MyVideo.srt` or
 `MyVideo.vtt`, depending on the type of subtitles):
 
     dash-mpd-cli -v --quality best --prefer-language fi --write-subs https://example.com/manifest.mpd -o MyVideo.mp4
 
-To know what subtitles and subtitle languages are available, first run: 
+To know what subtitles and subtitle languages are available, first run (this does not download any
+content):
 
     dash-mpd-cli -v -v --simulate https://example.com/manifest.mpd
 
@@ -24,7 +25,7 @@ To save the output to a Matroska container using mkvmerge as a muxer:
 
     dash-mpd-cli --muxer-preference mkv:mkvmerge https://example.com/manifest.mpd -o MyVideo.mkv
 
-To decrypt DRM on the media streams (assuming there are different keys for the audio and the video streams):
+To **decrypt DRM** on the media streams (assuming there are different keys for the audio and the video streams):
 
     dash-mpd-cli --key "43215678123412341234123412341237:12341234123412341234123412341237" \
       --key 43215678123412341234123412341236:12341234123412341234123412341236 \
@@ -34,12 +35,12 @@ To use ffmpeg that is installed in a non-standard location which is not in your 
 
     dash-mpd-cli --ffmpeg-location e:/ffmpeg/ffmpeg.exe https://example.com/manifest.mpd -o MyVideo.mp4
 
-To send necessary cookies to the web server frome Firefox (where you have logged in to the private
+To send necessary **cookies** to the web server from Firefox (where you have logged in to the private
 website):
 
     dash-mpd-cli --cookies-from-browser Firefox https://example.com/manifest.mpd -o MyVideo.mp4
     
-If you want to interrupt a download, type `Ctrl-C` (this works at least on Linux, Windows, MacOS and
+If you want to **interrupt a download**, type `Ctrl-C` (this works at least on Linux, Windows, MacOS and
 termux on Android).
 
 

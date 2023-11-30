@@ -92,7 +92,7 @@ The following features are supported:
   Media Services, and Unified Streaming. Test content is served by different CDNs including Akamai
   and various telecom providers.
   
-- dash-mpd-cli is written in the Rust programming language, meaning that it's high performance and
+- dash-mpd-cli is written in the Rust programming language, meaning that it’s high performance and
   protected from a variety of vulnerabilities that can affect more traditional software.
 
 
@@ -108,6 +108,8 @@ The following are not supported:
   choice for watching live streams.
 
 - XLink elements with actuate=onRequest semantics.
+
+- HLS streaming (m3u8 manifests).
 
 
 
