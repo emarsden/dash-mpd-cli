@@ -58,7 +58,8 @@ LABEL org.opencontainers.image.description="Download media content from a DASH-M
 #   - Shaka packager: MIT
 RUN apk update && \
     apk upgrade && \
-    apk add --no-cache ffmpeg mkvtoolnix bento4 libxslt && \
+    apk add --no-cache ca-certificates ffmpeg mkvtoolnix bento4 libxslt && \
+    update-ca-certificates && \
     mkdir /content && \
     chown root.root /content && \
     chmod a=rwx,o+t /content

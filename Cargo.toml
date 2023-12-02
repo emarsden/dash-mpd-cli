@@ -6,6 +6,7 @@ license = "MIT"
 description = "Download media content from a DASH-MPEG or DASH-WebM MPD manifest."
 readme = "README.md"
 repository = "https://github.com/emarsden/dash-mpd-cli"
+documentation = "https://emarsden.github.io/dash-mpd-cli/"
 keywords = ["video", "streaming", "DASH", "MPEG", "download"]
 categories = ["command-line-utilities", "multimedia", "multimedia::video"]
 edition = "2021"

@@ -61,7 +61,8 @@ LABEL org.opencontainers.image.description="Download media content from a DASH-M
 # built for AMD64.
 RUN apk update && \
     apk upgrade && \
-    apk add --no-cache libc6-compat wget ffmpeg mkvtoolnix bento4 libxslt && \
+    apk add --no-cache ca-certificates libc6-compat wget ffmpeg mkvtoolnix bento4 libxslt && \
+    update-ca-certificates && \
     wget -q -O /tmp/shaka-packager https://github.com/shaka-project/shaka-packager/releases/latest/download/packager-linux-arm64 && \
     mv /tmp/shaka-packager /usr/local/bin && \
     chmod +x /usr/local/bin/shaka-packager && \
