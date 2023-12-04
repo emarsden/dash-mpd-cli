@@ -9,7 +9,22 @@ Linux, Microsoft Windows and MacOS, possibly your NAS device). It’s available 
 Container Registry ghcr.io and automatically built from the sources using GitHub’s useful continuous
 integration services.
 
-It’s packaged as a multiarch container, currently available for linux/amd64 and linux/arm64 platforms.
+It’s packaged as a multiarch container, currently available for linux/amd64 and linux/arm64
+platforms, using the lightweight Alpine Linux distribution. The following helper applications are
+included in the container:
+
+- ffmpeg from Alpine Linux
+
+- mkvmerge from Alpine Linux
+
+- mp4decrypt from the Bento4 suite, from Alpine Linux
+
+- MP4Box from the GPAC suite, compiled from source
+
+- xsltproc from the libxslt package, from Alpine Linux
+
+- Shaka packager, from [Google's Docker image](https://hub.docker.com/r/google/shaka-packager) or [from GitHub](https://github.com/shaka-project/shaka-packager/releases/latest/)
+
 
 
 ```admonish info title="Advantages of running in a container"
