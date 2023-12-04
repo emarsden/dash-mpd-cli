@@ -70,21 +70,20 @@ podman machine start
 (Replace `podman` by `docker` if you prefer that option.)
 ~~~
 
-You can then fetch the container image from the registry and check that it works with:
+You can then fetch the container image (currently around 220 MB) from the GitHub container registry
+ghcr.io and save it to your local disk for later use:
 
-~~~admonish example title="Fetch and check the container"
+~~~admonish example title="Fetch the container image"
 ```shell
-podman run ghcr.io/emarsden/dash-mpd-cli --version
+podman pull ghcr.io/emarsden/dash-mpd-cli
 ```
 ~~~
 
-On the first run, this will fetch the container image (currently around 220 MB) from the GitHub
-Container Registry ghcr.io, and will save it on your local disk for later use. Then to download some
-content from an MPD manifest:
+Then to download some content from an MPD manifest:
 
 ~~~admonish example title="Run dash-mpd-cli in the container"
 ```shell
-podman run -v .:/content ghcr.io/emarsden/dash-mpd-cli https://example.com/manifest.mpd
+podman run --rm -v .:/content ghcr.io/emarsden/dash-mpd-cli https://example.com/manifest.mpd
 ```
 ~~~
 
@@ -95,7 +94,7 @@ If you want your local copy of the container image to be **updated if a newer on
 the registry, add `--pull=newer`:
 
 ```
-podman run --update=newer \
+podman run --rm --pull=newer \
   -v .:/content \
   ghcr.io/emarsden/dash-mpd-cli \
   -v <MPD-URL> -o foo.mp4
