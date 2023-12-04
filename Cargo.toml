@@ -34,7 +34,7 @@ bench_scraper = { version = "0.4.1", features = ["reqwest"], optional = true }
 rustls = "0.21.7"
 rustls-pemfile = "1.0.3"
 tokio = { version = "1.34.0", features = ["rt-multi-thread", "time", "macros"] }
-axum = "0.6.20"
+axum = "0.7.2"
 axum-server = { version = "0.5.1", features = ["tls-rustls"] }
 axum-auth = "0.4"
 quick-xml = { version = "0.31.0", features = ["serialize"] }
