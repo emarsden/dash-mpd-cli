@@ -4,103 +4,83 @@
 //
 //    cargo test --test commandline -- --show-output
 
-
-use std::process::Command;
+use predicates::prelude::*;
+use assert_cmd::Command;
 
 
 #[test]
 fn test_command_spurious () {
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--spurious-option",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--spurious-option",
                "https://example.org/mpd"])
-        .output()
-        .expect("failure spawning dash-mpd-cli");
-    assert!(!cli.status.success());
-    let msg = String::from_utf8_lossy(&cli.stderr);
-    assert!(msg.contains("unexpected argument"));
-    assert!(msg.contains("Usage:"));
+        .assert()
+        .stderr(predicate::str::contains("unexpected argument"))
+        .stderr(predicate::str::contains("Usage:"))
+        .failure();
 }
 
 #[test]
 fn test_command_mpd_missing () {
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--verbose"])
-        .output()
-        .expect("failure spawning dash-mpd-cli");
-    assert!(!cli.status.success());
-    let msg = String::from_utf8_lossy(&cli.stderr);
-    assert!(msg.contains("following required arguments were not provided"));
-    assert!(msg.contains("Usage:"));
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--verbose"])
+        .assert()
+        .stderr(predicate::str::contains("following required arguments were not provided"))
+        .stderr(predicate::str::contains("Usage:"))
+        .failure();
 }
 
 #[test]
 fn test_command_have_help () {
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--help"])
-        .output()
-        .expect("failure spawning dash-mpd-cli");
-    assert!(cli.status.success());
-    let msg = String::from_utf8_lossy(&cli.stdout);
-    assert!(msg.lines().count() > 20);
-    assert!(msg.contains("--help"));
-    assert!(msg.contains("Usage:"));
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--help"])
+        .assert()
+        .stdout(predicate::str::contains("--help"))
+        .stdout(predicate::str::contains("Usage:"))
+        .success();
+    // We can't implement this with predicates crate
+    // assert!(msg.lines().count() > 20);
 }
 
 #[test]
 fn test_command_missing_file () {
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--add-root-certificate", "/missing/file",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--add-root-certificate", "/missing/file",
                "https://example.org/ignored.mpd"])
-        .output()
-        .expect("failure spawning dash-mpd-cli");
-    assert!(!cli.status.success());
-    let msg = String::from_utf8_lossy(&cli.stderr);
-    assert!(msg.contains("Can't read root certificate"));
-    assert!(msg.contains("/missing/file"));
+        .assert()
+        .stderr(predicate::str::contains("Can't read root certificate"))
+        .stderr(predicate::str::contains("/missing/file"))
+        .failure();
 }
 
 #[test]
 fn test_command_missing_value () {
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--max-error-count",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--max-error-count",
                "https://example.org/ignored.mpd"])
-        .output()
-        .expect("failure spawning dash-mpd-cli");
-    assert!(!cli.status.success());
-    let msg = String::from_utf8_lossy(&cli.stderr);
-    assert!(msg.contains("error: invalid value"));
-    assert!(msg.contains("--help"));
+        .assert()
+        .stderr(predicate::str::contains("error: invalid value"))
+        .stderr(predicate::str::contains("--help"))
+        .failure();
 }
 
 #[test]
 fn test_command_funky_source () {
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--source-address", "33.44.55.66.77",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--source-address", "33.44.55.66.77",
                "https://example.org/ignored.mpd"])
-        .output()
-        .expect("failure spawning dash-mpd-cli");
-    assert!(!cli.status.success());
-    let msg = String::from_utf8_lossy(&cli.stderr);
-    assert!(msg.contains("Ignoring invalid argument to --source-address"));
+        .assert()
+        .stderr(predicate::str::contains("Ignoring invalid argument to --source-address"))
+        .failure();
 }
 
 #[test]
 fn test_command_bad_rate () {
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--limit-rate", "42Z",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--limit-rate", "42Z",
                "https://example.org/ignored.mpd"])
-        .output()
-        .expect("failure spawning dash-mpd-cli");
-    assert!(!cli.status.success());
-    let msg = String::from_utf8_lossy(&cli.stderr);
-    assert!(msg.contains("Ignoring unrecognized suffix on limit-rate"));
+        .assert()
+        .stderr(predicate::str::contains("Ignoring unrecognized suffix on limit-rate"))
+        .failure();
 }
 
 

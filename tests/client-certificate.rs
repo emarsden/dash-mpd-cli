@@ -38,9 +38,9 @@ use fs_err as fs;
 use std::net::SocketAddr;
 use std::time::Duration;
 use std::io::BufReader;
-use std::process::Command;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
+use assert_cmd::Command;
 use axum::{routing::get, Router};
 use axum::extract::State;
 use axum::response::{Response, IntoResponse};
@@ -180,26 +180,24 @@ async fn test_add_client_identity() -> Result<(), anyhow::Error> {
 
     // Without the --client-identity-certificate, should see an error from dash-mpd-cli due to the
     // server refusing the connection (with rustls, is "channel closed").
-    let failed = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--add-root-certificate", "tests/fixtures/root-CA.crt",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--add-root-certificate", "tests/fixtures/root-CA.crt",
                "https://localhost:6666/mpd"])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(!failed.status.success());
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v", "-v", "-v",
+        .assert()
+        .failure();
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v", "-v", "-v",
                "--add-root-certificate", "tests/fixtures/root-CA.crt",
                "--client-identity-certificate", "tests/fixtures/client-id.pem",
                "https://localhost:6666/mpd"])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
+        .assert()
+        .success();
+    /* TODO: turn this into a predicate::str 
     let msg = String::from_utf8_lossy(&cli.stderr);
     if msg.len() > 0 {
         eprintln!("cli stderr: {msg}");
     }
-    assert!(cli.status.success());
+    */
 
     // Check that the init.mp4 segment was fetched: request counter should be 1.
     let txt = client.get("https://localhost:6666/status")

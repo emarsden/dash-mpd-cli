@@ -10,9 +10,10 @@ use fs_err as fs;
 use std::env;
 use std::time::Duration;
 use std::path::PathBuf;
-use std::process::Command;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
+use assert_cmd::Command;
+use predicates::prelude::*;
 use axum::{routing::get, Router};
 use axum::extract::State;
 use axum::response::{Response, IntoResponse};
@@ -116,13 +117,11 @@ async fn test_xslt_rewrite_media() -> Result<()> {
     xslt.push("rewrite-init-media-segments");
     xslt.set_extension("xslt");
     let v = env::temp_dir().join("xslt_video.mp4");
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--xslt-stylesheet", &xslt.to_string_lossy(),
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--xslt-stylesheet", &xslt.to_string_lossy(),
                "-o", &v.to_string_lossy(), mpd_url])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
+        .assert()
+        .success();
     // Check the total number of requested media segments corresponds to what we expect.
     let txt = client.get("http://localhost:6668/status")
         .send().await?
@@ -152,14 +151,12 @@ fn test_xslt_drop_audio() {
     xslt.push("fixtures");
     xslt.push("rewrite-drop-audio");
     xslt.set_extension("xslt");
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
                "--xslt-stylesheet", &xslt.to_string_lossy(),
                "-o", &out.to_string_lossy(), mpd_url])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
+        .assert()
+        .success();
     check_file_size_approx(&out, 11_005_923);
     let format = FileFormat::from_file(out.clone()).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
@@ -186,14 +183,12 @@ fn test_xslt_rick() {
     xslt.push("fixtures");
     xslt.push("rewrite-rickroll");
     xslt.set_extension("xslt");
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
                "--xslt-stylesheet", &xslt.to_string_lossy(),
                "-o", &out.to_string_lossy(), mpd_url])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
+        .assert()
+        .success();
     check_file_size_approx(&out, 7_082_395);
     let format = FileFormat::from_file(out.clone()).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
@@ -223,15 +218,13 @@ fn test_xslt_multiple_stylesheets() {
     xslt_clean.push("fixtures");
     xslt_clean.push("rewrite-drop-dai");
     xslt_clean.set_extension("xslt");
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
                "--xslt-stylesheet", &xslt_rick.to_string_lossy(),
                "--xslt-stylesheet", &xslt_clean.to_string_lossy(),
                "-o", &out.to_string_lossy(), mpd_url])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
+        .assert()
+        .success();
     check_file_size_approx(&out, 12_975_377);
     let format = FileFormat::from_file(out.clone()).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
@@ -255,16 +248,13 @@ fn test_xslt_stylesheet_error() {
     xslt.push("fixtures");
     xslt.push("rewrite-stylesheet-error");
     xslt.set_extension("xslt");
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
                "--xslt-stylesheet", &xslt.to_string_lossy(),
                "-o", &out.to_string_lossy(), mpd_url])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    let stderr = String::from_utf8_lossy(&cli.stderr);
-    println!("STDERR> {stderr}");
-    assert!(stderr.contains("xsltproc returned exit"));
+        .assert()
+        .stderr(predicate::str::contains("xsltproc returned exit"))
+        .failure();
 }
 
 
@@ -274,15 +264,12 @@ fn test_xslt_stylesheet_missing() {
     let mpd_url = "https://dash.akamaized.net/akamai/test/index3-original.mpd";
     let out = env::temp_dir().join("unexist.mp4");
     let xslt = env::temp_dir().join("missing.xslt");
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
                "--xslt-stylesheet", &xslt.to_string_lossy(),
                "-o", &out.to_string_lossy(), mpd_url])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    // We would like to access the return code from running our bin, but "cargo run" doesn't return that.
-    let stderr = String::from_utf8_lossy(&cli.stderr);
-    assert!(stderr.contains("failed to load external entity"));
+        .assert()
+        .stderr(predicate::str::contains("failed to load external entity"))
+        .failure();
 }
 

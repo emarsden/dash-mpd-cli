@@ -11,9 +11,11 @@
 pub mod common;
 use fs_err as fs;
 use std::env;
-use std::process::Command;
 use ffprobe::ffprobe;
 use file_format::FileFormat;
+use predicates::prelude::*;
+use assert_cmd::Command;
+use assert_fs::{prelude::*, TempDir};
 use common::check_file_size_approx;
 
 
@@ -24,22 +26,22 @@ fn test_dl_mp4 () {
         return;
     }
     let mpd = "https://cloudflarestream.com/31c9291ab41fac05471db4e73aa11717/manifest/video.mpd";
-    let outpath = env::temp_dir().join("cf.mp4");
-    if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
-    }
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v",
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("cf.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
                "--quality", "worst",
                "--write-subs",
-               "-o", &outpath.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
-    check_file_size_approx(&outpath, 325_334);
-    let format = FileFormat::from_file(outpath.clone()).unwrap();
+               "-o", &out.to_string_lossy(), mpd])
+        .assert()
+        .success();
+    check_file_size_approx(&out, 325_334);
+    let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
+    let entries = fs::read_dir(tmpd.path()).unwrap();
+    let count = entries.count();
+    assert_eq!(count, 1, "Expecting a single output file, got {count}");
 }
 
 
@@ -49,25 +51,25 @@ fn test_dl_mp4a () {
         return;
     }
     let mpd = "https://dash.akamaized.net/dash264/TestCases/3a/fraunhofer/aac-lc_stereo_without_video/Sintel/sintel_audio_only_aaclc_stereo_sidx.mpd";
-    let outpath = env::temp_dir().join("sintel-audio.mp4");
-    if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
-    }
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-o", &outpath.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
-    check_file_size_approx(&outpath, 7_456_334);
-    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("sintel-audio.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-o", &out.to_string_lossy(), mpd])
+        .assert()
+        .success();
+    check_file_size_approx(&out, 7_456_334);
+    let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Audio);
-    let meta = ffprobe(outpath.clone()).unwrap();
+    let meta = ffprobe(&out).unwrap();
     assert_eq!(meta.streams.len(), 1);
     let audio = &meta.streams[0];
     assert_eq!(audio.codec_type, Some(String::from("audio")));
     assert_eq!(audio.codec_name, Some(String::from("aac")));
     assert!(audio.width.is_none());
+    let entries = fs::read_dir(tmpd.path()).unwrap();
+    let count = entries.count();
+    assert_eq!(count, 1, "Expecting a single output file, got {count}");
 }
 
 
@@ -77,39 +79,36 @@ fn test_dl_audio_flac () {
         return;
     }
     let mpd = "http://rdmedia.bbc.co.uk/testcard/vod/manifests/radio-flac-en.mpd";
-    let outpath = env::temp_dir().join("bbcradio-flac.mp4");
-    if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
-    }
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v",
-               "-o", &outpath.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
-    check_file_size_approx(&outpath, 81_603_640);
-    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("bbcradio-flac.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
+               "-o", &out.to_string_lossy(), mpd])
+        .assert()
+        .success();
+    check_file_size_approx(&out, 81_603_640);
+    let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Audio);
-    let meta = ffprobe(outpath.clone()).unwrap();
+    let meta = ffprobe(&out).unwrap();
     assert_eq!(meta.streams.len(), 1);
     let audio = &meta.streams[0];
     assert_eq!(audio.codec_type, Some(String::from("audio")));
     assert_eq!(audio.codec_name, Some(String::from("flac")));
     assert!(audio.width.is_none());
+    let entries = fs::read_dir(tmpd.path()).unwrap();
+    let count = entries.count();
+    assert_eq!(count, 1, "Expecting a single output file, got {count}");
 }
 
 
 // The manifest contains minBufferTime="4S", which is an invalid format for an xs:Duration.
 #[test]
 fn test_parse_failure_duration () {
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "https://dash.akamaized.net/akamai/test/manifest3.mpd"])
-        .output()
-        .expect("failure spawning dash-mpd-cli");
-    assert!(!cli.status.success());
-    let msg = String::from_utf8_lossy(&cli.stderr);
-    assert!(msg.contains("Download failed"));
-    assert!(msg.contains("invalid Duration"));
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["https://dash.akamaized.net/akamai/test/manifest3.mpd"])
+        .assert()
+        .stderr(predicate::str::contains("Download failed"))
+        .stderr(predicate::str::contains("invalid Duration"))
+        .failure();
 }

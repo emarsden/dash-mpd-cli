@@ -31,7 +31,9 @@ lazy_static! {
 
 fn container_run(args: Vec<&str>) {
     let vspec = format!("{}:/content", TMP.display());
-    let mut cargs = vec!["run", "--volume", &vspec,
+    let mut cargs = vec!["run", "--rm",
+                         "--pull=newer",
+                         "--volume", &vspec,
                          "ghcr.io/emarsden/dash-mpd-cli"];
     for a in &args {
         cargs.push(a);
@@ -85,9 +87,6 @@ fn test_container_mp4 () {
     let mpd = "https://cloudflarestream.com/31c9291ab41fac05471db4e73aa11717/manifest/video.mpd";
     let out = Path::new("cf.mp4");
     let outpath = TMP.join(out);
-    if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
-    }
     container_run(vec!["-o", &out.to_string_lossy(), "--quality", "worst", mpd]);
     check_file_size_approx(&outpath, 325_334);
     let format = FileFormat::from_file(outpath.clone()).unwrap();

@@ -17,9 +17,9 @@ pub mod common;
 use fs_err as fs;
 use std::env;
 use std::time::Duration;
-use std::process::Command;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
+use assert_cmd::Command;
 use axum::{routing::get, Router};
 use axum::extract::State;
 use axum::response::{Response, IntoResponse};
@@ -147,15 +147,13 @@ async fn test_bearer_auth() -> Result<()> {
     // were requested. We expect 2 segment requests because our verbosity level of 2 means that the
     // init segment will be retrieved twice, one of those times to print the PSSH if it is present.
     let outpath = env::temp_dir().join("bearer_auth.mp4");
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v", "-v", "-v",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v", "-v", "-v",
                "--auth-bearer", "eyFoobles",
                "-o", outpath.to_str().unwrap(),
                "http://localhost:6666/mpd"])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
+        .assert()
+        .success();
     assert!(fs::metadata(outpath).is_ok());
     let txt = client.get("http://localhost:6666/status")
         .send().await?
@@ -167,15 +165,13 @@ async fn test_bearer_auth() -> Result<()> {
     // This time we make the request in quiet mode and we should see only a single additional
     // request to the init segment.
     let outpath = env::temp_dir().join("bearer_auth2.mp4");
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--quiet",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--quiet",
                "--auth-bearer", "eyFoobles",
                "-o", outpath.to_str().unwrap(),
                "http://localhost:6666/mpd"])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
+        .assert()
+        .success();
     assert!(fs::metadata(outpath).is_ok());
     let txt = client.get("http://localhost:6666/status")
         .send().await?

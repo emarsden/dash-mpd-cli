@@ -9,7 +9,8 @@ use fs_err as fs;
 use std::env;
 use std::path::PathBuf;
 use std::time::Duration;
-use std::process::Command;
+use predicates::prelude::*;
+use assert_cmd::Command;
 use axum::{routing::get, Router};
 use axum::http::header;
 
@@ -19,30 +20,26 @@ fn test_conformity_empty_period() {
     // This manifest contains an empty Period. Periods should have at least one AdaptationSet.
     let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_empty_period.mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--simulate",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
-    let stderr = String::from_utf8_lossy(&cli.stderr);
-    assert!(stderr.contains("contains no AdaptationSet elements"));
+        .assert()
+        .stderr(predicate::str::contains("contains no AdaptationSet elements"))
+        // This conformity check only generates a warning
+        .success();
 }
 
 #[test]
 fn test_conformity_maxheight () {
     let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_maxHeight.mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--simulate",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
-    let stderr = String::from_utf8_lossy(&cli.stderr);
-    assert!(stderr.contains("invalid @maxHeight on AdaptationSet"));
+        .assert()
+        .stderr(predicate::str::contains("invalid @maxHeight on AdaptationSet"))
+        // This conformity check only generates a warning
+        .success();
 }
 
 
@@ -50,15 +47,13 @@ fn test_conformity_maxheight () {
 fn test_conformity_invalid_maxwidth() {
     let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_maxWidth.mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--simulate",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
-    let stderr = String::from_utf8_lossy(&cli.stderr);
-    assert!(stderr.contains("invalid @maxWidth on AdaptationSet"));
+        .assert()
+        .stderr(predicate::str::contains("invalid @maxWidth on AdaptationSet"))
+        // This conformity check only generates a warning
+        .success();
 }
 
 
@@ -68,15 +63,13 @@ fn test_conformity_invalid_maxwidth() {
 fn test_conformity_invalid_maxheight() {
     let mpd = "https://vod.infiniteplatform.tv/dash/vod-clear/ElephantsDream/default.mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--simulate",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
-    let stderr = String::from_utf8_lossy(&cli.stderr);
-    assert!(stderr.contains("invalid @maxHeight on AdaptationSet"));
+        .assert()
+        .stderr(predicate::str::contains("invalid @maxHeight on AdaptationSet"))
+        // This conformity check only generates a warning
+        .success();
 }
 
 
@@ -84,15 +77,13 @@ fn test_conformity_invalid_maxheight() {
 fn test_conformity_invalid_segment_duration() {
     let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_segmenttimeline_maxsegduration.mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--simulate",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
-    let stderr = String::from_utf8_lossy(&cli.stderr);
-    assert!(stderr.contains("segment@d > @maxSegmentDuration"));
+        .assert()
+        .stderr(predicate::str::contains("segment@d > @maxSegmentDuration"))
+        // This conformity check only generates a warning
+        .success();
 }
 
 
@@ -123,15 +114,14 @@ async fn test_conformity_invalid_maxsegmentduration() {
 
     let mpd = "http://localhost:6666/mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--simulate",
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
-    let stderr = String::from_utf8_lossy(&cli.stderr);
-    assert!(stderr.contains("segment@d > @maxSegmentDuration"));
+        .assert()
+        .stderr(predicate::str::contains("segment@d > @maxSegmentDuration"))
+        // This conformity check only generates a warning, but the download fails because it's a dynamic
+        // manifest.
+        .failure();
     server_handle.shutdown();
 }
 

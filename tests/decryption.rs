@@ -11,10 +11,11 @@
 pub mod common;
 use fs_err as fs;
 use std::env;
-use std::process::Command;
 use ffprobe::ffprobe;
 use file_format::FileFormat;
-use common::{check_file_size_approx, ffmpeg_approval};
+use assert_cmd::Command;
+use assert_fs::{prelude::*, TempDir};
+use common::check_file_size_approx;
 
 
 #[test]
@@ -23,22 +24,21 @@ fn test_decryption_widevine_cenc () {
         return;
     }
     let mpd = "https://refapp.hbbtv.org/videos/spring_h265_v8/cenc/manifest_wvcenc.mpd";
-    let outpath = env::temp_dir().join("spring.mp4");
-    if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
-    }
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v",
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("spring.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
                "--quality", "worst",
                "--key", "43215678123412341234123412341237:12341234123412341234123412341237",
                "--key", "43215678123412341234123412341236:12341234123412341234123412341236",
-               "-o", &outpath.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
-    check_file_size_approx(&outpath, 33_746_341);
-    let _ = fs::remove_file(outpath);
+               "-o", &out.to_string_lossy(), mpd])
+        .assert()
+        .success();
+    check_file_size_approx(&out, 33_746_341);
+    let entries = fs::read_dir(tmpd.path()).unwrap();
+    let count = entries.count();
+    assert_eq!(count, 1, "Expecting a single output file, got {count}");
 }
 
 #[test]
@@ -47,22 +47,21 @@ fn test_decryption_widevine_cbcs () {
         return;
     }
     let mpd = "https://refapp.hbbtv.org/videos/tears_of_steel_h265_v8/cbcs/manifest_wvcenc.mpd";
-    let outpath = env::temp_dir().join("tears-steel.mp4");
-    if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
-    }
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v",
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("tears-steel.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
                "--quality", "worst",
                "--key", "43215678123412341234123412341237:12341234123412341234123412341237",
                "--key", "43215678123412341234123412341236:12341234123412341234123412341236",
-               "-o", &outpath.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
-    check_file_size_approx(&outpath, 79_731_116);
-    let _ = fs::remove_file(outpath);
+               "-o", &out.to_string_lossy(), mpd])
+        .assert()
+        .success();
+    check_file_size_approx(&out, 79_731_116);
+    let entries = fs::read_dir(tmpd.path()).unwrap();
+    let count = entries.count();
+    assert_eq!(count, 1, "Expecting a single output file, got {count}");
 }
 
 
@@ -72,18 +71,20 @@ fn test_decryption_playready_cenc () {
         return;
     }
     let mpd = "https://refapp.hbbtv.org/videos/00_llama_h264_v8_8s/cenc/manifest_prcenc.mpd";
-    let outpath = env::temp_dir().join("llama.mp4");
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v",
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("llama.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
                "--quality", "worst",
                "--key", "43215678123412341234123412341236:12341234123412341234123412341236",
-               "-o", &outpath.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
-    check_file_size_approx(&outpath, 26_420_624);
-    let _ = fs::remove_file(outpath);
+               "-o", &out.to_string_lossy(), mpd])
+        .assert()
+        .success();
+    check_file_size_approx(&out, 26_420_624);
+    let entries = fs::read_dir(tmpd.path()).unwrap();
+    let count = entries.count();
+    assert_eq!(count, 1, "Expecting a single output file, got {count}");
 }
 
 #[test]
@@ -92,18 +93,20 @@ fn test_decryption_marlin_cenc () {
         return;
     }
     let mpd = "https://refapp.hbbtv.org/videos/agent327_h264_v8/cenc/manifest_mlcenc.mpd";
-    let outpath = env::temp_dir().join("llama-cenc.mp4");
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v",
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("llama-cenc.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
                "--quality", "worst",
                "--key", "43215678123412341234123412341234:12341234123412341234123412341234",
-               "-o", &outpath.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
-    check_file_size_approx(&outpath, 14_357_917);
-    let _ = fs::remove_file(outpath);
+               "-o", &out.to_string_lossy(), mpd])
+        .assert()
+        .success();
+    check_file_size_approx(&out, 14_357_917);
+    let entries = fs::read_dir(tmpd.path()).unwrap();
+    let count = entries.count();
+    assert_eq!(count, 1, "Expecting a single output file, got {count}");
 }
 
 #[test]
@@ -112,21 +115,20 @@ fn test_decryption_marlin_cbcs () {
         return;
     }
     let mpd = "https://refapp.hbbtv.org/videos/agent327_h264_v8/cbcs/manifest_mlcenc.mpd";
-    let outpath = env::temp_dir().join("llama-cbcs.mp4");
-    if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
-    }
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v",
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("llama-cbcs.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
                "--quality", "worst",
                "--key", "43215678123412341234123412341234:12341234123412341234123412341234",
-               "-o", &outpath.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
-    check_file_size_approx(&outpath, 14_357_925);
-    let _ = fs::remove_file(outpath);
+               "-o", &out.to_string_lossy(), mpd])
+        .assert()
+        .success();
+    check_file_size_approx(&out, 14_357_925);
+    let entries = fs::read_dir(tmpd.path()).unwrap();
+    let count = entries.count();
+    assert_eq!(count, 1, "Expecting a single output file, got {count}");
 }
 
 
@@ -136,23 +138,22 @@ fn test_decryption_cmaf_h265_multikey () {
         return;
     }
     let mpd = "https://media.axprod.net/TestVectors/H265/protected_cmaf_1080p_h265_multikey/manifest.mpd";
-    let outpath = env::temp_dir().join("axinom-h264-multikey.mp4");
-    if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
-    }
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v",
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("axinom-h264-multikey.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
                "--quality", "worst",
                "--key", "53dc3eaa5164410a8f4ee15113b43040:620045a34e839061ee2e9b7798fdf89b",
                "--key", "9dbace9e41034c5296aa63227dc5f773:a776f83276a107a3c322f9dbd6d4f48c",
                "--key", "a76f0ca68e7d40d08a37906f3e24dde2:2a99b42f08005ab4b57af20f4da3cc05",
-               "-o", &outpath.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
-    check_file_size_approx(&outpath, 48_233_447);
-    let _ = fs::remove_file(outpath);
+               "-o", &out.to_string_lossy(), mpd])
+        .assert()
+        .success();
+    check_file_size_approx(&out, 48_233_447);
+    let entries = fs::read_dir(tmpd.path()).unwrap();
+    let count = entries.count();
+    assert_eq!(count, 1, "Expecting a single output file, got {count}");
 }
 
 
@@ -160,48 +161,48 @@ fn test_decryption_cmaf_h265_multikey () {
 #[test]
 fn test_decryption_cenc_kaltura () {
     let mpd = "https://cdnapisec.kaltura.com/p/2433871/sp/243387100/playManifest/protocol/https//entryId/1_pgssezc1/format/mpegdash/tags/mbr/f/a.mpd";
-    let outpath = env::temp_dir().join("kaltura.mp4");
-    if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
-    }
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "--mp4decrypt-location", "mp4decrypt",
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("kaltura.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--mp4decrypt-location", "mp4decrypt",
                "--key", "a07c5d499dcead0fb416fed5913967be:caee457911302478487e6680bf0b3d1b",
-               "-o", &outpath.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
-    assert!(cli.status.success());
-    check_file_size_approx(&outpath, 1_323_079);
-    let format = FileFormat::from_file(outpath.clone()).unwrap();
+               "-o", &out.to_string_lossy(), mpd])
+        .assert()
+        .failure();
+    /* MPD has disappeared in December 2023
+    check_file_size_approx(&out, 1_323_079);
+    let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
-    let meta = ffprobe(outpath.clone()).unwrap();
+    let meta = ffprobe(out).unwrap();
     assert_eq!(meta.streams.len(), 2);
-    let audio = &meta.streams[1];
-    assert_eq!(audio.codec_type, Some(String::from("audio")));
+    let audio = meta.streams.iter()
+        .find(|s| s.codec_type.eq(&Some(String::from("audio"))))
+        .expect("finding audio stream");
     assert_eq!(audio.codec_name, Some(String::from("aac")));
     assert!(audio.width.is_none());
     let tags = audio.tags.as_ref().unwrap();
     assert_eq!(tags.language, Some(String::from("eng")));
-    let _ = fs::remove_file(outpath);
+    let entries = fs::read_dir(tmpd.path()).unwrap();
+    let count = entries.count();
+    assert_eq!(count, 1, "Expecting a single output file, got {count}");
+    */
 }
 
 
 #[test]
 fn test_decryption_small () {
     let mpd = "https://m.dtv.fi/dash/dasherh264/drm/manifest_clearkey.mpd";
-    let outpath = env::temp_dir().join("caminandes-mp4decrypt.mp4");
-    if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
-    }
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v",
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("caminandes.mp4");
+    let cli = Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
                "--quality", "worst",
                "--key", "43215678123412341234123412341234:12341234123412341234123412341234",
-               "-o", &outpath.to_string_lossy(), mpd])
+               "-o", &out.to_string_lossy(), mpd])
         .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
+        .expect("failed spawning cli");
     let msg = String::from_utf8_lossy(&cli.stdout);
     if msg.len() > 0 {
         println!("dash-mpd-cli stdout: {msg}");
@@ -211,8 +212,12 @@ fn test_decryption_small () {
         println!("dash-mpd-cli stderr: {msg}");
     }
     assert!(cli.status.success());
-    check_file_size_approx(&outpath, 6_975_147);
-    let _ = fs::remove_file(outpath);
+    check_file_size_approx(&out, 6_975_147);
+    let format = FileFormat::from_file(&out).unwrap();
+    assert_eq!(format, FileFormat::Mpeg4Part14Video);
+    let entries = fs::read_dir(tmpd.path()).unwrap();
+    let count = entries.count();
+    assert_eq!(count, 1, "Expecting a single output file, got {count}");
 }
 
 
@@ -221,13 +226,11 @@ fn test_decryption_small () {
 #[test]
 fn test_decryption_webm() {
     let mpd = "https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine/dash.mpd";
-    let outpath = env::temp_dir().join("angel.webm");
-    if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
-    }
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v",
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("angel.webm");
+    let cli = Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
                "--quality", "worst",
                "--decryption-application", "shaka",
                "--key", "4d97930a3d7b55fa81d0028653f5e499:429ec76475e7a952d224d8ef867f12b6",
@@ -235,9 +238,9 @@ fn test_decryption_webm() {
                "--key", "6f1729072b4a5cd288c916e11846b89e:a84b4bd66901874556093454c075e2c6",
                "--key", "800aacaa522958ae888062b5695db6bf:775dbf7289c4cc5847becd571f536ff2",
                "--key", "67b30c86756f57c5a0a38a23ac8c9178:efa2878c2ccf6dd47ab349fcf90e6259",
-               "-o", &outpath.to_string_lossy(), mpd])
+               "-o", &out.to_string_lossy(), mpd])
         .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
+        .expect("failed spawning cli");
     let msg = String::from_utf8_lossy(&cli.stdout);
     if msg.len() > 0 {
         println!("dash-mpd-cli stdout: {msg}");
@@ -247,8 +250,8 @@ fn test_decryption_webm() {
         println!("dash-mpd-cli stderr: {msg}");
     }
     assert!(cli.status.success());
-    check_file_size_approx(&outpath, 1_331_284);
-    let meta = ffprobe(outpath.clone()).unwrap();
+    check_file_size_approx(&out, 1_331_284);
+    let meta = ffprobe(&out).unwrap();
     assert_eq!(meta.streams.len(), 2);
     // The order of audio and video streams in the output WebM container is unreliable with Shaka
     // packager, so we need to test this carefully.
@@ -266,7 +269,7 @@ fn test_decryption_webm() {
     let ffmpeg = Command::new("ffmpeg")
         .args(["-nostdin",
                "-v", "error",
-               "-i", &outpath.to_string_lossy(),
+               "-i", &out.to_string_lossy(),
                "-f", "null", "-"])
         .output()
         .expect("spawning ffmpeg");
@@ -275,26 +278,26 @@ fn test_decryption_webm() {
         eprintln!("FFMPEG stderr {msg}");
     }
     assert!(msg.len() == 0);
-    let _ = fs::remove_file(outpath);
+    let entries = fs::read_dir(tmpd.path()).unwrap();
+    let count = entries.count();
+    assert_eq!(count, 1, "Expecting a single output file, got {count}");
 }
 
 
 #[test]
 fn test_decryption_small_shaka () {
     let mpd = "https://m.dtv.fi/dash/dasherh264/drm/manifest_clearkey.mpd";
-    let outpath = env::temp_dir().join("caminandes.mp4");
-    if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
-    }
-    let cli = Command::new("cargo")
-        .args(["run", "--no-default-features", "--",
-               "-v",
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("caminandes.mp4");
+    let cli = Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
                "--quality", "worst",
                "--decryption-application", "shaka",
                "--key", "43215678123412341234123412341234:12341234123412341234123412341234",
-               "-o", &outpath.to_string_lossy(), mpd])
+               "-o", &out.to_string_lossy(), mpd])
         .output()
-        .expect("failed spawning cargo run / dash-mpd-cli");
+        .expect("failed spawning cli");
     let msg = String::from_utf8_lossy(&cli.stdout);
     if msg.len() > 0 {
         println!("dash-mpd-cli stdout: {msg}");
@@ -304,8 +307,12 @@ fn test_decryption_small_shaka () {
         println!("dash-mpd-cli stderr: {msg}");
     }
     assert!(cli.status.success());
-    check_file_size_approx(&outpath, 6_975_147);
+    check_file_size_approx(&out, 6_975_147);
+    let format = FileFormat::from_file(&out).unwrap();
+    assert_eq!(format, FileFormat::Mpeg4Part14Video);
     // There are unexpected ffmpeg errors shown on CI machines for this output file
-    // assert!(ffmpeg_approval(&outpath));
-    let _ = fs::remove_file(outpath);
+    // assert!(ffmpeg_approval(&out));
+    let entries = fs::read_dir(tmpd.path()).unwrap();
+    let count = entries.count();
+    assert_eq!(count, 1, "Expecting a single output file, got {count}");
 }
