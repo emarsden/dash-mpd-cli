@@ -727,6 +727,7 @@ async fn main () -> Result<()> {
     if let Some(out) = matches.get_one::<String>("output-file") {
         if let Err(e) = dl.download_to(out).await {
             eprintln!("{}: {e}", "Download failed".bold().red());
+            std::process::exit(2);
         }
     } else {
         match dl.download().await {
