@@ -2,16 +2,15 @@
 
 The application, alongside the external helper applications that it uses for muxing media streams,
 for extracting/converting subtitle streams, and for decrypting content infected with DRM, are
-available as a container, which is probably the easiest and safest way to run it. The container is
-packaged with a minimal Alpine Linux installation and can be run on any host that can run
-Linux/AMD64 containers (using [Podman](https://podman.io/) or [Docker](https://www.docker.com/) on
-Linux, Microsoft Windows and MacOS, possibly your NAS device). It’s available in the GitHub
-Container Registry ghcr.io and automatically built from the sources using GitHub’s useful continuous
-integration services.
+available as a container, which is probably the easiest and safest way to run it. The container can
+be run on any host that can run Linux/AMD64 containers (using [Podman](https://podman.io/) or
+[Docker](https://www.docker.com/) on Linux, Microsoft Windows and MacOS, possibly your NAS device).
+It’s available in the GitHub Container Registry ghcr.io and automatically built from the sources
+using GitHub’s useful continuous integration services.
 
-It’s packaged as a multiarch container, currently available for linux/amd64 and linux/arm64
-platforms, using the lightweight Alpine Linux distribution. The following helper applications are
-included in the container:
+It’s packaged as a **multiarch container**, currently available for linux/amd64 and linux/arm64
+platforms, using the lightweight [Alpine Linux distribution](https://www.alpinelinux.org/). The
+following **helper applications** are included in the container:
 
 - ffmpeg from Alpine Linux
 
@@ -70,6 +69,8 @@ podman machine start
 (Replace `podman` by `docker` if you prefer that option.)
 ~~~
 
+This step is not necessary on Linux.
+
 You can then fetch the container image (currently around 220 MB) from the GitHub container registry
 ghcr.io and save it to your local disk for later use:
 
@@ -125,17 +126,17 @@ In the commandline show above, your current working directory (`.`) will be moun
 as `/content`, which is always the working directory in the container. This means that an output
 file specified without a full path, such as `foo.mp4`, will be saved to your current working
 directory on the host machine. If you specify a full path for the output file, for example `-o
-/tmp/foo.mp4`, note that this will output to the temporary directory in the container, which you
+/tmp/foo.mp4`, this will output to the temporary directory in the container, which you
 won’t have access to once the download has finished.
 
 This sandboxing restriction also applies to any files you need to pass into the container, such as
 an XSLT stylesheet for rewriting the manifest. If you’re running podman from your `Videos`
 directory, a stylesheet has to be in `Videos` or a subdirectory, or the container won’t be able to
-see it, and you should provide a relative name rather than an absolute name to the container. If the
-stylesheet is in the `rewrites` directory, for example:
+see it. Therefore, you should provide a relative name rather than an absolute name to the container.
+If the stylesheet is in the `rewrites` directory, for example:
 
 ```shell
-podman run --update=newer \
+podman run --rm --pull=newer \
   -v .:/content \ 
   --xslt-stylesheet rewrites/my-rewrites.xslt \
   ghcr.io/emarsden/dash-mpd-cli \
@@ -153,5 +154,5 @@ running as root (runsc doesn’t currently support rootless operation).
 
 ```shell
 sudo apt install runsc
-sudo podman --runtime=runsc run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+sudo podman --runtime=runsc run --rm -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
 ```
