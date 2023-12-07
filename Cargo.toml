@@ -28,6 +28,7 @@ number_prefix = "0.4.0"
 anyhow = "1.0.75"
 log = "0.4.20"
 env_logger = "0.10.0"
+tempfile = "3.8.1"
 bench_scraper = { version = "0.4.1", features = ["reqwest"], optional = true }
 
 [dev-dependencies]

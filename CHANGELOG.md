@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.11] - Unreleased
+
+- New commandline argument `--drop-elements` which takes an XPath expression as argument. XML
+  elements in the MPD manifest that match this XPath expression will be removed from the manifest
+  before downloading. This may be useful to help select an audio track based on attributes such as
+  its role or label, or to avoid overloading the servers that serve advertising content.
+
+
 ## [0.2.10] - 2023-11-28
 
 - A [user manual](https://emarsden.github.io/dash-mpd-cli/) is available on GitHub pages.

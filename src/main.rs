@@ -32,7 +32,7 @@ use reqwest::header;
 use clap::{Arg, ArgAction, ValueHint};
 use number_prefix::{NumberPrefix, Prefix};
 use indicatif::{ProgressBar, ProgressStyle};
-use anyhow::Result;
+use anyhow::{Result, Context};
 use dash_mpd::fetch::DashDownloader;
 use dash_mpd::fetch::ProgressObserver;
 
@@ -225,6 +225,12 @@ async fn main () -> Result<()> {
              .num_args(1)
              .value_hint(ValueHint::FilePath)
              .long_help("XSLT stylesheet with rewrite rules to be applied to the manifest before downloading media content. Stylesheets are applied using the xsltproc commandline application, which implements XSLT 1.0. You can use this option multiple times. This option is currently experimental."))
+        .arg(Arg::new("drop-elements")
+             .long("drop-elements")
+             .value_name("XPATH")
+             .action(ArgAction::Append)
+             .num_args(1)
+             .long_help("XML elements in the MPD manifest that match this XPATH expression will be removed before downloading proceeds. You can use this option multiple times. This option is currently experimental."))
         .arg(Arg::new("video-only")
              .long("video-only")
              .action(ArgAction::SetTrue)
@@ -712,8 +718,31 @@ async fn main () -> Result<()> {
     if let Some(lang) = matches.get_one::<String>("prefer-language") {
         dl = dl.prefer_language(lang.to_string());
     }
-    if let Some(stylesheet) = matches.get_one::<String>("xslt-stylesheet") {
-        dl = dl.with_xslt_stylesheet(stylesheet);
+    if let Some(stylesheets) = matches.get_many::<String>("xslt-stylesheet") {
+        for stylesheet in stylesheets {
+            dl = dl.with_xslt_stylesheet(stylesheet);
+        }
+    }
+    if let Some(xpaths) = matches.get_many::<String>("drop-elements") {
+        for xpath in xpaths {
+            let xslt = format!(r#"<?xml version="1.0" encoding="utf-8"?>
+  <xsl:stylesheet version="1.0"
+     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+     xmlns:mpd="urn:mpeg:dash:schema:mpd:2011">
+  <xsl:template match="@*|node()">
+    <xsl:copy><xsl:apply-templates select="@*|node()"/></xsl:copy></xsl:template>
+  <xsl:template match="{}" />
+</xsl:stylesheet>"#, xpath);
+            let stylesheet = tempfile::Builder::new()
+                .suffix(".xslt")
+                .rand_bytes(7)
+                .tempfile()
+                .context("creating temporary XSLT stylesheet")?;
+            fs::write(&stylesheet, xslt)
+                .context("writing XSLT to temporary stylesheet file")?;
+            let (_, stylesheet_path) = stylesheet.keep()?;
+            dl = dl.with_xslt_stylesheet(stylesheet_path);
+        }
     }
     if let Some(user) = matches.get_one::<String>("auth-username") {
         if let Some(password) = matches.get_one::<String>("auth-password") {

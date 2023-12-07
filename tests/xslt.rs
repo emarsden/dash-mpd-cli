@@ -21,6 +21,7 @@ use axum::http::{header, StatusCode};
 use axum::body::{Full, Bytes};
 use ffprobe::ffprobe;
 use file_format::FileFormat;
+use assert_fs::{prelude::*, TempDir};
 use anyhow::{Context, Result};
 use env_logger::Env;
 use common::{check_file_size_approx, generate_minimal_mp4};
@@ -116,10 +117,12 @@ async fn test_xslt_rewrite_media() -> Result<()> {
     xslt.push("fixtures");
     xslt.push("rewrite-init-media-segments");
     xslt.set_extension("xslt");
-    let v = env::temp_dir().join("xslt_video.mp4");
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("xslt_video.mp4");
     Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
         .args(["--xslt-stylesheet", &xslt.to_string_lossy(),
-               "-o", &v.to_string_lossy(), mpd_url])
+               "-o", &out.to_string_lossy(), mpd_url])
         .assert()
         .success();
     // Check the total number of requested media segments corresponds to what we expect.
@@ -145,7 +148,9 @@ fn test_xslt_drop_audio() {
         return;
     }
     let mpd_url = "http://dash.edgesuite.net/envivio/dashpr/clear/Manifest.mpd";
-    let out = env::temp_dir().join("envivio-dropped-audio.mp4");
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("envivio-dropped-audio.mp4");
     let mut xslt = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     xslt.push("tests");
     xslt.push("fixtures");
@@ -158,9 +163,38 @@ fn test_xslt_drop_audio() {
         .assert()
         .success();
     check_file_size_approx(&out, 11_005_923);
-    let format = FileFormat::from_file(out.clone()).unwrap();
+    let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
-    let meta = ffprobe(out.clone()).unwrap();
+    let meta = ffprobe(&out).unwrap();
+    assert_eq!(meta.streams.len(), 1);
+    let video = &meta.streams[0];
+    assert_eq!(video.codec_type, Some(String::from("video")));
+    assert_eq!(video.codec_name, Some(String::from("h264")));
+    assert_eq!(video.width, Some(320));
+}
+
+
+// The same test as above (dropping the audio track), but using only the XPath expression for the
+// audio AdaptationSet, instead of providing a full XSLT stylesheet.
+#[test]
+fn test_xpath_drop_audio() {
+    if env::var("CI").is_ok() {
+        return;
+    }
+    let mpd_url = "http://dash.edgesuite.net/envivio/dashpr/clear/Manifest.mpd";
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("envivio-dropped-audio.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
+               "--drop-elements", "//node()[local-name()='AdaptationSet' and starts-with(@mimeType,'audio/')]",
+               "-o", &out.to_string_lossy(), mpd_url])
+        .assert()
+        .success();
+    check_file_size_approx(&out, 11_005_923);
+    let format = FileFormat::from_file(&out).unwrap();
+    assert_eq!(format, FileFormat::Mpeg4Part14Video);
+    let meta = ffprobe(&out).unwrap();
     assert_eq!(meta.streams.len(), 1);
     let video = &meta.streams[0];
     assert_eq!(video.codec_type, Some(String::from("video")));
@@ -177,7 +211,9 @@ fn test_xslt_rick() {
         return;
     }
     let mpd_url = "https://dash.akamaized.net/dash264/TestCases/4b/qualcomm/1/ED_OnDemand_5SecSeg_Subtitles.mpd";
-    let out = env::temp_dir().join("ricked.mp4");
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("ricked.mp4");
     let mut xslt = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     xslt.push("tests");
     xslt.push("fixtures");
@@ -190,9 +226,9 @@ fn test_xslt_rick() {
         .assert()
         .success();
     check_file_size_approx(&out, 7_082_395);
-    let format = FileFormat::from_file(out.clone()).unwrap();
+    let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
-    let meta = ffprobe(out.clone()).unwrap();
+    let meta = ffprobe(&out).unwrap();
     assert_eq!(meta.streams.len(), 1);
     let video = &meta.streams[0];
     assert_eq!(video.codec_type, Some(String::from("video")));
@@ -207,7 +243,9 @@ fn test_xslt_multiple_stylesheets() {
         return;
     }
     let mpd_url = "http://dash.edgesuite.net/envivio/dashpr/clear/Manifest.mpd";
-    let out = env::temp_dir().join("ricked-cleaned.mp4");
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("ricked-cleaned.mp4");
     let mut xslt_rick = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     xslt_rick.push("tests");
     xslt_rick.push("fixtures");
@@ -226,9 +264,9 @@ fn test_xslt_multiple_stylesheets() {
         .assert()
         .success();
     check_file_size_approx(&out, 12_975_377);
-    let format = FileFormat::from_file(out.clone()).unwrap();
+    let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
-    let meta = ffprobe(out.clone()).unwrap();
+    let meta = ffprobe(&out).unwrap();
     assert_eq!(meta.streams.len(), 2);
     let video = &meta.streams[0];
     assert_eq!(video.codec_type, Some(String::from("video")));
