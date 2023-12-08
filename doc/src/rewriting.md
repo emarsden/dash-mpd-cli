@@ -26,26 +26,77 @@ downloading media segments from it. This allows you to:
 
 - modify the BaseURL to include another CDN.
 
-This functionality is currently implemented using [XSLT](https://en.wikipedia.org/wiki/XSLT), a
-language developed for XML rewriting. This is a standards-based approach to filtering/rewriting,
-which is very powerful though not particularly intuitive nor very widely adopted. XSLT is
-implemented by calling out to the [xsltproc](http://xmlsoft.org/xslt/xsltproc.html) commandline
-application, which unfortunately only supports XSLT v1.0. Version 3.0 of the specification is more
-powerful, and for example includes functions for manipulating xs:duration attributes which can be
-useful for our purposes, but the only free implementation of XSLT 3.0 is implemented in Java and
-inconvenient to package.
+You can use this functionality by:
+
+- supplying an [XPath expression](https://en.wikipedia.org/wiki/XPath) matching XML elements that
+  you don’t want to download, with the `--drop-elements` commandline option;
+  
+- supplying a full [XSLT](https://en.wikipedia.org/wiki/XSLT) stylesheet that will be applied to the
+  manifest to allow more complex rewriting rules. XSLT is a language that is specifically designed
+  for XML filtering/rewriting; it’s standards-based though not particularly intuitive.
+
+This functionality is currently implemented by calling out to the
+[xsltproc](http://xmlsoft.org/xslt/xsltproc.html) commandline application, which supports XPath v1.0
+and XSLT v1.0.
 
 
-## Examples
+## Examples of XPath filtering
 
-~~~admonish example title="Drop audio AdaptationSets"
+~~~admonish example title="Drop AdaptationSets with alternate audio"
+
+Suppose your DASH manifest contains an audio track with audio description, which has an attribute
+`label=alternate`. This track is being selected for download instead of the one you want. You can
+filter out the audio description track using the `--drop-elements` commandline argument with the
+following XPath expression:
+
+```
+--drop-elements "//mpd:AdaptationSet[@label='alternate']
+```
+
+If instead the audio track is marked with a `Label` element that contains the text `audiodescr`, you
+can use the following:
+
+```
+--drop-elements "//mpd:AdaptationSet[.//mpd:Label[contains(text(), 'audiodescr')]]"
+```
+
+~~~
+
+Another possible application of the XML filtering capability is to avoid overloading the web servers
+of companies that serve dynamic ad insertion (DAI) content, as illustrated below.
+
+
+~~~admonish example title="Drop dynamically inserted advertising content"
+
+Some DASH manifests include content (generally some `Period` elements) which is inserted based on
+your prior viewing habits, the time of day, your geographic location, and so on. You may wish to
+filter these out based on the URL of the server, with for example
+
+```
+--drop-elements "//mpd:Period[mpd:BaseURL[contains(text(),'https://dai.google.com')]]
+--drop-elements "//mpd:Period[mpd:BaseURL[contains(text(),'mediatailor.eu-west-1.amazonaws.com')]]"
+--drop-elements "//mpd:Period[mpd:BaseURL[contains(text(),'unified-streaming.com')]]"
+```
+
+or based on other features such as the Period duration or keywords in the BaseURL:
+
+```
+--drop-elements "//mpd:Period[duration='PT5.000S']"
+--drop-elements "//mpd:Period[.//mpd:BaseURL[contains(text(),'/creative/')]]"
+--drop-elements "//mpd:Period[.//mpd:BaseURL[contains(text(),'Ad_Bumper')]]"
+```
+~~~
+
+
+
+## Examples of XSLT rewriting
+
 The XSLT file (stylesheet) shown below will drop any AdaptationSets in the MPD manifest with a
 `@mimeType` matching `audio/*` (leaving only the AdaptationSets containing video).
 
 ```xml
 {{#include ../../tests/fixtures/rewrite-drop-audio.xslt}}
 ```
-~~~
 
 Note that the rewriting instruction 
 
@@ -71,34 +122,13 @@ is selecting (using the XPath expression defined in the template’s `@match` at
 AdaptationSet nodes whose `@mimeType` attribute starts with `audio/`. It doesn’t specify any action
 to run on these elements, which means that they are not copied to the XML output.
 
-To run an XSLT template, see the `--xslt-stylesheet` commandline argument.
-
-The XSLT stylesheet shown below will drop any Period elements in the MPD manifest that are served
-from dai.google.com or from AWS MediaTailor or from Unified Streaming. These are some of the main
-dynamic ad insertion services, which insert ads based on your prior viewing habits, the time of day,
-your geographic location, and so on.
-
-```xml
-{{#include ../../tests/fixtures/rewrite-drop-dai.xslt}}
-```
-The important parts of the stylesheet are the XPath expression that select the Period elements to be
-dropped, such as 
-
-    //mpd:Period[mpd:BaseURL[contains(text(),'mediatailor.eu-west-1.amazonaws.com')]]
-
-or for some OTT VOD services:
-
-    //mpd:Period[duration='PT5.000S']
-    //mpd:Period[.//mpd:BaseURL[contains(text(),'/creative/')]]
-    //mpd:Period[.//mpd:BaseURL[contains(text(),'Ad_Bumper')]]
-
-You can adapt these and add additional templates for advertising services used by your telecoms
-provider or streaming service. There are a few example of stylesheets in the [tests/fixtures
+To run an XSLT template, see the `--xslt-stylesheet` commandline argument. There are a few example
+of stylesheets in the [tests/fixtures
 directory](https://github.com/emarsden/dash-mpd-cli/tree/main/tests/fixtures).
 
 To download content with a rewritten manifest (here [running dash-mpd-cli in a container](container.html)):
 
-    podman run -v .:/content \
+    podman run --rm -v .:/content \
       --xslt-stylesheet my-rewrites.xslt \
       ghcr.io/emarsden/dash-mpd-cli \
       https://example.com/manifest.mpd -o foo.mp4
@@ -111,7 +141,7 @@ Our current implementation of filtering using xsltproc is quite powerful and eas
 probably not the easiest to use. Possible alternatives which we might move to in future version of
 dash-mpd-cli: 
 
-- Saxon-HE, free Java software (MPL v2) which implements XSLT 3.0
+- Saxon-HE, free Java software (MPL v2) which implements XPath v3.1 and XSLT v3.0
 
 - A generic filter interface implemented as a pipe
 

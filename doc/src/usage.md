@@ -149,11 +149,22 @@ Preferred language when multiple audio streams with different languages are avai
 RFC 5646 format (e.g. fr or en-AU). If a preference is not specified and multiple audio streams are
 present, the first one listed in the DASH manifest will be downloaded.
 
+    --drop-elements <XPATH>
+
+XML elements that match this XPath expression will be removed from the MPD manifest before the
+download starts. See [examples](rewriting.html) in the user manual. You can use this option multiple
+times. This option is currently experimental.
+
+The functionality is currently implemented using the external xsltproc commandline application,
+which implements version 1.0 of the XPath specification.
+
     --xslt-stylesheet <STYLESHEET>
  
 XSLT stylesheet with rewrite rules to be applied to the manifest before downloading media content.
-Stylesheets are applied using the xsltproc commandline application, which implements XSLT 1.0. You
-can use this option multiple times. This option is currently experimental.
+You can use this option multiple times. This option is currently experimental.
+
+Stylesheets are applied using the xsltproc commandline application, which implements version 1.0 of
+the XSLT specification.
 
     --video-only
 
