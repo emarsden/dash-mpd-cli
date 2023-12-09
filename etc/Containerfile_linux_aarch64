@@ -45,7 +45,7 @@ LABEL org.opencontainers.image.description="Download media content from a DASH-M
     org.opencontainers.image.title="dash-mpd-cli" \
     org.opencontainers.image.url="https://github.com/emarsden/dash-mpd-cli" \
     org.opencontainers.image.source="https://github.com/emarsden/dash-mpd-cli" \
-    org.opencontainers.image.version="0.2.9" \
+    org.opencontainers.image.version="0.2.11" \
     org.opencontainers.image.authors="eric.marsden@risk-engineering.org" \
     org.opencontainers.image.licenses="MIT,GPL-2.0-or-later"
 
