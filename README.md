@@ -38,7 +38,7 @@ HLS streaming (m3u8 manifests).
 
 The following features are supported: 
 
-- Multi-period content. The media in the different streams will be saved in a single media container
+- **Multi-period** content. The media in the different streams will be saved in a single media container
   if the formats are compatible (same resolution, codecs, bitrate and so on) and the
   `--no-period-concatenation` commandline option is not provided, and otherwise in separate media
   containers.
@@ -46,38 +46,28 @@ The following features are supported:
 - The application can download content available over HTTP, HTTPS and HTTP/2. Network bandwidth can
   be throttled (see the `--limit-rate` commandline argument).
 
-- Support for SOCKS and HTTP proxies, via the `--proxy` commandline argument. The following
+- Support for SOCKS and HTTP **proxies**, via the `--proxy` commandline argument. The following
   environment variables can also be used to specify the proxy at a system level: `HTTP_PROXY` or
   `http_proxy` for HTTP connections, `HTTPS_PROXY` or `https_proxy` for HTTPS connections, and
   `ALL_PROXY` or `all_proxy` for all connection types. The system proxy can be disabled using the
   `--no-proxy` commandline argument.
 
-- Support for HTTP Basic authentication (see the `--auth-username` and `--auth-password` commandline
+- Support for HTTP Basic **authentication** (see the `--auth-username` and `--auth-password` commandline
   arguments) and for Bearer authentation (see the `--auth-bearer` commandline argument). This
   authentication information is sent both to the server which hosts the DASH manifest, and to the
   server that hosts the media segments (the latter often being a CDN).
 
-- Subtitles: download support for WebVTT, TTML, SRT, tx3g and SMIL streams, as well as some support
+- **Subtitles**: download support for WebVTT, TTML, SRT, tx3g and SMIL streams, as well as some support
   for the wvtt format. We support both subtitles published as a complete file and segmented
   subtitles made available in media fragments.
 
-- The application can read cookies from the Firefox, Chromium, Chrome, ChromeBeta, Safari and Edge
-  browsers on Linux, Windows and MacOS, thanks to the
+- The application can read **cookies** from the Firefox, Chromium, Chrome, ChromeBeta, Safari and
+  Edge browsers on Linux, Windows and MacOS, thanks to the
   [bench_scraper](https://crates.io/crates/bench_scraper) crate. See the `--cookies-from-browser`
-  commandline argument.
-  Browsers that support multiple profiles will have all their profiles scraped for cookies.
+  commandline argument. Browsers that support multiple profiles will have all their profiles scraped
+  for cookies.
 
-- XLink elements (only with actuate=onLoad semantics), including resolve-to-zero.
-
-- All forms of segment index info: SegmentBase@indexRange, SegmentTimeline,
-  SegmentTemplate@duration, SegmentTemplate@index, SegmentList.
-
-- Media containers of types supported by mkvmerge, ffmpeg, VLC or MP4Box (this includes ISO-BMFF /
-  CMAF / MP4, Matroska, WebM, MPEG-2 TS, AVI), and all the codecs supported by these applications.
-
-- Any video resolution available on the streaming server, including 1080p and 4K content.
-
-- Support for decrypting media streams that use ContentProtection (DRM 🗝️). This requires either the
+- Support for **decrypting** media streams that use ContentProtection (DRM 🗝️). This requires either the
   `mp4decrypt` or `shaka-packager` commandline application to be installed. mp4decrypt is available
   from the [Bento4 suite](https://github.com/axiomatic-systems/Bento4/) ([binaries are
   available](https://www.bento4.com/downloads/) for common platforms), and [shaka-packager
@@ -88,6 +78,16 @@ The following features are supported:
   application to use. Shaka packager is able to decrypt more types of media streams (including in
   particular WebM containers and more encryption formats), whereas mp4decrypt mostly works with MPEG
   Common Encryption.
+
+- XLink elements (only with actuate=onLoad semantics), including resolve-to-zero.
+
+- All forms of segment index info: SegmentBase@indexRange, SegmentTimeline,
+  SegmentTemplate@duration, SegmentTemplate@index, SegmentList.
+
+- Media containers of types supported by mkvmerge, ffmpeg, VLC or MP4Box (this includes ISO-BMFF /
+  CMAF / MP4, Matroska, WebM, MPEG-2 TS, AVI), and all the codecs supported by these applications.
+
+- Any video resolution available on the streaming server, including 1080p and 4K content.
 
 - In practice, all features used by real streaming services and on-demand TV. Our test suite
   includes test streams published by industry groups such as HbbTV and the DASH Industry Forum, and
@@ -151,11 +151,12 @@ which is good for security.
 To **run the container** with podman:
 
     podman machine start (optional step, only required on Windows and MacOS)
-    podman run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+    podman run --rm -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
 
 On the first run, this will fetch the container image (around 216 MB) from the GitHub Container
 Registry ghcr.io, and will save it on your local disk for later uses. You can later delete the image
-if you no longer need it using `podman image rm` and the image id shown by `podman images`.
+if you no longer need it using `podman image rm` and the image id shown by `podman images` (see the
+[user manual](https://emarsden.github.io/dash-mpd-cli/container.html) for details).
 
 📁 Your current working directory (`.`) will be mounted in the container as `/content`, which will be
 the working directory in the container. This means that an output file specified without a root
@@ -167,9 +168,9 @@ against privilege escalation). This requires installation of runsc and running a
 doesn’t currently support rootless operation).
 
     sudo apt install runsc
-    sudo podman --runtime=runsc run -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+    sudo podman --runtime=runsc run --rm -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
 
-The container image is a multiarch manifest, currently built for linux/amd64 and for linux/arm64
+The container image is a **multiarch** manifest, currently built for linux/amd64 and for linux/arm64
 platforms.
 
 
@@ -264,7 +265,7 @@ not all of them, so download support tends to be more robust with the default co
 an external application as a subprocess). The `libav` feature currently only works on Linux.
 
 The choice of external muxer depends on the filename extension of the path supplied to `--output`
-or `-o` (which will be ".mp4" if you don't specify the output path explicitly):
+or `-o` (which will be `.mp4` if you don't specify the output path explicitly):
 
 - `.mkv`: call mkvmerge first, then if that fails call ffmpeg, then try MP4Box
 - `.mp4`: call ffmpeg first, then if that fails call vlc, then try MP4Box
@@ -338,9 +339,10 @@ was developed to allow the author to watch a news programme produced by a public
 whilst at the gym. The programme is published as a DASH stream on the broadcaster’s “replay”
 service, but network service at the gym is sometimes poor. First world problems!
 
-The author is not the morality police nor a lawyer, but please note that redistributing media
-content that you have not produced may, depending on the publication licence, be a breach of
-intellectual property laws. Also, circumventing DRM may be prohibited in some countries.
+> [!WARNING]
+> The author is not the morality police nor a lawyer, but please note that redistributing media
+> content that you have not produced may, depending on the publication licence, be a breach of
+> intellectual property laws. Also, circumventing DRM may be prohibited in some countries.
 
 
 ## License

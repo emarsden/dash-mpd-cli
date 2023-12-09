@@ -1,11 +1,19 @@
 # Changelog
 
-## [0.2.11] - Unreleased
+## [0.2.11] - 2023-12-09
 
 - New commandline argument `--drop-elements` which takes an XPath expression as argument. XML
   elements in the MPD manifest that match this XPath expression will be removed from the manifest
   before downloading. This may be useful to help select an audio track based on attributes such as
   its role or label, or to avoid overloading the servers that serve advertising content.
+
+- Include the query component of the MPD URL in requests for media segments, to support the
+  token-based authentication used by some streaming services. If the manifest URL is
+  `https://example.com/manifest.mpd?token=foo`, requests to segments will look like
+  `/segment/42.m4v?token=foo`, unless the manifest includes an explicit query component in the
+  segment URLs.
+
+- Muxing to a WebM container using the VLC external muxer should be fixed.
 
 
 ## [0.2.10] - 2023-11-28
