@@ -9,10 +9,15 @@ use fs_err as fs;
 use std::env;
 use std::path::PathBuf;
 use std::time::Duration;
+use std::sync::Once;
 use predicates::prelude::*;
 use assert_cmd::Command;
 use axum::{routing::get, Router};
 use axum::http::header;
+use env_logger::Env;
+
+
+static INIT: Once = Once::new();
 
 
 #[test]
@@ -92,6 +97,7 @@ fn test_conformity_invalid_segment_duration() {
 // of duration 132300 / 44100 (3 seconds).
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn test_conformity_invalid_maxsegmentduration() {
+    INIT.call_once(|| env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init());
     let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     path.push("tests");
     path.push("fixtures");
@@ -125,11 +131,11 @@ async fn test_conformity_invalid_maxsegmentduration() {
     server_handle.shutdown();
 }
 
-/*
-   These tests moved from dash-mpd-rs now need to be run with a check of stderr for the warning message.
-   Will need to use the local HTTP server method.
 
-    let err1 = r#"<MPD><Period id="1">
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+async fn test_conformity_invalid_sourceurl() {
+    INIT.call_once(|| env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init());
+    static XML: &str = r#"<MPD><Period id="1">
        <AdaptationSet group="1">
          <Representation mimeType='video/mp4' width="320" height="240">
            <SegmentList duration="10">
@@ -139,9 +145,36 @@ async fn test_conformity_invalid_maxsegmentduration() {
          </Representation>
        </AdaptationSet>
      </Period></MPD>"#;
-    assert!(parse(err1).is_err());
 
-    let err2 = r#"<MPD><Period id="1">
+    let app = Router::new()
+        .route("/mpd", get(|| async { ([(header::CONTENT_TYPE, "application/dash+xml")], XML) }));
+    let server_handle = axum_server::Handle::new();
+    let backend_handle = server_handle.clone();
+    let backend = async move {
+        axum_server::bind("127.0.0.1:6661".parse().unwrap())
+            .handle(backend_handle)
+            .serve(app.into_make_service()).await
+            .unwrap()
+    };
+    tokio::spawn(backend);
+    tokio::time::sleep(Duration::from_millis(500)).await;
+
+    let mpd = "http://localhost:6661/mpd";
+    let outpath = env::temp_dir().join("empty.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--simulate",
+               "-o", &outpath.to_string_lossy(), mpd])
+        .assert()
+        .stderr(predicate::str::contains("invalid URL"))
+        .success();
+    server_handle.shutdown();
+}
+
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+async fn test_conformity_invalid_segmenturl() {
+    INIT.call_once(|| env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init());
+    static XML: &str = r#"<MPD><Period id="1">
        <AdaptationSet group="1">
          <Representation mimeType="video/mp4" width="320" height="240">
            <SegmentList duration="10">
@@ -150,9 +183,55 @@ async fn test_conformity_invalid_maxsegmentduration() {
          </Representation>
        </AdaptationSet>
      </Period></MPD>"#;
-    assert!(parse(err2).is_err());
+    let app = Router::new()
+        .route("/mpd", get(|| async { ([(header::CONTENT_TYPE, "application/dash+xml")], XML) }));
+    let server_handle = axum_server::Handle::new();
+    let backend_handle = server_handle.clone();
+    let backend = async move {
+        axum_server::bind("127.0.0.1:6662".parse().unwrap())
+            .handle(backend_handle)
+            .serve(app.into_make_service()).await
+            .unwrap()
+    };
+    tokio::spawn(backend);
+    tokio::time::sleep(Duration::from_millis(500)).await;
 
-    let err3 = r#"<MPD><ProgramInformation moreInformationURL="https://192.168.1.2.3/segment.mp4" /></MPD>"#;
-    assert!(parse(err3).is_err());
+    let mpd = "http://localhost:6662/mpd";
+    let outpath = env::temp_dir().join("empty.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--simulate",
+               "-o", &outpath.to_string_lossy(), mpd])
+        .assert()
+        .stderr(predicate::str::contains("invalid URL"))
+        .success();
+    server_handle.shutdown();
+}
 
-*/
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+async fn test_conformity_invalid_moreinformation() {
+    INIT.call_once(|| env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init());
+    static XML: &str = r#"<MPD><ProgramInformation moreInformationURL="https://192.168.1.2.3/segment.mp4" /></MPD>"#;
+    let app = Router::new()
+        .route("/mpd", get(|| async { ([(header::CONTENT_TYPE, "application/dash+xml")], XML) }));
+    let server_handle = axum_server::Handle::new();
+    let backend_handle = server_handle.clone();
+    let backend = async move {
+        axum_server::bind("127.0.0.1:6663".parse().unwrap())
+            .handle(backend_handle)
+            .serve(app.into_make_service()).await
+            .unwrap()
+    };
+    tokio::spawn(backend);
+    tokio::time::sleep(Duration::from_millis(500)).await;
+
+    let mpd = "http://localhost:6663/mpd";
+    let outpath = env::temp_dir().join("empty.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--simulate",
+               "-o", &outpath.to_string_lossy(), mpd])
+        .assert()
+        .stderr(predicate::str::contains("invalid URL"))
+        .success();
+    server_handle.shutdown();
+}
