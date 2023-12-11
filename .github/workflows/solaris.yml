@@ -16,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Run tests in Solaris VM
-      uses: vmactions/solaris-vm@v0
+      uses: vmactions/solaris-vm@v1
       with:
         usesh: true
         prepare: |
