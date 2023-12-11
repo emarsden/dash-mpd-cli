@@ -43,7 +43,7 @@ mp4 = "0.14.0"
 tempfile = "3.8.1"
 lazy_static = "1.4.0"
 ffprobe = "0.3.3"
-file-format = { version = "0.22.0", features = ["reader"] }
+file-format = { version = "0.23.0", features = ["reader"] }
 json = "0.12.4"
 assert_cmd = "2.0.12"
 assert_fs = "1.0.13"
