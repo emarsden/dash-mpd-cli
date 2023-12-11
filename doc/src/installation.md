@@ -57,6 +57,10 @@ You should also install the following **dependencies**:
   `--decryption-application` commandline option to specify the choice of decryption application, and
   the `--shaka-packager-location` commandline argument if it is installed in a non-standard location.
 
+- the xsltproc commandline utility packaged with libxslt, which is used for the MPD rewriting
+  functionality (the `--drop-elements` and `--xslt-stylesheet` commandline options).
+
+
 
 ## Supported platforms
 

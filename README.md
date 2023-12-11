@@ -130,8 +130,8 @@ automatically built from the sources using GitHub’s useful continuous integrat
 >   downloaded media to the directory you specify. This is a very good idea when running random
 >   software you downloaded from the internet!
 >
-> - No need to install the various helper applications (ffmpeg, mkvmerge, mp4decrypt, MP4Box),
->   which are already present in the container.
+> - No need to install the various helper applications (ffmpeg, mkvmerge, mp4decrypt,
+>   shaka-packager, MP4Box, xsltproc), which are already present in the container.
 > 
 > - Automatically run the latest version of dash-mpd-cli and the various helper applications (the
 >   container runtime will pull the latest version for you automatically).
@@ -225,6 +225,8 @@ You should also install the following **dependencies**:
   `--decryption-application` commandline option to specify the choice of decryption application, and
   the `--shaka-packager-location` commandline argument if it is installed in a non-standard location.
 
+- the xsltproc commandline utility packaged with libxslt, which is used for the MPD rewriting
+  functionality (the `--drop-elements` and `--xslt-stylesheet` commandline options).
 
 This crate is tested on the following **platforms**:
 
