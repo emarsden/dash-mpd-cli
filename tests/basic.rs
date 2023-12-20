@@ -16,6 +16,7 @@ use file_format::FileFormat;
 use predicates::prelude::*;
 use assert_cmd::Command;
 use assert_fs::{prelude::*, TempDir};
+use test_log::test;
 use common::check_file_size_approx;
 
 

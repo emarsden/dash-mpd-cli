@@ -34,8 +34,9 @@ use number_prefix::{NumberPrefix, Prefix};
 use indicatif::{ProgressBar, ProgressStyle};
 use anyhow::{Result, Context};
 use tracing_subscriber::EnvFilter;
+use tracing_subscriber::fmt::writer::MakeWriterExt;
 use tracing_subscriber::prelude::*;
-use tracing::{info, warn, error};
+use tracing::{info, warn, error, Level};
 use dash_mpd::fetch::DashDownloader;
 use dash_mpd::fetch::ProgressObserver;
 
@@ -121,17 +122,21 @@ async fn main () -> Result<()> {
     let time_offset = time::UtcOffset::current_local_offset()
         .unwrap_or(time::UtcOffset::UTC);
     let timer = tracing_subscriber::fmt::time::OffsetTime::new(time_offset, time_fmt);
+    // Logs of level >= INFO go to stdout, otherwise (warnings and errors) to stderr.
+    let stderr = std::io::stderr.with_max_level(Level::WARN);
     let fmt_layer = tracing_subscriber::fmt::layer()
+        .map_writer(move |w| stderr.or_else(w))
         .compact()
         .with_target(false)
         .with_timer(timer);
     let filter_layer = EnvFilter::try_from_default_env()
         .or_else(|_| EnvFilter::try_new("info,reqwest=warn"))
-        .unwrap();
+        .expect("initializing logging");
     tracing_subscriber::registry()
         .with(filter_layer)
         .with(fmt_layer)
         .init();
+
     #[allow(unused_mut)]
     let mut clap = clap::Command::new("dash-mpd-cli")
         .about("Download content from an MPEG-DASH streaming media manifest.")

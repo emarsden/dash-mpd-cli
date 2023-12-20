@@ -29,8 +29,8 @@ use axum::body::{Full, Bytes};
 use axum_auth::AuthBasic;
 use dash_mpd::{MPD, Period, AdaptationSet, Representation, SegmentTemplate};
 use anyhow::{Context, Result};
-use env_logger::Env;
-use log::info;
+use test_log::test;
+use tracing::info;
 use common::generate_minimal_mp4;
 
 
@@ -45,8 +45,13 @@ impl AppState {
     }
 }
 
-#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+#[test(tokio::test(flavor = "multi_thread", worker_threads = 2))]
 async fn test_basic_auth() -> Result<()> {
+    let subscriber = tracing_subscriber::fmt()
+        .compact()
+        .finish();
+    tracing::subscriber::set_global_default(subscriber)?;
+
     // State shared between the request handlers. We are simply maintaining a counter of the number
     // of requests for media segments made.
     let shared_state = Arc::new(AppState::new());
@@ -92,50 +97,6 @@ async fn test_basic_auth() -> Result<()> {
     async fn send_mp4(AuthBasic((id, password)): AuthBasic, State(state): State<Arc<AppState>>) -> Response<Full<Bytes>> {
         info!("segment request: auth {id:?}:{password:?}");
         state.counter.fetch_add(1, Ordering::SeqCst);
-        /*
-        let config = mp4::Mp4Config {
-            major_brand: str::parse("isom").unwrap(),
-            minor_version: 512,
-            compatible_brands: vec![
-                str::parse("isom").unwrap(),
-                str::parse("iso2").unwrap(),
-                str::parse("avc1").unwrap(),
-                str::parse("mp41").unwrap(),
-            ],
-            timescale: 1000,
-        };
-        let data = Cursor::new(Vec::<u8>::new());
-        let mut writer = mp4::Mp4Writer::write_start(data, &config).unwrap();
-        let media_conf = mp4::MediaConfig::AvcConfig(mp4::AvcConfig {
-            width: 10,
-            height: 10,
-            // from https://github.com/ISSOtm/gb-packing-visualizer/blob/1954066537b373f2ddcd5768131bdb5595734a85/src/render.rs#L260
-            seq_param_set: vec![
-                0, // ???
-                0, // avc_profile_indication
-                0, // profile_compatibility
-                0, // avc_level_indication
-            ],
-            pic_param_set: vec![],
-        });
-        let track_conf = mp4::TrackConfig {
-            track_type: mp4::TrackType::Video,
-            timescale: 1000,
-            language: "und".to_string(),
-            media_conf,
-        };
-        writer.add_track(&track_conf).unwrap();
-        let sample = mp4::Mp4Sample {
-            start_time: 0,
-            duration: 2,
-            rendering_offset: 0,
-            is_sync: true,
-            bytes: mp4::Bytes::from(vec![0x0u8; 751]),
-        };
-        writer.write_sample(1, &sample).unwrap();
-        writer.write_end().unwrap();
-        let data: Vec<u8> = writer.into_writer().into_inner();
-        */
         let data = generate_minimal_mp4();
         Response::builder()
             .status(StatusCode::OK)
@@ -149,7 +110,6 @@ async fn test_basic_auth() -> Result<()> {
         ([(header::CONTENT_TYPE, "text/plain")], format!("{}", state.counter.load(Ordering::Relaxed)))
     }
 
-    env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init();
     let app = Router::new()
         .route("/mpd", get(send_mpd))
         .route("/media/:seg", get(send_mp4))

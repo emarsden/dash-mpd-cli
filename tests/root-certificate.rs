@@ -42,7 +42,7 @@ use axum::body::{Full, Bytes};
 use axum_server::tls_rustls::RustlsConfig;
 use dash_mpd::{MPD, Period, AdaptationSet, Representation, BaseURL};
 use anyhow::{Context, Result};
-use env_logger::Env;
+use test_log::test;
 
 
 #[derive(Debug, Default)]
@@ -56,8 +56,13 @@ impl AppState {
     }
 }
 
-#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+#[test(tokio::test(flavor = "multi_thread", worker_threads = 2))]
 async fn test_add_root_cert() -> Result<(), anyhow::Error> {
+    let subscriber = tracing_subscriber::fmt()
+        .compact()
+        .finish();
+    tracing::subscriber::set_global_default(subscriber)?;
+
     let base = BaseURL {
         base: "https://localhost:6666/init.mp4".to_string(),
         ..Default::default()
@@ -110,7 +115,6 @@ async fn test_add_root_cert() -> Result<(), anyhow::Error> {
         ([(header::CONTENT_TYPE, "text/plain")], format!("{}", state.counter.load(Ordering::Relaxed)))
     }
 
-    env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init();
     let app = Router::new()
         .route("/mpd", get(|| async { ([(header::CONTENT_TYPE, "application/dash+xml")], xml) }))
         .route("/init.mp4", get(send_mp4))

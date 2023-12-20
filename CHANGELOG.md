@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.12] - Unreleased
+
+- The `tracing` crate is now used for all logging purposes. Logged messages can be controlled using
+  the `RUST_LOG` environment variable.
+
+
 ## [0.2.11] - 2023-12-09
 
 - New commandline argument `--drop-elements` which takes an XPath expression as argument. XML

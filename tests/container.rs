@@ -20,6 +20,7 @@ use std::process::Command;
 use std::path::{Path, PathBuf};
 use ffprobe::ffprobe;
 use file_format::FileFormat;
+use test_log::test;
 use common::check_file_size_approx;
 
 

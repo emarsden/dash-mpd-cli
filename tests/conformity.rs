@@ -9,15 +9,13 @@ use fs_err as fs;
 use std::env;
 use std::path::PathBuf;
 use std::time::Duration;
-use std::sync::Once;
 use predicates::prelude::*;
 use assert_cmd::Command;
 use axum::{routing::get, Router};
 use axum::http::header;
-use env_logger::Env;
+use test_log::test;
 
 
-static INIT: Once = Once::new();
 
 
 #[test]
@@ -95,9 +93,8 @@ fn test_conformity_invalid_segment_duration() {
 // This an exemple DASH manifest from a commercial ad management platform which is not spec
 // compliant. The MPD specifies maxSegmentDuration="PT2S", but the SegmentTimeline contains segments
 // of duration 132300 / 44100 (3 seconds).
-#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+#[test(tokio::test(flavor = "multi_thread", worker_threads = 2))]
 async fn test_conformity_invalid_maxsegmentduration() {
-    INIT.call_once(|| env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init());
     let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     path.push("tests");
     path.push("fixtures");
@@ -132,9 +129,8 @@ async fn test_conformity_invalid_maxsegmentduration() {
 }
 
 
-#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+#[test(tokio::test(flavor = "multi_thread", worker_threads = 2))]
 async fn test_conformity_invalid_sourceurl() {
-    INIT.call_once(|| env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init());
     static XML: &str = r#"<MPD><Period id="1">
        <AdaptationSet group="1">
          <Representation mimeType='video/mp4' width="320" height="240">
@@ -171,9 +167,8 @@ async fn test_conformity_invalid_sourceurl() {
 }
 
 
-#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+#[test(tokio::test(flavor = "multi_thread", worker_threads = 2))]
 async fn test_conformity_invalid_segmenturl() {
-    INIT.call_once(|| env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init());
     static XML: &str = r#"<MPD><Period id="1">
        <AdaptationSet group="1">
          <Representation mimeType="video/mp4" width="320" height="240">
@@ -208,9 +203,8 @@ async fn test_conformity_invalid_segmenturl() {
 }
 
 
-#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+#[test(tokio::test(flavor = "multi_thread", worker_threads = 2))]
 async fn test_conformity_invalid_moreinformation() {
-    INIT.call_once(|| env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init());
     static XML: &str = r#"<MPD><ProgramInformation moreInformationURL="https://192.168.1.2.3/segment.mp4" /></MPD>"#;
     let app = Router::new()
         .route("/mpd", get(|| async { ([(header::CONTENT_TYPE, "application/dash+xml")], XML) }));

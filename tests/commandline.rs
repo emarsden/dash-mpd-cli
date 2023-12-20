@@ -6,6 +6,7 @@
 
 use predicates::prelude::*;
 use assert_cmd::Command;
+use test_log::test;
 
 
 #[test]

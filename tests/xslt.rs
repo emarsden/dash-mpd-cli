@@ -23,7 +23,8 @@ use ffprobe::ffprobe;
 use file_format::FileFormat;
 use assert_fs::{prelude::*, TempDir};
 use anyhow::{Context, Result};
-use env_logger::Env;
+use test_log::test;
+
 use common::{check_file_size_approx, generate_minimal_mp4};
 
 
@@ -42,13 +43,15 @@ impl AppState {
     }
 }
 
-#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+#[test(tokio::test(flavor = "multi_thread", worker_threads = 2))]
 async fn test_xslt_rewrite_media() -> Result<()> {
-    env_logger::Builder::from_env(Env::default().default_filter_or("info,reqwest=warn")).init();
+    let subscriber = tracing_subscriber::fmt()
+        .compact()
+        .finish();
+    tracing::subscriber::set_global_default(subscriber)?;
 
     // State shared between the request handlers.
     let shared_state = Arc::new(AppState::new());
-
 
     async fn send_init(State(state): State<Arc<AppState>>) -> Response<Full<Bytes>> {
         state.count_init.fetch_add(1, Ordering::SeqCst);
