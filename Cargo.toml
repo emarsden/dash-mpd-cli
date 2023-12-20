@@ -14,9 +14,12 @@ publish = true
 
 
 [dependencies]
-tokio = { version = "1.35.0", features = ["rt-multi-thread", "macros"] }
-dash-mpd = { version = "0.14.6", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
-reqwest = { version = "0.11.22", default-features = false, features = ["gzip", "rustls-tls", "socks", "json"] }
+tokio = { version = "1.35.1", features = ["rt-multi-thread", "macros"] }
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
+time = { version = "0.3.30", features = ["local-offset"] }
+dash-mpd = { git = "https://github.com/emarsden/dash-mpd-rs", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
+reqwest = { version = "0.11.23", default-features = false, features = ["gzip", "rustls-tls", "socks", "json"] }
 strum = { version = "0.24.1", features = ["derive"] }
 colored = "2.0.4"
 indicatif = "0.17.7"
@@ -26,15 +29,13 @@ versions = "6.0.0"
 fs-err = "2.11.0"
 number_prefix = "0.4.0"
 anyhow = "1.0.75"
-log = "0.4.20"
-env_logger = "0.10.0"
 tempfile = "3.8.1"
 bench_scraper = { version = "0.4.1", features = ["reqwest"], optional = true }
 
 [dev-dependencies]
 rustls = "0.21.10"
 rustls-pemfile = "1.0.3"
-tokio = { version = "1.35.0", features = ["rt-multi-thread", "time", "macros"] }
+tokio = { version = "1.35.1", features = ["rt-multi-thread", "time", "macros"] }
 axum = "0.6.20"
 axum-server = { version = "0.5.1", features = ["tls-rustls"] }
 axum-auth = "0.4"

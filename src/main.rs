@@ -33,6 +33,9 @@ use clap::{Arg, ArgAction, ValueHint};
 use number_prefix::{NumberPrefix, Prefix};
 use indicatif::{ProgressBar, ProgressStyle};
 use anyhow::{Result, Context};
+use tracing_subscriber::EnvFilter;
+use tracing_subscriber::prelude::*;
+use tracing::{info, warn, error};
 use dash_mpd::fetch::DashDownloader;
 use dash_mpd::fetch::ProgressObserver;
 
@@ -101,9 +104,9 @@ async fn check_newer_version() -> Result<()> {
         if let Some(gh_version) = Versioning::new(gh_release) {
             if let Some(this_version) = Versioning::new(env!("CARGO_PKG_VERSION")) {
                 if gh_version > this_version {
-                    println!("dash-mpd-cli {}", env!("CARGO_PKG_VERSION"));
-                    println!("A {} ({gh_release}) is available from https://github.com/emarsden/dash-mpd-cli.",
-                             "newer version".bold());
+                    info!("dash-mpd-cli {}", env!("CARGO_PKG_VERSION"));
+                    info!("A {} ({gh_release}) is available from https://github.com/emarsden/dash-mpd-cli.",
+                          "newer version".bold());
                 }
             }
         }
@@ -114,7 +117,21 @@ async fn check_newer_version() -> Result<()> {
 
 #[tokio::main]
 async fn main () -> Result<()> {
-    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info,reqwest=warn")).init();
+    let time_fmt = time::format_description::parse("[hour]:[minute]:[second]").unwrap();
+    let time_offset = time::UtcOffset::current_local_offset()
+        .unwrap_or(time::UtcOffset::UTC);
+    let timer = tracing_subscriber::fmt::time::OffsetTime::new(time_offset, time_fmt);
+    let fmt_layer = tracing_subscriber::fmt::layer()
+        .compact()
+        .with_target(false)
+        .with_timer(timer);
+    let filter_layer = EnvFilter::try_from_default_env()
+        .or_else(|_| EnvFilter::try_new("info,reqwest=warn"))
+        .unwrap();
+    tracing_subscriber::registry()
+        .with(filter_layer)
+        .with(fmt_layer)
+        .init();
     #[allow(unused_mut)]
     let mut clap = clap::Command::new("dash-mpd-cli")
         .about("Download content from an MPEG-DASH streaming media manifest.")
@@ -423,11 +440,11 @@ async fn main () -> Result<()> {
     }
     #[cfg(feature = "cookies")]
     if matches.get_flag("list-cookie-sources") {
-        eprintln!("On this computer, cookies are available from the following browsers:");
+        info!("On this computer, cookies are available from the following browsers:");
         let browsers = find_cookies()
             .expect("reading cookies from browser");
         for b in browsers.iter() {
-            eprintln!("  {:?} ({} cookies)", b.browser, b.cookies.len());
+            info!("  {:?} ({} cookies)", b.browser, b.cookies.len());
         }
         std::process::exit(3);
     }
@@ -470,14 +487,14 @@ async fn main () -> Result<()> {
             if targets_found {
                 cb = cb.cookie_store(true).cookie_provider(Arc::new(jar));
             } else {
-                eprintln!("Can't access cookies from {browser}.");
-                eprintln!("On this computer, cookies are available from the following browsers:");
+                warn!("Can't access cookies from {browser}.");
+                info!("On this computer, cookies are available from the following browsers:");
                 for b in browsers.iter() {
-                    eprintln!("  {:?} ({} cookies)", b.browser, b.cookies.len());
+                    info!("  {:?} ({} cookies)", b.browser, b.cookies.len());
                 }
             }
         } else {
-            eprintln!("Ignoring unknown browser {browser}. Try one of {known_browser_names}.");
+            warn!("Ignoring unknown browser {browser}. Try one of {known_browser_names}.");
         }
     }
     if verbosity > 2 {
@@ -495,14 +512,14 @@ async fn main () -> Result<()> {
        if let Ok(local_addr) = IpAddr::from_str(src) {
           cb = cb.local_address(local_addr);
        } else {
-          eprintln!("Ignoring invalid argument to --source-address: {src}");
+          warn!("Ignoring invalid argument to --source-address: {src}");
        }
     }
     if let Some(seconds) = matches.get_one::<String>("timeout") {
         if let Ok(secs) = seconds.parse::<u64>() {
             cb = cb.timeout(Duration::new(secs, 0));
         } else {
-            eprintln!("Ignoring invalid value for --timeout: {seconds}");
+            warn!("Ignoring invalid value for --timeout: {seconds}");
         }
     } else {
         cb = cb.timeout(Duration::new(30, 0));
@@ -516,7 +533,7 @@ async fn main () -> Result<()> {
             if let Some((h, v)) = hv.split_once(':') {
                 headers.insert(h.to_string(), v.trim_start().to_string());
             } else {
-                eprintln!("Ignoring badly formed {} argument to --header", "header:value".italic());
+                warn!("Ignoring badly formed {} argument to --header", "header:value".italic());
             }
         }
     }
@@ -525,7 +542,7 @@ async fn main () -> Result<()> {
             if let Some((h, v)) = hv.split_once(':') {
                 headers.insert(h.to_string(), v.to_string());
             } else {
-                eprintln!("Ignoring badly formed {} argument to --add-header", "header:value".italic());
+                warn!("Ignoring badly formed {} argument to --add-header", "header:value".italic());
             }
         }
     }
@@ -543,13 +560,13 @@ async fn main () -> Result<()> {
                             cb = cb.add_root_certificate(cert);
                         },
                         Err(e) => {
-                            eprintln!("Can't decode root certificate: {e}");
+                            error!("Can't decode root certificate: {e}");
                             std::process::exit(6);
                         },
                     }
                 },
                 Err(e) => {
-                    eprintln!("Can't read root certificate: {e}");
+                    error!("Can't read root certificate: {e}");
                     std::process::exit(5);
                 },
             }
@@ -563,13 +580,13 @@ async fn main () -> Result<()> {
                         cb = cb.identity(id);
                     },
                     Err(e) => {
-                        eprintln!("Can't decode client certificate: {e}");
+                        error!("Can't decode client certificate: {e}");
                         std::process::exit(8);
                     },
                 }
             },
             Err(e) => {
-                eprintln!("Can't read client certificate: {e}");
+                error!("Can't read client certificate: {e}");
                 std::process::exit(7);
             },
         }
@@ -602,7 +619,7 @@ async fn main () -> Result<()> {
                     Prefix::Giga => n * 1024.0 * 1024.0 * 1024.0,
                     Prefix::Tera => n * 1024.0 * 1024.0 * 1024.0 * 1024.0,
                     _ => {
-                        eprintln!("Ignoring unrecognized suffix on limit-rate");
+                        warn!("Ignoring unrecognized suffix on limit-rate");
                         0.0
                     },
                 },
@@ -610,10 +627,10 @@ async fn main () -> Result<()> {
             if bps > 0.0 {
                 dl = dl.with_rate_limit(bps as u64);
             } else {
-                eprintln!("Ignoring negative value for limit-rate");
+                warn!("Ignoring negative value for limit-rate");
             }
         } else {
-            eprintln!("Ignoring invalid value for limit-rate");
+            warn!("Ignoring invalid value for limit-rate");
         }
     }
     if let Some(count) = matches.get_one::<u32>("max-error-count") {
@@ -646,8 +663,8 @@ async fn main () -> Result<()> {
             if let Some((container, ordering)) = mp.split_once(':') {
                 dl = dl.with_muxer_preference(container, ordering);
             } else {
-                eprintln!("Ignoring badly formatted {} argument to --muxer-preference",
-                          "container:ordering".italic());
+                warn!("Ignoring badly formatted {} argument to --muxer-preference",
+                      "container:ordering".italic());
             }
         }
     }
@@ -655,12 +672,12 @@ async fn main () -> Result<()> {
         for kv in kvs.collect::<Vec<_>>() {
             if let Some((kid, key)) = kv.split_once(':') {
                 if key.len() != 32 {
-                    eprintln!("Ignoring invalid format for KEY (should be 32 hex digits)");
+                    warn!("Ignoring invalid format for KEY (should be 32 hex digits)");
                 } else {
                     dl = dl.add_decryption_key(String::from(kid), String::from(key));
                 }
             } else {
-                eprintln!("Ignoring badly formed {} argument to --key", "KID:KEY".italic());
+                warn!("Ignoring badly formed {} argument to --key", "KID:KEY".italic());
             }
         }
     }
@@ -755,18 +772,18 @@ async fn main () -> Result<()> {
     dl = dl.verbosity(verbosity);
     if let Some(out) = matches.get_one::<String>("output-file") {
         if let Err(e) = dl.download_to(out).await {
-            eprintln!("{}: {e}", "Download failed".bold().red());
+            error!("{}: {e}", "Download failed".bold().red());
             std::process::exit(2);
         }
     } else {
         match dl.download().await {
             Ok(out) => {
                 if !matches.get_flag("simulate") {
-                    println!("Downloaded DASH content to {out:?}");
+                    info!("Downloaded DASH content to {out:?}");
                 }
             },
             Err(e) => {
-                eprintln!("{}: {e}", "Download failed".bold().red());
+                error!("{}: {e}", "Download failed".bold().red());
                 // TODO we could return different exit codes for different error types
                 std::process::exit(2);
             },
