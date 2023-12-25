@@ -112,9 +112,8 @@ fn test_conformity_time_initialization() {
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
-        .stderr(predicate::str::contains("$Time$ identifier used in initialiation segment URL"))
-        // failure is however due to missing segments rather than the conformity warning
-        .failure();
+        .stderr(predicate::str::contains("$Time$ identifier used in initialization segment"))
+        .success();
 }
 
 
@@ -126,9 +125,8 @@ fn test_conformity_number_initialization() {
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
-        .stderr(predicate::str::contains("$Number$ identifier used in initialiation segment URL"))
-        // failure is however due to missing segments rather than the conformity warning
-        .failure();
+        .stderr(predicate::str::contains("$Number$ identifier used in initialization segment"))
+        .success();
 }
 
 
@@ -141,8 +139,7 @@ fn test_conformity_segmenttimeline_duration() {
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
         .stderr(predicate::str::contains("both SegmentTemplate.duration and SegmentTemplate.SegmentTimeline present"))
-        // failure is however due to missing segments rather than the conformity warning
-        .failure();
+        .success();
 }
 
 
@@ -155,8 +152,7 @@ fn test_conformity_segmenttimeline_number_time() {
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
         .stderr(predicate::str::contains("both $Number$ and $Time$ are used in media template URL"))
-        // failure is however due to missing segments rather than the conformity warning
-        .failure();
+        .success();
 }
 
 
