@@ -16,19 +16,29 @@
 
 # We make a static build of MP4Box from GPAC, which is not packaged for Alpine Linux.
 # https://github.com/gpac/gpac/wiki/GPAC-Build-Guide-for-Linux
-#
-# We aren't able to include shaka-packager for riscv64. It's not packed for Alpine Linux and not
-# distributed in binary form for RISCV64. Attempts to build from source fail due to an error
-# building the third party library abseil-cpp (missing declaration of off64_t).
 FROM --platform=linux/riscv64 docker.io/alpine:edge AS builder
 WORKDIR /src
 COPY ./ ./
 RUN apk update && \
     apk upgrade && \
-    apk add --no-cache bash curl bsd-compat-headers linux-headers build-base file musl-dev pkgconfig git g++ binutils make cmake zlib-dev zlib-static ninja python3 cargo rust && \
+    apk add --no-cache bash curl bsd-compat-headers linux-headers build-base file \
+       musl-dev pkgconfig git g++ binutils make cmake zlib-dev zlib-static ninja python3 cargo rust && \
     cd /src && cargo update && \
     cargo build --release && \
-    git clone https://github.com/gpac/gpac.git && \
+    # shaka-packager needs a few tweaks to build from source. We see C compiler errors when building
+    # with a build type of Release. The official Dockerfile is building with BUILD_TYPE of Debug...
+    # We work around a C compiler error when building the c-ares third party library, which doesn't
+    # build due to -Werror=shift-count-overflow errors from -Werr. We need to modify CMakeLists.txt
+    # to remove the -Werror and add a definition for _LARGEFILE64_SOURCE which is needed while
+    # compiling the abseil-cpp dependency.
+    cd /src && git clone --depth 1 --recurse-submodules https://github.com/shaka-project/shaka-packager.git && \
+    cd shaka-packager && \
+    sed --in-place 's/^.*add_compile_options.*Werror.*/  add_compile_definitions(_LARGEFILE64_SOURCE)/' packager/CMakeLists.txt && \
+    cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug && \
+    cmake --build build/ && \
+    ls -l build/packager && \
+    file build/packager/packager && \
+    cd /src && git clone --depth 1 https://github.com/gpac/gpac.git && \
     cd gpac && ./configure --static-bin && \
     make -j 4 && \
     ls -l bin/gcc/ && \
@@ -50,7 +60,7 @@ LABEL org.opencontainers.image.description="Download media content from a DASH-M
 #   - vlc: GNU GPL v2, not installed because it inflates image size considerably
 #   - mp4decrypt (from bento4): GNU GPL v2
 #   - xsltproc (from libxslt): MIT
-#   - Shaka packager: MIT -- not packaged in this container
+#   - Shaka packager: MIT
 #
 # Note that as of 2023-12, mkvtoolnix is not packaged in alpine:edge/riscv64.
 RUN apk update && \
@@ -65,10 +75,12 @@ COPY --from=builder --chown=root:root --chmod=755 \
     /src/target/release/dash-mpd-cli /usr/local/bin
 COPY --from=builder --chown=root:root --chmod=755 \
     /src/gpac/bin/gcc/MP4Box /usr/local/bin
+COPY --from=builder --chown=root:root --chmod=755 \
+    /src/shaka-packager/build/packager/packager /usr/local/bin/shaka-packager
 
 WORKDIR /content
 ENTRYPOINT ["/usr/local/bin/dash-mpd-cli"]
 
 # Size of our container image:
 #   with vlc:     331 MB
-#   without vlc nor mkvtoolnix: 133 MB  (riscv64)
+#   without vlc nor mkvtoolnix: 245 MB  (riscv64)
