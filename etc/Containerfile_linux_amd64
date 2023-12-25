@@ -32,7 +32,7 @@ WORKDIR /src
 RUN apk update && \
     apk upgrade && \
     apk add --no-cache musl-dev pkgconfig git g++ binutils make zlib-dev zlib-static && \
-    git clone https://github.com/gpac/gpac.git && \
+    git clone --depth 1 https://github.com/gpac/gpac.git && \
     cd gpac && ./configure --static-bin && \
     make && \
     ls -l bin/gcc/
