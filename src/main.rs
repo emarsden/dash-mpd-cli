@@ -130,7 +130,7 @@ async fn main () -> Result<()> {
         .with_target(false)
         .with_timer(timer);
     let filter_layer = EnvFilter::try_from_default_env()
-        .or_else(|_| EnvFilter::try_new("info,reqwest=warn"))
+        .or_else(|_| EnvFilter::try_new("info,reqwest=warn,hyper=warn,h2=warn"))
         .expect("initializing logging");
     tracing_subscriber::registry()
         .with(filter_layer)
