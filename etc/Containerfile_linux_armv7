@@ -1,0 +1,88 @@
+#        -*- Dockerfile -*-
+#
+# Recipe to build a container image for dash-mpd-cli + helper applications, for Linux/arm/v7.
+#
+# This Containerfile contains the recipe needed to generate a docker/podman/OCI container image
+# including the dash-mpd-cli binary alongside the external helper applications that it uses for
+# muxing media streams, for extracting/converting subtitle streams, and for decrypting content
+# infected with DRM. These are packaged with a minimal Alpine Linux installation.
+#
+# To build the container locally (not needed for an end user)
+#
+#   podman manifest create dash-mpd-cli
+#   podman build -f etc/Containerfile_linux_armv7 --platform linux/arm/v7 --tag dash-mpd-cli-linux-armv7 --manifest dash-mpd-cli .
+
+
+# static build of MP4Box from GPAC, which is not packaged for Alpine Linux.
+# https://github.com/gpac/gpac/wiki/GPAC-Build-Guide-for-Linux
+FROM --platform=linux/arm/v7 docker.io/alpine:latest AS builder
+WORKDIR /src
+COPY ./ ./
+RUN apk update && \
+    apk upgrade && \
+    apk add --no-cache curl file musl-dev pkgconfig git g++ binutils rust cargo \
+       make cmake sed zlib-dev zlib-static ninja python3 linux-headers zlib-dev zlib-static && \
+    cargo update && \
+    cargo build --release && \
+    # shaka-packager needs a few tweaks to build from source. We see C compiler errors when building
+    # with a build type of Release. The official Dockerfile is building with BUILD_TYPE of Debug...
+    # We work around a C compiler error when building the c-ares third party library, which doesn't
+    # build due to -Werror=shift-count-overflow errors from -Werr. We need to modify CMakeLists.txt
+    # to remove the -Werror and add a definition for _LARGEFILE64_SOURCE which is needed while
+    # compiling the abseil-cpp dependency.
+    cd /src && git clone --depth 1 --recurse-submodules https://github.com/shaka-project/shaka-packager.git && \
+    cd shaka-packager && \
+    sed --in-place 's/^.*add_compile_options.*Werror.*/  add_compile_definitions(_LARGEFILE64_SOURCE)/' packager/CMakeLists.txt && \
+    cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug && \
+    cmake --build build/ && \
+    ls -l build/packager && \
+    file build/packager/packager && \
+    cd /src && git clone --depth 1 https://github.com/gpac/gpac.git && \
+    cd gpac && ./configure --static-bin && \
+    make -j 4 && \
+    ls -l bin/gcc/ && \
+    file bin/gcc/MP4Box
+
+
+# Now build the final image
+FROM --platform=linux/arm/v7 docker.io/alpine:latest
+LABEL org.opencontainers.image.description="Download media content from a DASH-MPEG or DASH-WebM MPD manifest." \
+    org.opencontainers.image.title="dash-mpd-cli" \
+    org.opencontainers.image.url="https://github.com/emarsden/dash-mpd-cli" \
+    org.opencontainers.image.source="https://github.com/emarsden/dash-mpd-cli" \
+    org.opencontainers.image.version="0.2.11" \
+    org.opencontainers.image.authors="eric.marsden@risk-engineering.org" \
+    org.opencontainers.image.licenses="MIT,GPL-2.0-or-later"
+
+# Install our external dependencies. Licences for the external dependencies:
+#   - ffmpeg: GNU GPL v2
+#   - mkvmerge (from mkvtoolnix): GNU GPL v2
+#   - vlc: GNU GPL v2, not installed because it inflates image size considerably
+#   - mp4decrypt (from bento4): GNU GPL v2
+#   - xsltproc (from libxslt): MIT
+#   - Shaka packager: MIT
+#
+# We can't install shaka-packager from the docker.io/google/shaka-packager image, because it's only
+# built for AMD64.
+RUN apk update && \
+    apk upgrade && \
+    apk add --no-cache ca-certificates libc6-compat wget ffmpeg mkvtoolnix bento4 libxslt && \
+    update-ca-certificates && \
+    mkdir /content && \
+    chown root.root /content && \
+    chmod a=rwx,o+t /content
+
+COPY --from=builder --chown=root:root --chmod=755 \
+    /src/target/release/dash-mpd-cli /usr/local/bin
+COPY --from=builder --chown=root:root --chmod=755 \
+    /src/gpac/bin/gcc/MP4Box /usr/local/bin
+COPY --from=builder --chown=root:root --chmod=755 \
+    /src/shaka-packager/build/packager/packager /usr/local/bin/shaka-packager
+
+WORKDIR /content
+ENTRYPOINT ["/usr/local/bin/dash-mpd-cli"]
+
+# Size of our container image:
+#   with vlc:     331 MB
+#   without vlc:  238 MB  (arm/v7)
+
