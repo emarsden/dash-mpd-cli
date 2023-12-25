@@ -3,7 +3,17 @@
 ## [0.2.12] - Unreleased
 
 - The `tracing` crate is now used for all logging purposes. Logged messages can be controlled using
-  the `RUST_LOG` environment variable.
+  the `RUST_LOG` environment variable. As previously, warning and error messages are printed to
+  stderr, and other informative messages to stdout, but they will now be prefixed by a timestamp.
+
+- The Docker container at `ghcr.io/emarsden/dash-mpd-cli` is now also available for linux/arm/v7
+  (32-bit ARM) and linux/riscv64, in addition to linux/amd64 and linux/arm64.
+
+- Fix bug in the handling of toplevel `Period.SegmentTemplate` elements (rarely present in the wild,
+  but allowed by the DASH specification).
+
+- When deciding whether downloaded video files can be concatenated using the ffmpeg concat muxer, we
+  tolerate missing sar metainformation (not always present in MP4 containers in the wild).
 
 
 ## [0.2.11] - 2023-12-09
