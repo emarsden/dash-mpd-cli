@@ -32,7 +32,7 @@ RUN apk update && \
     rustup toolchain install stable --target aarch64-unknown-linux-musl && \
     cargo update && \
     cargo build --target aarch64-unknown-linux-musl --release && \
-    git clone https://github.com/gpac/gpac.git && \
+    git clone --depth 1 https://github.com/gpac/gpac.git && \
     cd gpac && ./configure --static-bin && \
     make -j 4 && \
     ls -l bin/gcc/ && \
