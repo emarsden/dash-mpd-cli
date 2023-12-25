@@ -33,6 +33,20 @@ fn test_conformity_empty_period() {
 }
 
 #[test]
+fn test_conformity_group_string() {
+    // This manifest contains <AdaptationSet group="notAnInteger">
+    let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_group_string.mpd";
+    let outpath = env::temp_dir().join("empty.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--simulate",
+               "-o", &outpath.to_string_lossy(), mpd])
+        .assert()
+        .stderr(predicate::str::contains("invalid digit found in string"))
+        .failure();
+}
+
+
+#[test]
 fn test_conformity_maxheight () {
     let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_maxHeight.mpd";
     let outpath = env::temp_dir().join("empty.mp4");
@@ -88,6 +102,63 @@ fn test_conformity_invalid_segment_duration() {
         // This conformity check only generates a warning
         .success();
 }
+
+
+#[test]
+fn test_conformity_time_initialization() {
+    let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_segmenttemplate_init_time.mpd";
+    let outpath = env::temp_dir().join("empty.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--simulate",
+               "-o", &outpath.to_string_lossy(), mpd])
+        .assert()
+        .stderr(predicate::str::contains("$Time$ identifier used in initialiation segment URL"))
+        // failure is however due to missing segments rather than the conformity warning
+        .failure();
+}
+
+
+#[test]
+fn test_conformity_number_initialization() {
+    let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_segmenttemplate_init_number.mpd";
+    let outpath = env::temp_dir().join("empty.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--simulate",
+               "-o", &outpath.to_string_lossy(), mpd])
+        .assert()
+        .stderr(predicate::str::contains("$Number$ identifier used in initialiation segment URL"))
+        // failure is however due to missing segments rather than the conformity warning
+        .failure();
+}
+
+
+#[test]
+fn test_conformity_segmenttimeline_duration() {
+    let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_segmenttimeline_duration.mpd";
+    let outpath = env::temp_dir().join("empty.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--simulate",
+               "-o", &outpath.to_string_lossy(), mpd])
+        .assert()
+        .stderr(predicate::str::contains("both SegmentTemplate.duration and SegmentTemplate.SegmentTimeline present"))
+        // failure is however due to missing segments rather than the conformity warning
+        .failure();
+}
+
+
+#[test]
+fn test_conformity_segmenttimeline_number_time() {
+    let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_segmenttimeline_number_time.mpd";
+    let outpath = env::temp_dir().join("empty.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["--simulate",
+               "-o", &outpath.to_string_lossy(), mpd])
+        .assert()
+        .stderr(predicate::str::contains("both $Number$ and $Time$ are used in media template URL"))
+        // failure is however due to missing segments rather than the conformity warning
+        .failure();
+}
+
 
 
 // This an exemple DASH manifest from a commercial ad management platform which is not spec
