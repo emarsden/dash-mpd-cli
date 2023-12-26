@@ -39,10 +39,10 @@ jobs:
         id: build-image
         run: |
           podman manifest create dash-mpd-cli
-          buildah build -f etc/Containerfile_linux_amd64 --arch amd64 --tag dash-mpd-cli-linux-amd64 --manifest dash-mpd-cli .
-          buildah build -f etc/Containerfile_linux_aarch64 --arch arm64 --tag dash-mpd-cli-linux-aarch64 --manifest dash-mpd-cli .
-          buildah build -f etc/Containerfile_linux_armv7 --arch arm/v7 --tag dash-mpd-cli-linux-armv7 --manifest dash-mpd-cli .
-          buildah build -f etc/Containerfile_linux_riscv64 --arch riscv64 --tag dash-mpd-cli-linux-riscv64 --manifest dash-mpd-cli .
+          buildah build -f etc/Containerfile_linux_amd64 --platform linux/amd64 --tag dash-mpd-cli-linux-amd64 --manifest dash-mpd-cli .
+          buildah build -f etc/Containerfile_linux_aarch64 --platform linux/arm64 --tag dash-mpd-cli-linux-aarch64 --manifest dash-mpd-cli .
+          buildah build -f etc/Containerfile_linux_armv7 --platform linux/arm/v7 --tag dash-mpd-cli-linux-armv7 --manifest dash-mpd-cli .
+          buildah build -f etc/Containerfile_linux_riscv64 --platform linux/riscv64 --tag dash-mpd-cli-linux-riscv64 --manifest dash-mpd-cli .
 
       - name: Push container image
         id: push-to-registry
