@@ -85,7 +85,7 @@ jobs:
     steps:
       - name: Install recent qemu build
         run: |
-           sudo apt-get install -y install qemu-user-static
+           sudo apt-get install -y qemu-user-static
            podman pull docker.io/hectorm/qemu-user-static
            podman create --name qemutmp docker.io/hectorm/qemu-user-static
            podman export qemutmp > /tmp/qemu-user-static.tar
