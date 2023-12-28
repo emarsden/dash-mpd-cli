@@ -55,6 +55,7 @@ jobs:
     steps:
       - name: Install recent qemu build
         run: |
+           sudo apt-get -y install qemu-user-static
            podman pull docker.io/hectorm/qemu-user-static
            podman create --name qemutmp docker.io/hectorm/qemu-user-static
            podman export qemutmp > /tmp/qemu-user-static.tar
@@ -62,7 +63,7 @@ jobs:
            mkdir -p /tmp/qemubin
            tar xf /tmp/qemu-user-static.tar -C /tmp/qemubin --wildcards "usr/bin/qemu-*"
            rm /tmp/qemu-user-static.tar
-           cp /tmp/qemubin/usr/bin/qemu* /usr/local/bin
+           sudo cp /tmp/qemubin/usr/bin/qemu* /usr/bin
 
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -73,6 +74,8 @@ jobs:
   # We install a recent build of qemu-user-static binaries, because the version available in
   # ubuntu-latest (currently jammy), v6.2, doesn't work well with riscv64.
   # See https://hub.docker.com/r/hectorm/qemu-user-static
+  # We first install qemu-user-static as a Ubuntu package to get the binfmt-misc settings, then
+  # overwrite the installed binaries
   build-riscv64:
     needs: create-manifest
     runs-on: ubuntu-latest
@@ -86,7 +89,7 @@ jobs:
            mkdir -p /tmp/qemubin
            tar xf /tmp/qemu-user-static.tar -C /tmp/qemubin --wildcards "usr/bin/qemu-*"
            rm /tmp/qemu-user-static.tar
-           cp /tmp/qemubin/usr/bin/qemu* /usr/local/bin
+           sudo cp /tmp/qemubin/usr/bin/qemu* /usr/bin
 
       - name: Checkout sources
         uses: actions/checkout@v4
