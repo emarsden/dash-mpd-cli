@@ -63,7 +63,9 @@ jobs:
            mkdir -p /tmp/qemubin
            tar xf /tmp/qemu-user-static.tar -C /tmp/qemubin --wildcards "usr/bin/qemu-*"
            rm /tmp/qemu-user-static.tar
-           sudo cp /tmp/qemubin/usr/bin/qemu* /usr/bin
+           sudo cp /tmp/qemubin/usr/bin/qemu* /usr/local/bin
+           sudo rm /usr/libexec/qemu-binfmt/arm-binfmt-P
+           sudo ln -s /usr/local/bin/qemu-arm-static /usr/libexec/qemu-binfmt/arm-binfmt-P
 
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -75,7 +77,8 @@ jobs:
   # ubuntu-latest (currently jammy), v6.2, doesn't work well with riscv64.
   # See https://hub.docker.com/r/hectorm/qemu-user-static
   # We first install qemu-user-static as a Ubuntu package to get the binfmt-misc settings, then
-  # overwrite the installed binaries
+  # copy to /usr/local/bin, then update the binfmt-misc symlinks to point to the new binaries. We
+  # can't overwrite the binaries in /usr/bin from within the container ("text file busy"). 
   build-riscv64:
     needs: create-manifest
     runs-on: ubuntu-latest
@@ -89,7 +92,9 @@ jobs:
            mkdir -p /tmp/qemubin
            tar xf /tmp/qemu-user-static.tar -C /tmp/qemubin --wildcards "usr/bin/qemu-*"
            rm /tmp/qemu-user-static.tar
-           sudo cp /tmp/qemubin/usr/bin/qemu* /usr/bin
+           sudo cp /tmp/qemubin/usr/bin/qemu* /usr/local/bin
+           sudo rm /usr/libexec/qemu-binfmt/riscv64-binfmt-P
+           sudo ln -s /usr/local/bin/qemu-riscv64-static /usr/libexec/qemu-binfmt/riscv64-binfmt-P
 
       - name: Checkout sources
         uses: actions/checkout@v4
