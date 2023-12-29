@@ -105,7 +105,7 @@ jobs:
 
 
   push-image:
-    needs: [build-amd64, build-aarch64, build-armv7, build-riscv64]
+    needs: [build-riscv64, build-amd64, build-aarch64, build-armv7]
     runs-on: ubuntu-latest
 
     permissions:
