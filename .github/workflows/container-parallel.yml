@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install qemu
-        run: sudo apt-get -y install qemu-user-static
+        run: sudo apt-get update && sudo apt-get -y install qemu-user-static
 
       - name: Checkout sources
         uses: actions/checkout@v4

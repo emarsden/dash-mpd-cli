@@ -14,7 +14,7 @@ jobs:
       - run: cargo build --no-default-features
 
       - name: Install ffmpeg and GPAC
-        run: sudo apt-get install ffmpeg gpac wget
+        run: sudo apt-get update && sudo apt-get install ffmpeg gpac wget
 
       - name: Install Bento4 mp4decrypt
         run: |
