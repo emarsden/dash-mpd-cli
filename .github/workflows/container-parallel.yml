@@ -112,7 +112,7 @@ jobs:
       contents: read
       packages: write
 
-    name: Build and push container/Linux
+    name: Push container to registry
     steps:
       - name: Log in to ghcr.io
         uses: redhat-actions/podman-login@v1
