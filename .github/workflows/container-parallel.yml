@@ -1,7 +1,7 @@
 # Build a Docker/Podman container with dash-mpd-cli and its external helper applications. We
 # currently build for Linux/AMD64, Linux/aarch64, Linux/armv7 (32 bit) and Linux/riscv64.
 #
-# We Build for the different architectures in parallel, or we run into the 360 minute workflow
+# We build for the different architectures in parallel, or we run into the 360 minute workflow
 # timeout.
 
 name: Build container images/parallel
@@ -21,11 +21,11 @@ jobs:
         run: podman manifest create dash-mpd-cli
     
   build-amd64:
-    needs: create-manifest
+    needs: [create-manifest, build-riscv64]
     runs-on: ubuntu-latest
     steps:
       - name: Install qemu
-        run: sudo apt-get -y install qemu-user-static
+        run: sudo apt-get update && sudo apt-get -y install qemu-user-static
 
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -37,7 +37,7 @@ jobs:
 
      
   build-aarch64:
-    needs: create-manifest
+    needs: [create-manifest, build-riscv64]
     runs-on: ubuntu-latest
     steps:
       - name: Install qemu
@@ -50,7 +50,7 @@ jobs:
         run: buildah build -f etc/Containerfile_linux_aarch64 --platform linux/arm64 --tag dash-mpd-cli-linux-aarch64 --manifest dash-mpd-cli .
 
   build-armv7:
-    needs: create-manifest
+    needs: [create-manifest, build-riscv64]
     runs-on: ubuntu-latest
     steps:
       - name: Install recent qemu build

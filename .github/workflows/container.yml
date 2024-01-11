@@ -22,7 +22,7 @@ jobs:
     name: Build and push container/Linux
     steps:
       - name: Install qemu
-        run: sudo apt install qemu-user-static
+        run: sudo apt-get update && sudo apt-get install qemu-user-static
 
       - name: Checkout sources
         uses: actions/checkout@v4
