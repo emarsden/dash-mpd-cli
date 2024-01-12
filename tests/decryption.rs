@@ -170,8 +170,7 @@ fn test_decryption_cenc_kaltura () {
                "--key", "a07c5d499dcead0fb416fed5913967be:caee457911302478487e6680bf0b3d1b",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
-        .failure();
-    /* MPD has disappeared in December 2023
+        .success();
     check_file_size_approx(&out, 1_323_079);
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
@@ -187,7 +186,6 @@ fn test_decryption_cenc_kaltura () {
     let entries = fs::read_dir(tmpd.path()).unwrap();
     let count = entries.count();
     assert_eq!(count, 1, "Expecting a single output file, got {count}");
-    */
 }
 
 
