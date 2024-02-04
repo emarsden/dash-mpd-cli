@@ -54,6 +54,20 @@ podman-build-multiarch:
     podman manifest push --all localhost/dash-mpd-cli ghcr.io/emarsden/dash-mpd-cli
 
 
+# Run a trivy vulnerability scan of our container image
+# https://github.com/aquasecurity/trivy
+trivy-container:
+    podman run --rm docker.io/aquasec/trivy image ghcr.io/emarsden/dash-mpd-cli:latest
+
+trivy-repository:
+    podman run --rm -v $PWD:/myapp docker.io/aquasec/trivy fs --scanners vuln,secret,misconfig .
+
+
+# Run a grype vulnerability scan of our container image
+# https://github.com/anchore/grype
+grype-container:
+    podman run -it --rm docker.io/anchore/grype ghcr.io/emarsden/dash-mpd-cli:latest
+
 
 publish:
   cargo test
