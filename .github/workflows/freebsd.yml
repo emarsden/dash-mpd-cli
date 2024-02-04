@@ -29,6 +29,7 @@ jobs:
           export PATH="${HOME}/.cargo/bin:$PATH"
           echo "~~~~ rustc --version ~~~~"
           rustc --version
+          pkg install -y --quiet devel/protobuf
           pkg install -y --quiet Bento4
           mp4decrypt || true
           # we are depending here on FreeBSD's Linux binary compatibility layer

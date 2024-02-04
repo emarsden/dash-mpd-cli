@@ -29,8 +29,8 @@ jobs:
           mv /tmp/shaka-packager /usr/local/bin
           chmod +x /usr/local/bin/shaka-packager
 
-      - name: Install xsltproc
-        run: sudo apt install xsltproc
+      - name: Install xsltproc + protobuf compiler
+        run: sudo apt install xsltproc protobuf-compiler
 
       - run: cargo test --jobs 1 -- --show-output
       - run: cargo doc --no-deps --all-features
@@ -70,6 +70,9 @@ jobs:
 
     - name: install xsltproc
       run: brew install libxslt
+
+    - name: install protobuf compiler
+      run: brew install protobuf
 
     - name: install podman
       run: |
@@ -111,8 +114,10 @@ jobs:
         Invoke-WebRequest -Uri "https://github.com/shaka-project/shaka-packager/releases/latest/download/packager-win-x64.exe" -OutFile c:\tools\shaka-packager.exe
 
     - name: install xsltproc
-      run: |
-         choco install --yes --limit-output xsltproc
+      run: choco install --yes --limit-output xsltproc
+
+    - name: install protobuf compiler
+      run: choco install --yes --limit-output protoc
 
     - name: install podman
       run: |
