@@ -17,8 +17,8 @@
 
 FROM docker.io/rust:latest AS rustbuilder
 RUN rustup target add x86_64-unknown-linux-musl
-RUN apt update && apt install -y musl-tools musl-dev
 RUN update-ca-certificates
+RUN apt update && apt install -y musl-tools musl-dev protoc
 
 WORKDIR /src
 COPY ../ ./
@@ -45,7 +45,7 @@ LABEL org.opencontainers.image.description="Download media content from a DASH-M
     org.opencontainers.image.title="dash-mpd-cli" \
     org.opencontainers.image.url="https://github.com/emarsden/dash-mpd-cli" \
     org.opencontainers.image.source="https://github.com/emarsden/dash-mpd-cli" \
-    org.opencontainers.image.version="0.2.12" \
+    org.opencontainers.image.version="0.2.13" \
     org.opencontainers.image.authors="eric.marsden@risk-engineering.org" \
     org.opencontainers.image.licenses="MIT,GPL-2.0-or-later"
 

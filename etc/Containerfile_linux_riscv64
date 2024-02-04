@@ -21,8 +21,8 @@ WORKDIR /src
 COPY ./ ./
 RUN apk update && \
     apk upgrade && \
-    apk add --no-cache bash curl bsd-compat-headers linux-headers build-base file \
-       musl-dev pkgconfig git g++ binutils make cmake zlib-dev zlib-static ninja python3 cargo rust && \
+    apk add --no-cache bash curl bsd-compat-headers linux-headers build-base file git \
+       musl-dev pkgconfig g++ binutils make cmake zlib-dev zlib-static ninja python3 cargo rust protoc && \
     cd /src && cargo update && \
     cargo build --release && \
     # shaka-packager needs a few tweaks to build from source. We see C compiler errors when building
@@ -50,7 +50,7 @@ LABEL org.opencontainers.image.description="Download media content from a DASH-M
     org.opencontainers.image.title="dash-mpd-cli" \
     org.opencontainers.image.url="https://github.com/emarsden/dash-mpd-cli" \
     org.opencontainers.image.source="https://github.com/emarsden/dash-mpd-cli" \
-    org.opencontainers.image.version="0.2.12" \
+    org.opencontainers.image.version="0.2.13" \
     org.opencontainers.image.authors="eric.marsden@risk-engineering.org" \
     org.opencontainers.image.licenses="MIT,GPL-2.0-or-later"
 

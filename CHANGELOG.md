@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.13] - 2024-02-04
+
+- Fix the handling of XLinked elements. The Shaka heliocentrism test case now works correctly.
+
+- Widevine and PlayReady initialization data will now be decoded and pretty printed, alongside their
+  Base64 representation (uses the new `pssh-box` crate).
+
+- Fix concatenation for multiperiod manifests in situations where one period has audio
+  and another has no audio track.
+
+
 ## [0.2.12] - 2023-12-25
 
 - The `tracing` crate is now used for all logging purposes. Logged messages can be controlled using
