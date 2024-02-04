@@ -6,7 +6,7 @@
 #
 # See https://github.com/vmactions/freebsd-vm
 
-on: [push]
+on: workflow_dispatch
 
 name: freebsd
 
