@@ -159,6 +159,8 @@ fn test_decryption_cmaf_h265_multikey () {
 
 
 // Small decryption test cases that we can run on the CI infrastructure.
+// Test ignored because the media is offline in 2024-02.
+#[ignore]
 #[test]
 fn test_decryption_cenc_kaltura () {
     let mpd = "https://cdnapisec.kaltura.com/p/2433871/sp/243387100/playManifest/protocol/https//entryId/1_pgssezc1/format/mpegdash/tags/mbr/f/a.mpd";
