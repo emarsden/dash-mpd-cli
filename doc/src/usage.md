@@ -39,7 +39,7 @@ To send necessary **cookies** to the web server from Firefox (where you have log
 website):
 
     dash-mpd-cli --cookies-from-browser Firefox https://example.com/manifest.mpd -o MyVideo.mp4
-    
+
 If you want to **interrupt a download**, type `Ctrl-C` (this works at least on Linux, Windows, MacOS and
 termux on Android).
 
@@ -53,7 +53,7 @@ termux on Android).
 Options:
 
     -U, --user-agent <user-agent>
-          
+
 The value of the [user-agent
 header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent) in HTTP requests. The
 default is `dash-mpd-cli/<version>`. If you want to look more like traffic from a web browser,
@@ -107,7 +107,7 @@ necessary to download from a live stream, where the duration is often not specif
 manifest. It may also be used to download only the first part of a static stream.
 
     -r, --limit-rate <RATE>
-    
+
 Maximum network bandwidth in octets per second (default no limit). For example, `200K`, `1M`.
 
     --max-error-count <COUNT>
@@ -122,7 +122,7 @@ using the version of this IP address (e.g. using an IPv6 source-address will sel
 traffic).
 
     --add-root-certificate <CERT>
-    
+
 Add a root certificate (in PEM format) to be used when verifying TLS network connections. This
 option can be used multiple times.
 
@@ -159,7 +159,7 @@ The functionality is currently implemented using the external xsltproc commandli
 which implements version 1.0 of the XPath specification.
 
     --xslt-stylesheet <STYLESHEET>
- 
+
 XSLT stylesheet with rewrite rules to be applied to the manifest before downloading media content.
 You can use this option multiple times. This option is currently experimental.
 
@@ -214,10 +214,10 @@ Please note that obtaining decryption keys is beyond the scope of this applicati
     --decryption-application <APP>
 
 Application to use to decrypt encrypted media streams (either `mp4decrypt` or `shaka`).
-          
+
 
     --save-fragments <FRAGMENTS-DIR>
- 
+
 Save media fragments to this directory (will be created if it does not exist).
 
     --ignore-content-type
@@ -230,16 +230,16 @@ Add a custom HTTP header and its value, separated by a colon ':'. You can use th
 
 
     -H, --header <HEADER>
-     
+
 Add a custom HTTP header, in cURL-compatible format. You can use this option multiple times.
 Example: `-H 'X-Custom: ized'`.
 
     --referer <URL>
- 
+
 Specify the content of the Referer HTTP header.
 
     -q, --quiet
-          
+
 Disable printing of diagnostics information to the terminal.
 
     -v, --verbose
@@ -296,18 +296,18 @@ Chrome, ChromeBeta, Chromium).
 Show valid values for the `BROWSER` argument to `--cookies-from-browser` on this computer, then exit.
 
     -h, --help
-  
+
 Print help (see a summary with `-h`)
 
     -V, --version
-  
+
 Print version and exit.
 
 
 
 ## Relevant environment variables
 
-You can set certain environment variables to modify the behaviour of the application: 
+You can set certain environment variables to modify the behaviour of the application:
 
 - The semi-standardized `HTTP_PROXY` and `http_proxy` environment variables allow you to specify a
   proxy to be used for HTTP connections, in the format `http://proxy.my.com:8080`. The `HTTPS_PROXY`
@@ -320,24 +320,34 @@ You can set certain environment variables to modify the behaviour of the applica
 - On Linux and MacOS, the `TMPDIR` environment variable will determine where temporary files used
   while downloading are saved. These temporary files should be cleaned up by the application, unless
   you interrupt execution using Ctrl-C.
-  
+
 - On Microsoft Windows, the `TMP` and `TEMP` environment variables will determine where temporary files
   are saved (see the documentation of the `GetTempPathA` function in the Win32 API, or the Rust
-  documentation for [`std::env::tmpdir`](https://doc.rust-lang.org/std/env/fn.temp_dir.html)). 
+  documentation for [`std::env::tmpdir`](https://doc.rust-lang.org/std/env/fn.temp_dir.html)).
 
 - The `RUST_LOG` environment variable can be used to obtain extra debugging logging (see the
-  [documentation for the env_logger crate](https://docs.rs/env_logger/latest/env_logger/)). For
-  example, you can ask for voluminous logging using
+  [documentation for the env_logger crate](https://docs.rs/env_logger/latest/env_logger/)). The
+  [tracing-subscriber crate](https://crates.io/crates/tracing-subscriber) is used to collect and
+  display logs.
+
+  For example, you can ask for voluminous logging using
 
 ```shell
 RUST_LOG=trace dash-mpd-cli -o foo.mp4 https://example.com/manifest.mpd
 ```
 
-  or if [running in a container](container.html)
-  
+  or voluminous logging only from the dash-mpd crate (excluding details regarding the network
+  connections) with
+
+```shell
+RUST_LOG=dash_mpd=trace dash-mpd-cli -o foo.mp4 https://example.com/manifest.mpd
+```
+
+  If you are [running in a container](container.html):
+
 ```shell
 podman run --env RUST_LOG=trace \
-   -v .:/content \ 
+   -v .:/content \
    ghcr.io/emarsden/dash-mpd-cli \
    https://example.com/manifest.mpd -o foo.mp4
 ```
