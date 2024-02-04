@@ -309,6 +309,7 @@ not work with other applications:
 ## Building
 
 ```
+$ sudo apt install protobuf-compiler
 $ git clone https://github.com/emarsden/dash-mpd-cli
 $ cd dash-mpd-cli
 $ cargo build --release
