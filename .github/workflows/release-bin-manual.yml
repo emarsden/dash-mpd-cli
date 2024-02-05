@@ -7,6 +7,9 @@ jobs:
   create-release:
     runs-on: ubuntu-latest
     steps:
+      - name: Install protobuf compiler
+        run: sudo apt-get update && sudo apt-get install protobuf-compiler
+
       - uses: actions/checkout@v4
       - uses: taiki-e/create-gh-release-action@v1
         with:
