@@ -1,0 +1,23 @@
+# Run a Trivy vulnerability scan on our Docker container image
+
+name: Trivy vulnerability scan
+
+on: workflow_dispatch
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Trivy scan for vulnerabilities
+        uses: aquasecurity/trivy-action@0.16
+        with:
+           image-ref: ghcr.io/emarsden/dash-mpd-cli:latest
+           # exit code when vulnerabilities were found
+           exit-code: 1
+           # severities of vulnerabilities to be displayed
+           severity: HIGH,CRITICAL,MEDIUM,LOW
