@@ -28,6 +28,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build
+      shell: bash
       # the windows-latest runner default C compiler doesn't work with autoconf
       env:
         CC: gcc
