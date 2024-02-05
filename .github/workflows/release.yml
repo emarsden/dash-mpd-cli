@@ -9,25 +9,31 @@ on:
       - v[0-9]+.*
 
 jobs:
-  release:
-    name: release ${{ matrix.target }}
-    runs-on: ubuntu-latest
+  publish:
+    name: Publish release for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
         include:
-          - target: x86_64-pc-windows-gnu
-            archive: zip
-          - target: x86_64-unknown-linux-musl
-            archive: tar.gz
-          - target: x86_64-apple-darwin
-            archive: zip
+          - os: ubuntu-latest
+            artifact_name: dash-mpd-cli
+            asset_name: dash-mpd-cli-linux-amd64
+          - os: windows-latest
+            artifact_name: dash-mpd-cli.exe
+            asset_name: dash-mpd-cli-windows-amd64
+          - os: macos-latest
+            artifact_name: dash-mpd-cli
+            asset_name: dash-mpd-cli-macos-amd64
+
     steps:
-      - uses: actions/checkout@master
-      - name: Compile and release
-        uses: rust-build/rust-build.action@v1.4.4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          RUSTTARGET: ${{ matrix.target }}
-          EXTRA_FILES: "README.md LICENSE-MIT"
+    - uses: actions/checkout@v4
+    - name: Build
+      run: cargo build --release
+
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: target/release/${{ matrix.artifact_name }}
+        asset_name: ${{ matrix.asset_name }}
+        tag: ${{ github.ref }}
