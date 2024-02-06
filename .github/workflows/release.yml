@@ -9,48 +9,96 @@ on:
       - v[0-9]+.*
 
 jobs:
-  publish:
-    name: Publish release for ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            artifact_name: dash-mpd-cli
-            asset_name: dash-mpd-cli-linux-amd64
-          - os: windows-latest
-            artifact_name: dash-mpd-cli.exe
-            asset_name: dash-mpd-cli-windows-amd64
-          - os: macos-latest
-            artifact_name: dash-mpd-cli
-            asset_name: dash-mpd-cli-macos-amd64
-
+  release-linux-musl-amd64:
+    name: Release for Linux/amd64/musl
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
       with:
          fetch-depth: 0
 
     - uses: dtolnay/rust-toolchain@stable
-
-    - name: Set up msys2 build toolchain on Windows
-      if: ${{ matrix.os == 'windows-latest' }}
-      uses: msys2/setup-msys2@v2
       with:
-        install: base-devel autotools mingw-w64-x86_64-toolchain mingw-w64-x86_64-rust mingw-w64-ucrt-x86_64-gcc
+         targets: x86_64-unknown-linux-musl
 
-    - name: Build on Windows
-      if: ${{ matrix.os == 'windows-latest' }}
-      run: cargo build --release
-      shell: msys2 {0}
-
-    - name: Build on non-Windows
-      if: ${{ matrix.os != 'windows-latest' }}
-      run: cargo build --release
-
+    - run: cargo build --release --target x86_64-unknown-linux-musl
+    
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: target/release/${{ matrix.artifact_name }}
-        asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}
+        file: target/release/x86_64-unknown-linux-musl/dash-mpd-cli
+        asset_name: dash-mpd-cli-linux-amd64
+
+
+  release-linux-aarch64:
+    name: Release for Linux/aarch64
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+         fetch-depth: 0
+
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+         targets: aarch64-unknown-linux-gnu
+
+    - run: cargo build --release --target aarch64-unknown-linux-gnu
+    
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref }}
+        file: target/release/aarch64-unknown-linux-gnu/dash-mpd-cli
+        asset_name: dash-mpd-cli-linux-aarch64
+
+
+  # TODO: generate a universal binary
+  release-macos:
+    name: Release for MacOS/aarch64
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+         fetch-depth: 0
+
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+         targets: aarch64-apple-darwin
+
+    - run: cargo build --release --target aarch64-apple-darwin
+    
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref }}
+        file: target/release/aarch64-apple-darwin/dash-mpd-cli
+        asset_name: dash-mpd-cli-macos-aarch64
+
+
+  release-windows:
+    name: Release for Windows/amd64
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+         fetch-depth: 0
+
+      uses: msys2/setup-msys2@v2
+      with:
+        install: base-devel autotools mingw-w64-x86_64-toolchain mingw-w64-x86_64-rust mingw-w64-ucrt-x86_64-gcc
+
+    - run: cargo build --release
+      shell: msys2 {0}
+    
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref }}
+        file: target/release/dash-mpd-cli.exe
+        asset_name: dash-mpd-cli-windows.exe
+
