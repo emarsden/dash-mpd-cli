@@ -27,12 +27,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - uses: msys2/setup-msys2@v2
+        with:
+          install: base-devel autotools mingw-w64-x86_64-toolchain mingw-w64-x86_64-rust mingw-w64-ucrt-x86_64-gcc
+
     - name: Build
-      shell: bash
-      # the windows-latest runner default C compiler doesn't work with autoconf
-      env:
-        CC: gcc
-        CXX: g++
+      shell: msys2 {0}
       run: cargo build --release
 
     - name: Upload binaries to release
