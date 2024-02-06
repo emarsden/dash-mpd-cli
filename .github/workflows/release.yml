@@ -27,12 +27,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - uses: msys2/setup-msys2@v2
+      with:
+         fetch-depth: 0
+
+    - uses: dtolnay/rust-toolchain@nightly
+
+    - name: set up msys2 build environment on Windows runners
+      if: matrix.os == 'windows-latest'
+      uses: msys2/setup-msys2@v2
       with:
         install: base-devel autotools mingw-w64-x86_64-toolchain mingw-w64-x86_64-rust mingw-w64-ucrt-x86_64-gcc
+      defaults:
+        run:
+          shell: msys2 {0}
 
     - name: Build
-      shell: msys2 {0}
       run: cargo build --release
 
     - name: Upload binaries to release
