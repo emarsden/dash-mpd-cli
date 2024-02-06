@@ -44,7 +44,7 @@ jobs:
       shell: msys2 {0}
 
     - name: Build on non-Windows
-      if: ${{ ! matrix.os == 'windows-latest' }}
+      if: ${{ matrix.os != 'windows-latest' }}
       run: cargo build --release
 
     - name: Upload binaries to release
