@@ -30,17 +30,21 @@ jobs:
       with:
          fetch-depth: 0
 
-    - name: Build on Windows
+    - uses: dtolnay/rust-toolchain@stable
+
+    - name: Set up msys2 build toolchain on Windows
       if: ${{ matrix.os == 'windows-latest' }}
       uses: msys2/setup-msys2@v2
       with:
         install: base-devel autotools mingw-w64-x86_64-toolchain mingw-w64-x86_64-rust mingw-w64-ucrt-x86_64-gcc
+
+    - name: Build on Windows
+      if: ${{ matrix.os == 'windows-latest' }}
       run: cargo build --release
       shell: msys2 {0}
 
     - name: Build on non-Windows
       if: ${{ ! matrix.os == 'windows-latest' }}
-      uses: dtolnay/rust-toolchain@nightly
       run: cargo build --release
 
     - name: Upload binaries to release
