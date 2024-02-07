@@ -30,7 +30,7 @@ versions = "6.1.0"
 fs-err = "2.11.0"
 number_prefix = "0.4.0"
 anyhow = "1.0.79"
-tempfile = "3.9.0"
+tempfile = "3.10.0"
 bench_scraper = { version = "0.4.1", features = ["reqwest"], optional = true }
 
 [dev-dependencies]
@@ -44,7 +44,6 @@ axum-server = { version = "0.5.1", features = ["tls-rustls"] }
 axum-auth = "0.4"
 quick-xml = { version = "0.31.0", features = ["serialize"] }
 mp4 = "0.14.0"
-tempfile = "3.8.1"
 lazy_static = "1.4.0"
 ffprobe = "0.3.3"
 file-format = { version = "0.24.0", features = ["reader"] }
