@@ -69,7 +69,10 @@ jobs:
       with:
          targets: aarch64-apple-darwin
 
-    - run: cargo build --release --target aarch64-apple-darwin
+    - run: |
+        cargo build --release --target aarch64-apple-darwin
+        ls -l target/release
+        ls -l target/release/aarch64-apple-darwin
     
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
