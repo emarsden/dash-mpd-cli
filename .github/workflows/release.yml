@@ -23,7 +23,7 @@ jobs:
          targets: x86_64-unknown-linux-musl
 
     - name: Install Musl dev tools
-      run: sudo apt-get update && sudo apt-get install musl-dev
+      run: sudo apt-get update && sudo apt-get install musl-dev musl-tools
 
     - run: cargo build --release --target x86_64-unknown-linux-musl
     
@@ -32,7 +32,7 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: target/release/x86_64-unknown-linux-musl/dash-mpd-cli
+        file: target/x86_64-unknown-linux-musl/release/dash-mpd-cli
         asset_name: dash-mpd-cli-linux-amd64
 
 
@@ -57,16 +57,14 @@ jobs:
         export CXX_aarch64_unknown_linux_gnu=aarch64-linux-gnu-g++
         cargo build --release --target aarch64-unknown-linux-gnu
         ls -l target/
-        ls -l target/build
-        ls -l target/release
-        ls -l target/release/aarch64-unknown-linux-gnu
+        ls -l target/aarch64-unknown-linux-gnu/release
     
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: target/release/aarch64-unknown-linux-gnu/dash-mpd-cli
+        file: target/aarch64-unknown-linux-gnu/release/dash-mpd-cli
         asset_name: dash-mpd-cli-linux-aarch64
 
 
@@ -85,18 +83,18 @@ jobs:
 
     - run: |
         cargo build --release --target aarch64-apple-darwin
-        echo target/build listing
-        ls -l target/build
-        echo target/release listing
-        ls -l target/release
-        ls -l target/release/aarch64-apple-darwin
+        echo target/ listing
+        ls -l target/
+        echo target/aarch64-apple-darwin listing
+        ls -l target/aarch64-apple-darwin
+        ls -l target/aarch64-apple-darwin/release
     
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: target/release/aarch64-apple-darwin/dash-mpd-cli
+        file: target/aarch64-apple-darwin/release/dash-mpd-cli
         asset_name: dash-mpd-cli-macos-aarch64
 
 
