@@ -460,6 +460,7 @@ async fn main () -> Result<()> {
     };
     let mut cb = reqwest::Client::builder()
         .user_agent(ua)
+        .cookie_store(true)
         .gzip(true);
     #[cfg(feature = "cookies")]
     if let Some(browser) = matches.get_one::<String>("cookies-from-browser") {
@@ -530,9 +531,6 @@ async fn main () -> Result<()> {
         cb = cb.timeout(Duration::new(30, 0));
     }
     let mut headers = HashMap::new();
-    if let Some(url) = matches.get_one::<String>("referer") {
-        headers.insert("referer".to_string(), url.to_string());
-    }
     if let Some(hvs) = matches.get_many::<String>("header") {
         for hv in hvs.collect::<Vec<_>>() {
             if let Some((h, v)) = hv.split_once(':') {
@@ -601,6 +599,9 @@ async fn main () -> Result<()> {
     let url = matches.get_one::<String>("url").unwrap();
     let mut dl = DashDownloader::new(url)
         .with_http_client(client);
+    if let Some(url) = matches.get_one::<String>("referer") {
+        dl = dl.with_referer(url.to_string());
+    }
     if !matches.get_flag("no-progress") && !matches.get_flag("quiet") {
         dl = dl.add_progress_observer(Arc::new(DownloadProgressBar::new()));
     }

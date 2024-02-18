@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.2.14] - 2024-02-18
+
+- The referer header specified using the `--referer` commandline option is now used in all network
+  requests, including requests for media segments. Previously, the referer specified on the
+  commandline was only used to retrieve the MPD manifest, and the referer header used in network
+  requests for media segments was the URL of the MPD manifest, updated to account for any HTTP
+  redirects and for use of the DASH `Location` redirect functionality. The new behaviour allows the
+  user to mimic the behaviour of a web browser which is playing media embedded in a web page.
+
+- Cookies set while retrieving the MPD manifest will be included in requests for media segments.
+  In practice, media servers rarely check cookies, as doing so is expensive on CDN infrastructure,
+  but this should help to mimic the behaviour of a web browser which is playing media embedded in a
+  web page.
+
+- Fix handling of XLinked elements when remote XML fragment contains multiple elements.
+
+
 ## [0.2.13] - 2024-02-04
 
 - Fix the handling of XLinked elements. The Shaka heliocentrism test case now works correctly.
@@ -7,8 +24,8 @@
 - Widevine and PlayReady initialization data will now be decoded and pretty printed, alongside their
   Base64 representation (uses the new `pssh-box` crate).
 
-- Fix concatenation for multiperiod manifests in situations where one period has audio
-  and another has no audio track.
+- Fix concatenation for multiperiod manifests in situations where one period has audio and another
+  has no audio track.
 
 
 ## [0.2.12] - 2023-12-25
@@ -150,12 +167,12 @@
 
 - New value `intermediate` recognized for the `--quality` commandline argument. If the DASH manifest
   specifies several Adaptations with different bitrates or quality levels (specified by the
-  `@qualityRanking` attribute in the manifest -- quality ranking may different from bandwidth
+  `@qualityRanking` attribute in the manifest -- quality ranking may differ from bandwidth
   ranking when different codecs are used), prefer the Adaptation with an intermediate bitrate
   (closest to the median value).
 
 - New commandline arguments `--auth-username` and `--auth-password` to specify the username and
-  password to be used for authentication with the server. Currently only HTTP Basic authentication
+  password to be used for authentication with the server. Currently, only HTTP Basic authentication
   is supported.
 
 - Improve support for selecting the output container format based on its filename extension.
@@ -354,7 +371,7 @@
 
 - Add commmandline argument `--prefer-language` to allow the user to specify the preferred language
   when multiple audio streams with different languages are available. The argument must be in RFC
-  5646 format (eg. "fr" or "en-AU"). If a preference is not specified and multiple audio streams are
+  5646 format (e.g. "fr" or "en-AU"). If a preference is not specified and multiple audio streams are
   present, the first one listed in the DASH manifest will be downloaded.
 
 
