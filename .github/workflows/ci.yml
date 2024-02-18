@@ -96,7 +96,10 @@ jobs:
     - uses: dtolnay/rust-toolchain@stable
 
     # We need path-type of inherit to include important utility applications such as podman,
-    # mp4decrypt, shaka-packager, ffmpeg, xsltproc on the $PATH for our tests.
+    # mp4decrypt, shaka-packager, ffmpeg, xsltproc on the $PATH for our tests. To be more precise,
+    # we need in addition to the standard UCRT paths, /c/ProgramData/chocolatey/bin and
+    # /c/windows/system32.
+    # See https://github.com/msys2/setup-msys2
     - uses: msys2/setup-msys2@v2
       with:
         msystem: UCRT64
