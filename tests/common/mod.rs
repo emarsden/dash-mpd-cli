@@ -36,8 +36,33 @@ pub fn ffmpeg_approval(name: &Path) -> bool {
     }
 }
 
+// Return a small MP4 fragment that can be concatenated to produce a playable MP4 file.
+pub fn generate_minimal_mp4 () -> Vec<u8> {
+    let tmp = env::temp_dir().join("fragment.mp4");
+    let ffmpeg = Command::new("ffmpeg")
+        .args(["-f", "lavfi",
+               "-y",  // overwrite output file if it exists
+               "-nostdin",
+               "-i", "testsrc=size=10x10:rate=1",
+               "-t", "4",
+               // Force the use of the libx264 encoder. ffmpeg defaults to platform-specific
+               // encoders (which may allow hardware encoding) on certain builds, which may have
+               // stronger restrictions on acceptable frame rates and so on. For example, the
+               // h264_mediacodec encoder on Android has more constraints than libx264 regarding the
+               // number of keyframes.
+               "-c:v", "libx264",
+               "-vf", "hue=s=0",
+               "-g", "52",
+               "-f", "mp4",
+               "-movflags", "frag_keyframe+empty_moov",
+               tmp.to_str().unwrap()])
+        .output()
+        .expect("spawning ffmpeg");
+    assert!(ffmpeg.status.success());
+    fs::read(tmp).unwrap()
+}
 
-pub fn generate_minimal_mp4() -> Vec<u8> {
+pub fn generate_minimal_mp4_rust() -> Vec<u8> {
     let config = mp4::Mp4Config {
         major_brand: str::parse("isom").unwrap(),
         minor_version: 512,
