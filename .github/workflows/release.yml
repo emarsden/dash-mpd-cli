@@ -4,6 +4,7 @@ permissions:
   contents: write
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - v[0-9]+.*
@@ -87,7 +88,7 @@ jobs:
       with:
          fetch-depth: 0
 
-      uses: msys2/setup-msys2@v2
+    - uses: msys2/setup-msys2@v2
       with:
         install: base-devel autotools mingw-w64-ucrt-x86_64-toolchain mingw-w64-ucrt-x86_64-rust mingw-w64-ucrt-x86_64-gcc
 
