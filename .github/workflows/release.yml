@@ -56,8 +56,6 @@ jobs:
         export CC_aarch64_unknown_linux_gnu=aarch64-linux-gnu-gcc
         export CXX_aarch64_unknown_linux_gnu=aarch64-linux-gnu-g++
         cargo build --release --target aarch64-unknown-linux-gnu
-        ls -l target/
-        ls -l target/aarch64-unknown-linux-gnu/release
     
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
@@ -83,11 +81,6 @@ jobs:
 
     - run: |
         cargo build --release --target aarch64-apple-darwin
-        echo target/ listing
-        ls -l target/
-        echo target/aarch64-apple-darwin listing
-        ls -l target/aarch64-apple-darwin
-        ls -l target/aarch64-apple-darwin/release
     
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
