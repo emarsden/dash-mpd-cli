@@ -92,11 +92,17 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
+
     - uses: dtolnay/rust-toolchain@stable
 
+    # We need path-type of inherit to include important utility applications such as podman,
+    # mp4decrypt, shaka-packager, ffmpeg, xsltproc on the $PATH for our tests.
     - uses: msys2/setup-msys2@v2
       with:
-        install: base-devel autotools mingw-w64-x86_64-toolchain mingw-w64-x86_64-rust mingw-w64-ucrt-x86_64-gcc
+        msystem: UCRT64
+        update: true
+        install: base-devel autotools mingw-w64-ucrt-x86_64-toolchain mingw-w64-ucrt-x86_64-rust mingw-w64-ucrt-x86_64-gcc
+        path-type: inherit
 
     - name: install protobuf compiler
       run: choco install --yes --limit-output protoc

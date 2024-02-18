@@ -89,7 +89,7 @@ jobs:
 
       uses: msys2/setup-msys2@v2
       with:
-        install: base-devel autotools mingw-w64-x86_64-toolchain mingw-w64-x86_64-rust mingw-w64-ucrt-x86_64-gcc
+        install: base-devel autotools mingw-w64-ucrt-x86_64-toolchain mingw-w64-ucrt-x86_64-rust mingw-w64-ucrt-x86_64-gcc
 
     - run: cargo build --release
       shell: msys2 {0}
