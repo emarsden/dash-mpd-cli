@@ -45,6 +45,9 @@ jobs:
       with:
          targets: aarch64-unknown-linux-gnu
 
+    - name: Install GCC cross-compiler for aarch64
+      run: sudo apt-get update && sudo apt-get install gcc-12-aarch64-linux-gnu
+
     - run: cargo build --release --target aarch64-unknown-linux-gnu
     
     - name: Upload binaries to release
