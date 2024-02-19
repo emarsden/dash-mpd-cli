@@ -5,6 +5,7 @@ export LLVM_PROFILE_FILE := 'coverage/cargo-test-%p-%m.profraw'
 default:
   @just --list
 
+version := `git describe --tags`
 
 grcov:
   @echo 'Running tests for coverage with grcov'
@@ -47,11 +48,22 @@ podman:
 podman-build-multiarch:
     echo First need to "podman login ghcr.io"
     podman manifest create dash-mpd-cli
+    podman manifest annotate --annotation=org.opencontainers.image.description="Download media content from a DASH-MPEG or DASH-WebM MPD manifest."
+    podman manifest annotate --annotation=org.opencontainers.image.title="dash-mpd-cli"
+    podman manifest annotate --annotation=org.opencontainers.image.url="https://github.com/emarsden/dash-mpd-cli"
+    podman manifest annotate --annotation=org.opencontainers.image.source="https://github.com/emarsden/dash-mpd-cli"
+    podman manifest annotate --annotation=org.opencontainers.image.version={{version}}
+    podman manifest annotate --annotation=org.opencontainers.image.authors="eric.marsden@risk-engineering.org"
+    podman manifest annotate --annotation=org.opencontainers.image.licenses="MIT,GPL-2.0-or-later"
     podman build -f etc/Containerfile_linux_amd64 --arch amd64 --tag dash-mpd-cli-linux-amd64 --manifest dash-mpd-cli .
     podman build -f etc/Containerfile_linux_aarch64 --arch arm64 --tag dash-mpd-cli-linux-aarch64 --manifest dash-mpd-cli .
     podman build -f etc/Containerfile_linux_armv7 --arch arm/v7 --tag dash-mpd-cli-linux-armv7 --manifest dash-mpd-cli .
     podman build -f etc/Containerfile_linux_riscv64 --arch riscv64 --tag dash-mpd-cli-linux-riscv64 --manifest dash-mpd-cli .
     podman manifest push --all localhost/dash-mpd-cli ghcr.io/emarsden/dash-mpd-cli
+
+
+list-docker-platforms:
+    podman run --rm docker.io/mplatform/mquery ghcr.io/emarsden/dash-mpd-cli:latest
 
 
 # Run a trivy vulnerability scan of our container image
