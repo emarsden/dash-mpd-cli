@@ -24,7 +24,7 @@ reqwest = { version = "0.11.24", default-features = false, features = ["gzip", "
 strum = { version = "0.24.1", features = ["derive"] }
 colored = "2.0.4"
 indicatif = "0.17.8"
-clap = { version = "4.3.24", features = ["cargo", "unicode", "wrap_help"] }
+clap = { version = "=4.3.24", features = ["cargo", "unicode", "wrap_help"] }
 serde_json = "1.0.113"
 versions = "6.1.0"
 fs-err = "2.11.0"
