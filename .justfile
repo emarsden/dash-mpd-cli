@@ -36,6 +36,11 @@ termux:
     cargo update
     cargo test --no-default-features -- --show-output
 
+# Build with the UCRT64 enviroment of MSYS, using a restricted PATH to limit the possibility of
+# conflicts with non-mingw applications (in particular for autoconf and the C compiler that are
+# needed to build the protobuf-src crate).
+mingw:
+    PATH=/ucrt64/bin:/usr/local/bin:/usr/bin:/bin:/c/windows/System32:/c/ProgramData/chocolatey/bin cargo build --release
 
 podman:
     podman run -ti -v /tmp:/tmp -v .:/content ghcr.io/emarsden/dash-mpd-cli "$@"
