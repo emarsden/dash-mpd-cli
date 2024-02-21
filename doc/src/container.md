@@ -29,7 +29,7 @@ following **helper applications** are included in the container:
 ```admonish info title="Advantages of running in a container"
 Why run the application in a container, instead of natively on your machine?
 
-- Good internet hygiene. It’s much safer, because the container is sandboxed: it can’t modify
+- Good internet hygiene. It’s much safer, because the container is **sandboxed**: it can’t modify
   your host machine, except for writing downloaded media to the directory you specify. This 
   is a very good idea when running random software you downloaded from the internet!
 
@@ -72,7 +72,7 @@ podman machine start
 This step is not necessary on Linux.
 
 You can then fetch the container image (currently around 220 MB) from the GitHub container registry
-ghcr.io and save it to your local disk for later use:
+`ghcr.io` and save it to your local disk for later use:
 
 ~~~admonish example title="Fetch the container image"
 ```shell
@@ -84,25 +84,26 @@ Then to download some content from an MPD manifest:
 
 ~~~admonish example title="Run dash-mpd-cli in the container"
 ```shell
-podman run --rm -v .:/content ghcr.io/emarsden/dash-mpd-cli https://example.com/manifest.mpd
+podman run --rm --tty -v .:/content ghcr.io/emarsden/dash-mpd-cli https://example.com/manifest.mpd
 ```
 ~~~
 
 This should save the media to a file named something like `example.com_manifest.mp4` 💪 (you can
-change this name by adding `-o foo.mp4`).
+change this name by adding `-o foo.mp4`). It will remove the container image from your local storage
+once the download is finished (`--rm`) and will use a terminal to show a progress bar (`--tty`).
 
 If you want your local copy of the container image to be **updated if a newer one is available** from
 the registry, add `--pull=newer`:
 
 ```
-podman run --rm --pull=newer \
+podman run --rm --tty --pull=newer \
   -v .:/content \
   ghcr.io/emarsden/dash-mpd-cli \
   -v <MPD-URL> -o foo.mp4
 ```
 
-You can later delete the image if you not longer need it using `podman image rm` with the image id
-shown by `podman images`, as illustrated below:
+If you don't use the `--rm` argument, you can later delete the image if you no longer need it using
+`podman image rm` with the image id shown by `podman images`, as illustrated below:
 
 ~~~admonish example title="Delete the container image from your local disk"
 ```shell
@@ -136,7 +137,7 @@ see it. Therefore, you should provide a relative name rather than an absolute na
 If the stylesheet is in the `rewrites` directory, for example:
 
 ```shell
-podman run --rm --pull=newer \
+podman run --rm --tty --pull=newer \
   -v .:/content \ 
   --xslt-stylesheet rewrites/my-rewrites.xslt \
   ghcr.io/emarsden/dash-mpd-cli \
@@ -154,5 +155,5 @@ running as root (runsc doesn’t currently support rootless operation).
 
 ```shell
 sudo apt install runsc
-sudo podman --runtime=runsc run --rm -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
+sudo podman --runtime=runsc run --rm --tty -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
 ```
