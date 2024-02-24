@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.15] - 2024-02-24
+
+- Fix the handling of the `--referer` commandline option, now used in all network
+  requests (bug reported by @yoyo890121).
+
+
 ## [0.2.14] - 2024-02-18
 
 - The referer header specified using the `--referer` commandline option is now used in all network

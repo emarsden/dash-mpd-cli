@@ -1,6 +1,6 @@
 [package]
 name = "dash-mpd-cli"
-version = "0.2.14"
+version = "0.2.15"
 authors = ["Eric Marsden <eric.marsden@risk-engineering.org>"]
 license = "MIT"
 description = "Download media content from a DASH-MPEG or DASH-WebM MPD manifest."
@@ -18,7 +18,7 @@ tokio = { version = "1.36.0", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.40", features = ["attributes"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 time = { version = "0.3.30", features = ["local-offset"] }
-dash-mpd = { version = "0.14.9", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
+dash-mpd = { version = "0.15.0", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
 reqwest = { version = "0.11.24", default-features = false, features = ["gzip", "rustls-tls", "socks", "json", "cookies"] }
 # We need to stay synchronized with the version used in the bench_scraper crate.
 strum = { version = "0.24.1", features = ["derive"] }
