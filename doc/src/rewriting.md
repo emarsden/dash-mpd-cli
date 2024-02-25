@@ -60,6 +60,19 @@ can use the following:
 --drop-elements "//mpd:AdaptationSet[.//mpd:Label[contains(text(), 'audiodescr')]]"
 ```
 
+If instead the AdaptationSet you want to ignore is identified by a `Role` child element, something
+like
+
+```
+<Role schemeIdUri="urn:mpeg:dash:role:2011" value="alternate"/>
+```
+
+you can use the following
+
+```
+--drop-elements "//mpd:AdaptationSet[.//mpd:Role[@value='alternate']]"
+```
+
 ~~~
 
 Another possible application of the XML filtering capability is to avoid overloading the web servers
