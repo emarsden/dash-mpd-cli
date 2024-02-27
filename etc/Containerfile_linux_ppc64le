@@ -55,7 +55,7 @@ LABEL org.opencontainers.image.url "https://github.com/emarsden/dash-mpd-cli"
 LABEL org.opencontainers.image.source "https://github.com/emarsden/dash-mpd-cli"
 LABEL org.opencontainers.image.version "0.2.15"
 LABEL org.opencontainers.image.authors "eric.marsden@risk-engineering.org"
-LABEL org.opencontainers.image.licenses "MIT,GPL-2.0-or-later"
+LABEL org.opencontainers.image.licenses "MIT"
 
 # Install our external dependencies. Licences for the external dependencies:
 #   - ffmpeg: GNU GPL v2
