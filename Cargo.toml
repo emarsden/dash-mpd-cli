@@ -30,7 +30,7 @@ versions = "6.1.0"
 fs-err = "2.11.0"
 number_prefix = "0.4.0"
 anyhow = "1.0.79"
-tempfile = "3.10.0"
+tempfile = "3.10.1"
 bench_scraper = { version = "0.4.1", features = ["reqwest"], optional = true }
 
 [dev-dependencies]
@@ -38,7 +38,7 @@ rustls = "0.21.10"
 rustls-pemfile = "1.0.3"
 tokio = { version = "1.36.0", features = ["rt-multi-thread", "time", "macros"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
-test-log = "0.2.14"
+test-log = "0.2.15"
 axum = "0.6.20"
 axum-server = { version = "0.5.1", features = ["tls-rustls"] }
 axum-auth = "0.4"
