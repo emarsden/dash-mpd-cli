@@ -35,7 +35,7 @@ bench_scraper = { version = "0.4.1", features = ["reqwest"], optional = true }
 
 [dev-dependencies]
 rustls = "0.21.10"
-rustls-pemfile = "1.0.3"
+rustls-pemfile = "2.1.1"
 tokio = { version = "1.36.0", features = ["rt-multi-thread", "time", "macros"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 test-log = "0.2.15"
