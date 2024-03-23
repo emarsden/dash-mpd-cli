@@ -45,11 +45,6 @@ impl AppState {
 
 #[test(tokio::test(flavor = "multi_thread", worker_threads = 2))]
 async fn test_xslt_rewrite_media() -> Result<()> {
-    let subscriber = tracing_subscriber::fmt()
-        .compact()
-        .finish();
-    tracing::subscriber::set_global_default(subscriber)?;
-
     // State shared between the request handlers.
     let shared_state = Arc::new(AppState::new());
 

@@ -58,11 +58,6 @@ impl AppState {
 
 #[test(tokio::test(flavor = "multi_thread", worker_threads = 2))]
 async fn test_add_root_cert() -> Result<(), anyhow::Error> {
-    let subscriber = tracing_subscriber::fmt()
-        .compact()
-        .finish();
-    tracing::subscriber::set_global_default(subscriber)?;
-
     let base = BaseURL {
         base: "https://localhost:6666/init.mp4".to_string(),
         ..Default::default()

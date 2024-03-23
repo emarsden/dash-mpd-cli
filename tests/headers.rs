@@ -32,11 +32,6 @@ use common::generate_minimal_mp4;
 
 #[test(tokio::test(flavor = "multi_thread", worker_threads = 2))]
 async fn test_headers() -> Result<()> {
-    let subscriber = tracing_subscriber::fmt()
-        .compact()
-        .finish();
-    tracing::subscriber::set_global_default(subscriber)?;
-
     async fn send_mpd(headers: HeaderMap) -> impl IntoResponse {
         assert_eq!(headers["user-agent"], "MyFakeUserAgent/42.0");
         assert_eq!(headers["referer"], "https://twiddles.org/");
