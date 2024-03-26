@@ -134,11 +134,11 @@ async fn test_basic_auth() -> Result<()> {
     let mpd_fail = client.get("http://localhost:6666/mpd")
         .send().await
         .expect("unauthenticated manifest request");
-    assert_eq!(mpd_fail.status(), StatusCode::BAD_REQUEST);
+    assert_eq!(mpd_fail.status(), http::StatusCode::BAD_REQUEST);
     let segment_fail = client.get("http://localhost:6666/media/foo.mp4")
         .send().await
         .expect("unauthenticated segment request");
-    assert_eq!(segment_fail.status(), StatusCode::BAD_REQUEST);
+    assert_eq!(segment_fail.status(), http::StatusCode::BAD_REQUEST);
 
     // Now download the media content from the MPD and check that the expected number of segments
     // were requested. Since we are in verbose mode, we make two requests for the init fragment, the

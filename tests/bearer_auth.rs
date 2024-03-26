@@ -136,11 +136,11 @@ async fn test_bearer_auth() -> Result<()> {
     let mpd_fail = client.get("http://localhost:6666/mpd")
         .send().await
         .expect("unauthenticated manifest request");
-    assert_eq!(mpd_fail.status(), StatusCode::BAD_REQUEST);
+    assert_eq!(mpd_fail.status(), http::StatusCode::BAD_REQUEST);
     let segment_fail = client.get("http://localhost:6666/media/foo.mp4")
         .send().await
         .expect("unauthenticated segment request");
-    assert_eq!(segment_fail.status(), StatusCode::BAD_REQUEST);
+    assert_eq!(segment_fail.status(), http::StatusCode::BAD_REQUEST);
 
     // Now download the media content from the MPD and check that the expected number of segments
     // were requested. We expect 2 segment requests because our verbosity level of 2 means that the

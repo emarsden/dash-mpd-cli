@@ -51,20 +51,27 @@ podman:
 #
 # Needs the package qemu-user-static installed to cross-build the various architectures.
 podman-build-multiarch:
+    #!/usr/bin/env bash
     echo First need to "podman login ghcr.io"
-    podman manifest create dash-mpd-cli
-    podman manifest annotate --annotation=org.opencontainers.image.description="Download media content from a DASH-MPEG or DASH-WebM MPD manifest."
-    podman manifest annotate --annotation=org.opencontainers.image.title="dash-mpd-cli"
-    podman manifest annotate --annotation=org.opencontainers.image.url="https://github.com/emarsden/dash-mpd-cli"
-    podman manifest annotate --annotation=org.opencontainers.image.source="https://github.com/emarsden/dash-mpd-cli"
-    podman manifest annotate --annotation=org.opencontainers.image.version={{version}}
-    podman manifest annotate --annotation=org.opencontainers.image.authors="eric.marsden@risk-engineering.org"
-    podman manifest annotate --annotation=org.opencontainers.image.licenses="MIT,GPL-2.0-or-later"
+    DIGEST=`podman manifest create dash-mpd-cli`
+    # podman manifest annotate --annotation org.opencontainers.image.description="Download media content from a DASH-MPEG or DASH-WebM MPD manifest." dash-mpd-cli $DIGEST
+    # podman manifest annotate --annotation org.opencontainers.image.title="dash-mpd-cli" dash-mpd-cli $DIGEST
+    # podman manifest annotate --annotation org.opencontainers.image.url="https://github.com/emarsden/dash-mpd-cli" dash-mpd-cli $DIGEST
+    # podman manifest annotate --annotation org.opencontainers.image.source="https://github.com/emarsden/dash-mpd-cli" dash-mpd-cli $DIGEST
+    # podman manifest annotate --annotation org.opencontainers.image.version={{version}} dash-mpd-cli $DIGEST
+    # podman manifest annotate --annotation org.opencontainers.image.authors="eric.marsden@risk-engineering.org" dash-mpd-cli $DIGEST
+    # podman manifest annotate --annotation org.opencontainers.image.licenses="MIT" dash-mpd-cli $DIGEST
     podman build -f etc/Containerfile_linux_amd64 --arch amd64 --tag dash-mpd-cli-linux-amd64 --manifest dash-mpd-cli .
     podman build -f etc/Containerfile_linux_aarch64 --arch arm64 --tag dash-mpd-cli-linux-aarch64 --manifest dash-mpd-cli .
     podman build -f etc/Containerfile_linux_armv7 --arch arm/v7 --tag dash-mpd-cli-linux-armv7 --manifest dash-mpd-cli .
     podman build -f etc/Containerfile_linux_riscv64 --arch riscv64 --tag dash-mpd-cli-linux-riscv64 --manifest dash-mpd-cli .
     podman manifest push --all localhost/dash-mpd-cli ghcr.io/emarsden/dash-mpd-cli
+
+
+test-annotate-manifest:
+    DIGEST=`podman manifest create test-annotation`
+    podman build -f etc/Containerfile_linux_amd64 --arch amd64 --tag test-annotation-linux-amd64 --manifest test-annotation .
+    podman manifest push --format oci --all localhost/test-annotation ttl.sh/test-annotation
 
 
 list-docker-platforms:
