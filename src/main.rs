@@ -790,6 +790,9 @@ async fn main () -> Result<()> {
             },
             Err(e) => {
                 error!("{}: {e}", "Download failed".bold().red());
+                if e.to_string().contains("how to download dynamic MPD") {
+                    info!("See the help for the --enable-live-streams commandline option.");
+                }
                 // TODO we could return different exit codes for different error types
                 std::process::exit(2);
             },
