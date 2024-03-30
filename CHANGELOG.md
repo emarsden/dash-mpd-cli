@@ -1,8 +1,19 @@
 # Changelog
 
+## [0.2.16] - 2024-03-30
+
+- Improvements to error reporting. Network timeouts and connection errors will now be reported as
+  different error types. Additional contextual information regarding the underlying source of an
+  error will be printed. For example, a network connection error caused by a TLS configuration error
+  will include information on the underlying issue.
+
+- Updates to our dependencies (in particular the reqwest crate used for HTTP requests) should allow
+  improved compatibility and performance.
+
+
 ## [0.2.15] - 2024-02-24
 
-- Fix the handling of the `--referer` commandline option, now used in all network
+- Fix the handling of the `--referer` commandline option, which is now used in all network
   requests (bug reported by @yoyo890121).
 
 
