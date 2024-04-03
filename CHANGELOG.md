@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.17] - Unreleased
+
+- The prebuilt software container `ghcr.io/emarsden/dash-mpd-cli` is now built also for
+  Linux/ppc64le.
+
+
 ## [0.2.16] - 2024-03-30
 
 - Improvements to error reporting. Network timeouts and connection errors will now be reported as
