@@ -13,39 +13,45 @@
 #   podman build -f etc/Containerfile_linux_ppc64le --platform linux/ppc64le --tag dash-mpd-cli-linux-ppc64le --manifest dash-mpd-cli .
 
 
+# We build shaka-packager from source, because it's not packaged for Alpine Linux and not
+# distributed in binary form for ppc64le by upstream. It doesn't build on Alpine Linux (with musl-libc)
+# due to a missing function definition concerning UnscaledCycleClock::Frequency() used by the
+# third-party library abseil-cpp. We build on Debian instead and link statically with glibc.
+FROM --platform=linux/ppc64le docker.io/debian:bookworm-slim as debian
+WORKDIR /src
+RUN apt-get update && apt-get install -y build-essential g++ python3 make cmake zlib1g-dev \
+        libssl-dev curl pkgconf git ninja-build file && \
+    echo == Building shaka packager && \
+    cd /src && git clone --depth 1 --recurse-submodules https://github.com/shaka-project/shaka-packager.git && \
+    cd shaka-packager && \
+    # sed --in-place 's/^.*add_compile_options.*Werror.*/  add_compile_definitions(_LARGEFILE64_SOURCE)/' packager/CMakeLists.txt && \
+    cmake -B build -G Ninja \
+       -DCMAKE_BUILD_TYPE=Release \
+       -DBUILD_SHARED_LIBS="OFF" \
+       -DFULLY_STATIC="ON" && \
+    cmake --build build/ && \
+    cmake --install build/ --strip --config Release && \
+    # this installs as /usr/local/bin/packager
+    ls -l /usr/local/bin
+
 # We make a static build of MP4Box from GPAC, which is not packaged for Alpine Linux.
 # https://github.com/gpac/gpac/wiki/GPAC-Build-Guide-for-Linux
-#
-# We attempt to build shaka-packager from source, because it's not packed for Alpine Linux and not
-# distributed in binary form for ppc64le. The build is currently failing with
-#
-#   #error Must implement UnscaledCycleClock::Frequency()
-#
-# while building the third-party library abseil-cpp.
 FROM --platform=linux/ppc64le docker.io/alpine:latest AS builder
 WORKDIR /src
 COPY ./ ./
 RUN apk update && \
     apk upgrade && \
     apk add --no-cache bash curl bsd-compat-headers linux-headers build-base file musl-dev \
-       pkgconfig git g++ binutils make cmake zlib-dev zlib-static ninja python3 cargo rust protoc && \
+       pkgconfig git g++ gcompat libstdc++ binutils make cmake zlib-dev zlib-static ninja \
+       python3 cargo rust protoc && \
     cargo update && \
     cargo build --release && \
+    echo == Building GPAC && \
     git clone --depth 1 https://github.com/gpac/gpac.git && \
     cd gpac && ./configure --static-bin && \
     make -j 4 && \
     ls -l bin/gcc/ && \
     file bin/gcc/MP4Box
-
-#    cd /src && git clone --depth 1 --recurse-submodules https://github.com/shaka-project/shaka-packager.git && \
-#    # We see C compiler errors when building with a build type of Release. The official Dockerfile is 
-#    # building with BUILD_TYPE of Debug...
-#    cd shaka-packager && \
-#    sed --in-place 's/^.*add_compile_options.*Werror.*/  add_compile_definitions(_LARGEFILE64_SOURCE)/' packager/CMakeLists.txt && \
-#    cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug && \
-#    cmake --build build/ && \
-#    ls -l build/packager && \
-#    file build/packager/packager
 
 # Now build the final image
 FROM --platform=linux/ppc64le docker.io/alpine:latest
@@ -53,7 +59,7 @@ LABEL org.opencontainers.image.description "Download media content from a DASH-M
 LABEL org.opencontainers.image.title "dash-mpd-cli"
 LABEL org.opencontainers.image.url "https://github.com/emarsden/dash-mpd-cli"
 LABEL org.opencontainers.image.source "https://github.com/emarsden/dash-mpd-cli"
-LABEL org.opencontainers.image.version "0.2.15"
+LABEL org.opencontainers.image.version "0.2.16"
 LABEL org.opencontainers.image.authors "eric.marsden@risk-engineering.org"
 LABEL org.opencontainers.image.licenses "MIT"
 
@@ -63,9 +69,9 @@ LABEL org.opencontainers.image.licenses "MIT"
 #   - vlc: GNU GPL v2, not installed because it inflates image size considerably
 #   - mp4decrypt (from bento4): GNU GPL v2
 #   - xsltproc (from libxslt): MIT
-#   - Shaka packager: MIT -- not packaged in this container
+#   - Shaka packager: MIT
 #
-# As of 2023-12, bento4 is not packaged for ppc64le in Alpine Linux.
+# As of 2023-12, bento4 is not packaged for ppc64le in Alpine Linux. Use shaka-packager instead.
 RUN apk update && \
     apk upgrade && \
     apk add --no-cache ca-certificates libc6-compat wget ffmpeg mkvtoolnix libxslt && \
@@ -78,10 +84,9 @@ COPY --from=builder --chown=root:root --chmod=755 \
     /src/target/release/dash-mpd-cli /usr/local/bin
 COPY --from=builder --chown=root:root --chmod=755 \
     /src/gpac/bin/gcc/MP4Box /usr/local/bin
+COPY --from=debian --chown=root:root --chmod=755 \
+    /usr/local/bin/packager /usr/local/bin/shaka-packager
 
 WORKDIR /content
 ENTRYPOINT ["/usr/local/bin/dash-mpd-cli"]
 
-# Size of our container image:
-#   with vlc:     331 MB
-#   without vlc:  203 MB  (aarch64)
