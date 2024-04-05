@@ -19,7 +19,7 @@ tracing = { version = "0.1.40", features = ["attributes"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 time = { version = "0.3.30", features = ["local-offset"] }
 dash-mpd = { version = "0.16.0", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
-reqwest = { version = "0.12.2", default-features = false, features = ["gzip", "rustls-tls", "socks", "json", "cookies"] }
+reqwest = { version = "0.12.3", default-features = false, features = ["gzip", "rustls-tls", "socks", "json", "cookies"] }
 # We need to stay synchronized with the version used in the bench_scraper crate.
 strum = { version = "0.24.1", features = ["derive"] }
 colored = "2.0.4"
