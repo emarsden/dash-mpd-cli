@@ -40,7 +40,7 @@ tokio = { version = "1.37.0", features = ["rt-multi-thread", "time", "macros"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 test-log = { version = "0.2.15", features = ["trace"] }
 http = "1.1.0"
-axum = "0.6.20"
+axum = "0.7.5"
 axum-server = { version = "0.5.1", features = ["tls-rustls"] }
 axum-auth = "0.4"
 quick-xml = { version = "0.31.0", features = ["serialize"] }
