@@ -18,7 +18,7 @@ tokio = { version = "1.37.0", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.40", features = ["attributes"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 time = { version = "0.3.30", features = ["local-offset"] }
-dash-mpd = { version = "0.16.0", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
+dash-mpd = { version = "0.16.1", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
 reqwest = { version = "0.12.3", default-features = false, features = ["gzip", "rustls-tls", "socks", "json", "cookies"] }
 # We need to stay synchronized with the version used in the bench_scraper crate.
 strum = { version = "0.24.1", features = ["derive"] }
@@ -46,7 +46,8 @@ axum-auth = "0.4"
 quick-xml = { version = "0.31.0", features = ["serialize"] }
 mp4 = "0.14.0"
 lazy_static = "1.4.0"
-ffprobe = "0.3.3"
+noxious-client = "1.0.4"
+ffprobe = "0.4.0"
 file-format = { version = "0.24.0", features = ["reader"] }
 json = "0.12.4"
 assert_cmd = "2.0.14"

@@ -195,13 +195,20 @@ async fn main () -> Result<()> {
              .value_name("RATE")
              .num_args(1)
              .help("Maximum network bandwidth in octets per second (default no limit), e.g. 200K, 1M."))
+        .arg(Arg::new("fragment-retries")
+             .long("fragment-retries")
+             .value_name("COUNT")
+             .num_args(1)
+             .value_parser(clap::value_parser!(u32))
+             .help("Number of times to retry fragment network requests on error.")
+             .long_help("Maximum number of non-transient network errors to ignore for each media framgent (default is 10)."))
         .arg(Arg::new("max-error-count")
              .long("max-error-count")
              .value_name("COUNT")
              .num_args(1)
              .value_parser(clap::value_parser!(u32))
              .help("Abort after COUNT non-transient network errors.")
-             .long_help("Maximum number of non-transient network errors that should be ignored before a download is aborted (default is 10)."))
+             .long_help("Maximum number of non-transient network errors that should be ignored before a download is aborted (default is 30)."))
         .arg(Arg::new("source-address")
              .long("source-address")
              .num_args(1)
@@ -638,6 +645,9 @@ async fn main () -> Result<()> {
         } else {
             warn!("Ignoring invalid value for limit-rate");
         }
+    }
+    if let Some(count) = matches.get_one::<u32>("fragment-retries") {
+        dl = dl.fragment_retry_count(*count);
     }
     if let Some(count) = matches.get_one::<u32>("max-error-count") {
         dl = dl.max_error_count(*count);

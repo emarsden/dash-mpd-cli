@@ -2,6 +2,18 @@
 
 ## [0.2.17] - Unreleased
 
+- Network requests for media fragments that fail are retried a certain number of times. The number
+  of retries for each fragment request can be set using the `--fragment-retries` commandline
+  argument (default is 10). Network errors that are identified as being transient (for
+  example, network timeouts) do not count towards this retry count. Network requests were previously
+  retried only if they were identified as transient, but anecdotally it seems that the internet and
+  CDN servers are not set up in a way that allows transient errors reliably to be distinguished from
+  non-transient errors. Non-transient retries still count towards the `max_error_count`, whose default
+  value is increased to 30.
+
+- Error messages include additional contextual information. For example, a network connection error
+  caused by a TLS configuration error will include information on the underlying issue.
+
 - The prebuilt software container `ghcr.io/emarsden/dash-mpd-cli` is now built also for
   Linux/ppc64le.
 

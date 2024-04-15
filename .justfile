@@ -53,14 +53,15 @@ podman:
 podman-build-multiarch:
     #!/usr/bin/env bash
     echo First need to "podman login ghcr.io"
-    DIGEST=`podman manifest create dash-mpd-cli`
-    # podman manifest annotate --annotation org.opencontainers.image.description="Download media content from a DASH-MPEG or DASH-WebM MPD manifest." dash-mpd-cli $DIGEST
-    # podman manifest annotate --annotation org.opencontainers.image.title="dash-mpd-cli" dash-mpd-cli $DIGEST
-    # podman manifest annotate --annotation org.opencontainers.image.url="https://github.com/emarsden/dash-mpd-cli" dash-mpd-cli $DIGEST
-    # podman manifest annotate --annotation org.opencontainers.image.source="https://github.com/emarsden/dash-mpd-cli" dash-mpd-cli $DIGEST
-    # podman manifest annotate --annotation org.opencontainers.image.version={{version}} dash-mpd-cli $DIGEST
-    # podman manifest annotate --annotation org.opencontainers.image.authors="eric.marsden@risk-engineering.org" dash-mpd-cli $DIGEST
-    # podman manifest annotate --annotation org.opencontainers.image.licenses="MIT" dash-mpd-cli $DIGEST
+    podman manifest create \
+      --annotation org.opencontainers.image.description="Download media content from a DASH-MPEG or DASH-WebM MPD manifest." \
+      --annotation org.opencontainers.image.title="dash-mpd-cli" \
+      --annotation org.opencontainers.image.url="https://github.com/emarsden/dash-mpd-cli" \
+      --annotation org.opencontainers.image.source="https://github.com/emarsden/dash-mpd-cli" \
+      --annotation org.opencontainers.image.version={{version}} \
+      --annotation org.opencontainers.image.authors="eric.marsden@risk-engineering.org" \
+      --annotation org.opencontainers.image.licenses="MIT" \
+      dash-mpd-cli
     podman build -f etc/Containerfile_linux_amd64 --arch amd64 --tag dash-mpd-cli-linux-amd64 --manifest dash-mpd-cli .
     podman build -f etc/Containerfile_linux_aarch64 --arch arm64 --tag dash-mpd-cli-linux-aarch64 --manifest dash-mpd-cli .
     podman build -f etc/Containerfile_linux_armv7 --arch arm/v7 --tag dash-mpd-cli-linux-armv7 --manifest dash-mpd-cli .

@@ -5,7 +5,7 @@ for extracting/converting subtitle streams, and for decrypting content infected 
 available as a prebuilt container, which is probably the easiest and safest way to run it. The container can
 be run on any host that can run Linux/AMD64 containers (using [Podman](https://podman.io/) or
 [Docker](https://www.docker.com/) on Linux, Microsoft Windows and MacOS, possibly your NAS device).
-It’s available in the GitHub Container Registry ghcr.io and is automatically built from the sources
+It’s available in the GitHub Container Registry `ghcr.io` and is automatically built from the sources
 using GitHub’s useful continuous integration services.
 
 It’s packaged as a **multiarch container** using the lightweight [Alpine Linux
@@ -39,7 +39,9 @@ Why run the application in a container, instead of natively on your machine?
 
 - Good internet hygiene. It’s much safer, because the container is **sandboxed**: it can’t modify
   your host machine, except for writing downloaded media to the directory you specify. This 
-  is a very good idea when running random software you downloaded from the internet!
+  is a very good idea when running random software you downloaded from the internet! The xz
+  backdoor attempt discovered in 2024 shows how much effort malicious actors are willing to make to
+  compromise peoples’ computers; don’t make it easier than it should be.
 
 - No need to install the various helper applications (ffmpeg, mkvmerge, mp4decrypt, MP4Box),
   which are already present in the container.
