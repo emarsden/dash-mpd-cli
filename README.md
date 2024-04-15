@@ -117,11 +117,10 @@ The following are not currently supported:
 
 The application, alongside the external helper applications that it uses for muxing media streams,
 for extracting/converting subtitle streams, and for decrypting content infected with DRM, are
-available as a container, which is probably the easiest and safest way to run it. The container is
-packaged with a minimal Alpine Linux installation and can be run on any host that can run
-Linux/AMD64 containers (using [Podman](https://podman.io/) or [Docker](https://www.docker.com/) on
-Linux, Microsoft Windows and MacOS). It’s available in the GitHub Container Registry ghcr.io and
-automatically built from the sources using GitHub’s useful continuous integration services.
+available as a prebuilt container, which is probably the easiest and safest way to run it. The
+container is packaged with a minimal Alpine Linux installation and can be run on any host that can
+run Linux containers (using [Podman](https://podman.io/) or [Docker](https://www.docker.com/) on
+Linux, Microsoft Windows and MacOS). It’s available in the GitHub Container Registry `ghcr.io`.
 
 > [!TIP]
 > What are the **advantages of running in a container**, instead of natively on your machine?
@@ -153,7 +152,7 @@ To **run the container** with podman:
     podman machine start (optional step, only required on Windows and MacOS)
     podman run --rm -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
 
-On the first run, this will fetch the container image (around 216 MB) from the GitHub Container
+On the first run, this will fetch the container image (around 220 MB) from the GitHub Container
 Registry ghcr.io, and will save it on your local disk for later uses. You can later delete the image
 if you no longer need it using `podman image rm` and the image id shown by `podman images` (see the
 [user manual](https://emarsden.github.io/dash-mpd-cli/container.html) for details).
@@ -163,15 +162,20 @@ the working directory in the container. This means that an output file specified
 directory, such as `foo.mp4`, will be saved to your current working directory on the host machine.
 
 On Linux/AMD64, it’s also possible to run the container using the [gVisor](https://gvisor.dev/)
-container runtime runsc, which uses a sandbox to improve security (strong isolation, protection
+container runtime runsc, which uses a sandbox to further improve security (strong isolation, protection
 against privilege escalation). This requires installation of runsc and running as root (runsc
 doesn’t currently support rootless operation).
 
     sudo apt install runsc
     sudo podman --runtime=runsc run --rm -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
 
-The container image is a **multiarch** manifest, currently built for linux/amd64 and for linux/arm64
-platforms.
+The container image is a **multiarch** manifest, currently built for the following platforms: 
+
+- linux/amd64
+- linux/arm64
+- linux/armv7 (should run on a Raspberry Pi)
+- linux/riscv64
+- linux/ppc64le
 
 
 ## Installation
@@ -181,7 +185,7 @@ you can download a prebuilt binary or build from source yourself.
 
 **Binary releases** are [available on GitHub](https://github.com/emarsden/dash-mpd-cli/releases) for
 GNU/Linux on AMD64 (statically linked against Musl Libc to avoid glibc versioning problems),
-Microsoft Windows on AMD64 and MacOS on aarch64 (“Apple Silicon”) and AMD64. These are built
+Microsoft Windows on AMD64 and MacOS on aarch64 (“Apple Silicon”). These are built
 automatically on the GitHub continuous integration infrastructure.
 
 You can also **build from source** using an [installed Rust development
@@ -230,7 +234,7 @@ You should also install the following **dependencies**:
 
 This crate is tested on the following **platforms**:
 
-- Our container images are tested using Podman on Linux and Windows
+- Our prebuilt container images are tested using Podman on Linux and Windows
 
 - Linux on AMD64 (x86-64) and Aarch64 architectures
 

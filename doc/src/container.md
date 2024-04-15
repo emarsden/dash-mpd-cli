@@ -3,7 +3,7 @@
 The application, alongside the external helper applications that it uses for muxing media streams,
 for extracting/converting subtitle streams, and for decrypting content infected with DRM, are
 available as a prebuilt container, which is probably the easiest and safest way to run it. The container can
-be run on any host that can run Linux/AMD64 containers (using [Podman](https://podman.io/) or
+be run on any host that can run Linux containers (using [Podman](https://podman.io/) or
 [Docker](https://www.docker.com/) on Linux, Microsoft Windows and MacOS, possibly your NAS device).
 It’s available in the GitHub Container Registry `ghcr.io` and is automatically built from the sources
 using GitHub’s useful continuous integration services.
@@ -32,6 +32,7 @@ The container is currently available for the following **platforms**:
 - linux/arm64/v8
 - linux/arm/v7
 - linux/riscv64
+- linux/ppc64le
 
 
 ```admonish info title="Advantages of running in a container"
@@ -81,8 +82,9 @@ podman machine start
 
 This step is not necessary on Linux.
 
-You can then fetch the container image (currently around 220 MB) from the GitHub container registry
-`ghcr.io` and save it to your local disk for later use:
+You can then fetch the container image (currently around 220 MB, though this depends on the
+architecture) from the GitHub container registry `ghcr.io` and save it to your local disk for later
+use:
 
 ~~~admonish example title="Fetch the container image"
 ```shell
@@ -159,7 +161,7 @@ podman run --rm --tty --pull=newer \
 ## Increased security with gVisor
 
 On Linux/AMD64, it’s also possible to run the container using the [gVisor](https://gvisor.dev/)
-container runtime runsc, which uses specially-designed sandboxing techniques to improve security
+container runtime runsc, which uses specially-designed sandboxing techniques to further improve security
 (strong isolation, protection against privilege escalation). This requires installation of runsc and
 running as root (runsc doesn’t currently support rootless operation).
 
