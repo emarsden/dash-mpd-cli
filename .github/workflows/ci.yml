@@ -40,7 +40,7 @@ jobs:
       - run: cargo doc --no-deps --all-features
 
   build-macos:
-    runs-on: macos-13
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v4
     - uses: dtolnay/rust-toolchain@stable
