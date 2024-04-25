@@ -102,6 +102,39 @@ fn test_dl_audio_flac () {
     assert_eq!(count, 1, "Expecting a single output file, got {count}");
 }
 
+#[test]
+fn test_dl_cmaf () {
+    if env::var("CI").is_ok() {
+        return;
+    }
+    let mpd = "https://cdn.theoplayer.com/video/cosmos/cmaf.mpd";
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("theo-cosmos.mp4");
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
+               "-o", &out.to_string_lossy(), mpd])
+        .assert()
+        .success();
+    check_file_size_approx(&out, 21_854_800);
+    let format = FileFormat::from_file(&out).unwrap();
+    assert_eq!(format, FileFormat::Mpeg4Part14Video);
+    let meta = ffprobe(&out).unwrap();
+    assert_eq!(meta.streams.len(), 2);
+    let audio = meta.streams.iter()
+        .find(|s| s.codec_type.eq(&Some(String::from("audio"))))
+        .expect("finding audio stream");
+    assert_eq!(audio.codec_name, Some(String::from("aac")));
+    assert!(audio.width.is_none());
+    let video = meta.streams.iter()
+        .find(|s| s.codec_type.eq(&Some(String::from("video"))))
+        .expect("finding video stream");
+    assert_eq!(video.codec_name, Some(String::from("h264")));
+    let entries = fs::read_dir(tmpd.path()).unwrap();
+    let count = entries.count();
+    assert_eq!(count, 1, "Expecting a single output file, got {count}");
+}
+
 
 // The manifest contains minBufferTime="4S", which is an invalid format for an xs:Duration.
 #[test]
