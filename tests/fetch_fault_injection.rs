@@ -12,8 +12,8 @@ use fs_err as fs;
 use std::env;
 use test_log::test;
 use anyhow::{Context, Result};
+use serde_json::json;
 use assert_cmd::Command;
-use noxious_client::{Toxic, ToxicKind, StreamDirection};
 use ffprobe::ffprobe;
 use file_format::FileFormat;
 use common::check_file_size_approx;
@@ -24,7 +24,27 @@ async fn test_dl_resilience() -> Result<()> {
     if env::var("CI").is_ok() {
         return Ok(());
     }
+    // https://github.com/Shopify/toxiproxy
+    //
+    // Pull the container image before the run command, so that when we later run the container it
+    // starts up within a repeatable timeframe.
+    let pull = Command::new("podman")
+        .args(["pull", "ghcr.io/shopify/toxiproxy"])
+        .output()
+        .expect("failed spawning podman");
+    if !pull.status.success() {
+        let stdout = String::from_utf8_lossy(&pull.stdout);
+        if stdout.len() > 0 {
+            println!("Podman stdout> {stdout}");
+        }
+        let stderr = String::from_utf8_lossy(&pull.stderr);
+        if stderr.len() > 0 {
+            println!("Podman stderr> {stderr}");
+        }
+    }
+    assert!(pull.status.success());
     let args = vec!["run", "--rm",
+                    "--name", "toxiproxy",
                     "--net", "host",
                     "-p", "8474:8474",
                     "-p", "8001:8001",
@@ -34,37 +54,60 @@ async fn test_dl_resilience() -> Result<()> {
         .spawn()
         .expect("failed spawning podman");
     tokio::time::sleep(tokio::time::Duration::new(2, 0)).await;
-    let noxious = noxious_client::Client::new("http://localhost:8474");
-    let noxious_proxy = noxious.create_proxy("dash-mpd-cli", "0.0.0.0:8001", "dash.akamaized.net:80").await
-        .context("creating fault injecting HTTP proxy")?;
-    let toxic_timeout = Toxic {
-        kind: ToxicKind::Timeout { timeout: 4000000 },
-        name: "fail".to_owned(),
-        toxicity: 0.3,
-        direction: StreamDirection::Downstream,
-    };
-    let toxic_fail = Toxic {
-        kind: ToxicKind::Timeout { timeout: 40 },
-        name: "timeout".to_owned(),
-        toxicity: 0.4,
-        direction: StreamDirection::Downstream,
-    };
-    let toxic_limit = Toxic {
-        kind: ToxicKind::LimitData { bytes: 321 },
-        name: "limit_data".to_owned(),
-        toxicity: 0.5,
-        direction: StreamDirection::Downstream,
-    };
+    let txclient = reqwest::Client::new();
+    // Enable the toxiproxy proxy.
+    txclient.post("http://localhost:8474/proxies")
+        .json(&json!({
+            "name": "dash-mpd-rs",
+            "listen": "0.0.0.0:8001",
+            // "upstream": "dash.akamaized.net:80",
+            "upstream": "ftp.itec.aau.at:80",
+            "enabled": true
+        }))
+        .send().await?;
+    // Add a timeout Toxic with a very large timeout (amounts to a failure).
+    txclient.post("http://localhost:8474/proxies/dash-mpd-rs/toxics")
+        .json(&json!({
+            "type": "timeout",
+            "name": "fail",
+            "toxicity": 0.3,
+            "attributes": { "timeout": 4000000 },
+        }))
+        .send().await
+        .expect("creating timeout toxic");
+    // Add a data rate limitation Toxic.
+    txclient.post("http://localhost:8474/proxies/dash-mpd-rs/toxics")
+        .json(&json!({
+            "type": "limit_data",
+            "toxicity": 0.5,
+            "attributes": { "bytes": 321 },
+        }))
+        .send().await
+        .expect("creating timeout toxic");
+
     // We wait 5 seconds before enabling the fault injection rules, so that the initial download of
     // the MPD manifest is not perturbed.
-    tokio::spawn(async move {
-        tokio::time::sleep(tokio::time::Duration::new(5, 0)).await;
-        noxious_proxy.add_toxic(&toxic_fail).await
-            .expect("adding failure toxicity failed");
-        noxious_proxy.add_toxic(&toxic_timeout).await
-            .expect("adding timeout toxicity failed");
-        noxious_proxy.add_toxic(&toxic_limit).await
-            .expect("adding limit toxicity failed");
+    let _configer = tokio::spawn(async move {
+        tokio::time::sleep(tokio::time::Duration::new(0, 5000)).await;
+        println!("Injecting toxics");
+        let txfail = json!({
+            "type": "timeout",
+            "toxicity": 0.3,
+            "attributes": { "timeout": 4000000 },
+        });
+        txclient.post("http://localhost:8474/proxies/dash-mpd-rs/toxics")
+            .json(&txfail)
+            .send().await
+            .expect("creating timeout toxic");
+        let txlimit = json!({
+            "type": "limit_data",
+            "toxicity": 0.5,
+            "attributes": { "bytes": 321 },
+        });
+        txclient.post("http://localhost:8474/proxies/dash-mpd-rs/toxics")
+            .json(&txlimit)
+            .send().await
+            .expect("creating timeout toxic");
         println!("Noxious toxics added");
     });
 
@@ -79,6 +122,12 @@ async fn test_dl_resilience() -> Result<()> {
                "-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
+
+    let _stop = Command::new("podman")
+        .args(["stop", "toxiproxy"])
+        .output()
+        .expect("failed to spawn podman");
+
     check_file_size_approx(&out, 35_408_884);
     let meta = ffprobe(out.clone()).unwrap();
     assert_eq!(meta.streams.len(), 2);
