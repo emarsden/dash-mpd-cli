@@ -10,13 +10,62 @@
 pub mod common;
 use fs_err as fs;
 use std::env;
+use std::process::Command;
 use test_log::test;
 use anyhow::{Context, Result};
 use serde_json::json;
-use assert_cmd::Command;
 use ffprobe::ffprobe;
 use file_format::FileFormat;
+use tracing::{trace, info};
 use common::check_file_size_approx;
+
+
+pub struct ToxiProxy {}
+
+// https://github.com/Shopify/toxiproxy
+impl ToxiProxy {
+    pub fn new() -> ToxiProxy {
+        // Pull the container image before the run command, so that when we later run the container it
+        // starts up within a repeatable timeframe.
+        let pull = Command::new("podman")
+            .args(["pull", "ghcr.io/shopify/toxiproxy"])
+            .output()
+            .expect("failed spawning podman");
+        if !pull.status.success() {
+            let stdout = String::from_utf8_lossy(&pull.stdout);
+            if stdout.len() > 0 {
+                println!("Podman stdout> {stdout}");
+            }
+            let stderr = String::from_utf8_lossy(&pull.stderr);
+            if stderr.len() > 0 {
+                println!("Podman stderr> {stderr}");
+            }
+        }
+        assert!(pull.status.success());
+        let _run = Command::new("podman")
+            .args(["run", "--rm",
+                   "--name", "toxiproxy",
+                   "--env", "LOG_LEVEL=trace",
+                   "-p", "8474:8474",
+                   "-p", "8001:8001",
+                   "ghcr.io/shopify/toxiproxy"])
+            .spawn()
+            .expect("failed spawning podman");
+        trace!("Toxiproxy server started");
+        std::thread::sleep(std::time::Duration::from_millis(500));
+        ToxiProxy {}
+    }
+}
+
+impl Drop for ToxiProxy {
+    fn drop(&mut self) {
+        // cleanup
+        let _stop = Command::new("podman")
+            .args(["stop", "toxiproxy"])
+            .output()
+            .expect("failed to spawn podman");
+    }
+}
 
 
 #[test(tokio::test)]
@@ -24,47 +73,18 @@ async fn test_dl_resilience() -> Result<()> {
     if env::var("CI").is_ok() {
         return Ok(());
     }
-    // https://github.com/Shopify/toxiproxy
-    //
-    // Pull the container image before the run command, so that when we later run the container it
-    // starts up within a repeatable timeframe.
-    let pull = Command::new("podman")
-        .args(["pull", "ghcr.io/shopify/toxiproxy"])
-        .output()
-        .expect("failed spawning podman");
-    if !pull.status.success() {
-        let stdout = String::from_utf8_lossy(&pull.stdout);
-        if stdout.len() > 0 {
-            println!("Podman stdout> {stdout}");
-        }
-        let stderr = String::from_utf8_lossy(&pull.stderr);
-        if stderr.len() > 0 {
-            println!("Podman stderr> {stderr}");
-        }
-    }
-    assert!(pull.status.success());
-    let args = vec!["run", "--rm",
-                    "--name", "toxiproxy",
-                    "--net", "host",
-                    "-p", "8474:8474",
-                    "-p", "8001:8001",
-                    "ghcr.io/shopify/toxiproxy"];
-    let _cli = std::process::Command::new("podman")
-        .args(args)
-        .spawn()
-        .expect("failed spawning podman");
-    tokio::time::sleep(tokio::time::Duration::new(2, 0)).await;
+    let _toxiproxy = ToxiProxy::new();
     let txclient = reqwest::Client::new();
     // Enable the toxiproxy proxy.
     txclient.post("http://localhost:8474/proxies")
         .json(&json!({
             "name": "dash-mpd-rs",
             "listen": "0.0.0.0:8001",
-            // "upstream": "dash.akamaized.net:80",
-            "upstream": "ftp.itec.aau.at:80",
+            "upstream": "dash.akamaized.net:80",
             "enabled": true
         }))
-        .send().await?;
+        .send().await
+        .context("creating toxiproxy proxy")?;
     // Add a timeout Toxic with a very large timeout (amounts to a failure).
     txclient.post("http://localhost:8474/proxies/dash-mpd-rs/toxics")
         .json(&json!({
@@ -74,7 +94,7 @@ async fn test_dl_resilience() -> Result<()> {
             "attributes": { "timeout": 4000000 },
         }))
         .send().await
-        .expect("creating timeout toxic");
+        .context("creating timeout toxic")?;
     // Add a data rate limitation Toxic.
     txclient.post("http://localhost:8474/proxies/dash-mpd-rs/toxics")
         .json(&json!({
@@ -83,12 +103,12 @@ async fn test_dl_resilience() -> Result<()> {
             "attributes": { "bytes": 321 },
         }))
         .send().await
-        .expect("creating timeout toxic");
+        .context("creating timeout toxic")?;
 
-    // We wait 5 seconds before enabling the fault injection rules, so that the initial download of
+    // We wait a little before enabling the fault injection rules, so that the initial download of
     // the MPD manifest is not perturbed.
     let _configer = tokio::spawn(async move {
-        tokio::time::sleep(tokio::time::Duration::new(0, 5000)).await;
+        tokio::time::sleep(tokio::time::Duration::new(1, 5000)).await;
         println!("Injecting toxics");
         let txfail = json!({
             "type": "timeout",
@@ -108,13 +128,13 @@ async fn test_dl_resilience() -> Result<()> {
             .json(&txlimit)
             .send().await
             .expect("creating timeout toxic");
-        println!("Noxious toxics added");
+        info!("Noxious toxics added");
     });
 
     let mpd = "http://dash.akamaized.net/dash264/TestCasesMCA/dts/1/Paint_dtsc_testA.mpd";
     let tmpd = tempfile::tempdir().unwrap();
     let out = tmpd.path().join("error-resilience.mkv");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    assert_cmd::Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
         .args(["-v", "-v", "-v",
                "--ignore-content-type",
                "--quality", "best",
@@ -122,12 +142,6 @@ async fn test_dl_resilience() -> Result<()> {
                "-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
-
-    let _stop = Command::new("podman")
-        .args(["stop", "toxiproxy"])
-        .output()
-        .expect("failed to spawn podman");
-
     check_file_size_approx(&out, 35_408_884);
     let meta = ffprobe(out.clone()).unwrap();
     assert_eq!(meta.streams.len(), 2);
