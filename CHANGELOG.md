@@ -1,6 +1,20 @@
 # Changelog
 
-## [0.2.17] - Unreleased
+## [0.2.18] - 2024-05-09
+
+- Fix bug in filename handling when using the ffmpeg concatenation filter, which is used for
+  multiperiod manifests when the technical characteristics of the different periods make it possible
+  to concatenate them without reencoding. Filenames were not properly escaped when passed as
+  arguments to the `filter_complex` commandline argument.
+
+- Add support for subtitles that use SegmentBase addressing.
+
+- Subtitles in STPP format (a data stream in MP4 fragments) are now converted to TTML format. The
+  XML data stream is extracted using ffmpeg. If the conversion is successful it will be saved to a
+  file with the same name as the output file, but with a `.ttml` extension.
+
+
+## [0.2.17] - 2024-04-15
 
 - Network requests for media fragments that fail are retried a certain number of times. The number
   of retries for each fragment request can be set using the `--fragment-retries` commandline
