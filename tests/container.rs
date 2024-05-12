@@ -40,7 +40,11 @@ fn container_run(args: Vec<&str>) {
         cargs.push(a);
     }
     println!("CTR> {:?}", cargs);
-    let cli = Command::new("podman")
+    let mut docker_exe = String::from("podman");
+    if let Ok(docker) = env::var("DOCKER") {
+        docker_exe = docker;
+    }
+    let cli = Command::new(docker_exe)
         .args(cargs)
         .output()
         .expect("failed spawning podman");

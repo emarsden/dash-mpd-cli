@@ -27,7 +27,11 @@ impl ToxiProxy {
     pub fn new() -> ToxiProxy {
         // Pull the container image before the run command, so that when we later run the container it
         // starts up within a repeatable timeframe.
-        let pull = Command::new("podman")
+        let mut docker_exe = String::from("podman");
+        if let Ok(docker) = env::var("DOCKER") {
+            docker_exe = docker;
+        }
+        let pull = Command::new(docker_exe)
             .args(["pull", "ghcr.io/shopify/toxiproxy"])
             .output()
             .expect("failed spawning podman");

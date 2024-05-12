@@ -79,13 +79,16 @@ jobs:
     - name: install xsltproc
       run: brew install libxslt
 
-    - name: install podman
-      run: |
-        brew install podman
-        podman machine init
-        podman machine start
+    # podman does not start on the macos-14 runners, perhaps because they are running on M1
+    # processors that do not support nested virtualization.
+    
+    # - name: install podman
+    #   run: |
+    #     brew install podman
+    #     podman machine init
+    #     podman machine start
 
-    - run: cargo test --jobs 1 -- --show-output
+    - run: DOCKER=docker cargo test --jobs 1 -- --show-output
 
 
   build-windows:
