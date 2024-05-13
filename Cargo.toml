@@ -48,7 +48,7 @@ quick-xml = { version = "0.31.0", features = ["serialize"] }
 mp4 = "0.14.0"
 lazy_static = "1.4.0"
 ffprobe = "0.4.0"
-file-format = { version = "0.24.0", features = ["reader"] }
+file-format = { version = "0.25.0", features = ["reader"] }
 json = "0.12.4"
 assert_cmd = "2.0.14"
 assert_fs = "1.1.1"
