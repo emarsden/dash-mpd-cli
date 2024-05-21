@@ -78,7 +78,7 @@ jobs:
     - run: |
         podman pull docker.io/messense/cargo-zigbuild
         podman run --rm \
-          -v .:/io \
+          -v ${GITHUB_WORKSPACE}:/io \
           -w /io docker.io/messense/cargo-zigbuild \
           cargo zigbuild --release --target universal2-apple-darwin
 
