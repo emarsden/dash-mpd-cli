@@ -34,6 +34,7 @@ jobs:
         tag: ${{ github.ref }}
         file: target/x86_64-unknown-linux-musl/release/dash-mpd-cli
         asset_name: dash-mpd-cli-linux-amd64
+        overwrite: true
 
 
   release-linux-aarch64:
@@ -77,7 +78,7 @@ jobs:
     - run: |
         podman pull docker.io/messense/cargo-zigbuild
         podman run --rm \
-          -v $CWD:/io \
+          -v .:/io \
           -w /io docker.io/messense/cargo-zigbuild \
           cargo zigbuild --release --target universal2-apple-darwin
 
