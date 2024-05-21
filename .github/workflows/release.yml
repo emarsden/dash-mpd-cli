@@ -73,7 +73,7 @@ jobs:
     name: Release universal binary for MacOS
     runs-on: ubuntu-latest
     steps:
-    - run: docker run --rm -it \
+    - run: docker run --rm \
           -v $(pwd):/io \
           -w /io docker.io/messense/cargo-zigbuild \
           cargo zigbuild --release --target universal2-apple-darwin
