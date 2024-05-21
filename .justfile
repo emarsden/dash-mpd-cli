@@ -64,12 +64,17 @@ podman-build-multiarch:
       dash-mpd-cli
     echo === Build container for AMD64
     podman build -f etc/Containerfile_linux_amd64 --arch amd64 --tag dash-mpd-cli-linux-amd64 --manifest dash-mpd-cli .
+    podman manifest push --format oci localhost/dash-mpd-cli-linux-amd64 ghcr.io/emarsden/dash-mpd-cli
     echo === Build container for ARM64
     podman build -f etc/Containerfile_linux_aarch64 --arch arm64 --tag dash-mpd-cli-linux-aarch64 --manifest dash-mpd-cli .
+    podman manifest push --format oci localhost/dash-mpd-cli-linux-aarch64 ghcr.io/emarsden/dash-mpd-cli
+
     echo === Build container for ARMv7
     podman build -f etc/Containerfile_linux_armv7 --arch arm/v7 --tag dash-mpd-cli-linux-armv7 --manifest dash-mpd-cli .
-    echo === Build container for RISVC64
+    podman manifest push --format oci localhost/dash-mpd-cli-linux-armv7 ghcr.io/emarsden/dash-mpd-cli
+    echo === Build container for RISCV64
     podman build -f etc/Containerfile_linux_riscv64 --arch riscv64 --tag dash-mpd-cli-linux-riscv64 --manifest dash-mpd-cli .
+    podman manifest push --format oci localhost/dash-mpd-cli-linux-riscv64 ghcr.io/emarsden/dash-mpd-cli
     echo === Build container for PPC64LE
     podman build -f etc/Containerfile_linux_ppc64le --arch ppc64le --tag dash-mpd-cli-linux-ppc64le --manifest dash-mpd-cli .
     echo === Push container to registry
@@ -98,7 +103,21 @@ trivy-repository:
 # Run a grype vulnerability scan of our container image
 # https://github.com/anchore/grype
 grype-container:
-    podman run -it --rm docker.io/anchore/grype ghcr.io/emarsden/dash-mpd-cli:latest
+    podman run --rm -it docker.io/anchore/grype ghcr.io/emarsden/dash-mpd-cli:latest
+
+
+# Using cargo-zigbuild from https://github.com/rust-cross/cargo-zigbuild
+macos-AMD64:
+    podman run --rm -it \
+       -v $(pwd):/io \
+       -w /io docker.io/messense/cargo-zigbuild \
+       cargo zigbuild --release --target x86_64-apple-darwin
+
+macos-universal:
+    podman run --rm -it \
+       -v $(pwd):/io \
+       -w /io docker.io/messense/cargo-zigbuild \
+       cargo zigbuild --release --target universal2-apple-darwin
 
 
 publish:
