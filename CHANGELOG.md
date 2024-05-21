@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.19] - Unreleased
+## [0.2.19] - 2024-05-21
 
 - A new commandline argument `--minimum_period_duration` whose argument is a number of seconds.
   Periods in the manifest whose duration is less than this value will not be downloaded. This may be
