@@ -66,15 +66,18 @@ jobs:
         asset_name: dash-mpd-cli-linux-aarch64
 
 
+  # Some of the GitHub MacOS runners (M1 processor) do not support nested virtualization, so can't
+  # run Docker/Podman in a VM. Since we want to use the Docker image for cargo-zigbuild to be able
+  # to build a universal binary, we cross-compile from a ubuntu-latest runner.
   release-macos:
     name: Release universal binary for MacOS
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
     - run: docker run --rm -it \
           -v $(pwd):/io \
           -w /io docker.io/messense/cargo-zigbuild \
-          cargo zigbuild --release --target x86_64-apple-darwin
-    
+          cargo zigbuild --release --target universal2-apple-darwin
+
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
