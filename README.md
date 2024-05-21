@@ -79,6 +79,15 @@ The following features are supported:
   particular WebM containers and more encryption formats), whereas mp4decrypt mostly works with MPEG
   Common Encryption.
 
+- Support for **[rewriting the MPD
+  manifest](https://emarsden.github.io/dash-mpd-cli/rewriting.html)** before downloading, for
+  example to replace the URL of certain segments by other URLs, or to drop certain Periods based on
+  different criteria (such as the CDN or DAI server they originate from, the content language). The
+  rewriting instructions are specified by a user-supplied XSLT stylesheet, which is applied to the
+  XML of the MPD manifest (see the `--xslt-stylesheet` commandline argument). A convenience form for
+  dropping elements based on an XPath specification is also provided (see the `--drop-elements`
+  commandline argument). This functionality depends on the xsltproc commandline tool.
+
 - XLink elements (only with actuate=onLoad semantics), including resolve-to-zero.
 
 - All forms of segment index info: SegmentBase@indexRange, SegmentTimeline,
