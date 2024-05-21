@@ -260,6 +260,12 @@ async fn main () -> Result<()> {
              .action(ArgAction::Append)
              .num_args(1)
              .long_help("XML elements in the MPD manifest that match this XPATH expression will be removed before downloading proceeds. You can use this option multiple times. This option is currently experimental."))
+        .arg(Arg::new("minimum-period-duration")
+             .long("minimum-period-duration")
+             .value_name("SECONDS")
+             .value_parser(clap::value_parser!(u64))
+             .num_args(1)
+             .help("Do not download periods whose duration is less than this value."))
         .arg(Arg::new("video-only")
              .long("video-only")
              .action(ArgAction::SetTrue)
@@ -776,6 +782,9 @@ async fn main () -> Result<()> {
             let (_, stylesheet_path) = stylesheet.keep()?;
             dl = dl.with_xslt_stylesheet(stylesheet_path);
         }
+    }
+    if let Some(secs) = matches.get_one::<u64>("minimum-period-duration") {
+        dl = dl.minimum_period_duration(Duration::from_secs(*secs));
     }
     if let Some(user) = matches.get_one::<String>("auth-username") {
         if let Some(password) = matches.get_one::<String>("auth-password") {

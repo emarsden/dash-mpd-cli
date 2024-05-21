@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.19] - Unreleased
+
+- A new commandline argument `--minimum_period_duration` whose argument is a number of seconds.
+  Periods in the manifest whose duration is less than this value will not be downloaded. This may be
+  useful to avoid overloading the servers that deliver advertising segments that are sliced into the
+  content of interest.
+
+- Fix a bug in the concatenation of multiperiod manifests. When per-Period files contained both
+  audio and video content, the content was being included twice in the concatenated file.
+
+
 ## [0.2.18] - 2024-05-09
 
 - Fix bug in filename handling when using the ffmpeg concatenation filter, which is used for

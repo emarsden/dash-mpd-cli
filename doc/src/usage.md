@@ -27,7 +27,7 @@ To save the output to a Matroska container using mkvmerge as a muxer:
 
 To **decrypt DRM** on the media streams (assuming there are different keys for the audio and the video streams):
 
-    dash-mpd-cli --key "43215678123412341234123412341237:12341234123412341234123412341237" \
+    dash-mpd-cli --key 43215678123412341234123412341237:12341234123412341234123412341237 \
       --key 43215678123412341234123412341236:12341234123412341234123412341236 \
        https://example.com/manifest.mpd -o MyVideo.mp4
 
@@ -165,6 +165,10 @@ You can use this option multiple times. This option is currently experimental.
 
 Stylesheets are applied using the xsltproc commandline application, which implements version 1.0 of
 the XSLT specification.
+
+    --minimum-period-duration <SECONDS>
+
+Do not download periods whose duration is less than this value, expressed in seconds.
 
     --video-only
 
