@@ -9,6 +9,12 @@
 // files. We create a directory inside the host's TMPDIR and map it to /content in the container, so for
 // example when we are using "-o foo.mp4" this results in the output file being saved as
 // /tmp/.tmp4BFre7/foo.mp4.
+//
+// Some of the the GitHub MacOS runners (M1-based processor) do not support nested virtualization,
+// so are not able to run Docker/Podman (they are already running in a VM). For this reason, the
+// tests that are not already disabled on the CI infrastructure are explicitly disabled when
+// targeting MacOS.
+
 
 #[macro_use]
 extern crate lazy_static;
@@ -88,6 +94,7 @@ fn container_metadata_encoder(p: &Path) -> Option<String> {
 
 
 #[test]
+#[cfg(not(target_os = "macos"))]
 fn test_container_mp4 () {
     let mpd = "https://cloudflarestream.com/31c9291ab41fac05471db4e73aa11717/manifest/video.mpd";
     let out = Path::new("cf.mp4");
@@ -290,6 +297,7 @@ fn test_container_decryption_marlin_cenc () {
 // Note that mp4decrypt is not able to decrypt content in a WebM container, so we use Shaka packager
 // here.
 #[test]
+#[cfg(not(target_os = "macos"))]
 fn test_container_decryption_webm() {
     let mpd = "https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine/dash.mpd";
     let out = Path::new("angel.webm");
@@ -337,6 +345,7 @@ fn test_container_decryption_webm() {
 
 
 #[test]
+#[cfg(not(target_os = "macos"))]
 fn test_container_decryption_small_shaka () {
     let mpd = "https://m.dtv.fi/dash/dasherh264/drm/manifest_clearkey.mpd";
     let out = Path::new("caminandes.mp4");
