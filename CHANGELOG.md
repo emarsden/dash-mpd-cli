@@ -10,6 +10,8 @@
 - Fix a bug in the concatenation of multiperiod manifests. When per-Period files contained both
   audio and video content, the content was being included twice in the concatenated file.
 
+- MacOS release binaries are now universal binaries, rather than Aarch64 ("Apple Silicon") binaries.
+
 
 ## [0.2.18] - 2024-05-09
 
