@@ -64,6 +64,7 @@ jobs:
         tag: ${{ github.ref }}
         file: target/aarch64-unknown-linux-gnu/release/dash-mpd-cli
         asset_name: dash-mpd-cli-linux-aarch64
+        overwrite: true
 
 
   # Some of the GitHub MacOS runners (M1 processor) do not support nested virtualization, so can't
@@ -73,8 +74,10 @@ jobs:
     name: Release universal binary for MacOS
     runs-on: ubuntu-latest
     steps:
-    - run: podman run --rm \
-          -v $(pwd):/io \
+    - run: |
+        podman pull docker.io/messense/cargo-zigbuild
+        podman run --rm \
+          -v $CWD:/io \
           -w /io docker.io/messense/cargo-zigbuild \
           cargo zigbuild --release --target universal2-apple-darwin
 
@@ -85,6 +88,7 @@ jobs:
         tag: ${{ github.ref }}
         file: target/universal2-apple-darwin/release/dash-mpd-cli
         asset_name: dash-mpd-cli-macos
+        overwrite: true
 
 
   release-windows:
@@ -111,4 +115,5 @@ jobs:
         tag: ${{ github.ref }}
         file: target/release/dash-mpd-cli.exe
         asset_name: dash-mpd-cli-windows.exe
+        overwrite: true
 
