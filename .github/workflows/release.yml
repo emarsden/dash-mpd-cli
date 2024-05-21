@@ -66,29 +66,22 @@ jobs:
         asset_name: dash-mpd-cli-linux-aarch64
 
 
-  # TODO: generate a universal binary
   release-macos:
-    name: Release for MacOS/aarch64
+    name: Release universal binary for MacOS
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-         fetch-depth: 0
-
-    - uses: dtolnay/rust-toolchain@stable
-      with:
-         targets: aarch64-apple-darwin
-
-    - run: |
-        cargo build --release --target aarch64-apple-darwin
+    - run: docker run --rm -it \
+          -v $(pwd):/io \
+          -w /io docker.io/messense/cargo-zigbuild \
+          cargo zigbuild --release --target x86_64-apple-darwin
     
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: target/aarch64-apple-darwin/release/dash-mpd-cli
-        asset_name: dash-mpd-cli-macos-aarch64
+        file: target/universal2-apple-darwin/release/dash-mpd-cli
+        asset_name: dash-mpd-cli-macos
 
 
   release-windows:

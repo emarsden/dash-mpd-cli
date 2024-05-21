@@ -1,5 +1,8 @@
 # Build a Docker/Podman container with dash-mpd-cli and its external helper applications.
 # We currently build for Linux/AMD64, Linux/aarch64, Linux/armv7 (32 bit) and Linux/riscv64.
+#
+# This workflow is currently unused because the cross-compile builds for riscv64 and ppc64le using
+# qemu last too long for a GitHub Action.
 
 name: Build container image
 
