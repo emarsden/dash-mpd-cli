@@ -75,7 +75,7 @@ jobs:
     steps:
     - run: docker run --rm \
           -v $(pwd):/io \
-          -w /io docker.io/messense/cargo-zigbuild \
+          -w /io -d docker.io/messense/cargo-zigbuild \
           cargo zigbuild --release --target universal2-apple-darwin
 
     - name: Upload binaries to release
