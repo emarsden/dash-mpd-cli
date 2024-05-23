@@ -54,7 +54,7 @@ argument `-o concerto.mp4` and the stream contains three periods, they will be s
 
 - `concerto.mp4` for the first period
 - `concerto-p2.mp4` for the second period
-- `concerto-p3.mp4` foor the third period
+- `concerto-p3.mp4` for the third period
 
 If the `--no-period-concatenation` commandline option is not used, and the media in the different
 periods is compatible (same video resolution, codecs, framerate and so on), then dash-mpd-cli will
