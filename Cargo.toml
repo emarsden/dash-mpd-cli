@@ -14,11 +14,11 @@ publish = true
 
 
 [dependencies]
-tokio = { version = "1.37.0", features = ["rt-multi-thread", "macros"] }
+tokio = { version = "1.38.0", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.40", features = ["attributes"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 time = { version = "0.3.30", features = ["local-offset"] }
-dash-mpd = { version = "0.16.3", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
+dash-mpd = { git = "https://github.com/emarsden/dash-mpd-rs", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
 reqwest = { version = "0.12.4", default-features = false, features = ["gzip", "rustls-tls", "socks", "json", "cookies"] }
 # We need to stay synchronized with the version used in the bench_scraper crate.
 strum = { version = "0.26.2", features = ["derive"] }
@@ -37,7 +37,7 @@ bench_scraper = { git = "https://github.com/emarsden/bench_scraper", features = 
 [dev-dependencies]
 rustls = "0.21.10"
 rustls-pemfile = "1.0.3"
-tokio = { version = "1.37.0", features = ["rt-multi-thread", "time", "macros"] }
+tokio = { version = "1.38.0", features = ["rt-multi-thread", "time", "macros"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 test-log = { version = "0.2.16", features = ["trace"] }
 http = "1.1.0"
