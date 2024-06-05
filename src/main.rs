@@ -314,6 +314,12 @@ async fn main () -> Result<()> {
              .num_args(1)
              .action(ArgAction::Append)
              .help("When muxing into CONTAINER, try muxing applications in order ORDERING. You can use this option multiple times."))
+        .arg(Arg::new("concat-preference")
+             .long("concat-preference")
+             .value_name("CONTAINER:ORDERING")
+             .num_args(1)
+             .action(ArgAction::Append)
+             .help("When concatenating media streams into CONTAINER, try concat helper applications in order ORDERING. You can use this option multiple times."))
         .arg(Arg::new("key")
              .long("key")
              .value_name("KID:KEY")
@@ -686,6 +692,16 @@ async fn main () -> Result<()> {
                 dl = dl.with_muxer_preference(container, ordering);
             } else {
                 warn!("Ignoring badly formatted {} argument to --muxer-preference",
+                      "container:ordering".italic());
+            }
+        }
+    }
+    if let Some(mps) = matches.get_many::<String>("concat-preference") {
+        for mp in mps.collect::<Vec<_>>() {
+            if let Some((container, ordering)) = mp.split_once(':') {
+                dl = dl.with_concat_preference(container, ordering);
+            } else {
+                warn!("Ignoring badly formatted {} argument to --concat-preference",
                       "container:ordering".italic());
             }
         }

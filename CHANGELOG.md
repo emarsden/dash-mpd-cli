@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.2.20] - Unreleased
+
+- Add support for concatenating streams in multi-period manifests using mkvmerge, as an alternative
+  to the existing support for concatenation using ffmpeg. The preference ordering for concatenation
+  helpers is specified by commandline argument `--concat-preference`, which works similarly to the
+  existing `--muxer-preference` commandline argument.
+
+  Concatenation using mkvmerge works at least with MP4 and with Matroska (.mkv) containers. It tends
+  to be much faster than using ffmpeg but also less robust (less tolerant of the variety of media
+  encoding specificities found in the wild). You can specify multiple concatenation helpers, in
+  which case they will be called sequentially until one of them returns a success code.
+
+- Fix a bug in concatenation for multiperiod manifests that occured when one of the Periods does not
+  contain any audio.
+
+- Accomodate manifests which declare that a Representation has `mimeType="video/mp4"` and
+  `codecs="mp4a"` (or some other audio codec). These Representations are now detected as audio
+  streams rather than as video streams.
+
+
 ## [0.2.19] - 2024-05-21
 
 - A new commandline argument `--minimum_period_duration` whose argument is a number of seconds.
