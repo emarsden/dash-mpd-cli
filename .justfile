@@ -64,17 +64,16 @@ podman-build-multiarch:
       dash-mpd-cli
     echo === Build container for AMD64
     podman build -f etc/Containerfile_linux_amd64 --arch amd64 --tag dash-mpd-cli-linux-amd64 --manifest dash-mpd-cli .
-    podman manifest push --format oci localhost/dash-mpd-cli-linux-amd64 ghcr.io/emarsden/dash-mpd-cli
+    podman manifest push --all localhost/dash-mpd-cli ghcr.io/emarsden/dash-mpd-cli
     echo === Build container for ARM64
     podman build -f etc/Containerfile_linux_aarch64 --arch arm64 --tag dash-mpd-cli-linux-aarch64 --manifest dash-mpd-cli .
-    podman manifest push --format oci localhost/dash-mpd-cli-linux-aarch64 ghcr.io/emarsden/dash-mpd-cli
-
+    podman manifest push --all localhost/dash-mpd-cli ghcr.io/emarsden/dash-mpd-cli
     echo === Build container for ARMv7
     podman build -f etc/Containerfile_linux_armv7 --arch arm/v7 --tag dash-mpd-cli-linux-armv7 --manifest dash-mpd-cli .
-    podman manifest push --format oci localhost/dash-mpd-cli-linux-armv7 ghcr.io/emarsden/dash-mpd-cli
+    podman manifest push --all localhost/dash-mpd-cli ghcr.io/emarsden/dash-mpd-cli
     echo === Build container for RISCV64
     podman build -f etc/Containerfile_linux_riscv64 --arch riscv64 --tag dash-mpd-cli-linux-riscv64 --manifest dash-mpd-cli .
-    podman manifest push --format oci localhost/dash-mpd-cli-linux-riscv64 ghcr.io/emarsden/dash-mpd-cli
+    podman manifest push --all localhost/dash-mpd-cli ghcr.io/emarsden/dash-mpd-cli
     echo === Build container for PPC64LE
     podman build -f etc/Containerfile_linux_ppc64le --arch ppc64le --tag dash-mpd-cli-linux-ppc64le --manifest dash-mpd-cli .
     echo === Push container to registry
