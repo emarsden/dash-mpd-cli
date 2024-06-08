@@ -12,6 +12,13 @@
   encoding specificities found in the wild). You can specify multiple concatenation helpers, in
   which case they will be called sequentially until one of them returns a success code.
 
+- Allow the user to specify a preference for streams based on the value of the `Role` element in an
+  `AdaptationSet`. Streaming services sometimes publish various additional streams marked with roles
+  such as `alternate` or `supplementary` or `description`, in addition to the main stream which is
+  generalled labelled with a role of `main`. The user can specify a preference order for these role
+  annotations, which is applied after the language preference and before the width/height/quality
+  preference.
+
 - Fix a bug in concatenation for multiperiod manifests that occured when one of the Periods does not
   contain any audio.
 

@@ -320,6 +320,12 @@ async fn main () -> Result<()> {
              .num_args(1)
              .action(ArgAction::Append)
              .help("When concatenating media streams into CONTAINER, try concat helper applications in order ORDERING. You can use this option multiple times."))
+        .arg(Arg::new("role-preference")
+            .long("role-preference")
+            .value_name("ORDERING")
+            .num_args(1)
+            .action(ArgAction::Append)
+            .help("Preference order for streams based on the value of the Role element in an AdaptationSet. Streaming services sometimes publish additional streams marked with roles such as alternate or supplementary, in addition to the main stream which is generalled labelled main. A value such as \"alternate,main\" means to download the alternate stream instead of the main stream (the default ordering will prefer the stream that is labelled as \"main\"). The role preference is applied after any language preference that is specified and before any specified width/height/quality preference."))
         .arg(Arg::new("key")
              .long("key")
              .value_name("KID:KEY")
@@ -704,6 +710,16 @@ async fn main () -> Result<()> {
                 warn!("Ignoring badly formatted {} argument to --concat-preference",
                       "container:ordering".italic());
             }
+        }
+    }
+    if let Some(rp) = matches.get_one::<String>("role-preference") {
+        let ordering: Vec<String> = rp.split(',')
+            .map(str::to_string)
+            .collect();
+        if ordering.len() > 0 {
+            dl = dl.prefer_roles(ordering);
+        } else {
+            warn!("Ignoring badly formatted role1,role2,role3 argument to --role-preference");
         }
     }
     if let Some(kvs) = matches.get_many::<String>("key") {
