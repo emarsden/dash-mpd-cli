@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.20] - Unreleased
+## [0.2.20] - 2024-06-08
 
 - Add support for concatenating streams in multi-period manifests using mkvmerge, as an alternative
   to the existing support for concatenation using ffmpeg. The preference ordering for concatenation
@@ -15,7 +15,7 @@
 - Allow the user to specify a preference for streams based on the value of the `Role` element in an
   `AdaptationSet`. Streaming services sometimes publish various additional streams marked with roles
   such as `alternate` or `supplementary` or `description`, in addition to the main stream which is
-  generalled labelled with a role of `main`. The user can specify a preference order for these role
+  generally labelled with a role of `main`. The user can specify a preference order for these role
   annotations, which is applied after the language preference and before the width/height/quality
   preference.
 

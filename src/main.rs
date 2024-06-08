@@ -716,7 +716,7 @@ async fn main () -> Result<()> {
         let ordering: Vec<String> = rp.split(',')
             .map(str::to_string)
             .collect();
-        if ordering.len() > 0 {
+        if !ordering.is_empty() {
             dl = dl.prefer_roles(ordering);
         } else {
             warn!("Ignoring badly formatted role1,role2,role3 argument to --role-preference");

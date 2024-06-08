@@ -81,6 +81,10 @@ The following features are supported:
   particular WebM containers and more encryption formats), whereas mp4decrypt mostly works with MPEG
   Common Encryption.
 
+- Support for selecting the streams to download based on audio language, quality, horizontal and
+  vertical resolution of the video stream, and role annotation (e.g. `main` instead of `alternate`
+  role).
+
 - Support for **[rewriting the MPD
   manifest](https://emarsden.github.io/dash-mpd-cli/rewriting.html)** before downloading, for
   example to replace the URL of certain segments by other URLs, or to drop certain Periods based on

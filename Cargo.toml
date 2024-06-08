@@ -18,7 +18,7 @@ tokio = { version = "1.38.0", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.40", features = ["attributes"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 time = { version = "0.3.36", features = ["local-offset"] }
-dash-mpd = { git = "https://github.com/emarsden/dash-mpd-rs", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
+dash-mpd = { version = "0.16.4", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
 reqwest = { version = "0.12.4", default-features = false, features = ["gzip", "rustls-tls", "socks", "json", "cookies"] }
 # We need to stay synchronized with the version used in the bench_scraper crate.
 strum = { version = "0.26.2", features = ["derive"] }
