@@ -17,12 +17,12 @@ publish = true
 tokio = { version = "1.38.0", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.40", features = ["attributes"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
-time = { version = "0.3.30", features = ["local-offset"] }
+time = { version = "0.3.36", features = ["local-offset"] }
 dash-mpd = { git = "https://github.com/emarsden/dash-mpd-rs", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
 reqwest = { version = "0.12.4", default-features = false, features = ["gzip", "rustls-tls", "socks", "json", "cookies"] }
 # We need to stay synchronized with the version used in the bench_scraper crate.
 strum = { version = "0.26.2", features = ["derive"] }
-colored = "2.0.4"
+colored = "2.1.0"
 indicatif = "0.17.8"
 clap = { version = "=4.3.24", features = ["cargo", "unicode", "wrap_help"] }
 serde_json = "1.0.117"
@@ -35,7 +35,7 @@ tempfile = "3.10.1"
 bench_scraper = { git = "https://github.com/emarsden/bench_scraper", features = ["reqwest"], optional = true }
 
 [dev-dependencies]
-rustls = "0.21.10"
+rustls = "0.21.12"
 rustls-pemfile = "1.0.3"
 tokio = { version = "1.38.0", features = ["rt-multi-thread", "time", "macros"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
@@ -52,7 +52,7 @@ file-format = { version = "0.25.0", features = ["reader"] }
 json = "0.12.4"
 assert_cmd = "2.0.14"
 assert_fs = "1.1.1"
-predicates = "3.0.4"
+predicates = "3.1.0"
 
 [features]
 default = ["cookies"]
