@@ -149,6 +149,15 @@ Preferred language when multiple audio streams with different languages are avai
 RFC 5646 format (e.g. fr or en-AU). If a preference is not specified and multiple audio streams are
 present, the first one listed in the DASH manifest will be downloaded.
 
+    --role-preference <ORDERING>
+
+Preference order for streams based on the value of the Role element in an AdaptationSet. Streaming
+services sometimes publish additional streams marked with roles such as `alternate` or `supplementary`,
+in addition to the main stream which is generalled labelled `main`. A value such as `alternate,main`
+means to download the alternate stream instead of the main stream (the default ordering will prefer
+the stream that is labelled as `main`). The role preference is applied after any language preference
+that is specified and before any specified width/height/quality preference.
+
     --drop-elements <XPATH>
 
 XML elements that match this XPath expression will be removed from the MPD manifest before the
