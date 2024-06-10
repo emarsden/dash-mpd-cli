@@ -14,7 +14,7 @@ jobs:
           fetch-depth: 0
 
       - name: Trivy scan for vulnerabilities
-        uses: aquasecurity/trivy-action@0.21.0
+        uses: aquasecurity/trivy-action@0.22.0
         with:
            image-ref: ghcr.io/emarsden/dash-mpd-cli:latest
            # exit code when vulnerabilities were found
