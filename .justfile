@@ -93,10 +93,10 @@ list-docker-platforms:
 # Run a trivy vulnerability scan of our container image
 # https://github.com/aquasecurity/trivy
 trivy-container:
-    podman run --rm docker.io/aquasec/trivy image ghcr.io/emarsden/dash-mpd-cli:latest
+    podman run --rm --pull=newer docker.io/aquasec/trivy image ghcr.io/emarsden/dash-mpd-cli:latest
 
 trivy-repository:
-    podman run --rm -v $PWD:/myapp docker.io/aquasec/trivy fs --scanners vuln,secret,misconfig .
+    podman run --rm --pull=newer -v $PWD:/myapp docker.io/aquasec/trivy fs --scanners vuln,secret,misconfig .
 
 
 # Run a grype vulnerability scan of our container image

@@ -19,7 +19,7 @@
   annotations, which is applied after the language preference and before the width/height/quality
   preference.
 
-- Fix a bug in concatenation for multiperiod manifests that occured when one of the Periods does not
+- Fix a bug in concatenation for multiperiod manifests that occurred when one of the Periods does not
   contain any audio.
 
 - Accomodate manifests which declare that a Representation has `mimeType="video/mp4"` and

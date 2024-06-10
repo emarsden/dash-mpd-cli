@@ -50,7 +50,7 @@ LABEL org.opencontainers.image.description "Download media content from a DASH-M
 LABEL org.opencontainers.image.title "dash-mpd-cli"
 LABEL org.opencontainers.image.url "https://github.com/emarsden/dash-mpd-cli"
 LABEL org.opencontainers.image.source "https://github.com/emarsden/dash-mpd-cli"
-LABEL org.opencontainers.image.version "0.2.19"
+LABEL org.opencontainers.image.version "0.2.20"
 LABEL org.opencontainers.image.authors "eric.marsden@risk-engineering.org"
 LABEL org.opencontainers.image.licenses "MIT"
 
@@ -62,7 +62,7 @@ LABEL org.opencontainers.image.licenses "MIT"
 #   - xsltproc (from libxslt): MIT
 #   - Shaka packager: MIT
 #
-# Note that as of 2023-12, mkvtoolnix is not packaged in alpine:edge/riscv64.
+# Note that as of 2024-06, mkvtoolnix is not packaged in alpine:edge/riscv64.
 RUN apk update && \
     apk upgrade && \
     apk add --no-cache ca-certificates libc6-compat wget ffmpeg bento4 libxslt && \
