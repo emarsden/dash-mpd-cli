@@ -44,7 +44,7 @@ http = "1.1.0"
 axum = "0.6.20"
 axum-server = { version = "0.5.1", features = ["tls-rustls"] }
 axum-auth = "0.4"
-quick-xml = { version = "0.31.0", features = ["serialize"] }
+quick-xml = { version = "0.32.0", features = ["serialize"] }
 mp4 = "0.14.0"
 lazy_static = "1.4.0"
 ffprobe = "0.4.0"
