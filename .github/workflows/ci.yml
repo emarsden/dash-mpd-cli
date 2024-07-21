@@ -113,6 +113,11 @@ jobs:
     - name: install protobuf compiler
       run: choco install --yes --limit-output protoc
 
+    - name: install NASM for rustls-tls build
+      run: |
+         choco install nasm
+         echo "C:\Program Files\NASM" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
     # The ffmpeg executable is installed at C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin\ffmpeg.exe
     # A shim is created at C:\ProgramData\chocolatey\bin\ffmpeg.exe.
     - name: install ffmpeg
