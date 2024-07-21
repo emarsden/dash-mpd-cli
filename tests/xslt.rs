@@ -18,7 +18,7 @@ use axum::{routing::get, Router};
 use axum::extract::State;
 use axum::response::{Response, IntoResponse};
 use axum::http::{header, StatusCode};
-use axum::body::{Full, Bytes};
+use axum::body::Body;
 use ffprobe::ffprobe;
 use file_format::FileFormat;
 use assert_fs::{prelude::*, TempDir};
@@ -48,23 +48,23 @@ async fn test_xslt_rewrite_media() -> Result<()> {
     // State shared between the request handlers.
     let shared_state = Arc::new(AppState::new());
 
-    async fn send_init(State(state): State<Arc<AppState>>) -> Response<Full<Bytes>> {
+    async fn send_init(State(state): State<Arc<AppState>>) -> Response {
         state.count_init.fetch_add(1, Ordering::SeqCst);
         let mp4 = generate_minimal_mp4();
         Response::builder()
             .status(StatusCode::OK)
             .header(header::CONTENT_TYPE, "video/mp4")
-            .body(Full::from(mp4))
+            .body(Body::from(mp4))
             .unwrap()
     }
 
-    async fn send_media(State(state): State<Arc<AppState>>) -> Response<Full<Bytes>> {
+    async fn send_media(State(state): State<Arc<AppState>>) -> Response {
         state.count_media.fetch_add(1, Ordering::SeqCst);
         let mp4 = generate_minimal_mp4();
         Response::builder()
             .status(StatusCode::OK)
             .header(header::CONTENT_TYPE, "video/mp4")
-            .body(Full::from(mp4))
+            .body(Body::from(mp4))
             .unwrap()
     }
     async fn send_status(State(state): State<Arc<AppState>>) -> impl IntoResponse {
@@ -87,10 +87,10 @@ async fn test_xslt_rewrite_media() -> Result<()> {
         .route("/media/segment-:id.mp4", get(send_media))
         .route("/status", get(send_status))
         .with_state(shared_state);
-    let server_handle = axum_server::Handle::new();
+    let server_handle = hyper_serve::Handle::new();
     let backend_handle = server_handle.clone();
     let backend = async move {
-        axum_server::bind("127.0.0.1:6668".parse().unwrap())
+        hyper_serve::bind("127.0.0.1:6668".parse().unwrap())
             .handle(backend_handle)
             .serve(app.into_make_service()).await
             .unwrap()

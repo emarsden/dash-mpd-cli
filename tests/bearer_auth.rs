@@ -23,8 +23,8 @@ use assert_cmd::Command;
 use axum::{routing::get, Router};
 use axum::extract::State;
 use axum::response::{Response, IntoResponse};
-use axum::http::{header, StatusCode};
-use axum::body::{Full, Bytes};
+use axum::http;
+use axum::body::Body;
 use axum_auth::AuthBearer;
 use dash_mpd::{MPD, Period, AdaptationSet, Representation, SegmentTemplate};
 use anyhow::{Context, Result};
@@ -84,27 +84,27 @@ async fn test_bearer_auth() -> Result<()> {
             ..Default::default()
         };
         let xml = quick_xml::se::to_string(&mpd).unwrap();
-        ([(header::CONTENT_TYPE, "application/dash+xml")], xml)
+        ([(http::header::CONTENT_TYPE, "application/dash+xml")], xml)
     }
 
     // Create a minimal sufficiently-valid MP4 file.
     async fn send_mp4(
         AuthBearer(token): AuthBearer,
-        State(state): State<Arc<AppState>>) -> Response<Full<Bytes>>
+        State(state): State<Arc<AppState>>) -> Response
     {
         info!("segment request: auth {token:?}");
         state.counter.fetch_add(1, Ordering::SeqCst);
         let data = generate_minimal_mp4();
         Response::builder()
-            .status(StatusCode::OK)
-            .header(header::CONTENT_TYPE, "video/mp4")
-            .body(Full::from(data))
+            .status(http::StatusCode::OK)
+            .header(http::header::CONTENT_TYPE, "video/mp4")
+            .body(Body::from(data))
             .unwrap()
     }
 
     // Status requests don't require authentication.
     async fn send_status(State(state): State<Arc<AppState>>) -> impl IntoResponse {
-        ([(header::CONTENT_TYPE, "text/plain")], format!("{}", state.counter.load(Ordering::Relaxed)))
+        ([(http::header::CONTENT_TYPE, "text/plain")], format!("{}", state.counter.load(Ordering::Relaxed)))
     }
 
     let app = Router::new()
@@ -113,9 +113,8 @@ async fn test_bearer_auth() -> Result<()> {
         .route("/status", get(send_status))
         .with_state(shared_state);
     let backend = async move {
-        axum::Server::bind(&"127.0.0.1:6666".parse().unwrap())
-            .serve(app.into_make_service())
-            .await
+        hyper_serve::bind("127.0.0.1:6666".parse().unwrap())
+            .serve(app.into_make_service()).await
             .unwrap()
     };
     tokio::spawn(backend);

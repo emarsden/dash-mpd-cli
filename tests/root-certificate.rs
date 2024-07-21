@@ -38,8 +38,8 @@ use axum::{routing::get, Router};
 use axum::extract::State;
 use axum::response::{Response, IntoResponse};
 use axum::http::{header, StatusCode};
-use axum::body::{Full, Bytes};
-use axum_server::tls_rustls::RustlsConfig;
+use axum::body::Body;
+use hyper_serve::tls_rustls::RustlsConfig;
 use dash_mpd::{MPD, Period, AdaptationSet, Representation, BaseURL};
 use anyhow::{Context, Result};
 use test_log::test;
@@ -97,12 +97,12 @@ async fn test_add_root_cert() -> Result<(), anyhow::Error> {
     // MPD and requested the video segment.
     let shared_state = Arc::new(AppState::new());
 
-    async fn send_mp4(State(state): State<Arc<AppState>>) -> Response<Full<Bytes>> {
+    async fn send_mp4(State(state): State<Arc<AppState>>) -> Response {
         state.counter.fetch_add(1, Ordering::SeqCst);
         Response::builder()
             .status(StatusCode::OK)
             .header(header::CONTENT_TYPE, "video/mp4")
-            .body(Full::from(Bytes::from(include_bytes!("fixtures/minimal-valid.mp4").as_slice())))
+            .body(Body::from(include_bytes!("fixtures/minimal-valid.mp4").as_slice()))
             .unwrap()
     }
 
@@ -110,6 +110,7 @@ async fn test_add_root_cert() -> Result<(), anyhow::Error> {
         ([(header::CONTENT_TYPE, "text/plain")], format!("{}", state.counter.load(Ordering::Relaxed)))
     }
 
+    rustls::crypto::aws_lc_rs::default_provider().install_default().unwrap();
     let app = Router::new()
         .route("/mpd", get(|| async { ([(header::CONTENT_TYPE, "application/dash+xml")], xml) }))
         .route("/init.mp4", get(send_mp4))
@@ -118,14 +119,11 @@ async fn test_add_root_cert() -> Result<(), anyhow::Error> {
     let addr = SocketAddr::from(([127, 0, 0, 1], 6666));
     let config = RustlsConfig::from_pem_file(
         "tests/fixtures/localhost-cert.crt",
-        "tests/fixtures/localhost-cert.key",
-    )
-        .await
+        "tests/fixtures/localhost-cert.key").await
         .context("rustls configuration")?;
     let backend = async move {
-        axum_server::bind_rustls(addr, config)
-            .serve(app.into_make_service())
-            .await
+        hyper_serve::bind_rustls(addr, config)
+            .serve(app.into_make_service()).await
             .unwrap()
     };
     tokio::spawn(backend);
@@ -139,11 +137,9 @@ async fn test_add_root_cert() -> Result<(), anyhow::Error> {
         .build()
         .context("creating HTTP client")?;
     let txt = client.get("https://localhost:6666/status")
-        .send()
-        .await?
+        .send().await?
         .error_for_status()?
-        .text()
-        .await
+        .text().await
         .context("fetching status")?;
     assert!(txt.eq("0"));
 
@@ -169,11 +165,9 @@ async fn test_add_root_cert() -> Result<(), anyhow::Error> {
 
     // Check that the init.mp4 segment was fetched: request counter should be 1.
     let txt = client.get("https://localhost:6666/status")
-        .send()
-        .await?
+        .send().await?
         .error_for_status()?
-        .text()
-        .await
+        .text().await
         .context("fetching status")?;
     assert!(txt.eq("1"));
 

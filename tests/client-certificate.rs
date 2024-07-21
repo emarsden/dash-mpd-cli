@@ -45,10 +45,12 @@ use axum::{routing::get, Router};
 use axum::extract::State;
 use axum::response::{Response, IntoResponse};
 use axum::http::{header, StatusCode};
-use axum::body::{Full, Bytes};
-use axum_server::tls_rustls::RustlsConfig;
+use axum::body::Body;
+use hyper_serve::tls_rustls::RustlsConfig;
 use rustls::RootCertStore;
-use rustls::server::AllowAnyAuthenticatedClient;
+use rustls::ServerConfig;
+use rustls_pki_types::{CertificateDer, PrivateKeyDer};
+use rustls::server::WebPkiClientVerifier;
 use dash_mpd::{MPD, Period, AdaptationSet, Representation, BaseURL};
 use anyhow::{Context, Result};
 use test_log::test;
@@ -106,12 +108,12 @@ async fn test_add_client_identity() -> Result<(), anyhow::Error> {
     // MPD and requested the video segment.
     let shared_state = Arc::new(AppState::new());
 
-    async fn send_mp4(State(state): State<Arc<AppState>>) -> Response<Full<Bytes>> {
+    async fn send_mp4(State(state): State<Arc<AppState>>) -> Response {
         state.counter.fetch_add(1, Ordering::SeqCst);
         Response::builder()
             .status(StatusCode::OK)
             .header(header::CONTENT_TYPE, "video/mp4")
-            .body(Full::from(Bytes::from(include_bytes!("fixtures/minimal-valid.mp4").as_slice())))
+            .body(Body::from(include_bytes!("fixtures/minimal-valid.mp4").as_slice()))
             .unwrap()
     }
 
@@ -119,6 +121,7 @@ async fn test_add_client_identity() -> Result<(), anyhow::Error> {
         ([(header::CONTENT_TYPE, "text/plain")], format!("{}", state.counter.load(Ordering::Relaxed)))
     }
 
+    rustls::crypto::aws_lc_rs::default_provider().install_default().unwrap();
     let app = Router::new()
         .route("/mpd", get(|| async { ([(header::CONTENT_TYPE, "application/dash+xml")], xml) }))
         .route("/init.mp4", get(send_mp4))
@@ -126,33 +129,40 @@ async fn test_add_client_identity() -> Result<(), anyhow::Error> {
         .with_state(shared_state);
     let addr = SocketAddr::from(([127, 0, 0, 1], 6666));
     let mut client_auth_roots = RootCertStore::empty();
-    let certfile = fs::File::open("tests/fixtures/root-CA.crt")?;
-    rustls_pemfile::certs(&mut BufReader::new(certfile))
+    let root_cert = fs::File::open("tests/fixtures/root-CA.crt")?;
+    for maybe_cert in rustls_pemfile::certs(&mut BufReader::new(root_cert)) {
+        client_auth_roots.add(maybe_cert.unwrap()).unwrap();
+    }
+    let client_verifier = WebPkiClientVerifier::builder(client_auth_roots.into())
+        .build()
+        .unwrap();
+    /* this convenience method doesn't allow us to specify client verifier
+    let config = RustlsConfig::from_pem_file(
+        "tests/fixtures/localhost-cert.crt",
+        "tests/fixtures/localhost-cert.key")
+        .await
         .unwrap()
-        .iter()
-        .map(|v| rustls::Certificate(v.clone()))
-        .for_each(|r| { client_auth_roots.add(&r).unwrap(); });
-    let client_auth = AllowAnyAuthenticatedClient::new(client_auth_roots).boxed();
-    let keyfile = fs::File::open("tests/fixtures/localhost-cert.key")?;
-    let mut reader = BufReader::new(keyfile);
-    let localhost_keys = rustls_pemfile::pkcs8_private_keys(&mut reader)
-        .context("reading localhost private keys")?;
-    let localhost_key = rustls::PrivateKey(localhost_keys[0].clone());
-    let crt_file = fs::File::open("tests/fixtures/localhost-cert.crt")?;
-    let mut reader = BufReader::new(crt_file);
-    let localhost_cert = rustls_pemfile::certs(&mut reader)?
-        .iter()
-        .map(|v| rustls::Certificate(v.clone()))
-        .collect::<Vec<_>>();
-    let config = rustls::ServerConfig::builder()
-        .with_safe_defaults()
-        .with_client_cert_verifier(client_auth)
-        .with_single_cert(localhost_cert, localhost_key)
-        .expect("bad certificates/private key");
+     */
+    let cert_file = fs::File::open("tests/fixtures/localhost-cert.crt")?;
+    let mut certificates: Vec<CertificateDer<'static>> = Vec::new();
+    for maybe_cert in rustls_pemfile::certs(&mut BufReader::new(cert_file)) {
+        certificates.push(maybe_cert.unwrap());
+    }
+    let key_file = fs::File::open("tests/fixtures/localhost-cert.key")?;
+    let mut keys: Vec<PrivateKeyDer> = Vec::new();
+    for maybe_key in rustls_pemfile::pkcs8_private_keys(&mut BufReader::new(key_file)) {
+        keys.push(PrivateKeyDer::Pkcs8(maybe_key.unwrap()));
+    }
+    keys.reverse();
+    let key = keys.pop().expect("no private key");
+    let mut config = ServerConfig::builder()
+        .with_client_cert_verifier(client_verifier)
+        .with_single_cert(certificates, key)
+        .expect("bad server certificate/key");
+    config.alpn_protocols = vec![b"h2".to_vec(), b"http/1.1".to_vec()];
     let backend = async move {
-        axum_server::bind_rustls(addr, RustlsConfig::from_config(config.into()))
-            .serve(app.into_make_service())
-            .await
+        hyper_serve::tls_rustls::bind_rustls(addr, RustlsConfig::from_config(config.into()))
+            .serve(app.into_make_service()).await
             .unwrap()
     };
     tokio::spawn(backend);

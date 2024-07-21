@@ -16,8 +16,6 @@ use axum::http::header;
 use test_log::test;
 
 
-
-
 #[test]
 fn test_conformity_empty_period() {
     // This manifest contains an empty Period. Periods should have at least one AdaptationSet.
@@ -171,10 +169,10 @@ async fn test_conformity_invalid_maxsegmentduration() {
 
     let app = Router::new()
         .route("/mpd", get(|| async { ([(header::CONTENT_TYPE, "application/dash+xml")], xml) }));
-    let server_handle = axum_server::Handle::new();
+    let server_handle = hyper_serve::Handle::new();
     let backend_handle = server_handle.clone();
     let backend = async move {
-        axum_server::bind("127.0.0.1:6666".parse().unwrap())
+        hyper_serve::bind("127.0.0.1:6666".parse().unwrap())
             .handle(backend_handle)
             .serve(app.into_make_service()).await
             .unwrap()
@@ -211,10 +209,10 @@ async fn test_conformity_invalid_sourceurl() {
 
     let app = Router::new()
         .route("/mpd", get(|| async { ([(header::CONTENT_TYPE, "application/dash+xml")], XML) }));
-    let server_handle = axum_server::Handle::new();
+    let server_handle = hyper_serve::Handle::new();
     let backend_handle = server_handle.clone();
     let backend = async move {
-        axum_server::bind("127.0.0.1:6661".parse().unwrap())
+        hyper_serve::bind("127.0.0.1:6661".parse().unwrap())
             .handle(backend_handle)
             .serve(app.into_make_service()).await
             .unwrap()
@@ -247,10 +245,10 @@ async fn test_conformity_invalid_segmenturl() {
      </Period></MPD>"#;
     let app = Router::new()
         .route("/mpd", get(|| async { ([(header::CONTENT_TYPE, "application/dash+xml")], XML) }));
-    let server_handle = axum_server::Handle::new();
+    let server_handle = hyper_serve::Handle::new();
     let backend_handle = server_handle.clone();
     let backend = async move {
-        axum_server::bind("127.0.0.1:6662".parse().unwrap())
+        hyper_serve::bind("127.0.0.1:6662".parse().unwrap())
             .handle(backend_handle)
             .serve(app.into_make_service()).await
             .unwrap()
@@ -275,10 +273,10 @@ async fn test_conformity_invalid_moreinformation() {
     static XML: &str = r#"<MPD><ProgramInformation moreInformationURL="https://192.168.1.2.3/segment.mp4" /></MPD>"#;
     let app = Router::new()
         .route("/mpd", get(|| async { ([(header::CONTENT_TYPE, "application/dash+xml")], XML) }));
-    let server_handle = axum_server::Handle::new();
+    let server_handle = hyper_serve::Handle::new();
     let backend_handle = server_handle.clone();
     let backend = async move {
-        axum_server::bind("127.0.0.1:6663".parse().unwrap())
+        hyper_serve::bind("127.0.0.1:6663".parse().unwrap())
             .handle(backend_handle)
             .serve(app.into_make_service()).await
             .unwrap()

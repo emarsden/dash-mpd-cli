@@ -23,7 +23,8 @@ use axum::{routing::get, Router};
 use axum::response::{Response, IntoResponse};
 use axum::http::header::HeaderMap;
 use axum::http::{header, StatusCode};
-use axum::body::{Full, Bytes};
+use axum::body::Body;
+use hyper_serve::Server;
 use dash_mpd::{MPD, Period, AdaptationSet, Representation, SegmentTemplate};
 use anyhow::Result;
 use test_log::test;
@@ -73,7 +74,7 @@ async fn test_headers() -> Result<()> {
         ([(header::CONTENT_TYPE, "application/dash+xml")], xml)
     }
 
-    async fn send_mp4(headers: HeaderMap) -> Response<Full<Bytes>> {
+    async fn send_mp4(headers: HeaderMap) -> Response {
         assert_eq!(headers["user-agent"], "MyFakeUserAgent/42.0");
         assert_eq!(headers["referer"], "https://twiddles.org/");
         assert_eq!(headers["x-twizzles"], "extra");
@@ -83,7 +84,7 @@ async fn test_headers() -> Result<()> {
         Response::builder()
             .status(StatusCode::OK)
             .header(header::CONTENT_TYPE, "video/mp4")
-            .body(Full::from(data))
+            .body(Body::from(data))
             .unwrap()
     }
 
@@ -91,7 +92,7 @@ async fn test_headers() -> Result<()> {
         .route("/mpd", get(send_mpd))
         .route("/media/:seg", get(send_mp4));
     let backend = async move {
-        axum::Server::bind(&"127.0.0.1:6661".parse().unwrap())
+        Server::bind("127.0.0.1:6661".parse().unwrap())
             .serve(app.into_make_service())
             .await
             .unwrap()
