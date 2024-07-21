@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.21] - Unreleased
+
+- Move to v0.23 of the rustls crate for various performance and security improvements to TLS
+  connection handling.
+
+- Move from the unmaintained `bench_scraper` crate to the `decrypt-cookies` crate for access to cookies
+  from your web browser. This crate also supports a wider range of web browsers.
+
+
 ## [0.2.20] - 2024-06-08
 
 - Add support for concatenating streams in multi-period manifests using mkvmerge, as an alternative

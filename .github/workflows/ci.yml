@@ -115,7 +115,7 @@ jobs:
 
     - name: install NASM for rustls-tls build
       run: |
-         choco install nasm
+         choco install --yes --limit-output nasm
          echo "C:\Program Files\NASM" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
     # The ffmpeg executable is installed at C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin\ffmpeg.exe

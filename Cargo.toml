@@ -20,8 +20,8 @@ tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 time = { version = "0.3.36", features = ["local-offset"] }
 dash-mpd = { version = "0.16.5", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
 reqwest = { version = "0.12.5", default-features = false, features = ["gzip", "rustls-tls", "socks", "json", "cookies"] }
-# We need to stay synchronized with the version used in the bench_scraper crate.
-strum = { version = "0.26.2", features = ["derive"] }
+# We need to stay synchronized with the version used in the decrypt-cookies crate.
+strum = { version = "0.26.3", features = ["derive"] }
 colored = "2.1.0"
 indicatif = "0.17.8"
 clap = { version = "=4.3.24", features = ["cargo", "unicode", "wrap_help"] }
@@ -31,8 +31,8 @@ fs-err = "2.11.0"
 number_prefix = "0.4.0"
 anyhow = "1.0.86"
 tempfile = "3.10.1"
-# bench_scraper = { version = "0.4.1", features = ["reqwest"], optional = true }
-bench_scraper = { git = "https://github.com/emarsden/bench_scraper", features = ["reqwest"], optional = true }
+decrypt-cookies = { version = "0.6.0", features = ["reqwest"], optional = true }
+
 
 [dev-dependencies]
 rustls = { version = "0.23.11", features = ["aws_lc_rs"] }
@@ -60,7 +60,7 @@ predicates = "3.1.0"
 
 [features]
 default = ["cookies"]
-cookies = ["bench_scraper"]
+cookies = ["decrypt-cookies"]
 
 
 [profile.release]
