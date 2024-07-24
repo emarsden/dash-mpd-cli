@@ -88,7 +88,9 @@ jobs:
     #     podman machine init
     #     podman machine start
 
-    - run: DOCKER=docker cargo test --jobs 1 -- --show-output
+    - run: cargo test --jobs 1 -- --show-output
+      env:
+        DOCKER=docker
 
 
   build-windows:
