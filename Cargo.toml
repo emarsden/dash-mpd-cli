@@ -14,7 +14,7 @@ publish = true
 
 
 [dependencies]
-tokio = { version = "1.38.1", features = ["rt-multi-thread", "macros"] }
+tokio = { version = "1.39.1", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.40", features = ["attributes"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 time = { version = "0.3.36", features = ["local-offset"] }
@@ -35,10 +35,10 @@ decrypt-cookies = { version = "0.6.0", features = ["reqwest"], optional = true }
 
 
 [dev-dependencies]
-rustls = { version = "0.23.11", features = ["aws_lc_rs"] }
+rustls = { version = "0.23.12", features = ["aws_lc_rs"] }
 rustls-pki-types = "1.7.0"
 rustls-pemfile = "2.1.2"
-tokio = { version = "1.38.1", features = ["rt-multi-thread", "time", "macros"] }
+tokio = { version = "1.39.1", features = ["rt-multi-thread", "time", "macros"] }
 tokio-rustls = "0.26.0"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 test-log = { version = "0.2.16", features = ["trace"] }
@@ -48,7 +48,7 @@ hyper-util = "0.1.6"
 axum = "0.7.5"
 hyper-serve = { version = "0.6.2", features = ["tls-rustls"] }
 axum-auth = "0.7"
-quick-xml = { version = "0.36.0", features = ["serialize"] }
+quick-xml = { version = "0.36.1", features = ["serialize"] }
 mp4 = "0.14.0"
 lazy_static = "1.5.0"
 ffprobe = "0.4.0"
@@ -67,6 +67,3 @@ cookies = ["decrypt-cookies"]
 opt-level = "z"  # optimize for size
 lto = "fat"
 codegen-units = 1
-
-[patch.crates-io]
-protobuf-src = { git = "https://github.com/emarsden/rust-protobuf-native" }
