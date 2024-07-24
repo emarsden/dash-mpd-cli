@@ -90,7 +90,7 @@ jobs:
 
     - run: cargo test --jobs 1 -- --show-output
       env:
-        DOCKER=docker
+        DOCKER: "docker"
 
 
   build-windows:
