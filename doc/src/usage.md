@@ -368,13 +368,17 @@ podman run --env RUST_LOG=trace \
 
 ## Recording metadata
 
-If your filesystem supports **extended attributes**, the application will save the following
+If your filesystem supports **extended attributes** (this is the case for most Linux, MacOS and *BSD
+installations), the application will save the following
 metainformation in the output file:
 
-- `user.xdg.origin.url`: the URL of the MPD manifest
+- `user.xdg.origin.url`: the URL of the MPD manifest (unless the URL contains any password information)
 - `user.dublincore.title`: the title, if specified in the manifest metainformation
 - `user.dublincore.source`: the source, if specified in the manifest metainformation
 - `user.dublincore.rights`: copyright information, if specified in the manifest metainformation
 
 You can examine these attributes using `xattr -l` (you may need to install your distribution's
-`xattr` package). Disable this feature using the `--no-xattr` commandline argument.
+`xattr` package) or `getfattr -d` (if you install the `xattr` package). There are also utilities to
+[edit the extended attribute metadata](https://www.lesbonscomptes.com/pages/extattrs.html), or
+display it in certain file browser. Disable this feature using the `--no-xattr` commandline
+argument.
