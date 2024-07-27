@@ -84,6 +84,7 @@ jobs:
         podman run --rm \
           -v ${GITHUB_WORKSPACE}:/io \
           -w /io docker.io/messense/cargo-zigbuild \
+          brew install cmake && \
           cargo zigbuild --release --target universal2-apple-darwin
 
     - name: Upload binaries to release
@@ -108,7 +109,7 @@ jobs:
       with:
         msystem: UCRT64
         update: true
-        install: base-devel autotools mingw-w64-ucrt-x86_64-toolchain mingw-w64-ucrt-x86_64-rust mingw-w64-ucrt-x86_64-gcc git
+        install: base-devel autotools mingw-w64-ucrt-x86_64-toolchain mingw-w64-ucrt-x86_64-rust mingw-w64-ucrt-x86_64-gcc git cmake
 
     - name: install NASM for rustls build
       run: |
