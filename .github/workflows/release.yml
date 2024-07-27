@@ -78,7 +78,7 @@ jobs:
   # run Docker/Podman in a VM.
   release-macos:
     name: Release universal binary for MacOS
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
     - uses: actions/checkout@v4
       with:
@@ -93,7 +93,7 @@ jobs:
          zig-version: 0.13.0
 
     - run: |
-        brew install protobuf
+        brew install protobuf cmake
         cargo install --locked cargo-zigbuild
         cargo zigbuild --release --target universal2-apple-darwin
 

@@ -52,7 +52,7 @@ jobs:
     - uses: dtolnay/rust-toolchain@stable
 
     - name: install protobuf compiler
-      run: brew install protobuf
+      run: brew install protobuf cmake
 
     - run: cargo build --jobs 1 --verbose
 
