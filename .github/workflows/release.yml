@@ -80,7 +80,6 @@ jobs:
          fetch-depth: 0
 
     - run: |
-        brew install cmake
         cargo install --locked cargo-zigbuild
         cargo zigbuild --release --target universal2-apple-darwin
 
