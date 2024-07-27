@@ -32,6 +32,7 @@ number_prefix = "0.4.0"
 anyhow = "1.0.86"
 tempfile = "3.10.1"
 decrypt-cookies = { version = "0.6.0", features = ["reqwest"], optional = true }
+pssh-box = { version = "0.1.8", default-features = false }
 
 
 [dev-dependencies]
