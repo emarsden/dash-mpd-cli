@@ -79,6 +79,10 @@ jobs:
       with:
          fetch-depth: 0
 
+    - uses: korandoru/setup-zig@v1
+      with:
+         zig-version: 0.13.0
+
     - run: |
         cargo install --locked cargo-zigbuild
         cargo zigbuild --release --target universal2-apple-darwin
