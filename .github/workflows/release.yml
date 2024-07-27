@@ -69,11 +69,10 @@ jobs:
 
 
   # Some of the GitHub MacOS runners (M1 processor) do not support nested virtualization, so can't
-  # run Docker/Podman in a VM. Since we want to use the Docker image for cargo-zigbuild to be able
-  # to build a universal binary, we cross-compile from a ubuntu-latest runner.
+  # run Docker/Podman in a VM.
   release-macos:
     name: Release universal binary for MacOS
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v4
       with:
@@ -88,6 +87,7 @@ jobs:
          zig-version: 0.13.0
 
     - run: |
+        brew install cmake
         cargo install --locked cargo-zigbuild
         cargo zigbuild --release --target universal2-apple-darwin
 
