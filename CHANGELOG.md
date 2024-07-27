@@ -1,12 +1,18 @@
 # Changelog
 
-## [0.2.21] - Unreleased
+## [0.2.21] - 2024-07-27
+
+- The progress bar will be updated more frequently, and more reliably when segment sizes are small
+  and network speeds are high (suggestion from @filiptibell).
+
+- Move from the unmaintained `bench_scraper` crate to the `decrypt-cookies` crate for access to cookies
+  from your web browser. This crate also supports a wider range of web browsers.
 
 - Move to v0.23 of the rustls crate for various performance and security improvements to TLS
   connection handling.
 
-- Move from the unmaintained `bench_scraper` crate to the `decrypt-cookies` crate for access to cookies
-  from your web browser. This crate also supports a wider range of web browsers.
+- Update the `protobuf-src` crate which was causing builds to fail, and move to current versions of
+  crates in the axum ecosystem used for tests.
 
 
 ## [0.2.20] - 2024-06-08
