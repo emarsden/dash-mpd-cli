@@ -25,7 +25,7 @@ WORKDIR /src
 COPY ./ ./
 RUN apk update && \
     apk upgrade && \
-    apk add --no-cache curl file musl-dev pkgconfig git g++ binutils make zlib-dev zlib-static protoc && \
+    apk add --no-cache curl file musl-dev pkgconfig git g++ binutils make zlib-dev zlib-static protoc cmake && \
     curl https://sh.rustup.rs -sSf --output rustup.sh && \
     sh rustup.sh -y --default-toolchain none && \
     export PATH="${HOME}/.cargo/bin:$PATH" && \
@@ -45,7 +45,7 @@ LABEL org.opencontainers.image.description "Download media content from a DASH-M
 LABEL org.opencontainers.image.title "dash-mpd-cli"
 LABEL org.opencontainers.image.url "https://github.com/emarsden/dash-mpd-cli"
 LABEL org.opencontainers.image.source "https://github.com/emarsden/dash-mpd-cli"
-LABEL org.opencontainers.image.version "0.2.19"
+LABEL org.opencontainers.image.version "0.2.21"
 LABEL org.opencontainers.image.authors "eric.marsden@risk-engineering.org"
 LABEL org.opencontainers.image.licenses "MIT"
 
