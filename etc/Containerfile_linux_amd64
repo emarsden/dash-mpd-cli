@@ -16,10 +16,9 @@
 
 
 FROM docker.io/rust:latest AS rustbuilder
-RUN rustup target add x86_64-unknown-linux-musl
-RUN update-ca-certificates
-RUN apt-get update && apt-get install -y musl-tools musl-dev protobuf-compiler cmake
-
+RUN apt-get update && apt-get install -y musl-tools musl-dev protobuf-compiler cmake && \
+    rustup target add x86_64-unknown-linux-musl && \
+    update-ca-certificates
 WORKDIR /src
 COPY ../ ./
 RUN cargo update && \
