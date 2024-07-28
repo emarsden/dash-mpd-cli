@@ -95,7 +95,7 @@ jobs:
     - run: |
         brew install protobuf cmake
         cargo install --locked cargo-zigbuild
-        cargo zigbuild --release --target universal2-apple-darwin
+        CXX=g++-14 CC=gcc-14 cargo zigbuild --release --target universal2-apple-darwin
 
 #         podman pull docker.io/messense/cargo-zigbuild
 #         podman run --rm \
