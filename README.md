@@ -126,6 +126,8 @@ The following are not currently supported:
 
 - HLS streaming (m3u8 manifests).
 
+- Microsoft Smooth Streaming
+
 
 
 ## Run safely in a Docker container
