@@ -215,6 +215,11 @@ output file per Period will be saved, with names derived from the requested outp
 When muxing into `CONTAINER`, try muxing applications in order `ORDERING`. You can use this option
 multiple times. Examples: `mp4:mp4box,vlc` and `avi:ffmpeg`.
 
+    --concat-preference <CONTAINER:ORDERING>
+ 
+When concatenating media streams into `CONTAINER`, try concat helper applications in order
+`ORDERING`. You can use this option multiple times.
+
     --key <KID:KEY>
 
 Use `KID:KEY` to decrypt encrypted media streams. `KID` should be either a track id in decimal (e.g.
