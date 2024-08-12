@@ -25,8 +25,8 @@ strum = { version = "0.26.3", features = ["derive"] }
 colored = "2.1.0"
 indicatif = "0.17.8"
 clap = { version = "=4.3.24", features = ["cargo", "unicode", "wrap_help"] }
-serde_json = "1.0.121"
-versions = "6.3.0"
+serde_json = "1.0.124"
+versions = "6.3.2"
 fs-err = "2.11.0"
 number_prefix = "0.4.0"
 anyhow = "1.0.86"
@@ -54,7 +54,7 @@ lazy_static = "1.5.0"
 ffprobe = "0.4.0"
 file-format = { version = "0.25.0", features = ["reader"] }
 json = "0.12.4"
-assert_cmd = "2.0.15"
+assert_cmd = "2.0.16"
 assert_fs = "1.1.2"
 predicates = "3.1.2"
 
