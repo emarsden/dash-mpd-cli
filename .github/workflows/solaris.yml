@@ -19,6 +19,7 @@ jobs:
       with:
         usesh: true
         prepare: |
+          pkg change-facet facet.devel=true
           pkgutil -y -i curl
           pkg install developer/rust/rustc developer/rust/cargo
           echo "~~~~ rustc --version ~~~~"
