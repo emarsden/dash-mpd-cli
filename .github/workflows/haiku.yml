@@ -16,7 +16,7 @@ jobs:
     - name: Wait until the VM is ready
       run: container-init & timeout 600 vmshell exit 0
     - name: Setup Haiku dependencies
-      run: vmshell pkgman update && pkgman install -y gcc rust_bin ffmpeg mkvtoolnix git haiku_devel protobuf
+      run: vmshell pkgman update; pkgman install -y gcc rust_bin ffmpeg mkvtoolnix git haiku_devel protobuf
     - name: Restart VM
       # disabled
       run: echo sv force-restart qemu; timeout 600 vmshell exit 0
