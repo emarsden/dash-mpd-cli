@@ -110,6 +110,11 @@ manifest. It may also be used to download only the first part of a static stream
 
 Maximum network bandwidth in octets per second (default no limit). For example, `200K`, `1M`.
 
+    --fragment-retries <COUNT>
+
+Maximum number of non-transient network errors to ignore for each media framgent (default is 10).
+
+
     --max-error-count <COUNT>
 
 Maximum number of non-transient network errors that should be ignored before a download is aborted
@@ -222,10 +227,11 @@ When concatenating media streams into `CONTAINER`, try concat helper application
 
     --key <KID:KEY>
 
-Use `KID:KEY` to decrypt encrypted media streams. `KID` should be either a track id in decimal (e.g.
-1), or a 128-bit keyid (32 hexadecimal characters). `KEY` should be 32 hexadecimal characters.
-Example: `--key eb676abbcb345e96bbcf616630f1a3da:100b6c20940f779a4589152b57d2dacb`. You can use this
-option multiple times.
+Use `KID:KEY` to decrypt encrypted media streams, for manifests that use DRM. `KID` should be either
+a track id in decimal (e.g. 1), or a 128-bit keyid (32 hexadecimal characters). `KEY` should be 32
+hexadecimal characters. Example: `--key
+eb676abbcb345e96bbcf616630f1a3da:100b6c20940f779a4589152b57d2dacb`. You can use this option multiple
+times.
 
 Please note that obtaining decryption keys is beyond the scope of this application.
 
@@ -307,7 +313,7 @@ Save media content to this file.
     --cookies-from-browser <BROWSER>
 
 Load cookies from `BROWSER` (possible values, depending on your operating system, include Firefox,
-Chrome, ChromeBeta, Chromium).
+Chrome, ChromeBeta, Chromium; see the `--list-cookie-sources` option).
 
     --list-cookie-sources
 
