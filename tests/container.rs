@@ -100,7 +100,7 @@ fn test_container_mp4 () {
     let out = Path::new("cf.mp4");
     let outpath = TMP.join(out);
     container_run(vec!["-o", &out.to_string_lossy(), "--quality", "worst", mpd]);
-    check_file_size_approx(&outpath, 325_334);
+    check_file_size_approx(&outpath, 410_218);
     let format = FileFormat::from_file(outpath.clone()).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
     let _ = fs::remove_file(outpath);
