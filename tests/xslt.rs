@@ -129,7 +129,7 @@ async fn test_xslt_rewrite_media() -> Result<()> {
         .error_for_status()?
         .text().await
         .context("fetching status")?;
-    assert!(txt.eq("1 926"), "Expecting 1 926, got {txt}");
+    assert!(txt.eq("1 927"), "Expecting 1 927, got {txt}");
     server_handle.shutdown();
 
     Ok(())

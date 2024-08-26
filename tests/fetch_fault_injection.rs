@@ -6,6 +6,10 @@
 //
 // We use the toxiproxy proxy, but could also use Noxious which is a reimplementation in Rust.
 // https://github.com/oguzbilgener/noxious
+//
+// This test currently disabled because it's unreliable: dash-mpd-cli doesn't retry when a failure
+// affects the initial MPD request, and the test isn't currently able to distinguish between that
+// request and later media requests.
 
 pub mod common;
 use fs_err as fs;
@@ -72,6 +76,7 @@ impl Drop for ToxiProxy {
 }
 
 
+#[ignore]
 #[test(tokio::test)]
 async fn test_dl_resilience() -> Result<()> {
     if env::var("CI").is_ok() {

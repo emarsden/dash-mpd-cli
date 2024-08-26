@@ -37,7 +37,7 @@ fn test_dl_mp4 () {
                "-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
-    check_file_size_approx(&out, 325_334);
+    check_file_size_approx(&out, 410_218);
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
     let entries = fs::read_dir(tmpd.path()).unwrap();

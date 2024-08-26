@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.2.22] - 2024-08-26
+
+Improvements to the handling of subtitles: we make additional efforts to extract STPP subtitles from
+a sequence of fMP4 segments, as a `.ttml` file. ffmpeg does not currently seem to be able to extract
+this in the more commonly supported SRT format. When saving to a Matroska container (`.mkv` or
+`.webm` output files), we attempt to embed subtitle tracks with mkvmerge instead of with MP4Box
+(which fails).
+
+Fix off-by-one bug in the calculation of the number of media fragments to download when using
+SegmentTemplate addressing with `$Number$`. The initialiation segment was being counted towards the
+number of segments, but should not be. Bug reported by @vidasi.
+
+When the audio and video tracks are unsynchronized due to a difference in their startTime attribute,
+we attempt to fix this desynchronization during muxing. This is a rare problem in the wild and has
+not been heavily tested. The fix is currently only implemented when using ffmpeg as a muxer
+application (uses the `-itsoffset` commandline option).
+
+
 ## [0.2.21] - 2024-07-27
 
 - The progress bar will be updated more frequently, and more reliably when segment sizes are small
