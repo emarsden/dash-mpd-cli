@@ -59,7 +59,7 @@ LABEL org.opencontainers.image.description "Download media content from a DASH-M
 LABEL org.opencontainers.image.title "dash-mpd-cli"
 LABEL org.opencontainers.image.url "https://github.com/emarsden/dash-mpd-cli"
 LABEL org.opencontainers.image.source "https://github.com/emarsden/dash-mpd-cli"
-LABEL org.opencontainers.image.version "0.2.21"
+LABEL org.opencontainers.image.version "0.2.22"
 LABEL org.opencontainers.image.authors "eric.marsden@risk-engineering.org"
 LABEL org.opencontainers.image.licenses "MIT"
 
@@ -77,7 +77,7 @@ RUN apk update && \
     apk add --no-cache ca-certificates libc6-compat wget ffmpeg mkvtoolnix libxslt && \
     update-ca-certificates && \
     mkdir /content && \
-    chown root.root /content && \
+    chown root:root /content && \
     chmod a=rwx,o+t /content
 
 COPY --from=builder --chown=root:root --chmod=755 \
@@ -88,5 +88,6 @@ COPY --from=debian --chown=root:root --chmod=755 \
     /usr/local/bin/packager /usr/local/bin/shaka-packager
 
 WORKDIR /content
+ENV TERM=xterm-256color
 ENTRYPOINT ["/usr/local/bin/dash-mpd-cli"]
 

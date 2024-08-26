@@ -32,6 +32,10 @@ setup-coverage-tools:
   cargo install cargo-tarpaulin
     
 
+duplicates:
+    cargo tree --duplicates
+
+
 termux:
     cargo update
     cargo test --no-default-features -- --show-output

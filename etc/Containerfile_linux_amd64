@@ -44,7 +44,7 @@ LABEL org.opencontainers.image.description "Download media content from a DASH-M
 LABEL org.opencontainers.image.title "dash-mpd-cli"
 LABEL org.opencontainers.image.url "https://github.com/emarsden/dash-mpd-cli"
 LABEL org.opencontainers.image.source "https://github.com/emarsden/dash-mpd-cli"
-LABEL org.opencontainers.image.version "0.2.21"
+LABEL org.opencontainers.image.version "0.2.22"
 LABEL org.opencontainers.image.authors "eric.marsden@risk-engineering.org"
 LABEL org.opencontainers.image.licenses "MIT"
 
@@ -60,7 +60,7 @@ RUN apk update && \
     apk add --no-cache ca-certificates ffmpeg mkvtoolnix bento4 libxslt && \
     update-ca-certificates && \
     mkdir /content && \
-    chown root.root /content && \
+    chown root:root /content && \
     chmod a=rwx,o+t /content
 
 COPY --from=docker.io/google/shaka-packager:latest --chown=root:root \
@@ -71,6 +71,7 @@ COPY --from=gpacbuilder --chown=root:root --chmod=755 \
     /src/gpac/bin/gcc/MP4Box /usr/local/bin
 
 WORKDIR /content
+ENV TERM=xterm-256color
 ENTRYPOINT ["/usr/local/bin/dash-mpd-cli"]
 
 # Size of our container image (for Linux/AMD64):
