@@ -2,11 +2,12 @@
 
 The application, alongside the external helper applications that it uses for muxing media streams,
 for extracting/converting subtitle streams, and for decrypting content infected with DRM, are
-available as a prebuilt container, which is probably the easiest and safest way to run it. The container can
-be run on any host that can run Linux containers (using [Podman](https://podman.io/) or
-[Docker](https://www.docker.com/) on Linux, Microsoft Windows and MacOS, possibly your NAS device).
-It’s available in the GitHub Container Registry `ghcr.io` and is automatically built from the sources
-using GitHub’s useful continuous integration services.
+available as a prebuilt container, which is probably the easiest and safest way to run it. The
+container can be run on any host that can run Linux containers using [Podman](https://podman.io/) or
+[Docker](https://www.docker.com/) on Linux, Microsoft Windows and MacOS, and certain NAS devices
+(the Docker support in Unraid has been reported to work). It’s available in the GitHub Container
+Registry `ghcr.io` and is automatically built from the sources using GitHub’s useful continuous
+integration services.
 
 It’s packaged as a **multiarch container** using the lightweight [Alpine Linux
 distribution](https://www.alpinelinux.org/). The following **helper applications** are included in
@@ -22,7 +23,7 @@ the container:
 
 - xsltproc from the libxslt package, from Alpine Linux
 
-- Shaka packager, from [Google's Docker image](https://hub.docker.com/r/google/shaka-packager) or
+- Shaka packager, from [Google’s Docker image](https://hub.docker.com/r/google/shaka-packager) or
   [from GitHub](https://github.com/shaka-project/shaka-packager/releases/latest/), or built from
   source on certain platforms
 

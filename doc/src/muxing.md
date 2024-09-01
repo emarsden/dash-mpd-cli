@@ -58,9 +58,10 @@ argument `-o concerto.mp4` and the stream contains three periods, they will be s
 
 If the `--no-period-concatenation` commandline option is not used, and the media in the different
 periods is compatible (same video resolution, codecs, framerate and so on), then dash-mpd-cli will
-attempt to concatenate them into a single output file. This concatenation process uses the [concat
-filter of ffmpeg](https://ffmpeg.org/ffmpeg-filters.html#concat) (irrespective of the selected
-muxing application). Concatenation can be slow, because it may require re-encoding of the different
-media streams. If the concatenation fails, the periods will be retained as separate files, as
-specified above.
+attempt to concatenate them into a single output file. This concatenation process uses either
+mkvmerge or the [concat filter of ffmpeg](https://ffmpeg.org/ffmpeg-filters.html#concat)
+(irrespective of the selected muxing application); see the the `--concat-preference` commandline
+argument). Concatenation can be slow, because it may require re-encoding of the different media
+streams. If the concatenation fails, the periods will be retained as separate files, as specified
+above.
 
