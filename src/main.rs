@@ -39,6 +39,7 @@ use tracing_subscriber::prelude::*;
 use tracing::{info, warn, error, Level};
 use dash_mpd::fetch::DashDownloader;
 use dash_mpd::fetch::ProgressObserver;
+#[cfg(feature = "cookies")]
 use strum::IntoEnumIterator;
 
 #[cfg(feature = "cookies")]
@@ -431,16 +432,13 @@ async fn main () -> Result<()> {
              .num_args(1)
              .index(1)
              .help("URL of the DASH manifest to retrieve."));
-//     #[allow(unused_variables)]
-//     let known_browser_names = known_browser_names();
-    let known_browser_names = "Chrome";
     #[cfg(feature = "cookies")] {
         clap = clap
             .arg(Arg::new("cookies-from-browser")
                  .long("cookies-from-browser")
                  .value_name("BROWSER")
                  .num_args(1)
-                 .help(format!("Load cookies from BROWSER ({known_browser_names}).")))
+                 .help("Load cookies from BROWSER (see --list-cookie-sources for possible browsers)."))
             .arg(Arg::new("list-cookie-sources")
                  .long("list-cookie-sources")
                  .action(ArgAction::SetTrue)
@@ -449,7 +447,6 @@ async fn main () -> Result<()> {
                  .help("Show valid values for BROWSER argument to --cookies-from-browser on this computer, then exit."));
     }
     // TODO: add --abort-on-error
-    // TODO: add --fragment-retries arg
     // TODO: add --mtime arg (Last-modified header)
     let matches = clap.get_matches();
 
