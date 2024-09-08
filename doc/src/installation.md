@@ -72,11 +72,13 @@ This crate is tested on the following **platforms**:
 
 - MacOS on AMD64 and Aarch64 architectures
 
-- Microsoft Windows 10 and Windows 11 on AMD64
+- Microsoft Windows 10 and Windows 11 on AMD64. We recommend you [install the free Microsoft Terminal
+  application](https://aka.ms/terminal) from the Microsoft Store, instead of using the ancient and
+  buggy command prompt.
 
-- Android 12 on Aarch64 via [termux](https://termux.dev/) (you’ll need to install the rust, binutils
-  and ffmpeg packages, and optionally the mkvtoolnix, vlc and gpac packages). You’ll need to disable
-  the `cookies` feature by building with `--no-default-features`.
+- Android 12 on Aarch64 via [termux](https://termux.dev/) (you’ll need to install the `̀rust`,
+  `binutils` and `ffmpeg` packages, and optionally the `mkvtoolnix`, `vlc` and `gpac` packages).
+  You’ll need to disable the `cookies` feature by building with `--no-default-features`.
 
 - FreeBSD/AMD64 and OpenBSD/AMD64. You’ll need to disable the `cookies` feature. Some of the
   external applications we depend on (e.g. mp4decrypt, Shaka packager) are poorly supported on OpenBSD.
