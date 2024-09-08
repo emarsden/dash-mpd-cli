@@ -7,8 +7,7 @@ replay of TV content and video streaming services.
 [![CI](https://github.com/emarsden/dash-mpd-cli/workflows/build/badge.svg)](https://github.com/emarsden/dash-mpd-cli/actions/)
 [![Dependency status](https://deps.rs/repo/github/emarsden/dash-mpd-cli/status.svg)](https://deps.rs/repo/github/emarsden/dash-mpd-cli)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE-MIT)
-[![Github downloads](https://img.shields.io/github/downloads/emarsden/dash-mpd-cli/total.svg)]()
-
+[![Github downloads](https://img.shields.io/github/downloads/emarsden/dash-mpd-cli/total)]()
 
 ![Terminal capture](https://risk-engineering.org/emarsden/dash-mpd-cli/terminal-capture.svg)
 
