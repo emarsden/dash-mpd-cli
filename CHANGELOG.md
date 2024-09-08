@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [0.2.23] - Unreleased
+## [0.2.23] - 2024-09-08
 
 - Add the ability to download from file:// URLs. This requires the MPD manifest to specify an
   absolute BaseURL element at the MPD, Period or Representation level, or to use absolute URLS for
