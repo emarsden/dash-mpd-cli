@@ -27,11 +27,10 @@ use axum::body::Body;
 use hyper_serve::Server;
 use dash_mpd::{MPD, Period, AdaptationSet, Representation, SegmentTemplate};
 use anyhow::Result;
-use test_log::test;
-use common::generate_minimal_mp4;
+use common::{generate_minimal_mp4, setup_logging};
 
 
-#[test(tokio::test(flavor = "multi_thread", worker_threads = 2))]
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn test_headers() -> Result<()> {
     async fn send_mpd(headers: HeaderMap) -> impl IntoResponse {
         assert_eq!(headers["user-agent"], "MyFakeUserAgent/42.0");
@@ -88,6 +87,7 @@ async fn test_headers() -> Result<()> {
             .unwrap()
     }
 
+    setup_logging();
     let app = Router::new()
         .route("/mpd", get(send_mpd))
         .route("/media/:seg", get(send_mp4));
