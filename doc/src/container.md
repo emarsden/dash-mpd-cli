@@ -35,6 +35,9 @@ The container is currently available for the following **platforms**:
 - linux/riscv64
 - linux/ppc64le
 
+[![Container size](https://ghcr-badge.egpl.dev/emarsden/dash-mpd-cli/size?label=Container%20image)](https://github.com/users/emarsden/packages/container/package/dash-mpd-cli)
+
+
 
 ```admonish info title="Advantages of running in a container"
 Why run the application in a container, instead of natively on your machine?
