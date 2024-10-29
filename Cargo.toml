@@ -19,7 +19,7 @@ tracing = { version = "0.1.40", features = ["attributes"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 time = { version = "0.3.36", features = ["local-offset"] }
 dash-mpd = { version = "0.17.3", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
-reqwest = { version = "0.12.8", default-features = false, features = ["gzip", "rustls-tls", "socks", "json", "cookies"] }
+reqwest = { version = "0.12.9", default-features = false, features = ["gzip", "rustls-tls", "socks", "json", "cookies"] }
 # We need to stay synchronized with the version used in the decrypt-cookies crate.
 strum = { version = "0.26.3", features = ["derive"] }
 colored = "2.1.0"
@@ -35,7 +35,7 @@ decrypt-cookies = { version = "0.6.1", features = ["reqwest"], optional = true }
 
 
 [dev-dependencies]
-rustls = { version = "0.23.14", features = ["aws_lc_rs"] }
+rustls = { version = "0.23.16", features = ["aws_lc_rs"] }
 rustls-pki-types = "1.9.0"
 rustls-pemfile = "2.2.0"
 tokio = { version = "1.40.0", features = ["rt-multi-thread", "time", "macros"] }
