@@ -14,7 +14,7 @@ publish = true
 
 
 [dependencies]
-tokio = { version = "1.41.0", features = ["rt-multi-thread", "macros"] }
+tokio = { version = "1.41.1", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.40", features = ["attributes"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 time = { version = "0.3.36", features = ["local-offset"] }
@@ -30,7 +30,7 @@ versions = "6.3.2"
 fs-err = "3.0.0"
 number_prefix = "0.4.0"
 anyhow = "1.0.93"
-tempfile = "3.13.0"
+tempfile = "3.14.0"
 decrypt-cookies = { version = "0.6.1", features = ["reqwest"], optional = true }
 
 
@@ -38,7 +38,7 @@ decrypt-cookies = { version = "0.6.1", features = ["reqwest"], optional = true }
 rustls = { version = "0.23.16", features = ["aws_lc_rs"] }
 rustls-pki-types = "1.9.0"
 rustls-pemfile = "2.2.0"
-tokio = { version = "1.41.0", features = ["rt-multi-thread", "time", "macros"] }
+tokio = { version = "1.41.1", features = ["rt-multi-thread", "time", "macros"] }
 tokio-rustls = "0.26.0"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 test-log = { version = "0.2.16", features = ["trace"] }
