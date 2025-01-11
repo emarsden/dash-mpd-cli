@@ -39,7 +39,7 @@ fn test_conformity_group_string() {
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
-        .stderr(predicate::str::contains("invalid digit found in string"))
+        .stderr(predicate::str::contains("notAnInteger"))
         .failure();
 }
 
