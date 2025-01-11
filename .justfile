@@ -56,7 +56,6 @@ podman:
 # Needs the package qemu-user-static installed to cross-build the various architectures.
 podman-build-multiarch:
     #!/usr/bin/env bash
-    echo First need to "podman login ghcr.io"
     podman manifest create \
       --annotation org.opencontainers.image.description="Download media content from a DASH-MPEG or DASH-WebM MPD manifest." \
       --annotation org.opencontainers.image.title="dash-mpd-cli" \
@@ -80,8 +79,9 @@ podman-build-multiarch:
     podman manifest push --all localhost/dash-mpd-cli ghcr.io/emarsden/dash-mpd-cli
     echo === Build container for PPC64LE
     podman build -f etc/Containerfile_linux_ppc64le --arch ppc64le --tag dash-mpd-cli-linux-ppc64le --manifest dash-mpd-cli .
-    echo === Push container to registry
-    podman manifest push --all localhost/dash-mpd-cli ghcr.io/emarsden/dash-mpd-cli
+    echo === To push container to registry:
+    echo ===   podman login ghcr.io
+    echo ===   podman manifest push --all localhost/dash-mpd-cli ghcr.io/emarsden/dash-mpd-cli
 
 
 test-annotate-manifest:
