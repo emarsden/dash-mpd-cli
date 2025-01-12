@@ -129,7 +129,7 @@ jobs:
         msystem: UCRT64
         update: true
         path-type: inherit
-        install: base-devel autotools mingw-w64-ucrt-x86_64-toolchain mingw-w64-ucrt-x86_64-rust mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-cmake git
+        install: base-devel autotools mingw-w64-ucrt-x86_64-toolchain mingw-w64-ucrt-x86_64-rust mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-podman git
 
     - name: install protobuf compiler
       run: choco install --yes --limit-output protoc
