@@ -14,7 +14,7 @@
   <!--
       This stylesheet modifies the @initialization and @media attribute on SegmentTemplate elements,
       as well as the content of BaseURL elements, to point to a beloved media segment. It also drops
-      the audio AdaptationSet.
+      the audio AdaptationSet, for obvious mental health reasons.
 
       To test this stylesheet:
 
@@ -24,7 +24,11 @@
   <xsl:template match="//mpd:BaseURL">
     <BaseURL>https://dash.akamaized.net/akamai/test/rick_dash_track1_init.mp4</BaseURL>
   </xsl:template>
-  
+
+  <!-- delete any indexRange attributes on a SegmentBase node, because our replacement media segment
+  is not set up with the same index -->
+  <xsl:template match="//mpd:SegmentBase/@indexRange" />
+
   <xsl:template match="//mpd:SegmentTemplate/@initialization">
     <xsl:attribute name="initialization">
       <xsl:value-of select="'https://dash.akamaized.net/akamai/test/rick_dash_track1_init.mp4'"/>
