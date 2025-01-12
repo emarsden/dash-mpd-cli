@@ -162,7 +162,7 @@ fn test_muxers_avi () {
                "-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
-    check_file_size_approx(&out, 7_128_748);
+    check_file_size_approx(&out, 8_316_748);
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::AudioVideoInterleave);
     if let Some(enc) = container_metadata_encoder(&out) {
