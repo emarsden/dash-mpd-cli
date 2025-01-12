@@ -139,6 +139,9 @@ jobs:
          choco install nasm
          echo "C:\Program Files\NASM" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
+    - name: initialize Podman for test suite
+      run: podman machine init
+
     - run: cargo build --release
       shell: msys2 {0}
     
