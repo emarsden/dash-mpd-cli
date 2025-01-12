@@ -36,7 +36,7 @@ decrypt-cookies = { version = "0.6.1", features = ["reqwest"], optional = true }
 
 [dev-dependencies]
 rustls = { version = "0.23.21", features = ["aws_lc_rs"] }
-rustls-pki-types = "1.9.0"
+rustls-pki-types = "1.10.1"
 rustls-pemfile = "2.2.0"
 tokio = { version = "1.43.0", features = ["rt-multi-thread", "time", "macros"] }
 tokio-rustls = "0.26.1"
@@ -44,7 +44,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 test-log = { version = "0.2.16", features = ["trace"] }
 http = "1.2.0"
 hyper = "1.5.2"
-hyper-util = "0.1.9"
+hyper-util = "0.1.10"
 axum = "0.7.8"
 hyper-serve = { version = "0.6.2", features = ["tls-rustls"] }
 axum-auth = "0.7"
