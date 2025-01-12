@@ -1,6 +1,14 @@
 # Changelog
 
 
+## [0.2.24] - 2025-01-12
+
+- This release only includes updates to our crate dependencies. It should not lead to any
+  user-visible changes in behaviour.
+
+- Cargo.lock file committed to our GitHub repository for packages, as requested by @al3xtjames.
+
+
 ## [0.2.23] - 2024-09-08
 
 - Add the ability to download from file:// URLs. This requires the MPD manifest to specify an
