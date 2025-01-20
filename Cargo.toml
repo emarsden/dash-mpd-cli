@@ -47,7 +47,7 @@ hyper = "1.5.2"
 hyper-util = "0.1.10"
 axum = "0.7.8"
 hyper-serve = { version = "0.6.2", features = ["tls-rustls"] }
-axum-auth = "0.7"
+axum-auth = "0.8"
 quick-xml = { version = "0.37.2", features = ["serialize"] }
 mp4 = "0.14.0"
 lazy_static = "1.5.0"

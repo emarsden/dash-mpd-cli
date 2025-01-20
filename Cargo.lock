@@ -400,7 +400,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "edca88bc138befd0323b20752846e6587272d3b03b0343c8ea28a6f819e6e71f"
 dependencies = [
  "async-trait",
- "axum-core",
+ "axum-core 0.4.5",
  "bytes",
  "futures-util",
  "http",
@@ -429,13 +429,12 @@ dependencies = [
 
 [[package]]
 name = "axum-auth"
-version = "0.7.0"
+version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8169113a185f54f68614fcfc3581df585d30bf8542bcb99496990e1025e4120a"
+checksum = "93495037c01c639b198ecb926b58f7f1c0d61ae663edcd61b2dd679f2a0bffe6"
 dependencies = [
- "async-trait",
- "axum-core",
- "base64 0.21.7",
+ "axum-core 0.5.0",
+ "base64",
  "http",
 ]
 
@@ -458,6 +457,25 @@ dependencies = [
  "tower-layer",
  "tower-service",
  "tracing",
+]
+
+[[package]]
+name = "axum-core"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "df1362f362fd16024ae199c1970ce98f9661bf5ef94b9808fee734bc3698b733"
+dependencies = [
+ "bytes",
+ "futures-util",
+ "http",
+ "http-body",
+ "http-body-util",
+ "mime",
+ "pin-project-lite",
+ "rustversion",
+ "sync_wrapper",
+ "tower-layer",
+ "tower-service",
 ]
 
 [[package]]
@@ -488,12 +506,6 @@ dependencies = [
  "rustc-demangle",
  "windows-targets 0.52.6",
 ]
-
-[[package]]
-name = "base64"
-version = "0.21.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9d297deb1925b89f2ccc13d7635fa0714f12c87adce1c75356b39ca9b7178567"
 
 [[package]]
 name = "base64"
@@ -960,7 +972,7 @@ checksum = "df8c53700cb27af681192b9f2fdb2fc700c0d4a1efaa33f57a94d237156e4c98"
 dependencies = [
  "async-recursion",
  "backoff",
- "base64 0.22.1",
+ "base64",
  "base64-serde",
  "bstr",
  "byteorder",
@@ -1067,7 +1079,7 @@ checksum = "ef3c1cd46596d50cbf2d99c7da82b7feac82e5b446591239258ca706e3a985cb"
 dependencies = [
  "aes",
  "aes-gcm",
- "base64 0.22.1",
+ "base64",
  "bytes",
  "cbc",
  "cfg-if",
@@ -3042,7 +3054,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "db6d29fbdf245bc2bde3b1a64549f12dcdfcb01d10915e0f216f603ab01f8a32"
 dependencies = [
  "anyhow",
- "base64 0.22.1",
+ "base64",
  "bstr",
  "byteorder",
  "bytes",
@@ -3299,7 +3311,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "43e734407157c3c2034e0258f5e4473ddb361b1e85f95a66690d67264d7cd1da"
 dependencies = [
  "async-compression",
- "base64 0.22.1",
+ "base64",
  "bytes",
  "cookie",
  "cookie_store",
@@ -3683,7 +3695,7 @@ version = "3.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d6b6f7f2fcb69f747921f79f3926bd1e203fce4fef62c268dd3abfb6d86029aa"
 dependencies = [
- "base64 0.22.1",
+ "base64",
  "chrono",
  "hex",
  "indexmap 1.9.3",
