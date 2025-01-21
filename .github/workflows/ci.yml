@@ -155,8 +155,11 @@ jobs:
     - name: install xsltproc
       run: choco install --yes --limit-output xsltproc
 
+    # the ~/ here depends on Windows CI runners using Powershell. We create ~/.ssh to work around a
+    # podman bug (https://github.com/containers/podman/issues/24650)
     - name: install podman
       run: |
+         mkdir ~/.ssh
          choco install --yes --limit-output podman-cli
          podman machine init
          podman machine start
