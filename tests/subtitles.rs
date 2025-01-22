@@ -3,8 +3,9 @@
 /// We don't run these tests on CI infrastructure, because they consume non-negligeable network
 /// bandwidth.
 
-// To run tests while enabling printing to stdout/stderr, "cargo test -- --show-output" (from the
-// root crate directory).
+// To run tests while enabling printing to stdout/stderr
+//
+//    cargo test --test subtitles -- --show-output
 
 
 pub mod common;
@@ -13,6 +14,8 @@ use std::env;
 use std::path::Path;
 use assert_cmd::Command;
 use assert_fs::{prelude::*, TempDir};
+use ffprobe::ffprobe;
+use file_format::FileFormat;
 use test_log::test;
 use common::check_file_size_approx;
 
@@ -121,4 +124,45 @@ fn test_subtitles_vtt () {
     // This manifest contains a single subtitle track, available in VTT format via BaseURL addressing.
     let vtt = fs::read_to_string(subpath).unwrap();
     assert!(vtt.contains("Hurry Emo!"));
+}
+
+// This test to check that we are able to download WVTT subtitles and convert them to SRT (currently
+// uses MP4Box).
+#[test]
+fn test_subtitles_convert_wvtt () {
+    if env::var("CI").is_ok() {
+        return;
+    }
+    let mpd = "http://dash.edgesuite.net/dash264/TestCasesIOP41/CMAF/UnifiedStreaming/ToS_HEVC_MultiRate_MultiRes_AAC_Eng_WebVTT.mpd";
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("tears-subs.mp4");
+    let mut subpath_wvtt = out.to_path_buf();
+    subpath_wvtt.set_extension("wvtt");
+    let subpath_wvtt = Path::new(&subpath_wvtt);
+    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+        .args(["-v",
+               "--quality", "worst",
+               "--write-subs",
+               "-o", &out.to_string_lossy(), mpd])
+        .assert()
+        .success();
+    check_file_size_approx(&out, 101_072_116);
+    let format = FileFormat::from_file(&out).unwrap();
+    assert_eq!(format, FileFormat::Mpeg4Part14Video);
+    // Check that we fetched the WVTT subtitles
+    assert!(fs::metadata(&subpath_wvtt).is_ok());
+    let meta = ffprobe(&subpath_wvtt).unwrap();
+    assert_eq!(meta.streams.len(), 1);
+    let subdata = &meta.streams[0];
+    println!("WVTT subs: codec_type {:?}, codec_name {:?}", subdata.codec_type, subdata.codec_name);
+    // assert_eq!(subdata.codec_type, Some(String::from("audio")));
+    // assert_eq!(subdata.codec_name, Some(String::from("aac")));
+    // Check that we were able to convert the WVTT to SRT
+    let mut subpath_srt = out.to_path_buf();
+    subpath_srt.set_extension("srt");
+    let subpath_srt = Path::new(&subpath_srt);
+    assert!(fs::metadata(&subpath_srt).is_ok());
+    let srt = fs::read_to_string(subpath_srt).unwrap();
+    assert!(srt.contains("Vivacissimo!"));
 }
