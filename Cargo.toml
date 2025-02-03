@@ -23,7 +23,7 @@ reqwest = { version = "0.12.12", default-features = false, features = ["gzip", "
 # We need to stay synchronized with the version used in the decrypt-cookies crate.
 strum = { version = "0.26.3", features = ["derive"] }
 colored = "3.0.0"
-indicatif = "0.17.9"
+indicatif = "0.17.11"
 clap = { version = "=4.4.18", features = ["cargo", "unicode", "wrap_help"] }
 serde_json = "1.0.137"
 versions = "6.3.2"
