@@ -21,7 +21,7 @@ time = { version = "0.3.37", features = ["local-offset"] }
 dash-mpd = { version = "0.18.0", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35"] }
 reqwest = { version = "0.12.12", default-features = false, features = ["gzip", "rustls-tls", "socks", "json", "cookies"] }
 # We need to stay synchronized with the version used in the decrypt-cookies crate.
-strum = { version = "0.26.3", features = ["derive"] }
+strum = { version = "0.27.1", features = ["derive"] }
 colored = "3.0.0"
 indicatif = "0.17.11"
 clap = { version = "=4.4.18", features = ["cargo", "unicode", "wrap_help"] }
