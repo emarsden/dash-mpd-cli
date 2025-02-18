@@ -492,6 +492,9 @@ async fn main () -> Result<()> {
                 .unwrap_or_else(|_| panic!("couldn't extract cookies from browser {}", browser_name));
             let cookies = browser.get_cookies_all().await
                 .unwrap_or_else(|_| panic!("couldn't extract cookies from browser {}", browser_name));
+            if verbosity > 1 {
+                info!("  Extracted {} cookies from browser {}", cookies.len(), browser_name);
+            }
             let jar: reqwest::cookie::Jar = cookies.into_iter().collect();
             cb = cb.cookie_store(true).cookie_provider(Arc::new(jar));
         }
@@ -500,6 +503,9 @@ async fn main () -> Result<()> {
                 .unwrap_or_else(|_| panic!("couldn't extract cookies from browser {}", browser_name));
             let cookies = browser.get_cookies_all().await
                 .unwrap_or_else(|_| panic!("couldn't extract cookies from browser {}", browser_name));
+            if verbosity > 1 {
+                info!("  Extracted {} cookies from browser {}", cookies.len(), browser_name);
+            }
             let jar: reqwest::cookie::Jar = cookies.into_iter().collect();
             cb = cb.cookie_store(true).cookie_provider(Arc::new(jar));
         }
