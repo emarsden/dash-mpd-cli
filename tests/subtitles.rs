@@ -155,9 +155,7 @@ fn test_subtitles_convert_wvtt () {
     let meta = ffprobe(&subpath_wvtt).unwrap();
     assert_eq!(meta.streams.len(), 1);
     let subdata = &meta.streams[0];
-    println!("WVTT subs: codec_type {:?}, codec_name {:?}", subdata.codec_type, subdata.codec_name);
-    // assert_eq!(subdata.codec_type, Some(String::from("audio")));
-    // assert_eq!(subdata.codec_name, Some(String::from("aac")));
+    assert_eq!(subdata.codec_type, Some(String::from("data")));
     // Check that we were able to convert the WVTT to SRT
     let mut subpath_srt = out.to_path_buf();
     subpath_srt.set_extension("srt");
