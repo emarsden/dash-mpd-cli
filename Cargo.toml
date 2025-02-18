@@ -30,12 +30,12 @@ versions = "6.3.2"
 fs-err = "3.1.0"
 number_prefix = "0.4.0"
 anyhow = "1.0.95"
-tempfile = "3.16.0"
+tempfile = "3.17.1"
 decrypt-cookies = { version = "0.6.1", features = ["reqwest"], optional = true }
 
 
 [dev-dependencies]
-rustls = { version = "0.23.22", features = ["aws_lc_rs"] }
+rustls = { version = "0.23.23", features = ["aws_lc_rs"] }
 rustls-pki-types = "1.11.0"
 rustls-pemfile = "2.2.0"
 tokio = { version = "1.43.0", features = ["rt-multi-thread", "time", "macros"] }
