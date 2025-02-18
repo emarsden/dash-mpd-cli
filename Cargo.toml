@@ -35,8 +35,8 @@ decrypt-cookies = { version = "0.6.1", features = ["reqwest"], optional = true }
 
 
 [dev-dependencies]
-rustls = { version = "0.23.21", features = ["aws_lc_rs"] }
-rustls-pki-types = "1.10.1"
+rustls = { version = "0.23.22", features = ["aws_lc_rs"] }
+rustls-pki-types = "1.11.0"
 rustls-pemfile = "2.2.0"
 tokio = { version = "1.43.0", features = ["rt-multi-thread", "time", "macros"] }
 tokio-rustls = "0.26.1"
