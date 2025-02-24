@@ -29,7 +29,7 @@ serde_json = "1.0.138"
 versions = "6.3.2"
 fs-err = "3.1.0"
 number_prefix = "0.4.0"
-anyhow = "1.0.95"
+anyhow = "1.0.96"
 tempfile = "3.17.1"
 decrypt-cookies = { version = "0.6.1", features = ["reqwest"], optional = true }
 
