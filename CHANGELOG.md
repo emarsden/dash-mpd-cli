@@ -1,6 +1,20 @@
 # Changelog
 
 
+## [0.2.25] - 2025-03-16
+
+- HTTP requests will now try to establish HTTP/2 connections if the functionality is advertised by
+  an HTTP server, using the `Upgrade` header. Disable this by building without the `http2` feature
+  on our `dash-mpd-rs` dependency.
+
+- ffmpeg muxing support supports the use of the `DASHMPD_PERSIST_FILES` environment variable to retain
+  the temporary files created during muxing.
+
+- The ffmpeg demuxer concat helper uses absolute paths in the ffconcat file, rather than relative
+  paths, because ffmpeg interprets relative paths with respect to the location of the ffconcat file,
+  rather than with respect to CWD. Reported by @Cocalus.
+
+
 ## [0.2.24] - 2025-01-12
 
 - This release only includes updates to our crate dependencies. It should not lead to any
