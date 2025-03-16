@@ -153,10 +153,10 @@ fn test_muxers_avi () {
     if env::var("CI").is_ok() {
         return;
     }
-    let mpd = "https://m.dtv.fi/dash/dasherh264/manifest.mpd";
+    let mpd = "https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd";
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
-    let out = tmpd.child("caminandes-ffmpeg.avi");
+    let out = tmpd.child("angel-ffmpeg.avi");
     Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
         .args(["--muxer-preference", "avi:ffmpeg",
                "-o", &out.to_string_lossy(), mpd])
