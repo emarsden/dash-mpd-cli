@@ -109,7 +109,7 @@ async fn test_bearer_auth() -> Result<()> {
 
     let app = Router::new()
         .route("/mpd", get(send_mpd))
-        .route("/media/:seg", get(send_mp4))
+        .route("/media/{seg}", get(send_mp4))
         .route("/status", get(send_status))
         .with_state(shared_state);
     let backend = async move {

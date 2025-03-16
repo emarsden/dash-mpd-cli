@@ -90,7 +90,7 @@ async fn test_headers() -> Result<()> {
     setup_logging();
     let app = Router::new()
         .route("/mpd", get(send_mpd))
-        .route("/media/:seg", get(send_mp4));
+        .route("/media/{seg}", get(send_mp4));
     let backend = async move {
         Server::bind("127.0.0.1:6661".parse().unwrap())
             .serve(app.into_make_service())
