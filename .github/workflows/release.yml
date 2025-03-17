@@ -93,7 +93,7 @@ jobs:
          zig-version: 0.13.0
 
     - run: |
-        brew install protobuf cmake
+        brew install protobuf
         cargo install --locked cargo-zigbuild
         cargo zigbuild --release --target universal2-apple-darwin
 
