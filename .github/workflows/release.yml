@@ -131,8 +131,8 @@ jobs:
         path-type: inherit
         install: base-devel autotools mingw-w64-ucrt-x86_64-toolchain mingw-w64-ucrt-x86_64-rust mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-podman git
 
-    - name: install protobuf compiler
-      run: choco install --yes --limit-output protoc
+    - name: install protobuf compiler and Podman
+      run: choco install --yes --limit-output protoc podman-cli
 
     - name: install NASM for rustls build
       run: |
