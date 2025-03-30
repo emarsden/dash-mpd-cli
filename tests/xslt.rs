@@ -84,7 +84,7 @@ async fn test_xslt_rewrite_media() -> Result<()> {
         .route("/mpd", get(
             || async { ([(header::CONTENT_TYPE, "application/dash+xml")], xml) }))
         .route("/media/init.mp4", get(send_init))
-        .route("/media/segment-:id.mp4", get(send_media))
+        .route("/media/{seg}", get(send_media))
         .route("/status", get(send_status))
         .with_state(shared_state);
     let server_handle = hyper_serve::Handle::new();
