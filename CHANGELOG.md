@@ -1,6 +1,17 @@
 # Changelog
 
 
+## [0.2.26] - Unreleased
+
+- New commandline option `--base-url` that allows you to specify a Base URL to be used for all
+  segment downloads. This overrides any `BaseURL` element provided in the DASH MPD. This option may
+  be useful when downloading from a manifest specified as a file:// URL, which does not contain a
+  `BaseURL` element.
+
+- The reported download bandwidth, and the updating of the progress bar, should be more reliable for
+  streams that are composed of a large number of very small segments.
+
+
 ## [0.2.25] - 2025-03-16
 
 - HTTP requests will now try to establish HTTP/2 connections if the functionality is advertised by

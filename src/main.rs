@@ -26,6 +26,7 @@ use std::str::FromStr;
 use std::time::Duration;
 use std::sync::Arc;
 use std::collections::HashMap;
+use url::Url;
 use colored::*;
 use fs_err as fs;
 use reqwest::header;
@@ -177,6 +178,11 @@ async fn main () -> Result<()> {
              .num_args(1)
              .value_parser(clap::value_parser!(f64))
              .help("Specify a number of seconds (possibly floating point) to download from the media stream. This may be necessary to download from a live stream, where the duration is often not specified in the DASH manifest. It may also be used to download only the first part of a static stream."))
+        .arg(Arg::new("base-url")
+            .long("base-url")
+            .value_name("URL")
+            .num_args(1)
+            .help("Base URL to use for all segment downloads. This overrides any BaseURL element in the MPD."))
         .arg(Arg::new("limit-rate")
              .long("limit-rate")
              .short('r')
@@ -620,6 +626,13 @@ async fn main () -> Result<()> {
     }
     if let Some(seconds) = matches.get_one::<f64>("force-duration") {
         dl = dl.force_duration(*seconds);
+    }
+    if let Some(bu) = matches.get_one::<String>("base-url") {
+        if let Err(e) = Url::parse(bu) {
+            error!("Invalid URL for --base-url: {e}");
+            std::process::exit(9);
+        }
+        dl = dl.with_base_url(String::from(bu));
     }
     if let Some(limit) = matches.get_one::<String>("limit-rate") {
         // We allow k, M, G, T suffixes, as per 100k, 1M, 0.4G

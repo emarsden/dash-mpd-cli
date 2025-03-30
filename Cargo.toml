@@ -18,8 +18,9 @@ tokio = { version = "1.44.1", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.41", features = ["attributes"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 time = { version = "0.3.39", features = ["local-offset"] }
-dash-mpd = { version = "0.18.1", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35", "http2"] }
-reqwest = { version = "0.12.14", default-features = false, features = ["gzip", "rustls-tls", "socks", "json", "cookies", "http2"] }
+# dash-mpd = { version = "0.18.1", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35", "http2"] }
+dash-mpd = { path = "../dash-mpd-rs", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35", "http2"] }
+reqwest = { version = "0.12.15", default-features = false, features = ["gzip", "rustls-tls", "socks", "json", "cookies", "http2"] }
 # We need to stay synchronized with the version used in the decrypt-cookies crate.
 strum = { version = "0.26.3", features = ["derive"] }
 colored = "3.0.0"
@@ -29,13 +30,14 @@ serde_json = "1.0.140"
 versions = "7.0.0"
 fs-err = "3.1.0"
 number_prefix = "0.4.0"
+url = "2.5.4"
 anyhow = "1.0.97"
-tempfile = "3.19.0"
+tempfile = "3.19.1"
 decrypt-cookies = { version = "0.6.1", features = ["reqwest"], optional = true }
 
 
 [dev-dependencies]
-rustls = { version = "0.23.23", features = ["aws_lc_rs"] }
+rustls = { version = "0.23.25", features = ["aws_lc_rs"] }
 rustls-pki-types = "1.11.0"
 rustls-pemfile = "2.2.0"
 tokio = { version = "1.44.1", features = ["rt-multi-thread", "time", "macros"] }
@@ -45,10 +47,10 @@ test-log = { version = "0.2.17", features = ["trace"] }
 http = "1.3.1"
 hyper = "1.6.0"
 hyper-util = "0.1.10"
-axum = "0.8.1"
+axum = "0.8.3"
 hyper-serve = { version = "0.6.2", features = ["tls-rustls"] }
 axum-auth = "0.8.1"
-quick-xml = { version = "0.37.2", features = ["serialize"] }
+quick-xml = { version = "0.37.3", features = ["serialize"] }
 mp4 = "0.14.0"
 lazy_static = "1.5.0"
 ffprobe = "0.4.0"
