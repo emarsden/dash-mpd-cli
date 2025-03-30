@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [0.2.26] - Unreleased
+## [0.2.26] - 2025-03-30
 
 - New commandline option `--base-url` that allows you to specify a Base URL to be used for all
   segment downloads. This overrides any `BaseURL` element provided in the DASH MPD. This option may

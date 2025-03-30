@@ -1,6 +1,6 @@
 [package]
 name = "dash-mpd-cli"
-version = "0.2.25"
+version = "0.2.26"
 authors = ["Eric Marsden <eric.marsden@risk-engineering.org>"]
 license = "MIT"
 description = "Download media content from a DASH-MPEG or DASH-WebM MPD manifest."
@@ -18,8 +18,7 @@ tokio = { version = "1.44.1", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.41", features = ["attributes"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 time = { version = "0.3.39", features = ["local-offset"] }
-# dash-mpd = { version = "0.18.1", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35", "http2"] }
-dash-mpd = { path = "../dash-mpd-rs", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35", "http2"] }
+dash-mpd = { version = "0.18.2", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35", "http2"] }
 reqwest = { version = "0.12.15", default-features = false, features = ["gzip", "rustls-tls", "socks", "json", "cookies", "http2"] }
 # We need to stay synchronized with the version used in the decrypt-cookies crate.
 strum = { version = "0.26.3", features = ["derive"] }
