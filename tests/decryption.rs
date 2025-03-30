@@ -191,37 +191,6 @@ fn test_decryption_cenc_kaltura () {
 }
 
 
-#[test]
-fn test_decryption_small () {
-    let mpd = "https://m.dtv.fi/dash/dasherh264/drm/manifest_clearkey.mpd";
-    let tmpd = TempDir::new().unwrap()
-        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
-    let out = tmpd.child("caminandes.mp4");
-    let cli = Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
-        .args(["-v",
-               "--quality", "worst",
-               "--key", "43215678123412341234123412341234:12341234123412341234123412341234",
-               "-o", &out.to_string_lossy(), mpd])
-        .output()
-        .expect("failed spawning cli");
-    let msg = String::from_utf8_lossy(&cli.stdout);
-    if msg.len() > 0 {
-        println!("dash-mpd-cli stdout: {msg}");
-    }
-    let msg = String::from_utf8_lossy(&cli.stderr);
-    if msg.len() > 0 {
-        println!("dash-mpd-cli stderr: {msg}");
-    }
-    assert!(cli.status.success());
-    check_file_size_approx(&out, 6_975_147);
-    let format = FileFormat::from_file(&out).unwrap();
-    assert_eq!(format, FileFormat::Mpeg4Part14Video);
-    let entries = fs::read_dir(tmpd.path()).unwrap();
-    let count = entries.count();
-    assert_eq!(count, 1, "Expecting a single output file, got {count}");
-}
-
-
 // Note that mp4decrypt is not able to decrypt content in a WebM container, so we use Shaka packager
 // here.
 #[test]
@@ -287,28 +256,33 @@ fn test_decryption_webm() {
 
 #[test]
 fn test_decryption_small_shaka () {
-    let mpd = "https://m.dtv.fi/dash/dasherh264/drm/manifest_clearkey.mpd";
+    let mpd = "https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine/dash.mpd";
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
-    let out = tmpd.child("caminandes.mp4");
+    let out = tmpd.child("cf-shaka.mp4");
     let cli = Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
         .args(["-v",
                "--quality", "worst",
                "--decryption-application", "shaka",
-               "--key", "43215678123412341234123412341234:12341234123412341234123412341234",
+               "--key", "4d97930a3d7b55fa81d0028653f5e499:429ec76475e7a952d224d8ef867f12b6",
+               "--key", "d21373c0b8ab5ba9954742bcdfb5f48b:150a6c7d7dee6a91b74dccfce5b31928",
+               "--key", "6f1729072b4a5cd288c916e11846b89e:a84b4bd66901874556093454c075e2c6",
+               "--key", "800aacaa522958ae888062b5695db6bf:775dbf7289c4cc5847becd571f536ff2",
+               "--key", "67b30c86756f57c5a0a38a23ac8c9178:efa2878c2ccf6dd47ab349fcf90e6259",
                "-o", &out.to_string_lossy(), mpd])
         .output()
         .expect("failed spawning cli");
     let msg = String::from_utf8_lossy(&cli.stdout);
-    if msg.len() > 0 {
+    if !msg.is_empty() {
         println!("dash-mpd-cli stdout: {msg}");
     }
     let msg = String::from_utf8_lossy(&cli.stderr);
-    if msg.len() > 0 {
+    if !msg.is_empty() {
         println!("dash-mpd-cli stderr: {msg}");
     }
     assert!(cli.status.success());
-    check_file_size_approx(&out, 6_975_147);
+    // check_file_size_approx(&out, 410_218);
+    check_file_size_approx(&out, 1_316_391);
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
     // There are unexpected ffmpeg errors shown on CI machines for this output file

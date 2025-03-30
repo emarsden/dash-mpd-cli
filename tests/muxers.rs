@@ -48,10 +48,10 @@ fn test_muxers_mp4 () {
     if env::var("CI").is_ok() {
         return;
     }
-    let mpd = "https://m.dtv.fi/dash/dasherh264/manifest.mpd";
+    let mpd = "https://v.redd.it/p5rowtg41iub1/DASHPlaylist.mpd?a=1701104071";
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
-    let out = tmpd.child("caminandes-ffmpeg.mp4");
+    let out = tmpd.child("reddit-ffmpeg.mp4");
     Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
         .args(["-v",
                "--muxer-preference", "mp4:ffmpeg",
@@ -60,7 +60,7 @@ fn test_muxers_mp4 () {
                "-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
-    check_file_size_approx(&out, 6_975_147);
+    check_file_size_approx(&out, 62_177);
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
     // Check that the mp4 metadata indicates it was created with ffmpeg (libavformat which contains
@@ -69,26 +69,26 @@ fn test_muxers_mp4 () {
         assert!(enc.starts_with("Lavf"), "Unexpected encoder {enc} in mp4 metadata");
     }
 
-    let out = tmpd.child("caminandes-vlc.mp4");
+    let out = tmpd.child("reddit-vlc.mp4");
     Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
         .args(["--muxer-preference", "mp4:vlc",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
-    check_file_size_approx(&out, 6_975_147);
+    check_file_size_approx(&out, 62_177);
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
     if let Some(enc) = container_metadata_encoder(&out) {
         assert!(enc.starts_with("vlc"), "Unexpected encoder {enc} in mp4 metadata");
     }
 
-    let out = tmpd.child("caminandes-mp4box.mp4");
+    let out = tmpd.child("reddit-mp4box.mp4");
     Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
         .args(["--muxer-preference", "mp4:mp4box",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
-    check_file_size_approx(&out, 6_975_147);
+    check_file_size_approx(&out, 62_177);
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
     if let Some(enc) = container_metadata_encoder(&out) {
@@ -104,42 +104,42 @@ fn test_muxers_mkv () {
     if env::var("CI").is_ok() {
         return;
     }
-    let mpd = "https://m.dtv.fi/dash/dasherh264/manifest.mpd";
+    let mpd = "https://v.redd.it/p5rowtg41iub1/DASHPlaylist.mpd?a=1701104071";
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
-    let out = tmpd.child("caminandes-ffmpeg.mkv");
+    let out = tmpd.child("reddit-ffmpeg.mkv");
     Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
         .args(["--muxer-preference", "mkv:ffmpeg",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
-    check_file_size_approx(&out, 6_975_147);
+    check_file_size_approx(&out, 62_177);
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::MatroskaVideo);
     if let Some(enc) = container_metadata_encoder(&out) {
         assert!(enc.starts_with("Lavf"), "Unexpected encoder {enc} in mkv metadata");
     }
 
-    let out = tmpd.child("caminandes-vlc.mkv");
+    let out = tmpd.child("reddit-vlc.mkv");
     Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
         .args(["--muxer-preference", "mkv:vlc",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
-    check_file_size_approx(&out, 6_975_147);
+    check_file_size_approx(&out, 62_177);
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::MatroskaVideo);
     if let Some(enc) = container_metadata_encoder(&out) {
         assert!(enc.to_lowercase().starts_with("vlc"), "Unexpected encoder {enc} in mkv metadata");
     }
 
-    let out = tmpd.child("caminandes-mkvmerge.mkv");
+    let out = tmpd.child("reddit-mkvmerge.mkv");
     Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
         .args(["--muxer-preference", "mkv:mkvmerge",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
-    check_file_size_approx(&out, 6_975_147);
+    check_file_size_approx(&out, 62_177);
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::MatroskaVideo);
     if let Some(enc) = container_metadata_encoder(&out) {

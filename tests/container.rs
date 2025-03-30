@@ -347,8 +347,8 @@ fn test_container_decryption_webm() {
 #[test]
 #[cfg(not(target_os = "macos"))]
 fn test_container_decryption_small_shaka () {
-    let mpd = "https://m.dtv.fi/dash/dasherh264/drm/manifest_clearkey.mpd";
-    let out = Path::new("caminandes.mp4");
+    let mpd = "https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine/dash.mpd";
+    let out = Path::new("angel.mp4");
     let outpath = TMP.join(out);
     if outpath.exists() {
         let _ = fs::remove_file(outpath.clone());
@@ -356,9 +356,13 @@ fn test_container_decryption_small_shaka () {
     container_run(vec!["-v", "-o", &out.to_string_lossy(),
                        "--quality", "worst",
                        "--decryption-application", "shaka",
-                       "--key", "43215678123412341234123412341234:12341234123412341234123412341234",
+                       "--key", "4d97930a3d7b55fa81d0028653f5e499:429ec76475e7a952d224d8ef867f12b6",
+                       "--key", "d21373c0b8ab5ba9954742bcdfb5f48b:150a6c7d7dee6a91b74dccfce5b31928",
+                       "--key", "6f1729072b4a5cd288c916e11846b89e:a84b4bd66901874556093454c075e2c6",
+                       "--key", "800aacaa522958ae888062b5695db6bf:775dbf7289c4cc5847becd571f536ff2",
+                       "--key", "67b30c86756f57c5a0a38a23ac8c9178:efa2878c2ccf6dd47ab349fcf90e6259",
                        mpd]);
-    check_file_size_approx(&outpath, 6_975_147);
+    check_file_size_approx(&outpath, 1_316_391);
     // There are unexpected ffmpeg errors shown on CI machines for this output file
     // assert!(ffmpeg_approval(&outpath));
     let _ = fs::remove_file(outpath);
@@ -369,8 +373,8 @@ fn test_container_muxers_mkv () {
     if env::var("CI").is_ok() {
         return;
     }
-    let mpd = "https://m.dtv.fi/dash/dasherh264/manifest.mpd";
-    let out = Path::new("caminandes-ffmpeg.mkv");
+    let mpd = "http://refapp.hbbtv.org/videos/01_llama_drama_2160p_25f75g6sv3/manifest.mpd";
+    let out = Path::new("llama.mkv");
     let outpath = TMP.join(out);
     if outpath.exists() {
         let _ = fs::remove_file(outpath.clone());
@@ -379,7 +383,7 @@ fn test_container_muxers_mkv () {
                        "--quality", "worst",
                        "--muxer-preference", "mkv:ffmpeg",
                        mpd]);
-    check_file_size_approx(&outpath, 6_975_147);
+    check_file_size_approx(&outpath, 6_652_846);
     let format = FileFormat::from_file(outpath.clone()).unwrap();
     assert_eq!(format, FileFormat::MatroskaVideo);
     if let Some(enc) = container_metadata_encoder(&outpath) {
@@ -387,13 +391,13 @@ fn test_container_muxers_mkv () {
     }
     let _ = fs::remove_file(outpath);
 
-    let out = Path::new("caminandes-mkvmerge.mkv");
+    let out = Path::new("angel-mkvmerge.mkv");
     let outpath = TMP.join(out);
     container_run(vec!["-v", "-o", &out.to_string_lossy(),
                        "--quality", "worst",
                        "--muxer-preference", "mkv:mkvmerge",
                        mpd]);
-    check_file_size_approx(&outpath, 6_975_147);
+    check_file_size_approx(&outpath, 6_652_846);
     let format = FileFormat::from_file(outpath.clone()).unwrap();
     assert_eq!(format, FileFormat::MatroskaVideo);
     if let Some(enc) = container_metadata_encoder(&outpath) {
