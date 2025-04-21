@@ -14,7 +14,7 @@ publish = true
 
 
 [dependencies]
-tokio = { version = "1.44.1", features = ["rt-multi-thread", "macros"] }
+tokio = { version = "1.44.2", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.41", features = ["attributes"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 time = { version = "0.3.39", features = ["local-offset"] }
@@ -30,16 +30,16 @@ versions = "7.0.0"
 fs-err = "3.1.0"
 number_prefix = "0.4.0"
 url = "2.5.4"
-anyhow = "1.0.97"
+anyhow = "1.0.98"
 tempfile = "3.19.1"
 decrypt-cookies = { version = "0.6.1", features = ["reqwest"], optional = true }
 
 
 [dev-dependencies]
-rustls = { version = "0.23.25", features = ["aws_lc_rs"] }
+rustls = { version = "0.23.26", features = ["aws_lc_rs"] }
 rustls-pki-types = "1.11.0"
 rustls-pemfile = "2.2.0"
-tokio = { version = "1.44.1", features = ["rt-multi-thread", "time", "macros"] }
+tokio = { version = "1.44.2", features = ["rt-multi-thread", "time", "macros"] }
 tokio-rustls = "0.26.2"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 test-log = { version = "0.2.17", features = ["trace"] }
@@ -49,13 +49,13 @@ hyper-util = "0.1.10"
 axum = "0.8.3"
 hyper-serve = { version = "0.6.2", features = ["tls-rustls"] }
 axum-auth = "0.8.1"
-quick-xml = { version = "0.37.3", features = ["serialize"] }
+quick-xml = { version = "0.37.4", features = ["serialize"] }
 mp4 = "0.14.0"
 lazy_static = "1.5.0"
 ffprobe = "0.4.0"
 file-format = { version = "0.26.0", features = ["reader"] }
 json = "0.12.4"
-assert_cmd = "2.0.16"
+assert_cmd = "2.0.17"
 assert_fs = "1.1.2"
 predicates = "3.1.3"
 
