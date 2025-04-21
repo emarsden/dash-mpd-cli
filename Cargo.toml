@@ -55,7 +55,7 @@ lazy_static = "1.5.0"
 ffprobe = "0.4.0"
 file-format = { version = "0.26.0", features = ["reader"] }
 json = "0.12.4"
-assert_cmd = "2.0.16"
+assert_cmd = "2.0.17"
 assert_fs = "1.1.2"
 predicates = "3.1.3"
 
