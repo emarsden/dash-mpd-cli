@@ -53,7 +53,7 @@ quick-xml = { version = "0.37.5", features = ["serialize"] }
 mp4 = "0.14.0"
 lazy_static = "1.5.0"
 ffprobe = "0.4.0"
-file-format = { version = "0.26.0", features = ["reader"] }
+file-format = { version = "0.27.0", features = ["reader"] }
 json = "0.12.4"
 assert_cmd = "2.0.17"
 assert_fs = "1.1.3"
