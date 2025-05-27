@@ -959,7 +959,7 @@ dependencies = [
  "colored",
  "data-url",
  "ffprobe",
- "file-format",
+ "file-format 0.26.0",
  "fs-err",
  "governor",
  "hex-literal 1.0.0",
@@ -999,7 +999,7 @@ dependencies = [
  "dash-mpd",
  "decrypt-cookies",
  "ffprobe",
- "file-format",
+ "file-format 0.27.0",
  "fs-err",
  "http",
  "hyper",
@@ -1334,6 +1334,12 @@ name = "file-format"
 version = "0.26.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e7ef3d5e8ae27277c8285ac43ed153158178ef0f79567f32024ca8140a0c7cd8"
+
+[[package]]
+name = "file-format"
+version = "0.27.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0ff8badf6e72ff15e42c9ade15d01375837173b17d10c228ab41d821082619db"
 
 [[package]]
 name = "fixedbitset"
