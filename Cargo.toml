@@ -17,9 +17,9 @@ publish = true
 tokio = { version = "1.45.1", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.41", features = ["attributes"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
-time = { version = "0.3.39", features = ["local-offset"] }
-dash-mpd = { version = "0.18.2", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35", "http2"] }
-reqwest = { version = "0.12.15", default-features = false, features = ["gzip", "rustls-tls", "socks", "json", "cookies", "http2"] }
+time = { version = "0.3.41", features = ["local-offset"] }
+dash-mpd = { version = "0.18.3", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35", "http2"] }
+reqwest = { version = "0.12.18", default-features = false, features = ["gzip", "rustls-tls", "socks", "json", "cookies", "http2"] }
 # We need to stay synchronized with the version used in the decrypt-cookies crate.
 strum = { version = "0.26.3", features = ["derive"] }
 colored = "3.0.0"
@@ -36,8 +36,8 @@ decrypt-cookies = { version = "0.6.1", features = ["reqwest"], optional = true }
 
 
 [dev-dependencies]
-rustls = { version = "0.23.26", features = ["aws_lc_rs"] }
-rustls-pki-types = "1.11.0"
+rustls = { version = "0.23.27", features = ["aws_lc_rs"] }
+rustls-pki-types = "1.12.0"
 rustls-pemfile = "2.2.0"
 tokio = { version = "1.45.1", features = ["rt-multi-thread", "time", "macros"] }
 tokio-rustls = "0.26.2"
@@ -45,7 +45,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 test-log = { version = "0.2.17", features = ["trace"] }
 http = "1.3.1"
 hyper = "1.6.0"
-hyper-util = "0.1.10"
+hyper-util = "0.1.13"
 axum = "0.8.4"
 hyper-serve = { version = "0.6.2", features = ["tls-rustls"] }
 axum-auth = "0.8.1"
