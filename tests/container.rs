@@ -32,7 +32,7 @@ use common::check_file_size_approx;
 
 lazy_static! {
     // A directory inside $TMPDIR that is persisted.
-    static ref TMP: PathBuf = tempfile::TempDir::new().unwrap().into_path();
+    static ref TMP: PathBuf = tempfile::TempDir::new().unwrap().keep();
 }
 
 
