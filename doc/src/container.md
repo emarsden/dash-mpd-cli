@@ -161,6 +161,20 @@ podman run --rm --tty --pull=newer \
 ```
 
 
+## Accessing browser cookies when running in a container
+
+The browser cookie functionality in dash-mpd-cli accesses the browser’s cookie data in a
+platform-specific manner. Our container image is Linux-based, so cookie access is only likely to
+work on Linux hosts. You also need to import the location where cookie data is stored (by default,
+your `$HOME` directory) into the running container as the home for the virtualized root user (the
+container runs as a virtualized root). With Podman on Linux, you can use something like the
+following (replace `username` by your user name):
+
+```shell
+podman run --rm -v .:/content -v /home/username:/root ghcr.io/emarsden/dash-mpd-cli --list-cookie-sources
+```
+
+
 
 ## Increased security with gVisor
 
