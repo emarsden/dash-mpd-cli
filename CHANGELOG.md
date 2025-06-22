@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.27] - Unreleased
+
+- The support for downloading certain dynamic streams (“live” manifests) has been improved. More
+  specifically, for `$Number$`-based dynamic streams the calculation of segment numbers now accounts
+  for the difference between `@availabilityStartTime` and the current time, so will download content
+  starting from when the download is started.
+
+- New support for decrypting streams with ContentProtection using the MP4Box commandline application
+  from GPAC. This provides an alternative to using mp4decrypt and Shaka packager. The MP4Box
+  application does not support decryption of content in WebM containers, and sometimes rejects
+  content which is accepted by mp4decrypt and Shaka packager, but may sometimes be more convenient
+  for users if it’s already installed.
+
 
 ## [0.2.26] - 2025-03-30
 
