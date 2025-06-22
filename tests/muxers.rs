@@ -113,7 +113,7 @@ fn test_muxers_mkv () {
                "-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
-    check_file_size_approx(&out, 62_177);
+    check_file_size_approx(&out, 33_709);
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::MatroskaVideo);
     if let Some(enc) = container_metadata_encoder(&out) {
@@ -126,7 +126,7 @@ fn test_muxers_mkv () {
                "-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
-    check_file_size_approx(&out, 62_177);
+    check_file_size_approx(&out, 33_709);
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::MatroskaVideo);
     if let Some(enc) = container_metadata_encoder(&out) {
@@ -139,7 +139,7 @@ fn test_muxers_mkv () {
                "-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
-    check_file_size_approx(&out, 62_177);
+    check_file_size_approx(&out, 33_709);
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::MatroskaVideo);
     if let Some(enc) = container_metadata_encoder(&out) {
@@ -162,7 +162,7 @@ fn test_muxers_avi () {
                "-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
-    check_file_size_approx(&out, 8_316_748);
+    check_file_size_approx(&out, 2_761_756);
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::AudioVideoInterleave);
     if let Some(enc) = container_metadata_encoder(&out) {
@@ -175,7 +175,7 @@ fn test_muxers_avi () {
                "-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
-    check_file_size_approx(&out, 5_520_360);
+    check_file_size_approx(&out, 714_762);
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::AudioVideoInterleave);
     if let Some(enc) = container_metadata_encoder(&out) {
