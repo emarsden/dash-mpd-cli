@@ -492,12 +492,12 @@ async fn main () -> Result<()> {
     #[cfg(feature = "cookies")]
     if let Some(browser_name) = matches.get_one::<String>("cookies-from-browser") {
         let browser = Browser::from_str(browser_name)
-            .unwrap_or_else(|_| panic!("unknown browser {} in --cookies-from-browser", browser_name));
+            .unwrap_or_else(|_| panic!("unknown browser {browser_name} in --cookies-from-browser"));
         if browser.is_chromium_base() {
             let browser = ChromiumBuilder::new(browser).build().await
-                .unwrap_or_else(|_| panic!("couldn't extract cookies from browser {}", browser_name));
+                .unwrap_or_else(|_| panic!("couldn't extract cookies from browser {browser_name}"));
             let cookies = browser.get_cookies_all().await
-                .unwrap_or_else(|_| panic!("couldn't extract cookies from browser {}", browser_name));
+                .unwrap_or_else(|_| panic!("couldn't extract cookies from browser {browser_name}"));
             if verbosity > 1 {
                 info!("  Extracted {} cookies from browser {}", cookies.len(), browser_name);
             }
@@ -506,9 +506,9 @@ async fn main () -> Result<()> {
         }
         if browser.is_firefox_base() {
             let browser = FirefoxBuilder::new(browser).build().await
-                .unwrap_or_else(|_| panic!("couldn't extract cookies from browser {}", browser_name));
+                .unwrap_or_else(|_| panic!("couldn't extract cookies from browser {browser_name}"));
             let cookies = browser.get_cookies_all().await
-                .unwrap_or_else(|_| panic!("couldn't extract cookies from browser {}", browser_name));
+                .unwrap_or_else(|_| panic!("couldn't extract cookies from browser {browser_name}"));
             if verbosity > 1 {
                 info!("  Extracted {} cookies from browser {}", cookies.len(), browser_name);
             }
@@ -797,8 +797,8 @@ async fn main () -> Result<()> {
      xmlns:mpd="urn:mpeg:dash:schema:mpd:2011">
   <xsl:template match="@*|node()">
     <xsl:copy><xsl:apply-templates select="@*|node()"/></xsl:copy></xsl:template>
-  <xsl:template match="{}" />
-</xsl:stylesheet>"#, xpath);
+  <xsl:template match="{xpath}" />
+</xsl:stylesheet>"#);
             let stylesheet = tempfile::Builder::new()
                 .suffix(".xslt")
                 .rand_bytes(7)
