@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.27] - Unreleased
+## [0.2.27] - 2025-06-22
 
 - The support for downloading certain dynamic streams (“live” manifests) has been improved. More
   specifically, for `$Number$`-based dynamic streams the calculation of segment numbers now accounts
