@@ -5,7 +5,7 @@ replay of TV content and video streaming services.
 
 [![Crates.io](https://img.shields.io/crates/v/dash-mpd-cli)](https://crates.io/crates/dash-mpd-cli)
 [![CI](https://github.com/emarsden/dash-mpd-cli/workflows/build/badge.svg)](https://github.com/emarsden/dash-mpd-cli/actions/)
-[![Container size](https://ghcr-badge.egpl.dev/emarsden/dash-mpd-cli/size?label=Container%20image)](https://github.com/users/emarsden/packages/container/package/dash-mpd-cli)
+[![Container size](https://ghcr-badge-hwb3.onrender.com/emarsden/dash-mpd-cli/size?label=Container%20image)](https://github.com/users/emarsden/packages/container/package/dash-mpd-cli)
 [![Dependency status](https://deps.rs/repo/github/emarsden/dash-mpd-cli/status.svg)](https://deps.rs/repo/github/emarsden/dash-mpd-cli)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE-MIT)
 [![Github downloads](https://img.shields.io/github/downloads/emarsden/dash-mpd-cli/total)]()
