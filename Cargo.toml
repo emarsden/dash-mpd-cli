@@ -14,7 +14,7 @@ publish = true
 
 
 [dependencies]
-tokio = { version = "1.46.1", features = ["rt-multi-thread", "macros"] }
+tokio = { version = "1.47.0", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.41", features = ["attributes"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 time = { version = "0.3.41", features = ["local-offset"] }
@@ -39,7 +39,7 @@ decrypt-cookies = { version = "0.6.1", features = ["reqwest"], optional = true }
 rustls = { version = "0.23.29", features = ["aws_lc_rs"] }
 rustls-pki-types = "1.12.0"
 rustls-pemfile = "2.2.0"
-tokio = { version = "1.46.1", features = ["rt-multi-thread", "time", "macros"] }
+tokio = { version = "1.47.0", features = ["rt-multi-thread", "time", "macros"] }
 tokio-rustls = "0.26.2"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 test-log = { version = "0.2.18", features = ["trace"] }
