@@ -32,7 +32,7 @@ number_prefix = "0.4.0"
 url = "2.5.4"
 anyhow = "1.0.98"
 tempfile = "3.20.0"
-decrypt-cookies = { version = "0.6.1", features = ["reqwest"], optional = true }
+decrypt-cookies = { version = "0.8.0", features = ["reqwest"], optional = true }
 
 
 [dev-dependencies]
