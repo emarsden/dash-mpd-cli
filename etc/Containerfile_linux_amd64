@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y musl-tools musl-dev protobuf-compiler c
 WORKDIR /src
 COPY ../ ./
 RUN cargo update && \
-    cargo build --target x86_64-unknown-linux-musl --release
+    RUSTFLAGS="-C target-cpu=x86-64-v3" cargo build --target x86_64-unknown-linux-musl --release
 
 # static build of MP4Box from GPAC, which is not packaged for Alpine Linux.
 # https://github.com/gpac/gpac/wiki/GPAC-Build-Guide-for-Linux
