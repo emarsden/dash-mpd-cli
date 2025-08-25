@@ -46,7 +46,7 @@ tokio-rustls = "0.26.2"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 test-log = { version = "0.2.18", features = ["trace"] }
 http = "1.3.1"
-hyper = "1.6.0"
+hyper = "1.7.0"
 hyper-util = "0.1.16"
 axum = "0.8.4"
 hyper-serve = { version = "0.6.2", features = ["tls-rustls"] }
