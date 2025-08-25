@@ -30,7 +30,7 @@ versions = "7.0.0"
 fs-err = "3.1.1"
 number_prefix = "0.4.0"
 url = "2.5.4"
-anyhow = "1.0.98"
+anyhow = "1.0.99"
 tempfile = "3.20.0"
 decrypt-cookies = { version = "0.10.1", features = ["reqwest"], optional = true }
 
