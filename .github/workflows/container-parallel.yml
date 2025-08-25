@@ -28,7 +28,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get -y install qemu-user-static
 
       - name: Checkout sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
         # We use "buildah build" instead of "podman build", because we are seeing errors on the older
         # version of podman installed on the runners.
@@ -44,7 +44,7 @@ jobs:
         run: sudo apt-get -y install qemu-user-static
 
       - name: Checkout sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build image/aarch64
         run: buildah build -f etc/Containerfile_linux_aarch64 --platform linux/arm64 --tag dash-mpd-cli-linux-aarch64 --manifest dash-mpd-cli .
@@ -68,7 +68,7 @@ jobs:
            sudo ln -s /usr/local/bin/qemu-arm-static /usr/libexec/qemu-binfmt/arm-binfmt-P
 
       - name: Checkout sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build image/armv7
         run: buildah build -f etc/Containerfile_linux_armv7 --platform linux/arm/v7 --tag dash-mpd-cli-linux-armv7 --manifest dash-mpd-cli .
@@ -98,7 +98,7 @@ jobs:
            sudo ln -s /usr/local/bin/qemu-riscv64-static /usr/libexec/qemu-binfmt/riscv64-binfmt-P
 
       - name: Checkout sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build image/riscv64
         run: buildah build -f etc/Containerfile_linux_riscv64 --platform linux/riscv64 --tag dash-mpd-cli-linux-riscv64 --manifest dash-mpd-cli .
