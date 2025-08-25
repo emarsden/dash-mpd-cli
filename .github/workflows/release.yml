@@ -14,7 +14,7 @@ jobs:
     name: Release for Linux/amd64/musl
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
          fetch-depth: 0
 
@@ -44,7 +44,7 @@ jobs:
     name: Release for Linux/aarch64
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
          fetch-depth: 0
 
@@ -80,7 +80,7 @@ jobs:
     name: Release universal binary for MacOS
     runs-on: macos-14
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
          fetch-depth: 0
 
@@ -118,7 +118,7 @@ jobs:
     name: Release for Windows/amd64
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
          fetch-depth: 0
 
