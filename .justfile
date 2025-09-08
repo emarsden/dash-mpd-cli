@@ -90,6 +90,10 @@ test-annotate-manifest:
     podman manifest push --format oci --all localhost/test-annotation ttl.sh/test-annotation
 
 
+inspect-container:
+    skopeo inspect docker://ghcr.io/emarsden/dash-mpd-cli:latest
+
+
 list-docker-platforms:
     podman run --rm docker.io/mplatform/mquery ghcr.io/emarsden/dash-mpd-cli:latest
 
