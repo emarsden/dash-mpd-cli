@@ -1117,9 +1117,9 @@ checksum = "be1e0bca6c3637f992fc1cc7cbc52a78c1ef6db076dbf1059c4323d6a2048376"
 
 [[package]]
 name = "decrypt-cookies"
-version = "0.10.2"
+version = "0.10.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "adc5fe704fff4436a0624e9ecb7a22b8ec579d550d764686ef4c8e2454aa3e09"
+checksum = "d88d787de19459b7fbfc40f1c331ef15276e6917ea42435ba29db42ccbbf4923"
 dependencies = [
  "anyhow",
  "chromium-crypto",
