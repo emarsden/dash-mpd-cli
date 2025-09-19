@@ -38,7 +38,7 @@ HLS streaming (m3u8 manifests).
 
 ## Features
 
-The following features are supported: 
+The following features are supported:
 
 - **Multi-period** content. The media in the different streams will be saved in a single media container
   if the formats are compatible (same resolution, codecs, bitrate and so on) and the
@@ -141,17 +141,17 @@ Linux, Microsoft Windows and MacOS). It’s available in the GitHub Container Re
 
 > [!TIP]
 > What are the **advantages of running in a container**, instead of natively on your machine?
-> 
+>
 > - Much safer, because the container isn't able to modify your host machine, except for writing
 >   downloaded media to the directory you specify. This is a very good idea when running random
 >   software you downloaded from the internet!
 >
 > - No need to install the various helper applications (ffmpeg, mkvmerge, mp4decrypt,
 >   shaka-packager, MP4Box, xsltproc), which are already present in the container.
-> 
+>
 > - Automatically run the latest version of dash-mpd-cli and the various helper applications (the
 >   container runtime will pull the latest version for you automatically).
-> 
+>
 > - Podman and Docker also allow you to set various limits on the resources allocated to the
 >   container (number of CPUs, memory); see their respective documentation.
 
@@ -186,7 +186,7 @@ doesn’t currently support rootless operation).
     sudo apt install runsc
     sudo podman --runtime=runsc run --rm -v .:/content ghcr.io/emarsden/dash-mpd-cli -v <MPD-URL> -o foo.mp4
 
-The container image is a **multiarch** manifest, currently built for the following platforms: 
+The container image is a **multiarch** manifest, currently built for the following platforms:
 
 - linux/amd64
 - linux/arm64
@@ -204,6 +204,12 @@ you can download a prebuilt binary or build from source yourself.
 GNU/Linux on AMD64 (statically linked against Musl Libc to avoid glibc versioning problems),
 Microsoft Windows on AMD64 and MacOS on aarch64 (“Apple Silicon”). These are built
 automatically on the GitHub continuous integration infrastructure.
+
+On macOS and Linux, you can install the software using [Homebrew](https://brew.sh/):
+
+```shell
+brew install dash-mpd-cli
+```
 
 You can also **build from source** using an [installed Rust development
 environment](https://www.rust-lang.org/tools/install):
