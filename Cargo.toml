@@ -33,7 +33,7 @@ number_prefix = "0.4.0"
 url = "2.5.7"
 anyhow = "1.0.99"
 tempfile = "3.22.0"
-decrypt-cookies = { version = "0.10.2", optional = true }
+decrypt-cookies = { version = "0.10.4", optional = true }
 
 
 [dev-dependencies]
