@@ -19,7 +19,7 @@ use std::env;
 use std::time::Duration;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
-use assert_cmd::Command;
+use assert_cmd::cargo::cargo_bin_cmd;
 use axum::{routing::get, Router};
 use axum::extract::State;
 use axum::response::{Response, IntoResponse};
@@ -145,7 +145,7 @@ async fn test_bearer_auth() -> Result<()> {
     // were requested. We expect 2 segment requests because our verbosity level of 2 means that the
     // init segment will be retrieved twice, one of those times to print the PSSH if it is present.
     let outpath = env::temp_dir().join("bearer_auth.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v", "-v", "-v",
                "--auth-bearer", "eyFoobles",
                "-o", outpath.to_str().unwrap(),
@@ -163,7 +163,7 @@ async fn test_bearer_auth() -> Result<()> {
     // This time we make the request in quiet mode and we should see only a single additional
     // request to the init segment.
     let outpath = env::temp_dir().join("bearer_auth2.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--quiet",
                "--auth-bearer", "eyFoobles",
                "-o", outpath.to_str().unwrap(),

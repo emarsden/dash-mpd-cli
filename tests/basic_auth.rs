@@ -20,7 +20,7 @@ use std::env;
 use std::time::Duration;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
-use assert_cmd::Command;
+use assert_cmd::cargo::cargo_bin_cmd;
 use axum::{routing::get, Router};
 use axum::extract::State;
 use axum::response::{Response, IntoResponse};
@@ -143,7 +143,7 @@ async fn test_basic_auth() -> Result<()> {
     // were requested. Since we are in verbose mode, we make two requests for the init fragment, the
     // second request being to attempt to extract and print the PSSH.
     let outpath = env::temp_dir().join("basic_auth.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v", "-v", "-v",
                "--auth-username", "myuser", "--auth-password", "mypassword",
                "-o", outpath.to_str().unwrap(),
@@ -161,7 +161,7 @@ async fn test_basic_auth() -> Result<()> {
     // This time we make the request in quiet mode and we should see only a single additional
     // request to the init segment.
     let outpath = env::temp_dir().join("basic_auth2.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--quiet",
                "--auth-username", "myuser", "--auth-password", "mypassword",
                "-o", outpath.to_str().unwrap(),

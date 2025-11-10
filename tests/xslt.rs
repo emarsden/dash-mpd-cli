@@ -12,7 +12,7 @@ use std::time::Duration;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
-use assert_cmd::Command;
+use assert_cmd::cargo::cargo_bin_cmd;
 use predicates::prelude::*;
 use axum::{routing::get, Router};
 use axum::extract::State;
@@ -118,7 +118,7 @@ async fn test_xslt_rewrite_media() -> Result<()> {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("xslt_video.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--xslt-stylesheet", &xslt.to_string_lossy(),
                "-o", &out.to_string_lossy(), mpd_url])
         .assert()
@@ -154,7 +154,7 @@ fn test_xslt_drop_audio() {
     xslt.push("fixtures");
     xslt.push("rewrite-drop-audio");
     xslt.set_extension("xslt");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--xslt-stylesheet", &xslt.to_string_lossy(),
                "-o", &out.to_string_lossy(), mpd_url])
@@ -183,7 +183,7 @@ fn test_xpath_drop_audio() {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("envivio-dropped-audio.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--drop-elements", "//node()[local-name()='AdaptationSet' and starts-with(@mimeType,'audio/')]",
                "-o", &out.to_string_lossy(), mpd_url])
@@ -217,7 +217,7 @@ fn test_xslt_rick() {
     xslt.push("fixtures");
     xslt.push("rewrite-rickroll");
     xslt.set_extension("xslt");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--xslt-stylesheet", &xslt.to_string_lossy(),
                "-o", &out.to_string_lossy(), mpd_url])
@@ -254,7 +254,7 @@ fn test_xslt_multiple_stylesheets() {
     xslt_clean.push("fixtures");
     xslt_clean.push("rewrite-drop-dai");
     xslt_clean.set_extension("xslt");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--xslt-stylesheet", &xslt_rick.to_string_lossy(),
                "--xslt-stylesheet", &xslt_clean.to_string_lossy(),
@@ -284,7 +284,7 @@ fn test_xslt_stylesheet_error() {
     xslt.push("fixtures");
     xslt.push("rewrite-stylesheet-error");
     xslt.set_extension("xslt");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--xslt-stylesheet", &xslt.to_string_lossy(),
                "-o", &out.to_string_lossy(), mpd_url])
@@ -300,7 +300,7 @@ fn test_xslt_stylesheet_missing() {
     let mpd_url = "https://dash.akamaized.net/akamai/test/index3-original.mpd";
     let out = env::temp_dir().join("unexist.mp4");
     let xslt = env::temp_dir().join("missing.xslt");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--xslt-stylesheet", &xslt.to_string_lossy(),
                "-o", &out.to_string_lossy(), mpd_url])

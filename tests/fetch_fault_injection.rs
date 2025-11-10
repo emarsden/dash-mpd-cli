@@ -21,6 +21,7 @@ use serde_json::json;
 use ffprobe::ffprobe;
 use file_format::FileFormat;
 use tracing::{trace, info};
+use assert_cmd::cargo::cargo_bin_cmd;
 use common::check_file_size_approx;
 
 
@@ -143,7 +144,7 @@ async fn test_dl_resilience() -> Result<()> {
     let mpd = "http://dash.akamaized.net/dash264/TestCasesMCA/dts/1/Paint_dtsc_testA.mpd";
     let tmpd = tempfile::tempdir().unwrap();
     let out = tmpd.path().join("error-resilience.mkv");
-    assert_cmd::Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v", "-v", "-v",
                "--ignore-content-type",
                "--quality", "best",

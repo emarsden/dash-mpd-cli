@@ -18,7 +18,7 @@ pub mod common;
 use fs_err as fs;
 use std::env;
 use std::time::Duration;
-use assert_cmd::Command;
+use assert_cmd::cargo::cargo_bin_cmd;
 use axum::{routing::get, Router};
 use axum::response::{Response, IntoResponse};
 use axum::http::header::HeaderMap;
@@ -100,7 +100,7 @@ async fn test_headers() -> Result<()> {
     tokio::spawn(backend);
     tokio::time::sleep(Duration::from_millis(1000)).await;
     let outpath = env::temp_dir().join("referer.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v", "-v", "-v",
                "--referer", "https://twiddles.org/",
                "--user-agent", "MyFakeUserAgent/42.0",

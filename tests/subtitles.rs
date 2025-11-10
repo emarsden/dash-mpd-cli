@@ -12,7 +12,7 @@ pub mod common;
 use fs_err as fs;
 use std::env;
 use std::path::Path;
-use assert_cmd::Command;
+use assert_cmd::cargo::cargo_bin_cmd;
 use assert_fs::{prelude::*, TempDir};
 use ffprobe::ffprobe;
 use file_format::FileFormat;
@@ -32,7 +32,7 @@ fn test_subtitles_wvtt () {
     let mut subpath = out.to_path_buf();
     subpath.set_extension("srt");
     let subpath = Path::new(&subpath);
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
                "--write-subs",
@@ -46,7 +46,7 @@ fn test_subtitles_wvtt () {
     // Dutch) is downloaded.
     assert!(srt.contains("land van de poortwachters"));
 
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
                "--write-subs",
@@ -72,7 +72,7 @@ fn test_subtitles_ttml () {
     let mut subpath = out.to_path_buf();
     subpath.set_extension("ttml");
     let subpath = Path::new(&subpath);
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
                "--write-subs",
@@ -86,7 +86,7 @@ fn test_subtitles_ttml () {
     // English) is downloaded.
     assert!(ttml.contains("You're a jerk"));
 
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
                "--write-subs",
@@ -112,7 +112,7 @@ fn test_subtitles_vtt () {
     let mut subpath = out.to_path_buf();
     subpath.set_extension("vtt");
     let subpath = Path::new(&subpath);
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
                "--write-subs",
@@ -140,7 +140,7 @@ fn test_subtitles_convert_wvtt () {
     let mut subpath_wvtt = out.to_path_buf();
     subpath_wvtt.set_extension("wvtt");
     let subpath_wvtt = Path::new(&subpath_wvtt);
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
                "--write-subs",

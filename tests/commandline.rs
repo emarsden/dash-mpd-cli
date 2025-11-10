@@ -5,15 +5,14 @@
 //    cargo test --test commandline -- --show-output
 
 use predicates::prelude::*;
-use assert_cmd::Command;
+use assert_cmd::cargo::cargo_bin_cmd;
 use test_log::test;
-
 
 #[test]
 fn test_command_spurious () {
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--spurious-option",
-               "https://example.org/mpd"])
+              "https://example.org/mpd"])
         .assert()
         .stderr(predicate::str::contains("unexpected argument"))
         .stderr(predicate::str::contains("Usage:"))
@@ -22,7 +21,7 @@ fn test_command_spurious () {
 
 #[test]
 fn test_command_mpd_missing () {
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--verbose"])
         .assert()
         .stderr(predicate::str::contains("following required arguments were not provided"))
@@ -32,7 +31,7 @@ fn test_command_mpd_missing () {
 
 #[test]
 fn test_command_have_help () {
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--help"])
         .assert()
         .stdout(predicate::str::contains("--help"))
@@ -44,7 +43,7 @@ fn test_command_have_help () {
 
 #[test]
 fn test_command_missing_file () {
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--add-root-certificate", "/missing/file",
                "https://example.org/ignored.mpd"])
         .assert()
@@ -55,7 +54,7 @@ fn test_command_missing_file () {
 
 #[test]
 fn test_command_missing_value () {
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--max-error-count",
                "https://example.org/ignored.mpd"])
         .assert()
@@ -66,7 +65,7 @@ fn test_command_missing_value () {
 
 #[test]
 fn test_command_funky_source () {
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--source-address", "33.44.55.66.77",
                "https://example.org/ignored.mpd"])
         .assert()
@@ -76,7 +75,7 @@ fn test_command_funky_source () {
 
 #[test]
 fn test_command_bad_rate () {
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--limit-rate", "42Z",
                "https://example.org/ignored.mpd"])
         .assert()

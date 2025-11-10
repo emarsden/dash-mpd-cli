@@ -11,9 +11,10 @@
 pub mod common;
 use fs_err as fs;
 use std::env;
+use std::process::Command;
 use ffprobe::ffprobe;
 use file_format::FileFormat;
-use assert_cmd::Command;
+use assert_cmd::cargo::cargo_bin_cmd;
 use assert_fs::{prelude::*, TempDir};
 use test_log::test;
 use common::check_file_size_approx;
@@ -28,7 +29,7 @@ fn test_decryption_widevine_cenc () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("spring.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
                "--key", "43215678123412341234123412341237:12341234123412341234123412341237",
@@ -51,7 +52,7 @@ fn test_decryption_widevine_cbcs () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("tears-steel.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
                "--key", "43215678123412341234123412341237:12341234123412341234123412341237",
@@ -75,7 +76,7 @@ fn test_decryption_playready_cenc () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("llama.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
                "--key", "43215678123412341234123412341236:12341234123412341234123412341236",
@@ -97,7 +98,7 @@ fn test_decryption_marlin_cenc () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("llama-cenc.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
                "--key", "43215678123412341234123412341234:12341234123412341234123412341234",
@@ -119,7 +120,7 @@ fn test_decryption_marlin_cbcs () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("llama-cbcs.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
                "--key", "43215678123412341234123412341234:12341234123412341234123412341234",
@@ -142,7 +143,7 @@ fn test_decryption_cmaf_h265_multikey () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("axinom-h264-multikey.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
                "--key", "53dc3eaa5164410a8f4ee15113b43040:620045a34e839061ee2e9b7798fdf89b",
@@ -167,7 +168,7 @@ fn test_decryption_cenc_kaltura () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("kaltura.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--mp4decrypt-location", "mp4decrypt",
                "--key", "a07c5d499dcead0fb416fed5913967be:caee457911302478487e6680bf0b3d1b",
                "-o", &out.to_string_lossy(), mpd])
@@ -199,7 +200,7 @@ fn test_decryption_webm() {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("angel.webm");
-    let cli = Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    let cli = cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
                "--decryption-application", "shaka",
@@ -260,7 +261,7 @@ fn test_decryption_small_shaka () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("cf-shaka.mp4");
-    let cli = Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    let cli = cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
                "--decryption-application", "shaka",

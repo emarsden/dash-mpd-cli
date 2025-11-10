@@ -10,7 +10,7 @@ use std::env;
 use std::path::PathBuf;
 use std::time::Duration;
 use predicates::prelude::*;
-use assert_cmd::Command;
+use assert_cmd::cargo::cargo_bin_cmd;
 use axum::{routing::get, Router};
 use axum::http::header;
 use test_log::test;
@@ -21,7 +21,7 @@ fn test_conformity_empty_period() {
     // This manifest contains an empty Period. Periods should have at least one AdaptationSet.
     let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_empty_period.mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
@@ -35,7 +35,7 @@ fn test_conformity_group_string() {
     // This manifest contains <AdaptationSet group="notAnInteger">
     let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_group_string.mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
@@ -48,7 +48,7 @@ fn test_conformity_group_string() {
 fn test_conformity_maxheight () {
     let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_maxHeight.mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
@@ -62,7 +62,7 @@ fn test_conformity_maxheight () {
 fn test_conformity_invalid_maxwidth() {
     let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_maxWidth.mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
@@ -78,7 +78,7 @@ fn test_conformity_invalid_maxwidth() {
 fn test_conformity_invalid_maxheight() {
     let mpd = "https://vod.infiniteplatform.tv/dash/vod-clear/ElephantsDream/default.mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
@@ -92,7 +92,7 @@ fn test_conformity_invalid_maxheight() {
 fn test_conformity_invalid_segment_duration() {
     let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_segmenttimeline_maxsegduration.mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
@@ -106,7 +106,7 @@ fn test_conformity_invalid_segment_duration() {
 fn test_conformity_time_initialization() {
     let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_segmenttemplate_init_time.mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
@@ -119,7 +119,7 @@ fn test_conformity_time_initialization() {
 fn test_conformity_number_initialization() {
     let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_segmenttemplate_init_number.mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
@@ -132,7 +132,7 @@ fn test_conformity_number_initialization() {
 fn test_conformity_segmenttimeline_duration() {
     let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_segmenttimeline_duration.mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
@@ -145,7 +145,7 @@ fn test_conformity_segmenttimeline_duration() {
 fn test_conformity_segmenttimeline_number_time() {
     let mpd = "http://download.tsi.telecom-paristech.fr/gpac/DASH_CONFORMANCE/TelecomParisTech/advanced/invalid_segmenttimeline_number_time.mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
@@ -182,7 +182,7 @@ async fn test_conformity_invalid_maxsegmentduration() {
 
     let mpd = "http://localhost:6666/mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
@@ -222,7 +222,7 @@ async fn test_conformity_invalid_sourceurl() {
 
     let mpd = "http://localhost:6661/mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
@@ -258,7 +258,7 @@ async fn test_conformity_invalid_segmenturl() {
 
     let mpd = "http://localhost:6662/mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()
@@ -286,7 +286,7 @@ async fn test_conformity_invalid_moreinformation() {
 
     let mpd = "http://localhost:6663/mpd";
     let outpath = env::temp_dir().join("empty.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--simulate",
                "-o", &outpath.to_string_lossy(), mpd])
         .assert()

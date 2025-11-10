@@ -1,5 +1,5 @@
-/// Tests for selecting muxer application (--muxer-preference commandline argument).
-///
+//! Tests for selecting muxer application (--muxer-preference commandline argument).
+
 
 // To run tests while enabling printing to stdout/stderr
 //
@@ -8,10 +8,11 @@
 
 pub mod common;
 use std::env;
+use std::process::Command;
 use std::path::Path;
 use ffprobe::ffprobe;
 use file_format::FileFormat;
-use assert_cmd::Command;
+use assert_cmd::cargo::cargo_bin_cmd;
 use assert_fs::{prelude::*, TempDir};
 use test_log::test;
 use common::check_file_size_approx;
@@ -52,7 +53,7 @@ fn test_muxers_mp4 () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("reddit-ffmpeg.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--muxer-preference", "mp4:ffmpeg",
                "--muxer-preference", "avi:vlc",
@@ -70,7 +71,7 @@ fn test_muxers_mp4 () {
     }
 
     let out = tmpd.child("reddit-vlc.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--muxer-preference", "mp4:vlc",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
@@ -83,7 +84,7 @@ fn test_muxers_mp4 () {
     }
 
     let out = tmpd.child("reddit-mp4box.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--muxer-preference", "mp4:mp4box",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
@@ -108,7 +109,7 @@ fn test_muxers_mkv () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("reddit-ffmpeg.mkv");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--muxer-preference", "mkv:ffmpeg",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
@@ -121,7 +122,7 @@ fn test_muxers_mkv () {
     }
 
     let out = tmpd.child("reddit-vlc.mkv");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--muxer-preference", "mkv:vlc",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
@@ -134,7 +135,7 @@ fn test_muxers_mkv () {
     }
 
     let out = tmpd.child("reddit-mkvmerge.mkv");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--muxer-preference", "mkv:mkvmerge",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
@@ -157,7 +158,7 @@ fn test_muxers_avi () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("angel-ffmpeg.avi");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--muxer-preference", "avi:ffmpeg",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
@@ -170,7 +171,7 @@ fn test_muxers_avi () {
     }
 
     let out = tmpd.child("caminandes-vlc.avi");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--muxer-preference", "avi:vlc",
                "-o", &out.to_string_lossy(), mpd])
         .assert()

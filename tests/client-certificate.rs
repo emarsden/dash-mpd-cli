@@ -40,7 +40,7 @@ use std::time::Duration;
 use std::io::BufReader;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
-use assert_cmd::Command;
+use assert_cmd::cargo::cargo_bin_cmd;
 use axum::{routing::get, Router};
 use axum::extract::State;
 use axum::response::{Response, IntoResponse};
@@ -189,12 +189,12 @@ async fn test_add_client_identity() -> Result<(), anyhow::Error> {
 
     // Without the --client-identity-certificate, should see an error from dash-mpd-cli due to the
     // server refusing the connection (with rustls, is "channel closed").
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["--add-root-certificate", "tests/fixtures/root-CA.crt",
                "https://localhost:6666/mpd"])
         .assert()
         .failure();
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v", "-v", "-v",
                "--add-root-certificate", "tests/fixtures/root-CA.crt",
                "--client-identity-certificate", "tests/fixtures/client-id.pem",

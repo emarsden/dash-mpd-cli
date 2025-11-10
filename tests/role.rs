@@ -11,7 +11,7 @@
 pub mod common;
 use fs_err as fs;
 use std::env;
-use assert_cmd::Command;
+use assert_cmd::cargo::cargo_bin_cmd;
 use assert_fs::{prelude::*, TempDir};
 use ffprobe::ffprobe;
 use file_format::FileFormat;
@@ -28,7 +28,7 @@ fn test_role_alternate () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("role-alternate.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
                "--role-preference", "alternate",

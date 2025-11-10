@@ -14,7 +14,7 @@ use std::env;
 use ffprobe::ffprobe;
 use file_format::FileFormat;
 use predicates::prelude::*;
-use assert_cmd::Command;
+use assert_cmd::cargo::cargo_bin_cmd;
 use assert_fs::{prelude::*, TempDir};
 use test_log::test;
 use common::check_file_size_approx;
@@ -30,7 +30,7 @@ fn test_dl_mp4 () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("cf.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
                "--write-subs",
@@ -55,7 +55,7 @@ fn test_dl_mp4a () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("sintel-audio.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
@@ -83,7 +83,7 @@ fn test_dl_audio_flac () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("bbcradio-flac.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
@@ -111,7 +111,7 @@ fn test_dl_cmaf () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("theo-cosmos.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
@@ -144,7 +144,7 @@ fn test_dl_timecode () {
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
     let out = tmpd.child("dune-adtime.mp4");
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["-v",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
@@ -171,7 +171,7 @@ fn test_dl_timecode () {
 // The manifest contains minBufferTime="4S", which is an invalid format for an xs:Duration.
 #[test]
 fn test_parse_failure_duration () {
-    Command::cargo_bin(env!("CARGO_PKG_NAME")).unwrap()
+    cargo_bin_cmd!()
         .args(["https://dash.akamaized.net/akamai/test/manifest3.mpd"])
         .assert()
         .stderr(predicate::str::contains("Download failed"))
