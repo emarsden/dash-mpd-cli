@@ -1,5 +1,12 @@
 # Changelog
 
+
+## [0.2.28] - Unreleased
+
+- Following changes in the tracing crate that disable ANSI terminal escape sequences for security
+  reasons, colors, bold and italics are no longer used in warning and error messages.
+
+
 ## [0.2.27] - 2025-06-22
 
 - The support for downloading certain dynamic streams (“live” manifests) has been improved. More

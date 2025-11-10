@@ -27,7 +27,6 @@ use std::time::Duration;
 use std::sync::Arc;
 use std::collections::HashMap;
 use url::Url;
-use colored::*;
 use fs_err as fs;
 use reqwest::header;
 use clap::{Arg, ArgAction, ValueHint};
@@ -94,8 +93,7 @@ async fn check_newer_version() -> Result<()> {
             if let Some(this_version) = Versioning::new(env!("CARGO_PKG_VERSION")) {
                 if gh_version > this_version {
                     info!("dash-mpd-cli {}", env!("CARGO_PKG_VERSION"));
-                    info!("A {} ({gh_release}) is available from https://github.com/emarsden/dash-mpd-cli.",
-                          "newer version".bold());
+                    info!("A newer version ({gh_release}) is available from https://github.com/emarsden/dash-mpd-cli.");
                 }
             }
         }
@@ -549,7 +547,7 @@ async fn main () -> Result<()> {
             if let Some((h, v)) = hv.split_once(':') {
                 headers.insert(h.to_string(), v.trim_start().to_string());
             } else {
-                warn!("Ignoring badly formed {} argument to --header", "header:value".italic());
+                warn!("Ignoring badly formed header:value argument to --header");
             }
         }
     }
@@ -558,7 +556,7 @@ async fn main () -> Result<()> {
             if let Some((h, v)) = hv.split_once(':') {
                 headers.insert(h.to_string(), v.to_string());
             } else {
-                warn!("Ignoring badly formed {} argument to --add-header", "header:value".italic());
+                warn!("Ignoring badly formed header:value argument to --add-header");
             }
         }
     }
@@ -692,8 +690,7 @@ async fn main () -> Result<()> {
             if let Some((container, ordering)) = mp.split_once(':') {
                 dl = dl.with_muxer_preference(container, ordering);
             } else {
-                warn!("Ignoring badly formatted {} argument to --muxer-preference",
-                      "container:ordering".italic());
+                warn!("Ignoring badly formatted container:ordering argument to --muxer-preference");
             }
         }
     }
@@ -702,8 +699,7 @@ async fn main () -> Result<()> {
             if let Some((container, ordering)) = mp.split_once(':') {
                 dl = dl.with_concat_preference(container, ordering);
             } else {
-                warn!("Ignoring badly formatted {} argument to --concat-preference",
-                      "container:ordering".italic());
+                warn!("Ignoring badly formatted container:ordering argument to --concat-preference");
             }
         }
     }
@@ -726,7 +722,7 @@ async fn main () -> Result<()> {
                     dl = dl.add_decryption_key(String::from(kid), String::from(key));
                 }
             } else {
-                warn!("Ignoring badly formed {} argument to --key", "KID:KEY".italic());
+                warn!("Ignoring badly formed KID:KEY argument to --key");
             }
         }
     }
@@ -824,7 +820,7 @@ async fn main () -> Result<()> {
     dl = dl.verbosity(verbosity);
     if let Some(out) = matches.get_one::<String>("output-file") {
         if let Err(e) = dl.download_to(out).await {
-            error!("{}: {e}", "Download failed".bold().red());
+            error!("Download failed");
             std::process::exit(2);
         }
     } else {
@@ -835,7 +831,7 @@ async fn main () -> Result<()> {
                 }
             },
             Err(e) => {
-                error!("{}: {e}", "Download failed".bold().red());
+                error!("Download failed");
                 if e.to_string().contains("how to download dynamic MPD") {
                     info!("See the help for the --enable-live-streams commandline option.");
                 }
