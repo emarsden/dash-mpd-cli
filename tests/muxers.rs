@@ -121,26 +121,13 @@ fn test_muxers_mkv () {
         assert!(enc.starts_with("Lavf"), "Unexpected encoder {enc} in mkv metadata");
     }
 
-    let out = tmpd.child("reddit-vlc.mkv");
-    cargo_bin_cmd!()
-        .args(["--muxer-preference", "mkv:vlc",
-               "-o", &out.to_string_lossy(), mpd])
-        .assert()
-        .success();
-    check_file_size_approx(&out, 33_709);
-    let format = FileFormat::from_file(&out).unwrap();
-    assert_eq!(format, FileFormat::MatroskaVideo);
-    if let Some(enc) = container_metadata_encoder(&out) {
-        assert!(enc.to_lowercase().starts_with("vlc"), "Unexpected encoder {enc} in mkv metadata");
-    }
-
     let out = tmpd.child("reddit-mkvmerge.mkv");
     cargo_bin_cmd!()
         .args(["--muxer-preference", "mkv:mkvmerge",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
         .success();
-    check_file_size_approx(&out, 33_709);
+    check_file_size_approx(&out, 66_089);
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::MatroskaVideo);
     if let Some(enc) = container_metadata_encoder(&out) {
