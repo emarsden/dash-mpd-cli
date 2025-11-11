@@ -43,4 +43,5 @@
 
   <xsl:template match="//mpd:AdaptationSet[@contentType='audio']"/>
   <xsl:template match="//mpd:AdaptationSet[starts-with(@mimeType, 'audio/')]"/>
+  <xsl:template match="//mpd:AdaptationSet[.//mpd:Representation[starts-with(@mimeType, 'audio/') or @contentType='audio']]"/>
 </xsl:stylesheet>
