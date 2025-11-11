@@ -30,7 +30,11 @@ setup-coverage-tools:
   rustup component add llvm-tools-preview
   cargo install grcov
   cargo install cargo-tarpaulin
-    
+
+
+pedantic:
+   cargo clippy -- -W clippy::pedantic
+
 
 duplicates:
     cargo tree --duplicates
