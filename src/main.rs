@@ -611,7 +611,7 @@ async fn main () -> Result<()> {
     let mut dl = DashDownloader::new(url)
         .with_http_client(client);
     if let Some(url) = matches.get_one::<String>("referer") {
-        dl = dl.with_referer(url.to_string());
+        dl = dl.with_referer(url.clone());
     }
     if !matches.get_flag("no-progress") && !matches.get_flag("quiet") {
         dl = dl.add_progress_observer(Arc::new(DownloadProgressBar::new()));
@@ -716,10 +716,10 @@ async fn main () -> Result<()> {
     if let Some(kvs) = matches.get_many::<String>("key") {
         for kv in kvs.collect::<Vec<_>>() {
             if let Some((kid, key)) = kv.split_once(':') {
-                if key.len() != 32 {
-                    warn!("Ignoring invalid format for KEY (should be 32 hex digits)");
-                } else {
+                if key.len() == 32 {
                     dl = dl.add_decryption_key(String::from(kid), String::from(key));
+                } else {
+                    warn!("Ignoring invalid format for KEY (should be 32 hex digits)");
                 }
             } else {
                 warn!("Ignoring badly formed KID:KEY argument to --key");
@@ -778,7 +778,7 @@ async fn main () -> Result<()> {
         }
     }
     if let Some(lang) = matches.get_one::<String>("prefer-language") {
-        dl = dl.prefer_language(lang.to_string());
+        dl = dl.prefer_language(lang.clone());
     }
     if let Some(stylesheets) = matches.get_many::<String>("xslt-stylesheet") {
         for stylesheet in stylesheets {
@@ -811,16 +811,16 @@ async fn main () -> Result<()> {
     }
     if let Some(user) = matches.get_one::<String>("auth-username") {
         if let Some(password) = matches.get_one::<String>("auth-password") {
-            dl = dl.with_authentication(user.to_string(), password.to_string());
+            dl = dl.with_authentication(user.clone(), password.clone());
         }
     }
     if let Some(token) = matches.get_one::<String>("auth-bearer") {
-        dl = dl.with_auth_bearer(token.to_string());
+        dl = dl.with_auth_bearer(token.clone());
     }
     dl = dl.verbosity(verbosity);
     if let Some(out) = matches.get_one::<String>("output-file") {
         if let Err(e) = dl.download_to(out).await {
-            error!("Download failed");
+            error!("Download failed: {e}");
             std::process::exit(2);
         }
     } else {
@@ -831,7 +831,7 @@ async fn main () -> Result<()> {
                 }
             },
             Err(e) => {
-                error!("Download failed");
+                error!("Download failed: {e}");
                 if e.to_string().contains("how to download dynamic MPD") {
                     info!("See the help for the --enable-live-streams commandline option.");
                 }
