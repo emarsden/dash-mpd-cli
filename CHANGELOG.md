@@ -1,10 +1,18 @@
 # Changelog
 
 
-## [0.2.28] - Unreleased
+## [0.2.28] - 2025-11-23
 
 - Following changes in the tracing crate that disable ANSI terminal escape sequences for security
   reasons, colors, bold and italics are no longer used in warning and error messages.
+
+- Decryption using MP4Box: delete the temporary file used to pass decryption information to MP4Box
+  once the file has been decrypted.
+
+- The dash-mpd-cli tool is now distributed in Homebrew, thanks to Jonathan Helgert.
+
+- Updated versions of crates used for HTTP support, browser cookie support, and parsing commandline
+  options.
 
 
 ## [0.2.27] - 2025-06-22
