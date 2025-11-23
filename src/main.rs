@@ -811,11 +811,11 @@ async fn main () -> Result<()> {
     }
     if let Some(user) = matches.get_one::<String>("auth-username") {
         if let Some(password) = matches.get_one::<String>("auth-password") {
-            dl = dl.with_authentication(user.clone(), password.clone());
+            dl = dl.with_authentication(user, password);
         }
     }
     if let Some(token) = matches.get_one::<String>("auth-bearer") {
-        dl = dl.with_auth_bearer(token.clone());
+        dl = dl.with_auth_bearer(token);
     }
     dl = dl.verbosity(verbosity);
     if let Some(out) = matches.get_one::<String>("output-file") {
