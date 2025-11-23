@@ -46,7 +46,7 @@ use axum::extract::State;
 use axum::response::{Response, IntoResponse};
 use axum::http::{header, StatusCode};
 use axum::body::Body;
-use hyper_serve::tls_rustls::RustlsConfig;
+use axum_server::tls_rustls::RustlsConfig;
 use rustls::RootCertStore;
 use rustls::ServerConfig;
 use rustls_pki_types::{CertificateDer, PrivateKeyDer};
@@ -161,7 +161,7 @@ async fn test_add_client_identity() -> Result<(), anyhow::Error> {
         .expect("bad server certificate/key");
     config.alpn_protocols = vec![b"h2".to_vec(), b"http/1.1".to_vec()];
     let backend = async move {
-        hyper_serve::tls_rustls::bind_rustls(addr, RustlsConfig::from_config(config.into()))
+        axum_server::bind_rustls(addr, RustlsConfig::from_config(config.into()))
             .serve(app.into_make_service()).await
             .unwrap()
     };

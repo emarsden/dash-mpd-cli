@@ -20,6 +20,7 @@ use std::time::Duration;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use assert_cmd::cargo::cargo_bin_cmd;
+use tokio::net::TcpListener;
 use axum::{routing::get, Router};
 use axum::extract::State;
 use axum::response::{Response, IntoResponse};
@@ -112,9 +113,10 @@ async fn test_bearer_auth() -> Result<()> {
         .route("/media/{seg}", get(send_mp4))
         .route("/status", get(send_status))
         .with_state(shared_state);
-    let backend = async move {
-        hyper_serve::bind("127.0.0.1:6666".parse().unwrap())
-            .serve(app.into_make_service()).await
+    let listener = TcpListener::bind("127.0.0.1:6666").await.unwrap();
+    let backend = async {
+        axum::serve(listener, app.into_make_service())
+            .await
             .unwrap()
     };
     tokio::spawn(backend);

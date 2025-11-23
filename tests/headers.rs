@@ -18,13 +18,13 @@ pub mod common;
 use fs_err as fs;
 use std::env;
 use std::time::Duration;
+use tokio::net::TcpListener;
 use assert_cmd::cargo::cargo_bin_cmd;
 use axum::{routing::get, Router};
 use axum::response::{Response, IntoResponse};
 use axum::http::header::HeaderMap;
 use axum::http::{header, StatusCode};
 use axum::body::Body;
-use hyper_serve::Server;
 use dash_mpd::{MPD, Period, AdaptationSet, Representation, SegmentTemplate};
 use anyhow::Result;
 use common::{generate_minimal_mp4, setup_logging};
@@ -91,9 +91,9 @@ async fn test_headers() -> Result<()> {
     let app = Router::new()
         .route("/mpd", get(send_mpd))
         .route("/media/{seg}", get(send_mp4));
-    let backend = async move {
-        Server::bind("127.0.0.1:6661".parse().unwrap())
-            .serve(app.into_make_service())
+    let listener = TcpListener::bind("127.0.0.1:6661").await.unwrap();
+    let backend = async {
+        axum::serve(listener, app.into_make_service())
             .await
             .unwrap()
     };

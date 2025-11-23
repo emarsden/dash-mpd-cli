@@ -12,6 +12,7 @@ use std::time::Duration;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
+use tokio::net::TcpListener;
 use assert_cmd::cargo::cargo_bin_cmd;
 use predicates::prelude::*;
 use axum::{routing::get, Router};
@@ -87,12 +88,10 @@ async fn test_xslt_rewrite_media() -> Result<()> {
         .route("/media/{seg}", get(send_media))
         .route("/status", get(send_status))
         .with_state(shared_state);
-    let server_handle = hyper_serve::Handle::new();
-    let backend_handle = server_handle.clone();
-    let backend = async move {
-        hyper_serve::bind("127.0.0.1:6668".parse().unwrap())
-            .handle(backend_handle)
-            .serve(app.into_make_service()).await
+    let listener = TcpListener::bind("127.0.0.1:6668").await.unwrap();
+    let backend = async {
+        axum::serve(listener, app.into_make_service())
+            .await
             .unwrap()
     };
     tokio::spawn(backend);
@@ -130,7 +129,6 @@ async fn test_xslt_rewrite_media() -> Result<()> {
         .text().await
         .context("fetching status")?;
     assert!(txt.eq("1 927"), "Expecting 1 927, got {txt}");
-    server_handle.shutdown();
 
     Ok(())
 }

@@ -39,7 +39,7 @@ use axum::extract::State;
 use axum::response::{Response, IntoResponse};
 use axum::http::{header, StatusCode};
 use axum::body::Body;
-use hyper_serve::tls_rustls::RustlsConfig;
+use axum_server::{bind_rustls, tls_rustls::RustlsConfig};
 use dash_mpd::{MPD, Period, AdaptationSet, Representation, BaseURL};
 use anyhow::{Context, Result};
 use test_log::test;
@@ -122,7 +122,7 @@ async fn test_add_root_cert() -> Result<(), anyhow::Error> {
         "tests/fixtures/localhost-cert.key").await
         .context("rustls configuration")?;
     let backend = async move {
-        hyper_serve::bind_rustls(addr, config)
+        bind_rustls(addr, config)
             .serve(app.into_make_service()).await
             .unwrap()
     };
