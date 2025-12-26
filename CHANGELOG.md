@@ -1,6 +1,20 @@
 # Changelog
 
 
+## [0.2.29] - Unreleased
+
+Preliminary support for security sandboxing our application code and our helper applications on
+Linux, using the Landlock loadable security module. If the `sandbox` feature is enabled at build
+time (only available on Linux) and the functionality is enabled using the new `--sandbox`
+commandline option, restrict access to the filesystem, limit write access to directories that we
+will need to write to, limit exec access to directories where our helper applications and their
+runtime libraries are located, and limit read access to directories that the application or helper
+applications may need to read. This feature also somewhat restricts network access, preventing
+binding to a TCP port.
+
+The release builds for Linux include this feature, as does the prebuilt Docker container.
+
+
 ## [0.2.28] - 2025-11-23
 
 - Following changes in the tracing crate that disable ANSI terminal escape sequences for security
