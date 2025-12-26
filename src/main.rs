@@ -435,7 +435,8 @@ async fn main () -> Result<()> {
              .num_args(1)
              .index(1)
              .help("URL of the DASH manifest to retrieve."));
-    #[cfg(feature = "cookies")] {
+    #[cfg(feature = "cookies")]
+    {
         clap = clap
             .arg(Arg::new("cookies-from-browser")
                  .long("cookies-from-browser")
@@ -448,6 +449,15 @@ async fn main () -> Result<()> {
                  .num_args(0)
                  .exclusive(true)
                  .help("Show valid values for BROWSER argument to --cookies-from-browser on this computer, then exit."));
+    }
+    #[cfg(feature = "sandbox")]
+    {
+        clap = clap
+            .arg(Arg::new("sandbox")
+                 .long("sandbox")
+                 .action(ArgAction::SetTrue)
+                 .num_args(0)
+                 .help("Enable experimental security sandboxing for our code and helper applications."))
     }
     // TODO: add --abort-on-error
     // TODO: add --mtime arg (Last-modified header)
@@ -815,6 +825,12 @@ async fn main () -> Result<()> {
     }
     if let Some(token) = matches.get_one::<String>("auth-bearer") {
         dl = dl.with_auth_bearer(token);
+    }
+    #[cfg(feature = "sandbox")]
+    {
+        if matches.get_flag("sandbox") {
+            dl = dl.sandbox(true);
+        }
     }
     dl = dl.verbosity(verbosity);
     if let Some(out) = matches.get_one::<String>("output-file") {
