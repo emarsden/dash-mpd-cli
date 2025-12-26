@@ -46,7 +46,6 @@ use strum::IntoEnumIterator;
 use decrypt_cookies::{Browser, ChromiumBuilder, FirefoxBuilder};
 
 
-
 struct DownloadProgressBar {
     bar: ProgressBar,
 }
@@ -118,7 +117,7 @@ async fn main () -> Result<()> {
     let filter_layer = EnvFilter::try_from_default_env()
         // The sqlx crate is used by the decrypt-cookies crate
         .or_else(|_| EnvFilter::try_new("info,reqwest=warn,hyper=warn,h2=warn,sqlx=warn"))
-        .expect("initializing logging");
+        .context("initializing logging")?;
     tracing_subscriber::registry()
         .with(filter_layer)
         .with(fmt_layer)
@@ -519,7 +518,7 @@ async fn main () -> Result<()> {
     }
     if let Some(p) = matches.get_one::<String>("proxy") {
         let proxy = reqwest::Proxy::all(p)
-            .expect("connecting to HTTP proxy");
+            .context("connecting to HTTP proxy")?;
         cb = cb.proxy(proxy);
     }
     if matches.get_flag("no-proxy") {
@@ -562,7 +561,7 @@ async fn main () -> Result<()> {
     }
     if !headers.is_empty() {
         let hmap: header::HeaderMap = (&headers).try_into()
-            .expect("valid HTTP headers");
+            .context("valid HTTP headers")?;
         cb = cb.default_headers(hmap);
     }
     if let Some(rcs) = matches.get_many::<String>("add-root-certificate") {
@@ -606,7 +605,7 @@ async fn main () -> Result<()> {
         }
     }
     let client = cb.build()
-        .expect("creating HTTP client");
+        .context("creating HTTP client")?;
     let url = matches.get_one::<String>("url").unwrap();
     let mut dl = DashDownloader::new(url)
         .with_http_client(client);
