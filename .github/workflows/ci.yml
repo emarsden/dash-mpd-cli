@@ -7,7 +7,7 @@ jobs:
     name: dash-mpd-cli check/nightly
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
            fetch-depth: 0
 
@@ -45,7 +45,7 @@ jobs:
   build-macos:
     runs-on: macos-14
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
          fetch-depth: 0
 
@@ -102,7 +102,7 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
          fetch-depth: 0
 

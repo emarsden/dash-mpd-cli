@@ -28,7 +28,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install qemu-user-static
 
       - name: Checkout sources
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Log in to ghcr.io
         uses: redhat-actions/podman-login@v1
