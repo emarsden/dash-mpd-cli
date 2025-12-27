@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [0.2.29] - Unreleased
+## [0.2.29] - 2025-12-27
 
 Preliminary support for security sandboxing our application code and our helper applications on
 Linux, using the Landlock loadable security module. If the `sandbox` feature is enabled at build
