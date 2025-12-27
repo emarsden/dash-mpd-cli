@@ -39,7 +39,7 @@ jobs:
       - name: Install xsltproc
         run: sudo apt install xsltproc
 
-      - run: cargo test --jobs 1 -- --show-output
+      - run: cargo test --jobs 1 --features sandbox -- --show-output
       - run: cargo doc --no-deps --all-features
 
   build-macos:
