@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v6
     - name: Run tests in FreeBSD VM
-      uses: cross-platform-actions/action@v0.32
+      uses: cross-platform-actions/action@v0.32.0
       with:
           memory: 1024M
           operating_system: freebsd
