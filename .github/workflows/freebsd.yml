@@ -50,6 +50,7 @@ jobs:
             shaka-packager --version
             echo "~~~~ installing ffmpeg ~~~~"
             sudo pkg install -y --quiet ffmpeg
+            sudo pkg install -y --quiet libxslt
             ls -l
             echo "~~~~ building dash-mpd-cli ~~~~"
             cargo build --jobs 1 --no-default-features --verbose
