@@ -25,7 +25,7 @@ jobs:
             uname -a
             sudo pkg install -y --quiet curl
             curl https://sh.rustup.rs -sSf --output rustup.sh
-            sudo bash rustup.sh -y --profile minimal --default-toolchain stable
+            bash rustup.sh -y --profile minimal --default-toolchain stable
             ls -al ${HOME}
             ls -al ${HOME}/.cargo
             ls -al ${HOME}/.cargo/bin
