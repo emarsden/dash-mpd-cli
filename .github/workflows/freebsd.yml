@@ -25,8 +25,10 @@ jobs:
             uname -a
             sudo pkg install -y --quiet curl
             curl https://sh.rustup.rs -sSf --output rustup.sh
-            sudo sh rustup.sh -y --profile minimal --default-toolchain stable
-            ls -l ${HOME}/.cargo/bin
+            sudo bash rustup.sh -y --profile minimal --default-toolchain stable
+            ls -al ${HOME}
+            ls -al ${HOME}/.cargo
+            ls -al ${HOME}/.cargo/bin
             export PATH=${HOME}/.cargo/bin:$PATH
             echo PATH is ${PATH}
             echo "~~~~ rustc --version ~~~~"
