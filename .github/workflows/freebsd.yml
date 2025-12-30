@@ -26,13 +26,10 @@ jobs:
             sudo pkg install -y --quiet curl
             curl https://sh.rustup.rs -sSf --output rustup.sh
             bash rustup.sh -y --profile minimal --default-toolchain stable
-            ls -al ${HOME}
-            ls -al ${HOME}/.cargo
-            ls -al ${HOME}/.cargo/bin
             export PATH=${HOME}/.cargo/bin:$PATH
-            echo PATH is ${PATH}
             echo "~~~~ rustc --version ~~~~"
-            # rustc --version
+            rustc --version
+            sudo pkg install -y --quiet devel/cmake
             sudo pkg install -y --quiet devel/protobuf
             sudo pkg install -y --quiet Bento4
             mp4decrypt || true
