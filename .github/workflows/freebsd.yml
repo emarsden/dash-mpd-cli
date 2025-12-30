@@ -17,20 +17,20 @@ jobs:
     - name: Run tests in FreeBSD VM
       uses: cross-platform-actions/action@v0.32.0
       with:
-          memory: 1024M
+          memory: 2G
           operating_system: freebsd
           version: "15.0"
           shell: sh
           run: |
             uname -a
-            pkg install -y --quiet curl
+            sudo pkg install -y --quiet curl
             curl https://sh.rustup.rs -sSf --output rustup.sh
-            sh rustup.sh -y --profile minimal --default-toolchain stable
+            sudo sh rustup.sh -y --profile minimal --default-toolchain stable
             export PATH="${HOME}/.cargo/bin:$PATH"
             echo "~~~~ rustc --version ~~~~"
             rustc --version
-            pkg install -y --quiet devel/protobuf
-            pkg install -y --quiet Bento4
+            sudo pkg install -y --quiet devel/protobuf
+            sudo pkg install -y --quiet Bento4
             mp4decrypt || true
             # we are depending here on FreeBSD's Linux binary compatibility layer
             curl https://github.com/shaka-project/shaka-packager/releases/latest/download/packager-linux-x64 --output /tmp/shaka-packager
@@ -38,8 +38,9 @@ jobs:
             sudo chmod +x /usr/local/bin/shaka-packager
             export PATH=${PATH}:/usr/local/bin
             shaka-packager --version
-            pkg install -y --quiet ffmpeg
-            git checkout --depth 1 https://github.com/emarsden/dash-mpd-cli
-            cd dash-mpd-cli
+            sudo pkg install -y --quiet ffmpeg
+            ls -l
+            # git checkout --depth 1 https://github.com/emarsden/dash-mpd-cli
+            # cd dash-mpd-cli
             cargo build --jobs 1 --no-default-features --verbose
             cargo test --jobs 1 --no-default-features --verbose
