@@ -1,10 +1,9 @@
-# Run cargo tests in a FreeBSD VM. This needs to run on one of the GitHub macos runners, because
-# they are currently the only ones to support virtualization.
+# Run cargo tests in a FreeBSD VM.
 #
 # We need to build without default features (in particular without the "cookies" feature), because
-# the bench_scraper crate doesn't compile on FreeBSD.
+# the decrypt-cookies crate doesn't compile on FreeBSD.
 #
-# See https://github.com/vmactions/freebsd-vm
+# See https://github.com/cross-platform-actions/action
 
 on: workflow_dispatch
 
@@ -12,37 +11,35 @@ name: freebsd
 
 jobs:
   test:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
     - name: Run tests in FreeBSD VM
-      uses: vmactions/freebsd-vm@v1
+      uses: cross-platform-actions/action@v0.32
       with:
-        usesh: true
-        sync: rsync
-        copyback: false
-        mem: 2048
-        prepare: |
-          pkg install -y --quiet curl
-          curl https://sh.rustup.rs -sSf --output rustup.sh
-          sh rustup.sh -y --profile minimal --default-toolchain stable
-          export PATH="${HOME}/.cargo/bin:$PATH"
-          echo "~~~~ rustc --version ~~~~"
-          rustc --version
-          pkg install -y --quiet devel/protobuf
-          pkg install -y --quiet Bento4
-          mp4decrypt || true
-          # we are depending here on FreeBSD's Linux binary compatibility layer
-          curl https://github.com/shaka-project/shaka-packager/releases/latest/download/packager-linux-x64 --output /tmp/shaka-packager
-          sudo mv /tmp/shaka-packager /usr/local/bin
-          sudo chmod +x /usr/local/bin/shaka-packager
-          export PATH=${PATH}:/usr/local/bin
-          shaka-packager --version
-          pkg install -y --quiet ffmpeg
-          sudo pkg install -y --quiet textproc/libxslt
-
-        run: |
-          export PATH="${HOME}/.cargo/bin:$PATH"
-          ls -la
-          cargo build --jobs 1 --no-default-features --verbose
-          cargo test --jobs 1 --no-default-features --verbose
+          memory: 1024M
+          operating_system: freebsd
+          version: "15.0"
+          shell: sh
+          run: |
+            uname -a
+            pkg install -y --quiet curl
+            curl https://sh.rustup.rs -sSf --output rustup.sh
+            sh rustup.sh -y --profile minimal --default-toolchain stable
+            export PATH="${HOME}/.cargo/bin:$PATH"
+            echo "~~~~ rustc --version ~~~~"
+            rustc --version
+            pkg install -y --quiet devel/protobuf
+            pkg install -y --quiet Bento4
+            mp4decrypt || true
+            # we are depending here on FreeBSD's Linux binary compatibility layer
+            curl https://github.com/shaka-project/shaka-packager/releases/latest/download/packager-linux-x64 --output /tmp/shaka-packager
+            sudo mv /tmp/shaka-packager /usr/local/bin
+            sudo chmod +x /usr/local/bin/shaka-packager
+            export PATH=${PATH}:/usr/local/bin
+            shaka-packager --version
+            pkg install -y --quiet ffmpeg
+            git checkout --depth 1 https://github.com/emarsden/dash-mpd-cli
+            cd dash-mpd-cli
+            cargo build --jobs 1 --no-default-features --verbose
+            cargo test --jobs 1 --no-default-features --verbose
