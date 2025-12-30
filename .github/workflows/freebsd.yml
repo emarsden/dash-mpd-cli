@@ -20,13 +20,13 @@ jobs:
           memory: 2G
           operating_system: freebsd
           version: "15.0"
-          shell: sh
+          shell: bash
           run: |
             uname -a
             sudo pkg install -y --quiet curl
             curl https://sh.rustup.rs -sSf --output rustup.sh
             sudo sh rustup.sh -y --profile minimal --default-toolchain stable
-            export PATH="${HOME}/.cargo/bin:$PATH"
+            export PATH=${HOME}/.cargo/bin:$PATH
             echo "~~~~ rustc --version ~~~~"
             rustc --version
             sudo pkg install -y --quiet devel/protobuf
