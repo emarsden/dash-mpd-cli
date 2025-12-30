@@ -40,8 +40,7 @@ jobs:
             export PATH=${PATH}:/usr/local/bin
             shaka-packager --version
             sudo pkg install -y --quiet ffmpeg
+            sudo pkg install -y --quiet podman
             ls -l
-            # git checkout --depth 1 https://github.com/emarsden/dash-mpd-cli
-            # cd dash-mpd-cli
             cargo build --jobs 1 --no-default-features --verbose
             cargo test --jobs 1 --no-default-features --verbose
