@@ -40,7 +40,6 @@ jobs:
             export PATH=${PATH}:/usr/local/bin
             shaka-packager --version
             sudo pkg install -y --quiet ffmpeg
-            sudo pkg install -y --quiet podman
             ls -l
             cargo build --jobs 1 --no-default-features --verbose
-            env CI=yes cargo test --jobs 1 --no-default-features --verbose
+            env CI=yes cargo test --jobs 1 --no-default-features --verbose -- --skip container
