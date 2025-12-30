@@ -24,6 +24,7 @@ jobs:
           run: |
             uname -a
             sudo pkg install -y --quiet curl
+            sudo pkg install -y --quiet wget
             curl https://sh.rustup.rs -sSf --output rustup.sh
             bash rustup.sh -y --profile minimal --default-toolchain stable
             export PATH=${HOME}/.cargo/bin:{$PATH}
@@ -36,7 +37,8 @@ jobs:
             mp4decrypt || true
             # we are depending here on FreeBSD's Linux binary compatibility layer
             echo "~~~~ downloading shaka-packager ~~~~"
-            curl --silent https://github.com/shaka-project/shaka-packager/releases/latest/download/packager-linux-x64 --output /tmp/shaka-packager
+            # Don't download this with curl; json parsing tricks are needed
+            wget -O /tmp/shaka-packager https://github.com/shaka-project/shaka-packager/releases/latest/download/packager-linux-x64 
             sudo mv /tmp/shaka-packager /usr/local/bin
             sudo chmod +x /usr/local/bin/shaka-packager
             ls -l /usr/local/bin/shaka-packager
