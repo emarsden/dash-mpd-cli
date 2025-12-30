@@ -36,7 +36,7 @@ jobs:
             sudo pkg install -y --quiet Bento4
             mp4decrypt || true
             # we are depending here on FreeBSD's Linux binary compatibility layer
-            sudo service linux start
+            sudo service linux onestart
             sudo pkg install -y --quiet linux_base-rl9
             echo "~~~~ downloading shaka-packager ~~~~"
             # Don't download this with curl; json parsing tricks are needed
