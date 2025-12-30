@@ -26,20 +26,27 @@ jobs:
             sudo pkg install -y --quiet curl
             curl https://sh.rustup.rs -sSf --output rustup.sh
             bash rustup.sh -y --profile minimal --default-toolchain stable
-            export PATH=${HOME}/.cargo/bin:$PATH
+            export PATH=${HOME}/.cargo/bin:{$PATH}
             echo "~~~~ rustc --version ~~~~"
             rustc --version
+            echo "~~~~ installing cmake, protobuf, mp4decrypt ~~~~~"
             sudo pkg install -y --quiet devel/cmake
             sudo pkg install -y --quiet devel/protobuf
             sudo pkg install -y --quiet Bento4
             mp4decrypt || true
             # we are depending here on FreeBSD's Linux binary compatibility layer
-            curl https://github.com/shaka-project/shaka-packager/releases/latest/download/packager-linux-x64 --output /tmp/shaka-packager
+            echo "~~~~ downloading shaka-packager ~~~~"
+            curl --silent https://github.com/shaka-project/shaka-packager/releases/latest/download/packager-linux-x64 --output /tmp/shaka-packager
             sudo mv /tmp/shaka-packager /usr/local/bin
             sudo chmod +x /usr/local/bin/shaka-packager
+            ls -l /usr/local/bin/shaka-packager
             export PATH=${PATH}:/usr/local/bin
+            echo "~~~~ shaka-packager version ~~~~"
             shaka-packager --version
+            echo "~~~~ installing ffmpeg ~~~~"
             sudo pkg install -y --quiet ffmpeg
             ls -l
+            echo "~~~~ building dash-mpd-cli ~~~~"
             cargo build --jobs 1 --no-default-features --verbose
+            echo "~~~~ running tests ~~~~"
             env CI=yes cargo test --jobs 1 --no-default-features --verbose -- --skip container
