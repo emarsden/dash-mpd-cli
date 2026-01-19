@@ -962,7 +962,7 @@ dependencies = [
  "lazy_static",
  "num-traits",
  "pssh-box",
- "quick-xml",
+ "quick-xml 0.38.4",
  "regex",
  "reqwest",
  "sanitise-file-name",
@@ -981,7 +981,7 @@ dependencies = [
 
 [[package]]
 name = "dash-mpd-cli"
-version = "0.2.28"
+version = "0.2.29"
 dependencies = [
  "anyhow",
  "assert_cmd",
@@ -1004,7 +1004,7 @@ dependencies = [
  "mp4",
  "number_prefix",
  "predicates",
- "quick-xml",
+ "quick-xml 0.39.0",
  "reqwest",
  "rustls",
  "rustls-pemfile",
@@ -3004,7 +3004,7 @@ dependencies = [
  "prost",
  "prost-build",
  "prost-types",
- "quick-xml",
+ "quick-xml 0.38.4",
  "serde",
  "serde-xml-rs",
  "serde_json",
@@ -3044,6 +3044,16 @@ name = "quick-xml"
 version = "0.38.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b66c2058c55a409d601666cffe35f04333cf1013010882cec174a7467cd4e21c"
+dependencies = [
+ "memchr",
+ "serde",
+]
+
+[[package]]
+name = "quick-xml"
+version = "0.39.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f2e3bf4aa9d243beeb01a7b3bc30b77cfe2c44e24ec02d751a7104a53c2c49a1"
 dependencies = [
  "memchr",
  "serde",

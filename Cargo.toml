@@ -49,7 +49,7 @@ hyper-util = "0.1.17"
 axum = { version = "0.8.7", features = ["tokio", "http1"] }
 axum-auth = "0.8.1"
 axum-server = { version = "0.8.0", features = ["tls-rustls"] }
-quick-xml = { version = "0.38.4", features = ["serialize"] }
+quick-xml = { version = "0.39.0", features = ["serialize"] }
 mp4 = "0.14.0"
 lazy_static = "1.5.0"
 ffprobe = "0.4.0"
