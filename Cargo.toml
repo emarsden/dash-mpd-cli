@@ -67,5 +67,5 @@ lto = "fat"
 codegen-units = 1
 
 
-[target.'cfg(all(target_os="macos", cookies))'.dependencies]
-decrypt-cookies = { version = "0.10.4", features = ["Safari"] }
+[target.'cfg(target_os="macos")'.dependencies]
+decrypt-cookies = { version = "0.10.4", features = ["Safari"], optional = true }
