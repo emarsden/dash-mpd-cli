@@ -48,9 +48,9 @@ jobs:
         overwrite: true
 
     - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v3
-        with:
-          subject-path: 'dash-mpd-cli-linux-amd64'
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: 'dash-mpd-cli-linux-amd64'
 
 
   release-linux-aarch64:
