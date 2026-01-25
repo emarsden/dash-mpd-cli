@@ -37,13 +37,12 @@ use tracing_subscriber::EnvFilter;
 use tracing_subscriber::fmt::writer::MakeWriterExt;
 use tracing_subscriber::prelude::*;
 use tracing::{info, warn, error, Level};
-use dash_mpd::fetch::DashDownloader;
-use dash_mpd::fetch::ProgressObserver;
-#[cfg(feature = "cookies")]
-use strum::IntoEnumIterator;
+use dash_mpd::fetch::{DashDownloader, ProgressObserver};
 
 #[cfg(feature = "cookies")]
-use decrypt_cookies::{Browser, ChromiumBuilder, FirefoxBuilder};
+mod cookies;
+#[cfg(feature = "cookies")]
+use crate::cookies::{list_cookie_sources, read_browser_cookies};
 
 
 struct DownloadProgressBar {
@@ -469,21 +468,8 @@ async fn main () -> Result<()> {
     #[cfg(feature = "cookies")]
     if matches.get_flag("list-cookie-sources") {
         info!("On this computer, cookies are available from the following browsers:");
-        for browser in Browser::iter() {
-            if browser.is_chromium_base() {
-                if let Ok(browser) = ChromiumBuilder::new(browser).build().await {
-                    if let Ok(cookies) = browser.get_cookies_all().await {
-                        info!("  {:?} ({} cookies)", browser.browser(), cookies.len());
-                    }
-                }
-            }
-            if browser.is_firefox_base() {
-                if let Ok(browser) = FirefoxBuilder::new(browser).build().await {
-                    if let Ok(cookies) = browser.get_cookies_all().await {
-                        info!("  {:?} ({} cookies)", browser.browser(), cookies.len());
-                    }
-                }
-            }
+        for (browser, count) in list_cookie_sources().await.iter() {
+            info!("  {browser:?} ({count} cookies)");
         }
         std::process::exit(3);
     }
@@ -498,30 +484,14 @@ async fn main () -> Result<()> {
         .gzip(true);
     #[cfg(feature = "cookies")]
     if let Some(browser_name) = matches.get_one::<String>("cookies-from-browser") {
-        let browser = Browser::from_str(browser_name)
-            .unwrap_or_else(|_| panic!("unknown browser {browser_name} in --cookies-from-browser"));
-        if browser.is_chromium_base() {
-            let browser = ChromiumBuilder::new(browser).build().await
-                .unwrap_or_else(|_| panic!("couldn't extract cookies from browser {browser_name}"));
-            let cookies = browser.get_cookies_all().await
-                .unwrap_or_else(|_| panic!("couldn't extract cookies from browser {browser_name}"));
-            if verbosity > 1 {
-                info!("  Extracted {} cookies from browser {}", cookies.len(), browser_name);
+        let cookies = read_browser_cookies(browser_name).await?;
+        let jar =  reqwest::cookie::Jar::default();
+        for (header, url_str) in cookies.iter() {
+            if let Ok(url) = reqwest::Url::parse(url_str) {
+                jar.add_cookie_str(header, &url);
             }
-            let jar: reqwest::cookie::Jar = cookies.into_iter().collect();
-            cb = cb.cookie_store(true).cookie_provider(Arc::new(jar));
         }
-        if browser.is_firefox_base() {
-            let browser = FirefoxBuilder::new(browser).build().await
-                .unwrap_or_else(|_| panic!("couldn't extract cookies from browser {browser_name}"));
-            let cookies = browser.get_cookies_all().await
-                .unwrap_or_else(|_| panic!("couldn't extract cookies from browser {browser_name}"));
-            if verbosity > 1 {
-                info!("  Extracted {} cookies from browser {}", cookies.len(), browser_name);
-            }
-            let jar: reqwest::cookie::Jar = cookies.into_iter().collect();
-            cb = cb.cookie_store(true).cookie_provider(Arc::new(jar));
-        }
+        cb = cb.cookie_store(true).cookie_provider(Arc::new(jar));
     }
     if verbosity > 2 {
        cb = cb.connection_verbose(true);
