@@ -441,6 +441,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "77c6d128af408d8ebd08331f0331cf2cf20d19e6c44a7aec58791641ecc8c0b5"
 
 [[package]]
+name = "binary-cookies"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "76249cc7da30e808268d2c6ca5190d9c2139b40acd3714209aade5984b642484"
+dependencies = [
+ "bstr",
+ "chrono",
+ "oval",
+ "positioned-io",
+ "snafu",
+ "tokio",
+ "winnow",
+]
+
+[[package]]
 name = "binrw"
 version = "0.11.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1088,6 +1103,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6d35d9d9ce3cd6bb324b759b7b5408b2e721f334cae7d26e13e713909808b5a2"
 dependencies = [
  "anyhow",
+ "binary-cookies",
  "chromium-crypto",
  "chrono",
  "dirs",
@@ -2773,6 +2789,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "oval"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "135cef32720c6746450d910890b0b69bcba2bbf6f85c9f4583df13fe415de828"
+
+[[package]]
 name = "parking"
 version = "2.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2875,6 +2897,16 @@ name = "portable-atomic"
 version = "1.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f89776e4d69bb58bc6993e99ffa1d11f228b839984854c7daeb5d37f87cbe950"
+
+[[package]]
+name = "positioned-io"
+version = "0.3.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d4ec4b80060f033312b99b6874025d9503d2af87aef2dd4c516e253fbfcdada7"
+dependencies = [
+ "libc",
+ "winapi",
+]
 
 [[package]]
 name = "potential_utf"

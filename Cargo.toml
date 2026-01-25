@@ -66,3 +66,6 @@ opt-level = "z"  # optimize for size
 lto = "fat"
 codegen-units = 1
 
+
+[target.'cfg(all(target_os="macos", cookies))'.dependencies]
+decrypt-cookies = { version = "0.10.4", features = ["Safari"] }
