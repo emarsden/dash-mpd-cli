@@ -9,14 +9,14 @@
 #
 # To dump the content of a certificate, openssl x509 -in cert.csr -text
 
-openssl genrsa -aes256 -out root-CA.key 4096
-openssl genrsa -aes256 -out localhost-cert.key 4096
-openssl genrsa -aes256 -out client-cert.key 4096
+openssl genrsa -out root-CA.key 4096
+openssl genrsa -out localhost-cert.key 4096
+openssl genrsa -out client-cert.key 4096
 
 
 # create the certificate for the root Certificate Authority
 openssl req -x509 -new -nodes \
-   -sha512 -days 1000 \
+   -sha512 -days 400 \
    -subj "/C=FR/L=Toulouse/O=Test" \
    -addext "basicConstraints=critical,CA:true,pathlen:0" \
    -addext "keyUsage=critical,keyCertSign,cRLSign" \
@@ -28,12 +28,12 @@ openssl req -x509 -new -nodes \
 openssl req -new -sha512 \
    -subj "/C=FR/L=Toulouse/O=Test/CN=localhost" \
    -addext 'subjectAltName=DNS:localhost' \
-   -addext 'basicConstraints=critical,CA:FALSE' \
+   -addext 'basicConstraints=critical,CA:false' \
    -addext 'extendedKeyUsage=serverAuth' \
    -key localhost-cert.key \
    -out localhost-cert.csr
 openssl x509 -req \
-   -CAcreateserial -days 1000 -sha512 -copy_extensions copy \
+   -CAcreateserial -days 400 -sha512 -copy_extensions copy \
    -in localhost-cert.csr \
    -CA root-CA.crt \
    -CAkey root-CA.key \
@@ -47,7 +47,7 @@ openssl req -new -sha512 -nodes \
    -key client-cert.key \
    -out client-cert.csr
 openssl x509 -req \
-   -CAcreateserial -days 1000 -sha512 -copy_extensions copy \
+   -CAcreateserial -days 400 -sha512 -copy_extensions copy \
    -CA root-CA.crt \
    -CAkey root-CA.key \
    -in client-cert.csr \
