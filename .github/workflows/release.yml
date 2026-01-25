@@ -1,7 +1,15 @@
+# TODO: generate artifact attestations for our release builds + container image
+#
+#     https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations
+
 name: Release
 
 permissions:
+  id-token: write
   contents: write
+  attestations: write
+  artifact-metadata: write
+
 
 on:
   workflow_dispatch:
@@ -39,6 +47,11 @@ jobs:
         asset_name: dash-mpd-cli-linux-amd64
         overwrite: true
 
+    - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: 'dash-mpd-cli-linux-amd64'
+
 
   release-linux-aarch64:
     name: Release for Linux/aarch64
@@ -72,6 +85,11 @@ jobs:
         file: target/aarch64-unknown-linux-gnu/release/dash-mpd-cli
         asset_name: dash-mpd-cli-linux-aarch64
         overwrite: true
+
+    - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: 'dash-mpd-cli-linux-aarch64'
 
 
   # Some of the GitHub MacOS runners (M1 processor) do not support nested virtualization, so can't

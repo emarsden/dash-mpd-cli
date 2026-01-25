@@ -121,18 +121,18 @@ jobs:
         path-type: inherit
 
     - name: install protobuf compiler
-      run: choco install --yes --limit-output protoc
+      run: choco install --yes --limit-output -–no-progress protoc
 
     - name: install NASM for rustls-tls build
       run: |
-         choco install --yes --limit-output nasm
+         choco install --yes --limit-output -–no-progress nasm
          echo "C:\Program Files\NASM" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
     # The ffmpeg executable is installed at C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin\ffmpeg.exe
     # A shim is created at C:\ProgramData\chocolatey\bin\ffmpeg.exe.
     - name: install ffmpeg
       run: |
-         choco install --yes --limit-output ffmpeg
+         choco install --yes --limit-output -–no-progress ffmpeg
          echo "C:\ProgramData\chocolatey\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
     # Isn't this fun
@@ -153,19 +153,19 @@ jobs:
         Invoke-WebRequest -Uri "https://github.com/shaka-project/shaka-packager/releases/latest/download/packager-win-x64.exe" -OutFile c:\tools\shaka-packager.exe
 
     - name: install xsltproc
-      run: choco install --yes --limit-output xsltproc
+      run: choco install --yes --limit-output -–no-progress xsltproc
 
     # the ~/ here depends on Windows CI runners using Powershell. We create ~/.ssh to work around a
     # podman bug (https://github.com/containers/podman/issues/24650)
     - name: install podman
       run: |
          mkdir ~/.ssh
-         choco install --yes --limit-output podman-cli
+         choco install --yes --limit-output -–no-progress podman-cli
          podman machine init
          podman machine start
 
     - run: cargo build --jobs 1 --verbose
       shell: msys2 {0}
 
-    - run: cargo test --jobs 1 -- --show-output
+    - run: cargo test --jobs 1 -- --show-output --test-threads=1
       shell: msys2 {0}

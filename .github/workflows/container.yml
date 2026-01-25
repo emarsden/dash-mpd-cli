@@ -19,8 +19,11 @@ jobs:
     timeout-minutes: 800
 
     permissions:
+      id-token: write
       contents: read
       packages: write
+      attestations: write
+
 
     name: Build and push container/Linux
     steps:
@@ -55,4 +58,12 @@ jobs:
           image: dash-mpd-cli
           tags: latest
           registry: ${{ env.IMAGE_REGISTRY }}
+
+      # See https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-name: 'ghcr.io/emarsden/dash-mpd-cli'
+          subject-digest: ${{ steps.push-to-registry.outputs.digest }}
+          push-to-registry: true
 
