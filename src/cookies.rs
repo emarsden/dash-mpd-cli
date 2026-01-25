@@ -108,9 +108,7 @@ async fn read_browser_cookies_safari() -> Result<HashMap<String, String>> {
     let safari = SafariBuilder::new().build().await
         .context("building Safari cookie extractor")?;
     let mut cookies = HashMap::new();
-    for cookie in safari.cookies_all()
-        .context("retrieving Safari cookies")?
-    {
+    for cookie in safari.cookies_all() {
         cookies.insert(cookie.set_cookie_header(), cookie.url());
     }
     Ok(cookies)
