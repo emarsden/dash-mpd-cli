@@ -103,6 +103,8 @@ async fn read_browser_cookies_firefox() -> Result<HashMap<String, String>> {
 
 #[cfg(target_os="macos")]
 async fn read_browser_cookies_safari() -> Result<HashMap<String, String>> {
+    use decrypt_cookies_rs::prelude::{SafariBuilder, SafariCookie, SafariGetter};
+
     let safari = SafariBuilder::new().build().await
         .context("building Safari cookie extractor")?;
     let mut cookies = HashMap::new();
