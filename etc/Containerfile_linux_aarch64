@@ -31,7 +31,7 @@ RUN apk update && \
     export PATH="${HOME}/.cargo/bin:$PATH" && \
     rustup toolchain install stable --target aarch64-unknown-linux-musl && \
     cargo update && \
-    cargo build --target aarch64-unknown-linux-musl --release && \
+    cargo build --target aarch64-unknown-linux-musl --release --features sandbox && \
     git clone --depth 1 https://github.com/gpac/gpac.git && \
     cd gpac && ./configure --static-bin && \
     make -j 4 && \
@@ -45,7 +45,7 @@ LABEL org.opencontainers.image.description "Download media content from a DASH-M
 LABEL org.opencontainers.image.title "dash-mpd-cli"
 LABEL org.opencontainers.image.url "https://github.com/emarsden/dash-mpd-cli"
 LABEL org.opencontainers.image.source "https://github.com/emarsden/dash-mpd-cli"
-LABEL org.opencontainers.image.version "0.2.29"
+LABEL org.opencontainers.image.version "0.2.30"
 LABEL org.opencontainers.image.authors "eric.marsden@risk-engineering.org"
 LABEL org.opencontainers.image.licenses "MIT"
 

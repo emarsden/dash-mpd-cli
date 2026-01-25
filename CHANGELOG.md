@@ -1,6 +1,29 @@
 # Changelog
 
 
+## [0.2.30] - 2026-01-25
+
+Add the ability to decrypt media content with the shaka-packager helper application running in its
+official Docker/Podman container (instead of installed locally on the host), and with the MP4Box
+helper application from the official GPAC Docker/Podman container. These rely on a container runtime
+(Podman or Docker) being installed. The container runtime to use can be specified using the `DOCKER`
+environment variable (defaults to `podman`; it will only work with Docker if it is configured for
+rootless operation, or you will encounter file ownership problems).
+
+Improve support for dynamic manifests that use SegmentTemplate+SegmentTimeline addressing.
+
+Improve handling of manifests without a `MPD.mediaPresentationDuration` attribute and without a
+`Period.duration` attribute.
+
+Clean up the temporary file used to invoke the decryption helper mp4box.
+
+Use human-readable formatting when displaying per-Period duration information.
+
+Replace the unmaintained `backoff` crate by the `backon` crate.
+
+Replace the unmaintained dev dependency `json` by the `jzon` crate.
+
+
 ## [0.2.29] - 2025-12-27
 
 Preliminary support for security sandboxing our application code and our helper applications on

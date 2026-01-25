@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y musl-tools musl-dev protobuf-compiler c
 WORKDIR /src
 COPY ../ ./
 RUN cargo update && \
-    RUSTFLAGS="-C target-cpu=x86-64-v3" cargo build --target x86_64-unknown-linux-musl --release
+    RUSTFLAGS="-C target-cpu=x86-64-v3" cargo build --target x86_64-unknown-linux-musl --release --features sandbox
 
 # static build of MP4Box from GPAC, which is not packaged for Alpine Linux.
 # https://github.com/gpac/gpac/wiki/GPAC-Build-Guide-for-Linux
@@ -44,7 +44,7 @@ LABEL org.opencontainers.image.description "Download media content from a DASH-M
 LABEL org.opencontainers.image.title "dash-mpd-cli"
 LABEL org.opencontainers.image.url "https://github.com/emarsden/dash-mpd-cli"
 LABEL org.opencontainers.image.source "https://github.com/emarsden/dash-mpd-cli"
-LABEL org.opencontainers.image.version "0.2.29"
+LABEL org.opencontainers.image.version "0.2.30"
 LABEL org.opencontainers.image.authors "eric.marsden@risk-engineering.org"
 LABEL org.opencontainers.image.licenses "MIT"
 
