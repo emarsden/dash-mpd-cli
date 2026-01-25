@@ -87,9 +87,9 @@ jobs:
         overwrite: true
 
     - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v3
-        with:
-          subject-path: 'dash-mpd-cli-linux-aarch64'
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: 'dash-mpd-cli-linux-aarch64'
 
 
   # Some of the GitHub MacOS runners (M1 processor) do not support nested virtualization, so can't
