@@ -27,7 +27,7 @@ versions = "7.0.0"
 fs-err = "3.2.2"
 number_prefix = "0.4.0"
 url = "2.5.8"
-anyhow = "1.0.100"
+anyhow = "1.0.101"
 tempfile = "3.24.0"
 decrypt-cookies = { version = "0.10.4", optional = true }
 
