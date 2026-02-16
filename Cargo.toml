@@ -19,7 +19,7 @@ tracing = { version = "0.1.44", features = ["attributes"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
 time = { version = "0.3.44", features = ["local-offset"] }
 dash-mpd = { version = "0.19.3", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35", "http2"] }
-reqwest = { version = "0.13.1", default-features = false, features = ["gzip", "rustls", "socks", "json", "cookies", "http2"] }
+reqwest = { version = "0.13.2", default-features = false, features = ["gzip", "rustls", "socks", "json", "cookies", "http2"] }
 indicatif = "0.18.3"
 clap = { version = "4.5.51", features = ["cargo", "unicode", "wrap_help"] }
 serde_json = "1.0.149"
