@@ -17,7 +17,7 @@ publish = true
 tokio = { version = "1.49.0", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.44", features = ["attributes"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
-time = { version = "0.3.44", features = ["local-offset"] }
+time = { version = "0.3.47", features = ["local-offset"] }
 dash-mpd = { version = "0.19.3", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35", "http2"] }
 reqwest = { version = "0.13.1", default-features = false, features = ["gzip", "rustls", "socks", "json", "cookies", "http2"] }
 indicatif = "0.18.3"
