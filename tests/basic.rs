@@ -1,4 +1,4 @@
-/// Tests for basic download functionality.
+//! Tests for basic download functionality.
 ///
 /// We don't run these tests on CI infrastructure, because they consume non-negligeable network
 /// bandwidth.
@@ -23,9 +23,6 @@ use common::check_file_size_approx;
 
 #[test]
 fn test_dl_mp4 () {
-    if env::var("CI").is_ok() {
-        return;
-    }
     let mpd = "https://cloudflarestream.com/31c9291ab41fac05471db4e73aa11717/manifest/video.mpd";
     let tmpd = TempDir::new().unwrap()
         .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
