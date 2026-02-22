@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.31] - Unreleased
+
+New commandline option `--progress` which accepts options `bar` (the default), `none` and `json`. If
+option `json` is selected, machine-readable progress information is printed to stderr as
+newline-delimited JSON of the form
+
+   `{"type": "progress", "percent": 75, "bandwidth": 2266856, "message": "Fetching video segments)"}`
+
+When the `json` option is selected, logging is modified also to use a partly JSON format, of the
+form 
+
+   `18:03:33  INFO {"message":"Preparing download for period 0 (#1)"}`
+
 
 ## [0.2.30] - 2026-01-25
 

@@ -20,6 +20,7 @@
 // Example usage: dash-mpd-cli --timeout 5 --output=/tmp/foo.mp4 https://v.redd.it/zv89llsvexdz/DASHPlaylist.mpd
 
 use std::env;
+use std::io::{self, Write};
 use std::path::Path;
 use std::net::IpAddr;
 use std::str::FromStr;
@@ -45,6 +46,13 @@ mod cookies;
 use crate::cookies::{list_cookie_sources, read_browser_cookies};
 
 
+#[derive(Debug, PartialEq)]
+enum ProgressType {
+    None,
+    Bar,
+    Json,
+}
+
 struct DownloadProgressBar {
     bar: ProgressBar,
 }
@@ -61,14 +69,40 @@ impl DownloadProgressBar {
 }
 
 impl ProgressObserver for DownloadProgressBar {
-    fn update(&self, percent: u32, message: &str) {
+    fn update(&self, percent: u32, bandwidth: u64, message: &str) {
+        let msg = if bandwidth > 500_000 {
+            format!("{message} ({:.1} MB/s)", bandwidth as f64 / 1e6)
+        } else {
+            format!("{message} ({:3} kB/s)", bandwidth as f64 / 1e3)
+        };
         if percent <= 100 {
             self.bar.set_position(percent.into());
-            self.bar.set_message(message.to_string());
+            self.bar.set_message(msg);
         }
         if percent == 100 {
             self.bar.finish_with_message("Done");
         }
+    }
+}
+
+struct DownloadProgressJson {
+}
+
+impl DownloadProgressJson {
+    pub fn new() -> Self {
+        Self { }
+    }
+}
+
+// Prints newline-delimited JSON to stderr.
+impl ProgressObserver for DownloadProgressJson {
+    fn update(&self, percent: u32, bandwidth: u64, message: &str) {
+        eprint!("{{\"type\": \"progress\", \"percent\": {percent}, \"bandwidth\": {bandwidth}, \"message\": \"");
+        for str in json_escape::escape_str(message) {
+            eprint!("{str}");
+        }
+        eprintln!("\"}}");
+        let _ = io::stderr().flush();
     }
 }
 
@@ -102,26 +136,6 @@ async fn check_newer_version() -> Result<()> {
 
 #[tokio::main]
 async fn main () -> Result<()> {
-    let time_fmt = time::format_description::parse("[hour]:[minute]:[second]").unwrap();
-    let time_offset = time::UtcOffset::current_local_offset()
-        .unwrap_or(time::UtcOffset::UTC);
-    let timer = tracing_subscriber::fmt::time::OffsetTime::new(time_offset, time_fmt);
-    // Logs of level >= INFO go to stdout, otherwise (warnings and errors) to stderr.
-    let stderr = std::io::stderr.with_max_level(Level::WARN);
-    let fmt_layer = tracing_subscriber::fmt::layer()
-        .map_writer(move |w| stderr.or_else(w))
-        .compact()
-        .with_target(false)
-        .with_timer(timer);
-    let filter_layer = EnvFilter::try_from_default_env()
-        // The sqlx crate is used by the decrypt-cookies crate
-        .or_else(|_| EnvFilter::try_new("info,reqwest=warn,hyper=warn,h2=warn,sqlx=warn"))
-        .context("initializing logging")?;
-    tracing_subscriber::registry()
-        .with(filter_layer)
-        .with(fmt_layer)
-        .init();
-
     #[allow(unused_mut)]
     let mut clap = clap::Command::new("dash-mpd-cli")
         .about("Download content from an MPEG-DASH streaming media manifest.")
@@ -374,6 +388,11 @@ async fn main () -> Result<()> {
              .action(ArgAction::SetTrue)
              .num_args(0)
              .help("Disable the progress bar"))
+        .arg(Arg::new("progress")
+            .long("progress")
+             .value_name("PROGRESS-TYPE")
+             .num_args(1)
+            .help("Progress=json to print machine-readable progress information to stdout."))
         .arg(Arg::new("no-xattr")
              .long("no-xattr")
              .action(ArgAction::SetTrue)
@@ -461,6 +480,43 @@ async fn main () -> Result<()> {
     // TODO: add --abort-on-error
     // TODO: add --mtime arg (Last-modified header)
     let matches = clap.get_matches();
+
+    let time_fmt = time::format_description::parse("[hour]:[minute]:[second]").unwrap();
+    let time_offset = time::UtcOffset::current_local_offset()
+        .unwrap_or(time::UtcOffset::UTC);
+    let timer = tracing_subscriber::fmt::time::OffsetTime::new(time_offset, time_fmt);
+    // Logs of level >= INFO go to stdout, otherwise (warnings and errors) to stderr.
+    let stderr = std::io::stderr.with_max_level(Level::WARN);
+    let filter_layer = EnvFilter::try_from_default_env()
+        // The sqlx crate is used by the decrypt-cookies crate
+        .or_else(|_| EnvFilter::try_new("info,reqwest=warn,hyper=warn,h2=warn,sqlx=warn"))
+        .context("initializing logging")?;
+    if matches.get_one::<String>("progress")
+        .is_some_and(|p| p.eq("json"))
+    {
+        // Display logs in NDJSON format
+        let fmt_layer = tracing_subscriber::fmt::layer()
+            .json()
+            .map_writer(move |w| stderr.or_else(w))
+            .compact()
+            .with_target(false)
+            .with_ansi(false)
+            .with_timer(timer);
+        tracing_subscriber::registry()
+            .with(filter_layer)
+            .with(fmt_layer)
+            .init();
+    } else {
+        let fmt_layer = tracing_subscriber::fmt::layer()
+            .map_writer(move |w| stderr.or_else(w))
+            .compact()
+            .with_target(false)
+            .with_timer(timer);
+        tracing_subscriber::registry()
+            .with(filter_layer)
+            .with(fmt_layer)
+            .init();
+    };
 
     if ! matches.get_flag("no-version-check") {
         let _ = check_newer_version().await;
@@ -592,8 +648,21 @@ async fn main () -> Result<()> {
     if let Some(url) = matches.get_one::<String>("referer") {
         dl = dl.with_referer(url.clone());
     }
-    if !matches.get_flag("no-progress") && !matches.get_flag("quiet") {
-        dl = dl.add_progress_observer(Arc::new(DownloadProgressBar::new()));
+    let mut progress_type = ProgressType::Bar;
+    if matches.get_flag("no-progress") || matches.get_flag("quiet") {
+        progress_type = ProgressType::None;
+    }
+    if let Some(ptype) = matches.get_one::<String>("progress") {
+        if ptype.eq("json") {
+            progress_type = ProgressType::Json;
+        } else if !ptype.eq("bar") {
+            warn!("Ignoring invalid value for --progress");
+        }
+    }
+    match progress_type {
+        ProgressType::Bar => dl = dl.add_progress_observer(Arc::new(DownloadProgressBar::new())),
+        ProgressType::Json => dl = dl.add_progress_observer(Arc::new(DownloadProgressJson::new())),
+        ProgressType::None => {},
     }
     if let Some(seconds) = matches.get_one::<u8>("sleep-requests") {
         dl = dl.sleep_between_requests(*seconds);
