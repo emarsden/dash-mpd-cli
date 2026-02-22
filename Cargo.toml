@@ -16,45 +16,46 @@ publish = true
 [dependencies]
 tokio = { version = "1.49.0", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.44", features = ["attributes"] }
-tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
-time = { version = "0.3.44", features = ["local-offset"] }
-dash-mpd = { version = "0.19.3", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35", "http2"] }
-reqwest = { version = "0.13.1", default-features = false, features = ["gzip", "rustls", "socks", "json", "cookies", "http2"] }
-indicatif = "0.18.3"
-clap = { version = "4.5.51", features = ["cargo", "unicode", "wrap_help"] }
+tracing-subscriber = { version = "0.3.22", features = ["env-filter", "time", "json", "fmt", "std"] }
+time = { version = "0.3.47", features = ["local-offset"] }
+dash-mpd = { version = "0.20.0", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35", "http2"] }
+reqwest = { version = "0.13.2", default-features = false, features = ["gzip", "rustls", "socks", "json", "cookies", "http2"] }
+indicatif = "0.18.4"
+clap = { version = "4.5.60", features = ["cargo", "unicode", "wrap_help"] }
 serde_json = "1.0.149"
+json-escape = "0.3.1"
 versions = "7.0.0"
-fs-err = "3.2.2"
+fs-err = "3.3.0"
 number_prefix = "0.4.0"
 url = "2.5.8"
-anyhow = "1.0.100"
-tempfile = "3.24.0"
+anyhow = "1.0.102"
+tempfile = "3.25.0"
 decrypt-cookies = { version = "0.10.4", optional = true }
 
 
 [dev-dependencies]
-rustls = { version = "0.23.35", features = ["aws_lc_rs"] }
+rustls = { version = "0.23.36", features = ["aws_lc_rs"] }
 rustls-pki-types = "1.14.0"
 rustls-pemfile = "2.2.0"
 tokio = { version = "1.49.0", features = ["rt-multi-thread", "time", "macros"] }
 tokio-rustls = "0.26.4"
-tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
+tracing-subscriber = { version = "0.3.22", features = ["env-filter", "json", "fmt", "time", "std"] }
 test-log = { version = "0.2.19", features = ["trace"] }
-http = "1.3.1"
+http = "1.4.0"
 hyper = "1.8.1"
-hyper-util = "0.1.17"
-axum = { version = "0.8.7", features = ["tokio", "http1"] }
+hyper-util = "0.1.20"
+axum = { version = "0.8.8", features = ["tokio", "http1"] }
 axum-auth = "0.8.1"
 axum-server = { version = "0.8.0", features = ["tls-rustls"] }
-quick-xml = { version = "0.39.0", features = ["serialize"] }
+quick-xml = { version = "0.39.2", features = ["serialize"] }
 mp4 = "0.14.0"
 lazy_static = "1.5.0"
 ffprobe = "0.4.0"
 file-format = { version = "0.28.0", features = ["reader"] }
 json = "0.12.4"
-assert_cmd = "2.1.1"
+assert_cmd = "2.1.2"
 assert_fs = "1.1.3"
-predicates = "3.1.3"
+predicates = "3.1.4"
 
 [features]
 default = ["cookies"]
