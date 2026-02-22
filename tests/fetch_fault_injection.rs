@@ -153,13 +153,13 @@ async fn test_dl_resilience() -> Result<()> {
         .assert()
         .success();
     check_file_size_approx(&out, 35_408_884);
-    let meta = ffprobe(out.clone()).unwrap();
+    let meta = ffprobe(&out).unwrap();
     assert_eq!(meta.streams.len(), 2);
     let audio = meta.streams.iter()
         .find(|s| s.codec_type.eq(&Some(String::from("audio"))))
         .expect("finding audio stream");
     assert_eq!(audio.codec_name, Some(String::from("dts")));
-    let format = FileFormat::from_file(out.clone()).unwrap();
+    let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::MatroskaVideo);
     let entries = fs::read_dir(tmpd.path()).unwrap();
     let count = entries.count();
