@@ -101,7 +101,7 @@ fn test_container_mp4 () {
     let outpath = TMP.join(out);
     container_run(vec!["-o", &out.to_string_lossy(), "--quality", "worst", mpd]);
     check_file_size_approx(&outpath, 410_218);
-    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    let format = FileFormat::from_file(&outpath).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
     let _ = fs::remove_file(outpath);
 }
@@ -115,13 +115,13 @@ fn test_container_mp4a () {
     let out = Path::new("sintel-audio.mp4");
     let outpath = TMP.join(out);
     if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
+        let _ = fs::remove_file(&outpath);
     }
     container_run(vec!["-o", &out.to_string_lossy(), "--quality", "worst", mpd]);
     check_file_size_approx(&outpath, 7_456_334);
-    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    let format = FileFormat::from_file(&outpath).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Audio);
-    let meta = ffprobe(outpath.clone()).unwrap();
+    let meta = ffprobe(&outpath).unwrap();
     assert_eq!(meta.streams.len(), 1);
     let audio = &meta.streams[0];
     assert_eq!(audio.codec_type, Some(String::from("audio")));
@@ -140,13 +140,13 @@ fn test_container_audio_flac () {
     let out = Path::new("bbcradio-flac.mp4");
     let outpath = TMP.join(out);
     if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
+        let _ = fs::remove_file(&outpath);
     }
     container_run(vec!["-o", &out.to_string_lossy(), "--quality", "worst", mpd]);
     check_file_size_approx(&outpath, 81_603_640);
-    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    let format = FileFormat::from_file(&outpath).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Audio);
-    let meta = ffprobe(outpath.clone()).unwrap();
+    let meta = ffprobe(&outpath).unwrap();
     assert_eq!(meta.streams.len(), 1);
     let audio = &meta.streams[0];
     assert_eq!(audio.codec_type, Some(String::from("audio")));
@@ -165,7 +165,7 @@ fn test_container_subtitles_wvtt () {
     let out = Path::new("sintel-wvtt.mp4");
     let outpath = TMP.join(out);
     if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
+        let _ = fs::remove_file(&outpath);
     }
     let mut subpath = outpath.clone();
     subpath.set_extension("srt");
@@ -180,7 +180,7 @@ fn test_container_subtitles_wvtt () {
     // We didn't specify a preferred language, so the first available one in the manifest (here
     // Dutch) is downloaded.
     assert!(srt.contains("land van de poortwachters"));
-    let _ = fs::remove_file(outpath.clone());
+    let _ = fs::remove_file(&outpath);
 
     container_run(vec!["-o", &out.to_string_lossy(),
                        "--quality", "worst",
@@ -201,7 +201,7 @@ fn test_container_subtitles_ttml () {
     let out = Path::new("tears-of-steel-ttml.mp4");
     let outpath = TMP.join(out);
     if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
+        let _ = fs::remove_file(&outpath);
     }
     let mut subpath = outpath.clone();
     subpath.set_extension("ttml");
@@ -217,7 +217,7 @@ fn test_container_subtitles_ttml () {
     // We didn't specify a preferred language, so the first available one in the manifest (here
     // English) is downloaded.
     assert!(ttml.contains("You're a jerk"));
-    let _ = fs::remove_file(outpath.clone());
+    let _ = fs::remove_file(&outpath);
     let _ = fs::remove_file(subpath);
 
     container_run(vec!["-o", &out.to_string_lossy(),
@@ -241,7 +241,7 @@ fn test_container_subtitles_vtt () {
     let out = Path::new("elephants-dream.mp4");
     let outpath = TMP.join(out);
     if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
+        let _ = fs::remove_file(&outpath);
     }
     let mut subpath = outpath.clone();
     subpath.set_extension("vtt");
@@ -264,7 +264,7 @@ fn test_container_decryption_playready_cenc () {
     let out = Path::new("llama.mp4");
     let outpath = TMP.join(out);
     if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
+        let _ = fs::remove_file(&outpath);
     }
     container_run(vec!["-v", "-o", &out.to_string_lossy(),
                        "--quality", "worst",
@@ -283,7 +283,7 @@ fn test_container_decryption_marlin_cenc () {
     let out = Path::new("llama-cenc.mp4");
     let outpath = TMP.join(out);
     if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
+        let _ = fs::remove_file(&outpath);
     }
     container_run(vec!["-v", "-o", &out.to_string_lossy(),
                        "--quality", "worst",
@@ -303,7 +303,7 @@ fn test_container_decryption_webm() {
     let out = Path::new("angel.webm");
     let outpath = TMP.join(out);
     if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
+        let _ = fs::remove_file(&outpath);
     }
     container_run(vec!["-v", "-o", &out.to_string_lossy(),
                        "--quality", "worst",
@@ -315,7 +315,7 @@ fn test_container_decryption_webm() {
                        "--key", "67b30c86756f57c5a0a38a23ac8c9178:efa2878c2ccf6dd47ab349fcf90e6259",
                        mpd]);
     check_file_size_approx(&outpath, 1_331_284);
-    let meta = ffprobe(outpath.clone()).unwrap();
+    let meta = ffprobe(&outpath).unwrap();
     assert_eq!(meta.streams.len(), 2);
     // The order of audio and video streams in the output WebM container is unreliable with Shaka
     // packager, so we need to test this carefully.
@@ -352,7 +352,7 @@ fn test_container_decryption_small_shaka () {
     let out = Path::new("angel.mp4");
     let outpath = TMP.join(out);
     if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
+        let _ = fs::remove_file(&outpath);
     }
     container_run(vec!["-v", "-o", &out.to_string_lossy(),
                        "--quality", "worst",
@@ -378,14 +378,14 @@ fn test_container_muxers_mkv () {
     let out = Path::new("llama.mkv");
     let outpath = TMP.join(out);
     if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
+        let _ = fs::remove_file(&outpath);
     }
     container_run(vec!["-v", "-o", &out.to_string_lossy(),
                        "--quality", "worst",
                        "--muxer-preference", "mkv:ffmpeg",
                        mpd]);
     check_file_size_approx(&outpath, 6_652_846);
-    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    let format = FileFormat::from_file(&outpath).unwrap();
     assert_eq!(format, FileFormat::MatroskaVideo);
     if let Some(enc) = container_metadata_encoder(&outpath) {
         assert!(enc.starts_with("Lavf"), "Unexpected encoder {enc} in mkv metadata");
@@ -399,7 +399,7 @@ fn test_container_muxers_mkv () {
                        "--muxer-preference", "mkv:mkvmerge",
                        mpd]);
     check_file_size_approx(&outpath, 6_652_846);
-    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    let format = FileFormat::from_file(&outpath).unwrap();
     assert_eq!(format, FileFormat::MatroskaVideo);
     if let Some(enc) = container_metadata_encoder(&outpath) {
         assert!(enc.contains("libmatroska"), "Unexpected encoder {enc} in mkv metadata");
@@ -417,7 +417,7 @@ fn test_container_xslt_multiple_stylesheets() {
     let out = Path::new("ricked-cleaned.mp4");
     let outpath = TMP.join(out);
     if outpath.exists() {
-        let _ = fs::remove_file(outpath.clone());
+        let _ = fs::remove_file(&outpath);
     }
     let mut xslt_rick = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     xslt_rick.push("tests");
@@ -433,17 +433,17 @@ fn test_container_xslt_multiple_stylesheets() {
     // /tmp/ directory, which is made available inside the container.
     let s1 = TMP.join("s1.xslt");
     let s2 = TMP.join("s2.xslt");
-    fs::copy(xslt_rick, s1.clone()).unwrap();
-    fs::copy(xslt_clean, s2.clone()).unwrap();
+    fs::copy(xslt_rick, &s1).unwrap();
+    fs::copy(xslt_clean, &s2).unwrap();
     container_run(vec!["-v", "-o", &out.to_string_lossy(),
                        "--quality", "worst",
                        "--xslt-stylesheet", "s1.xslt",
                        "--xslt-stylesheet", "s2.xslt",
                        mpd]);
     check_file_size_approx(&outpath, 12_975_377);
-    let format = FileFormat::from_file(outpath.clone()).unwrap();
+    let format = FileFormat::from_file(&outpath).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
-    let meta = ffprobe(outpath.clone()).unwrap();
+    let meta = ffprobe(&outpath).unwrap();
     assert_eq!(meta.streams.len(), 2);
     let video = &meta.streams[0];
     assert_eq!(video.codec_type, Some(String::from("video")));
