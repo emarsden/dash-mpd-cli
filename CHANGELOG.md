@@ -8,10 +8,10 @@ newline-delimited JSON of the form
 
    `{"type": "progress", "percent": 75, "bandwidth": 2266856, "message": "Fetching video segments)"}`
 
-When the `json` option is selected, logging is modified also to use a partly JSON format, of the
+When the `json` option is selected, logging is modified also to use NDJSON format, of the
 form 
 
-   `18:03:33  INFO {"message":"Preparing download for period 0 (#1)"}`
+   `{"timestamp":"2026-02-25T21:34:31.417298Z","level":"INFO","message":"Fetching the DASH manifest"}`
 
 
 ## [0.2.30] - 2026-01-25

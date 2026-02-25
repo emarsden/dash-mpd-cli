@@ -497,11 +497,9 @@ async fn main () -> Result<()> {
         // Display logs in NDJSON format
         let fmt_layer = tracing_subscriber::fmt::layer()
             .json()
-            .map_writer(move |w| stderr.or_else(w))
-            .compact()
+            .flatten_event(true)
             .with_target(false)
-            .with_ansi(false)
-            .with_timer(timer);
+            .with_ansi(false);
         tracing_subscriber::registry()
             .with(filter_layer)
             .with(fmt_layer)
