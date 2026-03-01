@@ -18,7 +18,7 @@ tokio = { version = "1.49.0", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.44", features = ["attributes"] }
 tracing-subscriber = { version = "0.3.22", features = ["env-filter", "time", "json", "fmt", "std"] }
 time = { version = "0.3.47", features = ["local-offset"] }
-dash-mpd = { version = "0.20.0", default-features = false, features = ["fetch", "compression", "rustls-tls", "scte35", "http2"] }
+dash-mpd = { version = "0.20.1", default-features = false, features = ["fetch", "compression", "rustls", "scte35", "http2"] }
 reqwest = { version = "0.13.2", default-features = false, features = ["gzip", "rustls", "socks", "json", "cookies", "http2"] }
 indicatif = "0.18.4"
 clap = { version = "4.5.60", features = ["cargo", "unicode", "wrap_help"] }
