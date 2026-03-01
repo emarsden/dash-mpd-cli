@@ -1,0 +1,35 @@
+# Test the build for MacOS universal binaries
+#
+
+on: workflow_dispatch
+
+name: Build MacOS universal binary
+
+jobs:
+  build-universal:
+    runs-on: macos-26
+
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: x86_64-apple-darwin,aarch64-apple-darwin
+
+    - uses: mlugg/setup-zig@v2
+
+    - run: |
+        brew install protobuf
+        cargo install --locked cargo-zigbuild
+        cargo zigbuild --release --target universal2-apple-darwin
+
+#         podman pull docker.io/messense/cargo-zigbuild
+#         podman run --rm \
+#           -v ${GITHUB_WORKSPACE}:/io \
+#           -w /io docker.io/messense/cargo-zigbuild \
+#           brew install cmake && \
+#           cargo zigbuild --release --target universal2-apple-darwin
+
+
