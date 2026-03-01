@@ -50,7 +50,7 @@ jobs:
     - name: Generate artifact attestation
       uses: actions/attest-build-provenance@v3
       with:
-        subject-path: 'dash-mpd-cli-linux-amd64'
+        subject-path: target/x86_64-unknown-linux-musl/release/dash-mpd-cli
 
 
   release-linux-aarch64:
@@ -89,7 +89,7 @@ jobs:
     - name: Generate artifact attestation
       uses: actions/attest-build-provenance@v3
       with:
-        subject-path: 'dash-mpd-cli-linux-aarch64'
+        subject-path: target/aarch64-unknown-linux-gnu/release/dash-mpd-cli
 
 
   # Some of the GitHub MacOS runners (M1 processor) do not support nested virtualization, so can't

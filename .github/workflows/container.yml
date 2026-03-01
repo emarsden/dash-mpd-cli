@@ -66,4 +66,3 @@ jobs:
           subject-name: 'ghcr.io/emarsden/dash-mpd-cli'
           subject-digest: ${{ steps.push-to-registry.outputs.digest }}
           push-to-registry: true
-
