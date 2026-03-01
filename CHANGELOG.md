@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.31] - Unreleased
+## [0.2.31] - 2026-03-01
 
 New commandline option `--progress` which accepts options `bar` (the default), `none` and `json`. If
 option `json` is selected, machine-readable progress information is printed to stderr as
