@@ -148,11 +148,23 @@ When multiple video streams are available, choose that with vertical resolution 
 Prefer best quality (and highest bandwidth) representation, or lowest quality. Possible values:
 `best`, `intermediate`, `worst`.
 
+    --prefer-audio-language <LANG>
+
+Preferred language when multiple audio streams tracks with different languages are available. Must
+be in RFC 5646 format (e.g. fr or en-AU). If a preference is not specified and multiple audio
+streams are present, the first one listed in the DASH manifest will be downloaded.
+
+    --prefer-subtitle-language <LANG>
+
+Preferred language when multiple subtitle tracks with different languages are available. Must be in
+RFC 5646 format (e.g. fr or en-AU). If a preference is not specified and multiple subtitle tracks
+are present, the first one listed in the DASH manifest will be downloaded.
+
     --prefer-language <LANG>
 
-Preferred language when multiple audio streams with different languages are available. Must be in
-RFC 5646 format (e.g. fr or en-AU). If a preference is not specified and multiple audio streams are
-present, the first one listed in the DASH manifest will be downloaded.
+Preferred language for both audio stream and subtitles. Must be in RFC 5646 format (e.g. fr or
+en-AU). If a preference is not specified and multiple audio streams and subtitle tracks are present,
+the first one listed in the DASH manifest will be downloaded.
 
     --role-preference <ORDERING>
 
