@@ -1,6 +1,6 @@
 [package]
 name = "dash-mpd-cli"
-version = "0.2.30"
+version = "0.2.31"
 authors = ["Eric Marsden <eric.marsden@risk-engineering.org>"]
 license = "MIT"
 description = "Download media content from a DASH-MPEG or DASH-WebM MPD manifest."
