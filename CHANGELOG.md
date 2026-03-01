@@ -14,6 +14,13 @@ form
    `{"timestamp":"2026-02-25T21:34:31.417298Z","level":"INFO","message":"Fetching the DASH manifest"}`
 
 
+New commandline options `--prefer-audio-language` and `--prefer-subtitle-language`. These function
+in the same way as the existing `--prefer-language` option, but only specify a preference for audio
+streams and for subtitle tracks, respectively. A different preference can be expressed concerning
+the audio language and the subtitle language. The `--prefer-language` commandline option sets a
+preference for both audio language and subtitle language.
+
+
 ## [0.2.30] - 2026-01-25
 
 Add the ability to decrypt media content with the shaka-packager helper application running in its

@@ -250,7 +250,17 @@ async fn main () -> Result<()> {
              .long("prefer-language")
              .value_name("LANG")
              .num_args(1)
+             .long_help("Preferred language when multiple audio streams and subtitle tracks with different languages are available. Must be in RFC 5646 format (e.g. fr or en-AU). If a preference is not specified and multiple audio streams and subtitles are present, the first one listed in the DASH manifest will be downloaded."))
+        .arg(Arg::new("prefer-audio-language")
+             .long("prefer-audio-language")
+             .value_name("LANG")
+             .num_args(1)
              .long_help("Preferred language when multiple audio streams with different languages are available. Must be in RFC 5646 format (e.g. fr or en-AU). If a preference is not specified and multiple audio streams are present, the first one listed in the DASH manifest will be downloaded."))
+        .arg(Arg::new("prefer-subtitle-language")
+             .long("prefer-subtitle-language")
+             .value_name("LANG")
+             .num_args(1)
+             .long_help("Preferred language when multiple subtitle tracks with different languages are available. Must be in RFC 5646 format (e.g. fr or en-AU). If a preference is not specified and multiple subtitle tracks are present, the first one listed in the DASH manifest will be downloaded."))
         .arg(Arg::new("xslt-stylesheet")
              .long("xslt-stylesheet")
              .value_name("STYLESHEET")
@@ -825,6 +835,12 @@ async fn main () -> Result<()> {
     }
     if let Some(lang) = matches.get_one::<String>("prefer-language") {
         dl = dl.prefer_language(lang.clone());
+    }
+    if let Some(lang) = matches.get_one::<String>("prefer-audio-language") {
+        dl = dl.prefer_audio_language(lang.clone());
+    }
+    if let Some(lang) = matches.get_one::<String>("prefer-subtitle-language") {
+        dl = dl.prefer_subtitle_language(lang.clone());
     }
     if let Some(stylesheets) = matches.get_many::<String>("xslt-stylesheet") {
         for stylesheet in stylesheets {
