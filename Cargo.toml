@@ -14,11 +14,11 @@ publish = true
 
 
 [dependencies]
-tokio = { version = "1.49.0", features = ["rt-multi-thread", "macros"] }
+tokio = { version = "1.50.0", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.44", features = ["attributes"] }
 tracing-subscriber = { version = "0.3.22", features = ["env-filter", "time", "json", "fmt", "std"] }
 time = { version = "0.3.47", features = ["local-offset"] }
-dash-mpd = { version = "0.20.1", default-features = false, features = ["fetch", "compression", "rustls", "scte35", "http2"] }
+dash-mpd = { version = "0.20.1", default-features = false, features = ["fetch", "rustls", "compression", "scte35", "http2"] }
 reqwest = { version = "0.13.2", default-features = false, features = ["gzip", "rustls", "socks", "json", "cookies", "http2"] }
 indicatif = "0.18.4"
 clap = { version = "4.5.60", features = ["cargo", "unicode", "wrap_help"] }
@@ -29,8 +29,10 @@ fs-err = "3.3.0"
 number_prefix = "0.4.0"
 url = "2.5.8"
 anyhow = "1.0.102"
-tempfile = "3.25.0"
+tempfile = "3.26.0"
 decrypt-cookies = { version = "0.10.4", optional = true }
+# TMP TMP
+rustls = { version = "0.23.36", default-features = false, features = ["std", "tls12", "brotli", "ring"] }
 
 
 [dev-dependencies]
@@ -58,9 +60,11 @@ assert_fs = "1.1.3"
 predicates = "3.1.4"
 
 [features]
-default = ["cookies"]
-cookies = ["decrypt-cookies"]
+default = ["cookies", "rustls"]
+cookies = ["dep:decrypt-cookies"]
 sandbox = ["dash-mpd/sandbox"]
+native-tls = ["dash-mpd/native-tls", "reqwest/native-tls"]
+rustls = ["dash-mpd/rustls", "reqwest/rustls"]
 
 [profile.release]
 opt-level = "z"  # optimize for size
@@ -70,3 +74,4 @@ codegen-units = 1
 
 [target.'cfg(target_os="macos")'.dependencies]
 decrypt-cookies = { version = "0.10.4", features = ["Safari"], optional = true }
+rustls = { version = "0.23.36", default-features = false, features = ["brotli", "ring"] }
