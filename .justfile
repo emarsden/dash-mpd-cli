@@ -133,11 +133,13 @@ macos-AMD64:
        -w /io docker.io/messense/cargo-zigbuild \
        cargo zigbuild --release --target x86_64-apple-darwin
 
+# The complicated entrypoint is to install protoc (needed to compile the pssh-box crate) before
+# running cargo-zigbuild
 macos-universal:
     podman run --rm -it \
        -v $(pwd):/io \
        -w /io docker.io/messense/cargo-zigbuild \
-       cargo zigbuild --release --target universal2-apple-darwin
+       bash -c "curl -L --output /tmp/protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v34.0/protoc-34.0-linux-x86_64.zip && unzip /tmp/protoc.zip -d /tmp/protoc && mv /tmp/protoc/bin/protoc /usr/bin && cargo zigbuild --release --target universal2-apple-darwin"
 
 
 publish:
