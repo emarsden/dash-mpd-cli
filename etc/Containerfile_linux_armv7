@@ -15,7 +15,7 @@
 
 # static build of MP4Box from GPAC, which is not packaged for Alpine Linux.
 # https://github.com/gpac/gpac/wiki/GPAC-Build-Guide-for-Linux
-FROM --platform=linux/arm/v7 docker.io/alpine:latest AS builder
+FROM --platform=linux/arm/v7 docker.io/alpine:edge AS builder
 WORKDIR /src
 COPY ./ ./
 RUN apk update && \
@@ -33,7 +33,9 @@ RUN apk update && \
     cd /src && git clone --depth 1 --recurse-submodules https://github.com/shaka-project/shaka-packager.git && \
     cd shaka-packager && \
     sed --in-place 's/^.*add_compile_options.*Werror.*/  add_compile_definitions(_LARGEFILE64_SOURCE)/' packager/CMakeLists.txt && \
-    cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug && \
+    cmake -B build -G Ninja \
+       -DCMAKE_BUILD_TYPE=Release \
+       -DCMAKE_POLICY_VERSION_MINIMUM=4.0 && \
     cmake --build build/ && \
     ls -l build/packager && \
     file build/packager/packager && \
@@ -45,7 +47,7 @@ RUN apk update && \
 
 
 # Now build the final image
-FROM --platform=linux/arm/v7 docker.io/alpine:latest
+FROM --platform=linux/arm/v7 docker.io/alpine:edge
 LABEL org.opencontainers.image.description "Download media content from a DASH-MPEG or DASH-WebM MPD manifest."
 LABEL org.opencontainers.image.title "dash-mpd-cli"
 LABEL org.opencontainers.image.url "https://github.com/emarsden/dash-mpd-cli"
