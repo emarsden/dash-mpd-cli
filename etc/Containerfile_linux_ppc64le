@@ -17,7 +17,7 @@
 # distributed in binary form for ppc64le by upstream. It doesn't build on Alpine Linux (with musl-libc)
 # due to a missing function definition concerning UnscaledCycleClock::Frequency() used by the
 # third-party library abseil-cpp. We build on Debian instead and link statically with glibc.
-FROM --platform=linux/ppc64le docker.io/debian:bookworm-slim as debian
+FROM --platform=linux/ppc64le docker.io/debian:trixie-slim as debian
 WORKDIR /src
 RUN apt-get update && apt-get install -y build-essential g++ python3 make cmake zlib1g-dev \
         libssl-dev curl pkgconf git ninja-build file && \
@@ -27,6 +27,7 @@ RUN apt-get update && apt-get install -y build-essential g++ python3 make cmake 
     # sed --in-place 's/^.*add_compile_options.*Werror.*/  add_compile_definitions(_LARGEFILE64_SOURCE)/' packager/CMakeLists.txt && \
     cmake -B build -G Ninja \
        -DCMAKE_BUILD_TYPE=Release \
+       -DCMAKE_POLICY_VERSION_MINIMUM=4.0 \
        -DBUILD_SHARED_LIBS="OFF" \
        -DFULLY_STATIC="ON" && \
     cmake --build build/ && \

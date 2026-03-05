@@ -34,7 +34,9 @@ RUN apk update && \
     cd /src && git clone --depth 1 --recurse-submodules https://github.com/shaka-project/shaka-packager.git && \
     cd shaka-packager && \
     sed --in-place 's/^.*add_compile_options.*Werror.*/  add_compile_definitions(_LARGEFILE64_SOURCE)/' packager/CMakeLists.txt && \
-    cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug && \
+    cmake -B build -G Ninja \
+       -DCMAKE_BUILD_TYPE=Release \
+       -DCMAKE_POLICY_VERSION_MINIMUM=4.0 && \
     cmake --build build/ && \
     ls -l build/packager && \
     file build/packager/packager && \
