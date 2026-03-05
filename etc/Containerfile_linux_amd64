@@ -33,7 +33,7 @@ RUN apk update && \
     apk add --no-cache musl-dev pkgconfig git g++ binutils make zlib-dev zlib-static && \
     git clone --depth 1 https://github.com/gpac/gpac.git && \
     cd gpac && ./configure --static-bin && \
-    make && \
+    make -j 3 && \
     ls -l bin/gcc/
 # here there should be MP4Box
 
