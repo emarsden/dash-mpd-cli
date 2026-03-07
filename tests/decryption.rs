@@ -1,8 +1,8 @@
-/// Tests for decryption support using mp4decrypt and shaka packager
-///
-/// These test cases are from https://refapp.hbbtv.org/videos/. We don't run these tests on CI
-/// infrastructure, because they consume non-negligeable network bandwidth.
-
+//! Tests for decryption support using mp4decrypt and shaka packager
+//
+// These test cases are from https://refapp.hbbtv.org/videos/. We don't run these tests on CI
+// infrastructure, because they consume non-negligeable network bandwidth.
+//
 // To run tests while enabling printing to stdout/stderr
 //
 //    cargo test --test decryption -- --show-output
@@ -213,11 +213,11 @@ fn test_decryption_webm() {
         .output()
         .expect("failed spawning cli");
     let msg = String::from_utf8_lossy(&cli.stdout);
-    if msg.len() > 0 {
+    if !msg.is_empty() {
         println!("dash-mpd-cli stdout: {msg}");
     }
     let msg = String::from_utf8_lossy(&cli.stderr);
-    if msg.len() > 0 {
+    if !msg.is_empty() {
         println!("dash-mpd-cli stderr: {msg}");
     }
     assert!(cli.status.success());
@@ -245,7 +245,7 @@ fn test_decryption_webm() {
         .output()
         .expect("spawning ffmpeg");
     let msg = String::from_utf8_lossy(&ffmpeg.stderr);
-    if msg.len() > 0 {
+    if !msg.is_empty() {
         eprintln!("FFMPEG stderr {msg}");
     }
     // FFmpeg version 8 is now showing an error message "Error parsing Opus packet header" for this content.
