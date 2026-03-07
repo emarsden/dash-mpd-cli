@@ -47,9 +47,8 @@ use axum::response::{Response, IntoResponse};
 use axum::http::{header, StatusCode};
 use axum::body::Body;
 use axum_server::tls_rustls::RustlsConfig;
-use rustls::RootCertStore;
-use rustls::ServerConfig;
-use rustls_pki_types::{CertificateDer, PrivateKeyDer};
+use rustls::{RootCertStore, ServerConfig};
+use rustls_pki_types::{CertificateDer, PrivateKeyDer, PrivatePkcs8KeyDer, pem::PemObject};
 use rustls::server::WebPkiClientVerifier;
 use dash_mpd::{MPD, Period, AdaptationSet, Representation, BaseURL};
 use anyhow::{Context, Result};
@@ -130,7 +129,7 @@ async fn test_add_client_identity() -> Result<(), anyhow::Error> {
     let addr = SocketAddr::from(([127, 0, 0, 1], 6666));
     let mut client_auth_roots = RootCertStore::empty();
     let root_cert = fs::File::open("tests/fixtures/root-CA.crt")?;
-    for maybe_cert in rustls_pemfile::certs(&mut BufReader::new(root_cert)) {
+    for maybe_cert in CertificateDer::pem_reader_iter(&mut BufReader::new(root_cert)) {
         client_auth_roots.add(maybe_cert.unwrap()).unwrap();
     }
     let client_verifier = WebPkiClientVerifier::builder(client_auth_roots.into())
@@ -145,12 +144,12 @@ async fn test_add_client_identity() -> Result<(), anyhow::Error> {
      */
     let cert_file = fs::File::open("tests/fixtures/localhost-cert.crt")?;
     let mut certificates: Vec<CertificateDer<'static>> = Vec::new();
-    for maybe_cert in rustls_pemfile::certs(&mut BufReader::new(cert_file)) {
+    for maybe_cert in CertificateDer::pem_reader_iter(&mut BufReader::new(cert_file)) {
         certificates.push(maybe_cert.unwrap());
     }
     let key_file = fs::File::open("tests/fixtures/localhost-cert.key")?;
     let mut keys: Vec<PrivateKeyDer> = Vec::new();
-    for maybe_key in rustls_pemfile::pkcs8_private_keys(&mut BufReader::new(key_file)) {
+    for maybe_key in PrivatePkcs8KeyDer::pem_reader_iter(&mut BufReader::new(key_file)) {
         keys.push(PrivateKeyDer::Pkcs8(maybe_key.unwrap()));
     }
     keys.reverse();
@@ -168,9 +167,18 @@ async fn test_add_client_identity() -> Result<(), anyhow::Error> {
     tokio::spawn(backend);
     tokio::time::sleep(Duration::from_millis(1000)).await;
     // Check that the initial value of our request counter is zero.
+    #[cfg(feature = "rustls")]
     let client_id = fs::read("tests/fixtures/client-id.pem")?;
+    #[cfg(feature = "rustls")]
     let id = reqwest::Identity::from_pem(&client_id)
-        .context("reading client identity from certificate")?;
+        .context("reading PEM client identity from certificate")?;
+    #[cfg(feature = "native-tls")]
+    let client_cert = fs::read("tests/fixtures/client-cert.crt")?;
+    #[cfg(feature = "native-tls")]
+    let client_key = fs::read("tests/fixtures/client-cert.key")?;
+    #[cfg(feature = "native-tls")]
+    let id =  reqwest::Identity::from_pkcs8_pem(&client_cert, &client_key)
+        .context("reading PKCS8 client identity from certificate")?;
     let crt = fs::read("tests/fixtures/root-CA.crt")?;
     let root_cert = reqwest::Certificate::from_pem(&crt)?;
     let client = reqwest::Client::builder()
@@ -194,6 +202,12 @@ async fn test_add_client_identity() -> Result<(), anyhow::Error> {
                "https://localhost:6666/mpd"])
         .assert()
         .failure();
+    // This test will not work with native-tls, because we don't support passing in the client
+    // certificate private key on the commandline (rustls accepts a single PEM-encoded file with
+    // both the certificate and the key, but native-tls requires them to be passed in as separate
+    // arrays, and we don't want to implement the code to parse out the different keys and
+    // certificates from a single file).
+    #[cfg(feature = "rustls")]
     cargo_bin_cmd!()
         .args(["-v", "-v", "-v",
                "--add-root-certificate", "tests/fixtures/root-CA.crt",
