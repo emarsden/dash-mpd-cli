@@ -1037,7 +1037,7 @@ dependencies = [
 
 [[package]]
 name = "dash-mpd-cli"
-version = "0.2.31"
+version = "0.2.32"
 dependencies = [
  "anyhow",
  "assert_cmd",
@@ -3664,8 +3664,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "758025cb5fccfd3bc2fd74708fd4682be41d99e5dff73c377c0646c6012c73a4"
 dependencies = [
  "aws-lc-rs",
- "brotli",
- "brotli-decompressor",
  "log",
  "once_cell",
  "ring",

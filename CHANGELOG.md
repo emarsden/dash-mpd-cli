@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.2.32] - 2026-03-07
+
+Fix a bug in the progress reporting which led to an incorrect percent value being reported.
+
+Update the version of the `aws-lc-rs` crate used for TLS handling (via `rustls`). The previous
+version had a security-relevant bug in certificate verification.
+
+Migrate from the unmaintained `rustls-pemfile` crate to the `rustls-pki-types` crate.
+
+Migrate from the unmaintained `json` crate to the `jzon` crate.
+
+The application can be built without the `rustls` crate, using only `native-tls` functionality for
+HTTPS via the `reqwest` crate. Build with `--no-default-features` and the `native-tls` feature. In
+this configuration, the `--client-identity-certificate` commandline option only accepts passwordless
+client identities. When built with the `rustls` feature (default), the client identity can be
+specified as a PEM-encoded file containing both the client certificate and the client key.
+
+
 ## [0.2.31] - 2026-03-01
 
 New commandline option `--progress` which accepts options `bar` (the default), `none` and `json`. If
