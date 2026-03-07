@@ -1,8 +1,8 @@
-/// Tests for subtitle support
-///
-/// We don't run these tests on CI infrastructure, because they consume non-negligeable network
-/// bandwidth.
-
+//! Tests for subtitle support
+//
+// We don't run these tests on CI infrastructure, because they consume non-negligeable network
+// bandwidth.
+//
 // To run tests while enabling printing to stdout/stderr
 //
 //    cargo test --test subtitles -- --show-output
@@ -151,8 +151,8 @@ fn test_subtitles_convert_wvtt () {
     let format = FileFormat::from_file(&out).unwrap();
     assert_eq!(format, FileFormat::Mpeg4Part14Video);
     // Check that we fetched the WVTT subtitles
-    assert!(fs::metadata(&subpath_wvtt).is_ok());
-    let meta = ffprobe(&subpath_wvtt).unwrap();
+    assert!(fs::metadata(subpath_wvtt).is_ok());
+    let meta = ffprobe(subpath_wvtt).unwrap();
     assert_eq!(meta.streams.len(), 1);
     let subdata = &meta.streams[0];
     assert_eq!(subdata.codec_type, Some(String::from("data")));
@@ -160,7 +160,7 @@ fn test_subtitles_convert_wvtt () {
     let mut subpath_srt = out.to_path_buf();
     subpath_srt.set_extension("srt");
     let subpath_srt = Path::new(&subpath_srt);
-    assert!(fs::metadata(&subpath_srt).is_ok());
+    assert!(fs::metadata(subpath_srt).is_ok());
     let srt = fs::read_to_string(subpath_srt).unwrap();
     assert!(srt.contains("Vivacissimo!"));
 }

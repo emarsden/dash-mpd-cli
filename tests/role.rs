@@ -1,7 +1,7 @@
-/// Tests for selection-by-role support
-///
-/// We don't run these tests on CI infrastructure, because they consume non-negligeable network
-/// bandwidth.
+//! Tests for selection-by-role support
+//
+// Note: we don't run these tests on CI infrastructure, because they consume non-negligeable network
+// bandwidth.
 
 // To run tests while enabling printing to stdout/stderr
 //
