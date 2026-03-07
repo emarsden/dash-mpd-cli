@@ -70,10 +70,12 @@ impl DownloadProgressBar {
 
 impl ProgressObserver for DownloadProgressBar {
     fn update(&self, percent: u32, bandwidth: u64, message: &str) {
-        let msg = if bandwidth > 500_000 {
+        let msg = if bandwidth == 1 {
+            String::from(message)
+        } else if bandwidth > 500_000 {
             format!("{message} ({:.1} MB/s)", bandwidth as f64 / 1e6)
         } else {
-            format!("{message} ({:3} kB/s)", bandwidth as f64 / 1e3)
+            format!("{message} ({:1} kB/s)", bandwidth as f64 / 1e3)
         };
         if percent <= 100 {
             self.bar.set_position(percent.into());
