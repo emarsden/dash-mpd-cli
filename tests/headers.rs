@@ -1,4 +1,4 @@
-// Testing support for sending various HTTP header (referer, user-agent).
+//! Testing support for sending various HTTP header (referer, user-agent).
 //
 //
 // To run tests while enabling printing to stdout/stderr

@@ -1,4 +1,4 @@
-// Test scaffolding to verify the --client-identity-certificate functionality.
+//! Test scaffolding to verify the --client-identity-certificate functionality.
 //
 // To run tests while enabling printing to stdout/stderr, "cargo test -- --show-output" (from the
 // root crate directory).

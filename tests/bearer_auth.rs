@@ -1,4 +1,4 @@
-// Testing support for Bearer HTTP authorization.
+//! Testing support for Bearer HTTP authorization.
 //
 //
 // To run tests while enabling printing to stdout/stderr

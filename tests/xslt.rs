@@ -1,4 +1,4 @@
-// Dedicated tests for XSLT stylesheet processing
+//! Dedicated tests for XSLT stylesheet processing
 //
 // To run only these tests while enabling printing to stdout/stderr
 //

@@ -1,7 +1,10 @@
-// Test scaffolding to verify the --add-root-certificate functionality.
+//! Test scaffolding to verify the --add-root-certificate functionality.
 //
-// To run tests while enabling printing to stdout/stderr, "cargo test -- --show-output" (from the
-// root crate directory).
+// To run this test while enabling printing to stdout/stderr
+//
+//    cargo test --test root-certificate --show-output
+//
+// This test only works when the crate is built with rustls support.
 //
 // What happens in this test:
 //

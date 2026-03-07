@@ -1,4 +1,4 @@
-// Test network error handling code using a fault-injecting HTTP proxy
+//! Test network error handling code using a fault-injecting HTTP proxy
 //
 // To run tests while enabling printing to stdout/stderr
 //
