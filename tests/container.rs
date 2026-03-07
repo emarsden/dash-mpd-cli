@@ -1,6 +1,6 @@
-/// Tests for functionality when using our docker/podman container
-///
-///
+//! Tests for functionality when using our docker/podman container
+//
+//
 // To run tests while enabling printing to stdout/stderr
 //
 //    cargo test --test container -- --show-output
@@ -56,11 +56,11 @@ fn container_run(args: Vec<&str>) {
         .expect("failed spawning podman");
     if !cli.status.success() {
         let stdout = String::from_utf8_lossy(&cli.stdout);
-        if stdout.len() > 0 {
+        if !stdout.is_empty() {
             println!("Podman stdout> {stdout}");
         }
         let stderr = String::from_utf8_lossy(&cli.stderr);
-        if stderr.len() > 0 {
+        if !stderr.is_empty() {
             println!("Podman stderr> {stderr}");
         }
     }
@@ -83,7 +83,7 @@ fn container_metadata_encoder(p: &Path) -> Option<String> {
         .output()
     {
         let json = String::from_utf8_lossy(&minf.stdout);
-        if let Ok(j) = json::parse(&json) {
+        if let Ok(j) = jzon::parse(&json) {
             if let Some(ea) = j["media"]["track"][0]["Encoded_Application"].as_str() {
                 return Some(String::from(ea));
             }
@@ -336,7 +336,7 @@ fn test_container_decryption_webm() {
         .output()
         .expect("spawning ffmpeg");
     let msg = String::from_utf8_lossy(&ffmpeg.stderr);
-    if msg.len() > 0 {
+    if !msg.is_empty() {
         eprintln!("FFMPEG stderr {msg}");
     }
     // FFmpeg version 8 is now showing an error message "Error parsing Opus packet header" for this content.
