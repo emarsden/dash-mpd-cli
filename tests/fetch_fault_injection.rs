@@ -42,11 +42,11 @@ impl ToxiProxy {
             .expect("failed spawning podman");
         if !pull.status.success() {
             let stdout = String::from_utf8_lossy(&pull.stdout);
-            if stdout.len() > 0 {
+            if !stdout.is_empty() {
                 println!("Podman stdout> {stdout}");
             }
             let stderr = String::from_utf8_lossy(&pull.stderr);
-            if stderr.len() > 0 {
+            if !stderr.is_empty() {
                 println!("Podman stderr> {stderr}");
             }
         }
