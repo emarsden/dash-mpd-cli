@@ -1,6 +1,6 @@
-//! Tests for progressbar and LDJSON logging functionality
-///
-///
+//! Tests for progressbar and NDJSON logging functionality
+//
+//
 // To run tests while enabling printing to stdout/stderr
 //
 //    cargo test --test progressbar -- --show-output
