@@ -631,10 +631,28 @@ async fn main () -> Result<()> {
             }
         }
     }
+    // When built with rustls, we can handle a client identity provided in a single PEM-encoded file
+    // containing both the client certificate and the private key. When the reqwest library is built
+    // with native-tls, it requires the client certificate and private key to be specified
+    // separately in function from_pkcs8_pem. It doesn't seem sensible to have different commandline
+    // options depending on how the application is built, nor it is sensible to reimplement the
+    // rustls code that extracts key and certificate from a single PEM-encoded file, so when built
+    // with native-tls, we can only handle client identities that use no password.
     if let Some(cc) = matches.get_one::<String>("client-identity-certificate") {
         match fs::read(cc) {
             Ok(pem) => {
+                #[cfg(feature = "rustls")]
                 match reqwest::Identity::from_pem(&pem) {
+                    Ok(id) => {
+                        cb = cb.identity(id);
+                    },
+                    Err(e) => {
+                        error!("Can't decode client certificate: {e}");
+                        std::process::exit(8);
+                    },
+                }
+                #[cfg(feature = "native-tls")]
+                match reqwest::Identity::from_pkcs8_pem(&pem, &Vec::<u8>::new()) {
                     Ok(id) => {
                         cb = cb.identity(id);
                     },
