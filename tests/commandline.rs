@@ -1,5 +1,5 @@
-/// Tests for various commandline option behaviour.
-
+//! Tests for various commandline option behaviour.
+//
 // To run tests while enabling printing to stdout/stderr
 //
 //    cargo test --test commandline -- --show-output
