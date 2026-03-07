@@ -1,4 +1,4 @@
-/// Shared code for our test harness.
+//! Shared code for our test harness.
 
 
 use fs_err as fs;
@@ -54,7 +54,7 @@ pub fn ffmpeg_approval(name: &Path) -> bool {
         .output()
         .expect("spawning ffmpeg");
     let msg = String::from_utf8_lossy(&ffmpeg.stderr);
-    if msg.len() > 0 {
+    if !msg.is_empty() {
         println!("ffmpeg stderr: {msg}");
         false
     } else {
@@ -164,7 +164,7 @@ pub fn ffprobe_metadata_title(mp4: &Path) -> Result<u8> {
         .output()
         .expect("spawning ffmpeg");
     assert!(ffprobe.status.success());
-    let parsed = json::parse(&String::from_utf8_lossy(&ffprobe.stdout)).unwrap();
+    let parsed = jzon::parse(&String::from_utf8_lossy(&ffprobe.stdout)).unwrap();
     let title = parsed["format"]["tags"]["title"].as_str().unwrap();
     title.parse().context("parsing title metadata")
 }
