@@ -34,7 +34,7 @@ fn container_metadata_encoder(p: &Path) -> Option<String> {
         .output()
     {
         let json = String::from_utf8_lossy(&minf.stdout);
-        if let Ok(j) = json::parse(&json) {
+        if let Ok(j) = jzon::parse(&json) {
             if let Some(ea) = j["media"]["track"][0]["Encoded_Application"].as_str() {
                 return Some(String::from(ea));
             }
