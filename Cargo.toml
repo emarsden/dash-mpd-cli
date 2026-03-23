@@ -16,7 +16,7 @@ publish = true
 [dependencies]
 tokio = { version = "1.50.0", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.44", features = ["attributes"] }
-tracing-subscriber = { version = "0.3.22", features = ["env-filter", "time", "json", "fmt", "std"] }
+tracing-subscriber = { version = "0.3.23", features = ["env-filter", "time", "json", "fmt", "std"] }
 time = { version = "0.3.47", features = ["local-offset"] }
 dash-mpd = { version = "0.20.2", default-features = false, features = ["fetch", "compression", "scte35", "http2"] }
 reqwest = { version = "0.13.2", default-features = false, features = ["gzip", "socks", "json", "cookies", "http2", "rustls"] }
@@ -38,7 +38,7 @@ rustls = { version = "0.23.37", features = ["aws_lc_rs"] }
 rustls-pki-types = "1.14.0"
 tokio = { version = "1.50.0", features = ["rt-multi-thread", "time", "macros"] }
 tokio-rustls = "0.26.4"
-tracing-subscriber = { version = "0.3.22", features = ["env-filter", "json", "fmt", "time", "std"] }
+tracing-subscriber = { version = "0.3.23", features = ["env-filter", "json", "fmt", "time", "std"] }
 test-log = { version = "0.2.19", features = ["trace"] }
 http = "1.4.0"
 hyper = "1.8.1"
