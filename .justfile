@@ -92,6 +92,7 @@ podman-build-multiarch:
     podman manifest push --all localhost/dash-mpd-cli ghcr.io/emarsden/dash-mpd-cli
     echo === Build container for PPC64LE
     podman build -f etc/Containerfile_linux_ppc64le --arch ppc64le --tag dash-mpd-cli-linux-ppc64le --manifest dash-mpd-cli .
+    podman manifest push --all localhost/dash-mpd-cli ghcr.io/emarsden/dash-mpd-cli
     echo === To push container to registry:
     echo ===   podman login ghcr.io
     echo ===   podman manifest push --all localhost/dash-mpd-cli ghcr.io/emarsden/dash-mpd-cli
