@@ -63,6 +63,7 @@ RUN apk update && \
     chown root:root /content && \
     chmod a=rwx,o+t /content
 
+# 202602: the shaka-packager is enormous, 114MB!
 COPY --from=docker.io/google/shaka-packager:latest --chown=root:root \
     /usr/bin/packager /usr/local/bin/shaka-packager
 COPY --from=rustbuilder --chown=root:root --chmod=755 \
