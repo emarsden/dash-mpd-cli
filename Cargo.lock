@@ -4,18 +4,6 @@ version = 4
 
 [[package]]
 name = "TinyUFO"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2dac305af3c659b7f9929e6bfae6499e7cd4446e60e19f8049aed67ebfa1969d"
-dependencies = [
- "ahash",
- "crossbeam-queue",
- "crossbeam-skiplist",
- "flurry",
-]
-
-[[package]]
-name = "TinyUFO"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7507d942373e5064fd15618870e2c0c6cd2d6aa3918d93f8f104227859d5356a"
@@ -162,7 +150,7 @@ version = "1.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "40c48f72fd53cd289104fc64099abca73db4166ad86ea0b4341abe65af83dadc"
 dependencies = [
- "windows-sys 0.61.2",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -173,7 +161,7 @@ checksum = "291e6a250ff86cd4a820112fb8898808a366d8f9f58ce16d1f538353ad55747d"
 dependencies = [
  "anstyle",
  "once_cell_polyfill",
- "windows-sys 0.61.2",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -635,39 +623,11 @@ dependencies = [
 
 [[package]]
 name = "chromium-crypto"
-version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bf1449d7e4afc6a2b3815ceb6c3e50a569ce4e1062563634fcdcf30e942a6fb8"
-dependencies = [
- "TinyUFO 0.5.0",
- "aead",
- "aes",
- "aes-gcm",
- "base64",
- "block-padding",
- "cbc",
- "cfg-if",
- "chacha20poly1305",
- "keyring",
- "pbkdf2",
- "secret-service",
- "serde",
- "serde_json",
- "sha1",
- "snafu",
- "tokio",
- "tracing",
- "windows",
- "winnow 0.7.15",
-]
-
-[[package]]
-name = "chromium-crypto"
 version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8e30165997a3f88e3e7ca044c896f0a5560f32cf604419aaefacd8beaca6f301"
 dependencies = [
- "TinyUFO 0.6.0",
+ "TinyUFO",
  "aead",
  "aes",
  "aes-gcm",
@@ -1085,8 +1045,7 @@ dependencies = [
  "axum-server",
  "clap",
  "dash-mpd",
- "decrypt-cookies 0.10.4",
- "decrypt-cookies 0.11.0",
+ "decrypt-cookies",
  "ffprobe",
  "file-format 0.29.0",
  "fs-err",
@@ -1138,27 +1097,6 @@ checksum = "be1e0bca6c3637f992fc1cc7cbc52a78c1ef6db076dbf1059c4323d6a2048376"
 
 [[package]]
 name = "decrypt-cookies"
-version = "0.10.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6d35d9d9ce3cd6bb324b759b7b5408b2e721f334cae7d26e13e713909808b5a2"
-dependencies = [
- "anyhow",
- "chromium-crypto 0.4.2",
- "chrono",
- "dirs",
- "rawcopy-rs-next",
- "rayon",
- "reqwest 0.12.28",
- "rust-ini",
- "sea-orm",
- "serde",
- "snafu",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "decrypt-cookies"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f829d6b5870d6c6b51d97621d7243d558a58988e2382fb0dac04e64caaaf2ad7"
@@ -1166,7 +1104,7 @@ dependencies = [
  "anyhow",
  "async-trait",
  "binary-cookies",
- "chromium-crypto 0.5.1",
+ "chromium-crypto",
  "chrono",
  "dirs",
  "pastey",
@@ -1267,7 +1205,7 @@ dependencies = [
  "libc",
  "option-ext",
  "redox_users",
- "windows-sys 0.61.2",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -1454,7 +1392,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
 dependencies = [
  "libc",
- "windows-sys 0.61.2",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -2753,7 +2691,7 @@ version = "0.50.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7957b9740744892f114936ab4a57b3f487491bbeafaf8083688b16841a4240e5"
 dependencies = [
- "windows-sys 0.61.2",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -3746,7 +3684,7 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys",
- "windows-sys 0.61.2",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -3805,7 +3743,7 @@ dependencies = [
  "security-framework 3.7.0",
  "security-framework-sys",
  "webpki-root-certs",
- "windows-sys 0.61.2",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -4242,7 +4180,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3a766e1110788c36f4fa1c2b71b387a7815aa65f88ce0229841826633d93723e"
 dependencies = [
  "libc",
- "windows-sys 0.61.2",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -4517,7 +4455,7 @@ dependencies = [
  "getrandom 0.4.2",
  "once_cell",
  "rustix",
- "windows-sys 0.61.2",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -4527,7 +4465,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "230a1b821ccbd75b185820a1f1ff7b14d21da1e442e22c0863ea5f08771a8874"
 dependencies = [
  "rustix",
- "windows-sys 0.61.2",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -4923,7 +4861,7 @@ checksum = "f2f6fb2847f6742cd76af783a2a2c49e9375d0a111c7bef6f71cd9e738c72d6e"
 dependencies = [
  "memoffset",
  "tempfile",
- "windows-sys 0.61.2",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -5260,7 +5198,7 @@ version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
 dependencies = [
- "windows-sys 0.61.2",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
