@@ -145,7 +145,7 @@ jobs:
 
     # We need path-type of inherit to include the protoc compiler on the $PATH.
     # See https://github.com/msys2/setup-msys2
-    - uses: msys2/setup-msys2@v2.31.0
+    - uses: msys2/setup-msys2@v2.31.1
       with:
         msystem: UCRT64
         update: true
