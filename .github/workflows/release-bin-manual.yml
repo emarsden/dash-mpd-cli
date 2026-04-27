@@ -35,7 +35,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install protobuf-compiler
 
       - uses: actions/checkout@v6
-      - uses: taiki-e/upload-rust-binary-action@v1.30.0
+      - uses: taiki-e/upload-rust-binary-action@v1.30.2
         with:
           bin: dash-mpd-cli
           include: LICENSE-MIT,README.md,CHANGELOG.md
