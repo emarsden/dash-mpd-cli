@@ -39,36 +39,39 @@ The container is currently available for the following **platforms**:
 
 
 
-```admonish info title="Advantages of running in a container"
-Why run the application in a container, instead of natively on your machine?
-
-- Good internet hygiene. It’s much safer, because the container is **sandboxed**: it can’t modify
-  your host machine, except for writing downloaded media to the directory you specify. This 
-  is a very good idea when running random software you downloaded from the internet! The xz
-  backdoor attempt discovered in 2024 shows how much effort malicious actors are willing to make to
-  compromise peoples’ computers; don’t make it easier than it should be.
-
-- No need to install the various helper applications (ffmpeg, mkvmerge, mp4decrypt, MP4Box),
-  which are already present in the container.
-
-- Automatically run the latest version of dash-mpd-cli and the various helper applications (the
-  container runtime can pull the latest version for you automatically).
-
-- Podman and Docker also allow you to set various limits on the resources allocated to the
-  container (number of CPUs, memory); see their respective documentation.
-```
+> [!NOTE]
+>
+> **Advantages of running in a container**
+>
+> Why run the application in a container, instead of natively on your machine?
+>
+> - Good internet hygiene. It’s much safer, because the container is **sandboxed**: it can’t modify
+>   your host machine, except for writing downloaded media to the directory you specify. This
+>   is a very good idea when running random software you downloaded from the internet! The xz
+>   backdoor attempt discovered in 2024 shows how much effort malicious actors are willing to make to
+>   compromise peoples’ computers; don’t make it easier than it should be.
+>
+> - No need to install the various helper applications (ffmpeg, mkvmerge, mp4decrypt, MP4Box),
+>   which are already present in the container.
+>
+> - Automatically run the latest version of dash-mpd-cli and the various helper applications (the
+>   container runtime can pull the latest version for you automatically).
+>
+> - Podman and Docker also allow you to set various limits on the resources allocated to the
+>   container (number of CPUs, memory); see their respective documentation.
 
 Unlike running software in a virtual machine, there is only a negligeable performance penalty to
 running in a container. That’s not quite true: if you’re running the container on an aarch64 (“Apple
 Silicon”) Mac, Podman will set up a virtual machine for you. On Windows, Podman will set up a
 low-overhead WSL2 virtual machine for you.
 
-```admonish tip
-I recommend installing [Podman](https://podman.io/) because it’s fully free software, whereas Docker
-is partly commercial. Podman is also able to run containers “rootless”, without special privileges,
-which is good for security, and doesn’t require a background daemon. Podman has a docker-compatible
-commandline interface.
-```
+> [!NOTE]
+>
+> I recommend installing [Podman](https://podman.io/) because it’s fully free software, whereas Docker
+> is partly commercial. Podman is also able to run containers “rootless”, without special privileges,
+> which is good for security, and doesn’t require a background daemon. Podman has a docker-compatible
+> commandline interface.
+
 
 
 ## Running the container
@@ -76,13 +79,16 @@ commandline interface.
 If you’re running on Microsoft Windows or MacOS, you will need to start the virtual machine that’s
 used to run the container:
 
-~~~admonish example title="Start up the container runtime (only Windows/MacOS)"
-```shell
-podman machine start
-```
+> [!NOTE]
+>
+> **Start up the container runtime (only Windows/MacOS)**
+>
+> ```shell
+> podman machine start
+> ```
+>
+> (Replace `podman` by `docker` if you prefer that option.)
 
-(Replace `podman` by `docker` if you prefer that option.)
-~~~
 
 This step is not necessary on Linux.
 
@@ -90,19 +96,24 @@ You can then fetch the container image (currently around 220 MB, though this dep
 architecture) from the GitHub container registry `ghcr.io` and save it to your local disk for later
 use:
 
-~~~admonish example title="Fetch the container image"
-```shell
-podman pull ghcr.io/emarsden/dash-mpd-cli
-```
-~~~
+> [!NOTE]
+>
+> **Fetch the container image**
+>
+> ```shell
+> podman pull ghcr.io/emarsden/dash-mpd-cli
+> ```
+
 
 Then to download some content from an MPD manifest:
 
-~~~admonish example title="Run dash-mpd-cli in the container"
-```shell
-podman run --rm --tty -v .:/content ghcr.io/emarsden/dash-mpd-cli https://example.com/manifest.mpd
-```
-~~~
+> [!NOTE]
+>
+> **Run dash-mpd-cli in the container**
+>
+> ```shell
+> podman run --rm --tty -v .:/content ghcr.io/emarsden/dash-mpd-cli https://example.com/manifest.mpd
+> ```
 
 This should save the media to a file named something like `example.com_manifest.mp4` 💪 (you can
 change this name by adding `-o foo.mp4`). It will remove the container image from your local storage
@@ -121,15 +132,17 @@ podman run --rm --tty --pull=newer \
 If you don't use the `--rm` argument, you can later delete the image if you no longer need it using
 `podman image rm` with the image id shown by `podman images`, as illustrated below:
 
-~~~admonish example title="Delete the container image from your local disk"
-```shell
-% podman images
-REPOSITORY                       TAG         IMAGE ID      CREATED         SIZE
-ghcr.io/emarsden/dash-mpd-cli    latest      ae6971bf21ae  4 days ago      216 MB
-...
-% podman image rm ae6971bf21ae
-```
-~~~
+> [!NOTE]
+>
+> **Delete the container image from your local disk**
+>
+> ```shell
+> % podman images
+> REPOSITORY                       TAG         IMAGE ID      CREATED         SIZE
+> ghcr.io/emarsden/dash-mpd-cli    latest      ae6971bf21ae  4 days ago      216 MB
+> ...
+> % podman image rm ae6971bf21ae
+> ```
 
 
 ## Mounting a directory into the container
@@ -137,7 +150,7 @@ ghcr.io/emarsden/dash-mpd-cli    latest      ae6971bf21ae  4 days ago      216 M
 By default, your local disk is neither readable nor writable by the application running in the
 container (this is a major security advantage!). Since you want to write the downloaded media onto
 your local disk, you need to mount (bind) a directory into the container, using podman’s `-v`
-commandline option. 
+commandline option.
 
 In the commandline show above, your current working directory (`.`) will be mounted in the container
 as `/content`, which is always the working directory in the container. This means that an output
@@ -154,7 +167,7 @@ If the stylesheet is in the `rewrites` directory, for example:
 
 ```shell
 podman run --rm --tty --pull=newer \
-  -v .:/content \ 
+  -v .:/content \
   --xslt-stylesheet rewrites/my-rewrites.xslt \
   ghcr.io/emarsden/dash-mpd-cli \
   -v <MPD-URL> -o foo.mp4

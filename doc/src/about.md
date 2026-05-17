@@ -34,7 +34,7 @@ This application builds on the [dash-mpd](https://crates.io/crates/dash-mpd) cra
 
 ## Features
 
-The following features are supported: 
+The following features are supported:
 
 - Multi-period content. The media in the different streams will be saved in a single media container
   if the formats are compatible (same resolution, codecs, bitrate and so on) and the
@@ -91,12 +91,12 @@ The following features are supported:
   by Netflix and other services), Amazon MediaTailor, Google’s Shaka packager, Microsoft’s Azure
   Media Services, and Unified Streaming. Test content is served by different CDNs including Akamai
   and various telecom providers.
-  
+
 - dash-mpd-cli is written in the Rust programming language, meaning that it’s high performance and
   protected from a variety of vulnerabilities that can affect more traditional software.
 
 
-The following are not supported: 
+The following are not supported:
 
 - **Live streams** (dynamic MPD manifests), that are used for live streaming/OTT TV are not really
   supported. This is because we don’t implement the clock-related throttling that is needed to only

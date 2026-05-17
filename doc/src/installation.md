@@ -33,7 +33,7 @@ You should also install the following **dependencies**:
   from a multi-period manifest. The ffprobe binary (distributed with ffmpeg) is required alongside
   the ffmpeg binary. See the `--ffmpeg-location` commandline argument if this is installed in a
   non-standard location.
-  
+
 - [vlc](https://www.videolan.org/vlc/) as an alternative application for muxing audio and video
   streams (sometimes VLC is able to mux certain streams that ffmpeg doesn’t support). See the
   `--vlc-location` commandline argument if this is installed in a non-standard location. Also see

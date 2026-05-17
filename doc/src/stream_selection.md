@@ -10,7 +10,7 @@ video stream (the Representation, in DASH terminology) you want:
   intermediate quality, that applies both to the video and the audio streams (when they are
   separate). The default behaviour is to prefer the stream with the lowest quality (and lowest
   download size).
-  
+
 - `--prefer-video-width` to request video whose width is closest to the specified number of pixels.
 
 - `--prefer-video-height` to request video whose height is closest to the specified number of pixels.
@@ -21,7 +21,7 @@ video stream (the Representation, in DASH terminology) you want:
   specified in FourCC format. You can see the video codecs which are available for a manifest by
   using the `--simulate` commandline option (if full `family.subfamily` codec names are specified,
   you can use only the family part of the name).
-  
+
 - `--want-video-id` to specify which video Representation to download by its id. The provided
   substring is used as a filter on available video Representations: if the full id is provided this
   selects the specified Representation, and if only a substring of the id is specified, this
@@ -91,5 +91,3 @@ The list belows specifies the **order** in which these preferences are handled:
 
 - If more than one stream remains under consideration after all the preceding steps, select the
   first stream that appears in the XML of the DASH manifest.
-
-

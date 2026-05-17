@@ -23,7 +23,7 @@ present on your `PATH`, you will need to specify their location using one of the
 `--mkvmerge-location`, `--ffmpeg-location`, `--vlc-location` and `--mp4box-location`.
 
 The choice of external muxer depends on the filename extension of the path supplied to `--output`
-or `-o`: 
+or `-o`:
 
 - `.mkv`: call mkvmerge first, then if that fails call ffmpeg, then try MP4Box
 - `.mp4`: call ffmpeg first, then if that fails call vlc, then try MP4Box
@@ -64,4 +64,3 @@ mkvmerge or the [concat filter of ffmpeg](https://ffmpeg.org/ffmpeg-filters.html
 argument). Concatenation can be slow, because it may require re-encoding of the different media
 streams. If the concatenation fails, the periods will be retained as separate files, as specified
 above.
-

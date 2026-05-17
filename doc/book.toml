@@ -3,11 +3,11 @@ title = "Using dash-mpd-cli"
 authors = ["Eric Marsden <eric.marsden@risk-engineering.org>"]
 description = "User manual for the dash-mpd-cli commandline application."
 language = "en"
-multilingual = false
 src = "src"
 
 
 [output.html]
 git-repository-url = "https://github.com/emarsden/dash-mpd-cli"
-git-repository-icon = "fa-github"
+git-repository-icon = "fab-github"
 smart-punctuation = true
+admonitions = true
