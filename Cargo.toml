@@ -22,7 +22,7 @@ dash-mpd = { version = "0.20.3", default-features = false, features = ["fetch", 
 reqwest = { version = "0.13.3", default-features = false, features = ["gzip", "socks", "json", "cookies", "http2", "rustls"] }
 indicatif = "0.18.4"
 clap = { version = "4.5.60", features = ["cargo", "unicode", "wrap_help"] }
-serde_json = "1.0.149"
+serde_json = "1.0.150"
 json-escape = "0.3.1"
 versions = "7.0.0"
 fs-err = "3.3.0"
