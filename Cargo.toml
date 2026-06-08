@@ -41,7 +41,7 @@ tokio-rustls = "0.26.4"
 tracing-subscriber = { version = "0.3.23", features = ["env-filter", "json", "fmt", "time", "std"] }
 test-log = { version = "0.2.20", features = ["trace"] }
 http = "1.4.1"
-hyper = "1.9.0"
+hyper = "1.10.1"
 hyper-util = "0.1.20"
 axum = { version = "0.8.9", features = ["tokio", "http1"] }
 axum-auth = "0.8.1"
