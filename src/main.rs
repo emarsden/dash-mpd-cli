@@ -650,6 +650,7 @@ async fn main () -> Result<()> {
     // rustls code that extracts key and certificate from a single PEM-encoded file, so when built
     // with native-tls, we can only handle client identities that use no password.
     if let Some(cc) = matches.get_one::<String>("client-identity-certificate") {
+        #[allow(unused_variables)]
         match fs::read(cc) {
             Ok(pem) => {
                 #[cfg(feature = "rustls")]
