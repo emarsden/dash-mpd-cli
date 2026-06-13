@@ -268,6 +268,7 @@ fn test_container_decryption_playready_cenc () {
     }
     container_run(vec!["-v", "-o", &out.to_string_lossy(),
                        "--quality", "worst",
+                       "--ignore-content-type",
                        "--key", "43215678123412341234123412341236:12341234123412341234123412341236",
                        mpd]);
     check_file_size_approx(&outpath, 26_420_624);
@@ -287,6 +288,7 @@ fn test_container_decryption_marlin_cenc () {
     }
     container_run(vec!["-v", "-o", &out.to_string_lossy(),
                        "--quality", "worst",
+                       "--ignore-content-type",
                        "--key", "43215678123412341234123412341234:12341234123412341234123412341234",
                        mpd]);
     check_file_size_approx(&outpath, 14_357_917);
@@ -382,6 +384,7 @@ fn test_container_muxers_mkv () {
     }
     container_run(vec!["-v", "-o", &out.to_string_lossy(),
                        "--quality", "worst",
+                       "--ignore-content-type",
                        "--muxer-preference", "mkv:ffmpeg",
                        mpd]);
     check_file_size_approx(&outpath, 6_652_846);
@@ -396,6 +399,7 @@ fn test_container_muxers_mkv () {
     let outpath = TMP.join(out);
     container_run(vec!["-v", "-o", &out.to_string_lossy(),
                        "--quality", "worst",
+                       "--ignore-content-type",
                        "--muxer-preference", "mkv:mkvmerge",
                        mpd]);
     check_file_size_approx(&outpath, 6_652_846);
