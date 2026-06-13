@@ -154,7 +154,11 @@ async fn test_add_root_cert() -> Result<(), anyhow::Error> {
         .expect("failure spawning cargo run / dash-mpd-cli");
     assert!(!failed.status.success());
     let stderr = String::from_utf8_lossy(&failed.stderr);
+    if !stderr.contains("UnknownIssuer") {
+        eprintln!("stderr did not contain magic string UnknownIssuer: {stderr}");
+    }
     // we are assuming that we build reqwest with rustls here, rather than with native-tls
+    #[cfg(feature = "rustls")]
     assert!(stderr.contains("UnknownIssuer"));
     let cli = Command::new("cargo")
         .args(["run", "--no-default-features", "--",
