@@ -11,7 +11,7 @@ jobs:
         with:
            fetch-depth: 0
 
-      - uses: dtolnay/rust-toolchain@nightly
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
 
       - name: Install protobuf compiler
         run: sudo apt-get update && sudo apt-get install protobuf-compiler
@@ -43,13 +43,13 @@ jobs:
       - run: cargo doc --no-deps --all-features
 
   build-macos:
-    runs-on: macos-14
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v6.0.2
       with:
          fetch-depth: 0
 
-    - uses: dtolnay/rust-toolchain@stable
+    - uses: actions-rust-lang/setup-rust-toolchain@v1
 
     - name: install protobuf compiler
       run: brew install protobuf cmake
@@ -106,7 +106,7 @@ jobs:
       with:
          fetch-depth: 0
 
-    - uses: dtolnay/rust-toolchain@stable
+    - uses: actions-rust-lang/setup-rust-toolchain@v1
 
     # We need path-type of inherit to include important utility applications such as podman,
     # mp4decrypt, shaka-packager, ffmpeg, xsltproc on the $PATH for our tests. To be more precise,
