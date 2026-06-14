@@ -44,13 +44,11 @@ jobs:
 
   build-macos:
     runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v6.0.2
+    uses: actions/checkout@v6.0.2
       with:
          fetch-depth: 0
-
-    - uses: actions-rust-lang/setup-rust-toolchain@v1
-
+    uses: actions-rust-lang/setup-rust-toolchain@v1
+    steps:
     - name: install protobuf compiler
       run: brew install protobuf cmake
 
