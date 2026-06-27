@@ -7,7 +7,7 @@ jobs:
     name: dash-mpd-cli check/nightly
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
         with:
            fetch-depth: 0
 
@@ -45,7 +45,7 @@ jobs:
   build-macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
         with:
           fetch-depth: 0
       - uses: actions-rust-lang/setup-rust-toolchain@v1
@@ -101,7 +101,7 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v6.0.2
+    - uses: actions/checkout@v6.0.3
       with:
          fetch-depth: 0
     - uses: actions-rust-lang/setup-rust-toolchain@v1
@@ -111,7 +111,7 @@ jobs:
     # we need in addition to the standard UCRT paths, /c/ProgramData/chocolatey/bin and
     # /c/windows/system32.
     # See https://github.com/msys2/setup-msys2
-    - uses: msys2/setup-msys2@v2.31.1
+    - uses: msys2/setup-msys2@v2.32.0
       with:
         msystem: UCRT64
         update: true
