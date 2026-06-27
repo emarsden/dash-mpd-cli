@@ -504,7 +504,7 @@ async fn main () -> Result<()> {
     // TODO: add --mtime arg (Last-modified header)
     let matches = clap.get_matches();
 
-    let time_fmt = time::format_description::parse("[hour]:[minute]:[second]").unwrap();
+    let time_fmt = time::format_description::parse_borrowed::<3>("[hour]:[minute]:[second]").unwrap();
     let time_offset = time::UtcOffset::current_local_offset()
         .unwrap_or(time::UtcOffset::UTC);
     let timer = tracing_subscriber::fmt::time::OffsetTime::new(time_offset, time_fmt);
