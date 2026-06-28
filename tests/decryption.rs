@@ -32,6 +32,7 @@ fn test_decryption_widevine_cenc () {
     cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
+               "--ignore-content-type",
                "--key", "43215678123412341234123412341237:12341234123412341234123412341237",
                "--key", "43215678123412341234123412341236:12341234123412341234123412341236",
                "-o", &out.to_string_lossy(), mpd])
@@ -55,6 +56,7 @@ fn test_decryption_widevine_cbcs () {
     cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
+               "--ignore-content-type",
                "--key", "43215678123412341234123412341237:12341234123412341234123412341237",
                "--key", "43215678123412341234123412341236:12341234123412341234123412341236",
                "-o", &out.to_string_lossy(), mpd])
@@ -79,6 +81,7 @@ fn test_decryption_playready_cenc () {
     cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
+               "--ignore-content-type",
                "--key", "43215678123412341234123412341236:12341234123412341234123412341236",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
@@ -101,6 +104,7 @@ fn test_decryption_marlin_cenc () {
     cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
+               "--ignore-content-type",
                "--key", "43215678123412341234123412341234:12341234123412341234123412341234",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
@@ -123,6 +127,7 @@ fn test_decryption_marlin_cbcs () {
     cargo_bin_cmd!()
         .args(["-v",
                "--quality", "worst",
+               "--ignore-content-type",
                "--key", "43215678123412341234123412341234:12341234123412341234123412341234",
                "-o", &out.to_string_lossy(), mpd])
         .assert()
