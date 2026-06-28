@@ -537,7 +537,7 @@ async fn main () -> Result<()> {
             .with(filter_layer)
             .with(fmt_layer)
             .init();
-    };
+    }
 
     if ! matches.get_flag("no-version-check") {
         let _ = check_newer_version().await;
@@ -545,7 +545,7 @@ async fn main () -> Result<()> {
     #[cfg(feature = "cookies")]
     if matches.get_flag("list-cookie-sources") {
         info!("On this computer, cookies are available from the following browsers:");
-        for (browser, count) in list_cookie_sources().await.iter() {
+        for (browser, count) in &list_cookie_sources().await {
             info!("  {browser:?} ({count} cookies)");
         }
         std::process::exit(3);
@@ -563,7 +563,7 @@ async fn main () -> Result<()> {
     if let Some(browser_name) = matches.get_one::<String>("cookies-from-browser") {
         let cookies = read_browser_cookies(browser_name).await?;
         let jar =  reqwest::cookie::Jar::default();
-        for (header, url_str) in cookies.iter() {
+        for (header, url_str) in &cookies {
             if let Ok(url) = reqwest::Url::parse(url_str) {
                 jar.add_cookie_str(header, &url);
             }
