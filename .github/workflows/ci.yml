@@ -7,7 +7,7 @@ jobs:
     name: dash-mpd-cli check/nightly
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v7.0.0
         with:
            fetch-depth: 0
 
@@ -45,7 +45,7 @@ jobs:
   build-macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
       - uses: actions-rust-lang/setup-rust-toolchain@v1
@@ -101,7 +101,7 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v6.0.3
+    - uses: actions/checkout@v7.0.0
       with:
          fetch-depth: 0
     - uses: actions-rust-lang/setup-rust-toolchain@v1
