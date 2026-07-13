@@ -45,25 +45,27 @@ jobs:
   build-macos:
     runs-on: macos-latest
     steps:
+      - uses: actions-rust-lang/setup-rust-toolchain@v1.17.0
+
       - uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
-      - name: install protobuf compiler
+
+      - name: Install protobuf compiler
         run: brew install protobuf cmake
 
-      - uses: actions-rust-lang/setup-rust-toolchain@v1.17.0
-
-      - run: cargo build --jobs 1 --verbose
+      - name: Build binary
+        run: cargo build --jobs 1 --verbose
 
       # The "|| true" on upgrade is to work around homebrew conflicts between GitHub-installed Python versions
       # and those required by our packages.
-      - name: install GPAC/MP4Box
+      - name: Install GPAC/MP4Box
         run: |
           brew update
           brew upgrade || true
           HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1 brew install gpac
 
-      - name: install ffmpeg
+      - name: Install ffmpeg
         run: brew install ffmpeg
 
       - name: Install Bento4 mp4decrypt
@@ -81,14 +83,11 @@ jobs:
           mv /tmp/shaka-packager /usr/local/bin
           chmod +x /usr/local/bin/shaka-packager
 
-      - name: install xsltproc
+      - name: Install xsltproc
         run: brew install libxslt
 
-      - uses: actions-rust-lang/setup-rust-toolchain@v1.17.0
-
-      - run: cargo test --jobs 1 -- --show-output
-        env:
-          DOCKER: "docker"
+      - name: Run tests
+        run: cargo test --jobs 1 -- --show-output
 
 
   build-windows:
