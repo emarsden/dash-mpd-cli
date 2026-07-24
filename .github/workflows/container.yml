@@ -6,13 +6,11 @@
 
 name: Build container image
 
-# This is currently needed to build the http3 functionality in the reqwest crate
-env:
-  RUSTFLAGS: '--cfg reqwest_unstable'
-
 on: workflow_dispatch
 
 env:
+  # This is currently needed to build the http3 functionality in the reqwest crate
+  RUSTFLAGS: '--cfg reqwest_unstable'
   REGISTRY_USER: ${{ github.actor }}
   REGISTRY_PASSWORD: ${{ github.token }}
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
