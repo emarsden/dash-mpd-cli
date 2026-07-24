@@ -107,7 +107,7 @@ jobs:
     - uses: mlugg/setup-zig@v2
 
     - run: |
-        brew install protobuf
+        brew install rust
         cargo install --locked cargo-zigbuild
         cargo zigbuild --release --target universal2-apple-darwin
 
