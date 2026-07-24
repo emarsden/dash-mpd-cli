@@ -109,8 +109,8 @@ jobs:
 
     - run: |
         brew install rustup
-        rustup install stable-x86_64-apple-darwin
         rustup install stable-aarch64-apple-darwin
+        rustup target add x86_64-apple-darwin
         cargo install --locked cargo-zigbuild
         cargo zigbuild --release --target universal2-apple-darwin
 
