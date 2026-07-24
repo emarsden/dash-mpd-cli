@@ -258,7 +258,7 @@ async fn main () -> Result<()> {
              .long("quality")
              .num_args(1)
              .value_parser(["best", "intermediate", "worst"])
-             .help("Prefer best quality (and highest bandwidth) representation, or lowest quality."))
+             .help("Prefer best quality (and highest bandwidth) representation, or lowest quality. Default is the worst quality (smallest file size)."))
         .arg(Arg::new("prefer-language")
              .long("prefer-language")
              .value_name("LANG")
