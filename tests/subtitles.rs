@@ -17,7 +17,7 @@ use assert_fs::{prelude::*, TempDir};
 use ffprobe::ffprobe;
 use file_format::FileFormat;
 use test_log::test;
-use common::check_file_size_approx;
+use common::{check_file_size_approx, check_media_duration};
 
 
 #[test]
@@ -126,6 +126,35 @@ fn test_subtitles_vtt () {
     assert!(vtt.contains("Hurry Emo!"));
 }
 
+
+// Fragmented text/vtt subtitles using SegmentTemplate>SegmentTimeline addressing
+#[tokio::test]
+async fn test_subtitles_vtt_fragments () {
+    if env::var("CI").is_ok() {
+        return;
+    }
+    let mpd = "https://gcp.emea-free.prd.media.max.com/global/6703e8d6-055c-5897-9006-d6d75f11e4b8/11_dbbb02_fallback.mpd";
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("cnn-subs.mp4");
+    let mut subpath_vtt = out.to_path_buf();
+    subpath_vtt.set_extension("vtt");
+    let subpath_vtt = Path::new(&subpath_vtt);
+    cargo_bin_cmd!()
+        .args(["-v",
+               "--quality", "worst",
+               "--write-subs",
+               "-o", &out.to_string_lossy(), mpd])
+        .assert()
+        .success();
+    assert!(fs::metadata(subpath_vtt).is_ok());
+    let format = FileFormat::from_file(subpath_vtt).unwrap();
+    assert_eq!(format, FileFormat::WebVideoTextTracks);
+    let vtt = fs::read_to_string(subpath_vtt).unwrap();
+    assert!(vtt.contains("unhinged behavior"));
+}
+
+
 // This test to check that we are able to download WVTT subtitles and convert them to SRT (currently
 // uses MP4Box).
 #[test]
@@ -164,3 +193,41 @@ fn test_subtitles_convert_wvtt () {
     let srt = fs::read_to_string(subpath_srt).unwrap();
     assert!(srt.contains("Vivacissimo!"));
 }
+
+
+// STPP subtitles are muxed into the output media stream, so we need to download audio and video for
+// this type. So we don't run this test on CI infrastructure.
+#[tokio::test]
+async fn test_subtitles_stpp() {
+    if env::var("CI").is_ok() {
+        return;
+    }
+    let mpd = "https://rdmedia.bbc.co.uk/elephants_dream/1/client_manifest-all.mpd";
+    let tmpd = TempDir::new().unwrap()
+        .into_persistent_if(env::var("TEST_PERSIST_FILES").is_ok());
+    let out = tmpd.child("elephants-dream-bbc.mp4");
+    let mut subpath = out.to_path_buf();
+    subpath.set_extension("ttml");
+    let subpath = Path::new(&subpath);
+    cargo_bin_cmd!()
+        .args(["-v",
+               "--quality", "worst",
+               "--write-subs",
+               "-v",
+               "-o", &out.to_string_lossy(), mpd])
+        .assert()
+        .success();
+    assert!(fs::metadata(subpath).is_ok());
+    let format = FileFormat::from_file(subpath).unwrap();
+    assert_eq!(format, FileFormat::TimedTextMarkupLanguage);
+    let ttml = fs::read_to_string(subpath).unwrap();
+    assert!(ttml.contains("http://www.w3.org/ns/ttml"));
+    assert!(ttml.contains("just for you Proog."));
+    let meta = ffprobe(&out).unwrap();
+    assert_eq!(meta.streams.len(), 3);
+    let stpp = &meta.streams[2];
+    assert_eq!(stpp.codec_tag_string, "stpp");
+    check_media_duration(&out, 632.0);
+}
+
+
