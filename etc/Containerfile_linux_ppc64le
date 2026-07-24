@@ -40,6 +40,7 @@ RUN apt-get update && apt-get install -y build-essential g++ python3 make cmake 
 FROM --platform=linux/ppc64le docker.io/alpine:latest AS builder
 WORKDIR /src
 COPY ./ ./
+ENV RUSTFLAGS='--cfg reqwest_unstable'
 RUN apk update && \
     apk upgrade && \
     apk add --no-cache bash curl bsd-compat-headers linux-headers build-base file musl-dev \
