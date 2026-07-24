@@ -5,6 +5,10 @@ on: workflow_dispatch
 
 name: Build MacOS universal binary
 
+# This is currently needed to build the http3 functionality in the reqwest crate
+env:
+  RUSTFLAGS: '--cfg reqwest_unstable'
+
 jobs:
   build-universal:
     runs-on: macos-26

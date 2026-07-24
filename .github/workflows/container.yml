@@ -6,6 +6,10 @@
 
 name: Build container image
 
+# This is currently needed to build the http3 functionality in the reqwest crate
+env:
+  RUSTFLAGS: '--cfg reqwest_unstable'
+
 on: workflow_dispatch
 
 env:
@@ -32,6 +36,8 @@ jobs:
 
       - name: Checkout sources
         uses: actions/checkout@v7.0.0
+        with:
+           fetch-depth: 0
 
       - name: Log in to ghcr.io
         uses: redhat-actions/podman-login@v1

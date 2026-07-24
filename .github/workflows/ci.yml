@@ -2,6 +2,10 @@ on: [push]
 
 name: build
 
+# This is currently needed to build the http3 functionality in the reqwest crate
+env:
+  RUSTFLAGS: '--cfg reqwest_unstable'
+
 jobs:
   check:
     name: dash-mpd-cli check/nightly
@@ -10,9 +14,6 @@ jobs:
       - uses: actions/checkout@v7.0.0
         with:
            fetch-depth: 0
-
-      - name: Install protobuf compiler
-        run: sudo apt-get update && sudo apt-get install protobuf-compiler
 
       - uses: actions-rust-lang/setup-rust-toolchain@v1.17.0
 
@@ -42,6 +43,7 @@ jobs:
       - run: cargo test --jobs 1 --features sandbox -- --show-output
       - run: cargo doc --no-deps --all-features
 
+
   build-macos:
     runs-on: macos-latest
     steps:
@@ -50,9 +52,6 @@ jobs:
       - uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
-
-      - name: Install protobuf compiler
-        run: brew install protobuf cmake
 
       - name: Build binary
         run: cargo build --jobs 1 --verbose
@@ -109,9 +108,6 @@ jobs:
         update: true
         install: base-devel autotools mingw-w64-ucrt-x86_64-toolchain mingw-w64-ucrt-x86_64-rust mingw-w64-ucrt-x86_64-gcc
         path-type: inherit
-
-    - name: install protobuf compiler
-      run: choco install --yes --limit-output -–no-progress protoc
 
     - name: install NASM for rustls-tls build
       run: |
