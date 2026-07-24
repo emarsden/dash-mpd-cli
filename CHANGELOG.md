@@ -1,5 +1,53 @@
 # Changelog
 
+## [0.2.34] - 2026-07-24
+
+- Implement support for TTML (Timed Text Markup Language) subtitles that are encoded using the STPP
+  codec and packed in fragmented MP4 segments. These subtitles are provided as a separate media
+  stream of fMP4 segments, that the media player retrieves incrementally. This library is able to
+  extract the XML-formatted TTML fragments from an MP4 fragment, to parse the TTML fragment to
+  extract `<style>`, `<region>` and `<p>` elements, and to serialize them to a single merged TTML
+  subtitle file. We only support the text-only IMSC1 profile for subtitles ("stpp.ttml.im1t"); the
+  image-only profile ("stpp.ttml.im1i") is not supported.
+
+- Implement support for VTT subtitles that are distributed in fragmented MP4 segments, using
+  SegmentTemplate or SegmentTemplate>SegmentTimeline addressing. This is a complement to the
+  existing support for VTT subtitles distributed as a sidecar.
+
+- Subtitles embedded in an output MP4 file now include the subtitle language in the metadata for the
+  subtitle track.
+
+- Account for `@endNumber` in a SegmentTemplate element. This attribute does not seem to be
+  officially documented in the ISO and DASH-IF specifications, but support for it is implemented in
+  the reference dash.js player, and the attribute is used by some manifests in the wild.
+
+- When retrieving content from a multi-codec manifest (that includes multiple Representation
+  elements with different video codecs), it is now possible to specify a preference ordering for the
+  video codec. Use the new commandline option `--prefer-video-codecs`.
+
+- When retrieving content from a manifest that offers multiple Representation elements
+  for the video stream (with different resolutions, or different codecs for example), it is now
+  possible to select the Representation to retrieve by its `id` attribute. You can specify the full
+  id of the desired Representation, or a substring of the id which will then be combined with other
+  user-specified preferences (on video width, height, codec and quality) to select the video stream
+  that will be retrieved. Use the new commandline option `--want-video-id`.
+
+- Improve the way in which video stream selection is implemented, to allow selection based on both
+  video width/height and codec and quality, in situations where multiple Representations are
+  available with the same resolution but different codecs or quality settings. If there are multiple
+  Representations with the same “score” with respect to a user-specified parameter (for example,
+  several Representations with the same video resolution but with different codecs), all identical
+  score Representations will now be passed on to the next filtering stage, whereas previously only
+  one Representation (the first listed in the manifest) would be selected. Filtering of video
+  Representations takes place in the following order:
+
+  - @id substring
+  - video width
+  - video height
+  - video codec
+  - quality/bandwidth (defaulting to the lowest quality and file size)
+
+
 ## [0.2.33] - 2026-05-17
 
 New commandline option `--prefer-video-codecs` which accepts a comma-separated list of the form

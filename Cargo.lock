@@ -1071,7 +1071,7 @@ dependencies = [
 
 [[package]]
 name = "dash-mpd-cli"
-version = "0.2.33"
+version = "0.2.34"
 dependencies = [
  "anyhow",
  "assert_cmd",

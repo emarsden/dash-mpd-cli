@@ -26,8 +26,8 @@ Matroska, AVI). There is a good explanation of adaptive bitrate video streaming 
 This commandline application allows you to **download streaming video** or audio to your local
 device. This involves selecting the alternative with the most appropriate encoding (in terms of
 bitrate, codec, etc.), fetching segments of the content using HTTP or HTTPS requests and muxing
-audio and video segments together. There is also support for downloading subtitles (mostly WebVTT,
-TTML, SRT, tx3g and SMIL formats, with some support for wvtt format).
+audio and video segments together. There is also support for downloading **subtitles** (WebVTT,
+TTML, SRT, tx3g and SMIL formats).
 
 This application builds on the [dash-mpd](https://crates.io/crates/dash-mpd) crate. It works for
 streaming that uses DASH adaptive streaming (MPD manifests), and doesn’t currently have support for
@@ -59,9 +59,10 @@ The following features are supported:
   authentication information is sent both to the server which hosts the DASH manifest, and to the
   server that hosts the media segments (the latter often being a CDN).
 
-- **Subtitles**: download support for WebVTT, TTML, SRT, tx3g and SMIL streams, as well as some support
-  for the wvtt format. We support both subtitles published as a complete file and segmented
-  subtitles made available in media fragments.
+- **Subtitles**: download support for WebVTT, TTML, SRT, tx3g, SMIL and wvtt streams. We support
+  both subtitles published as a complete file (a “sidecar”) and segmented subtitles made available
+  in media fragments to be downloaded on demand (for example using the `stpp.ttml.im1t` or
+  `stpp.ttml.im1i` codecs).
 
 - The application can read **cookies** from the Firefox, Chromium, Chrome, ChromeBeta, Safari and
   Edge browsers on Linux, Windows and MacOS, thanks to the
@@ -96,7 +97,7 @@ The following features are supported:
 
 - XLink elements (only with actuate=onLoad semantics), including resolve-to-zero.
 
-- All forms of segment index info: SegmentBase@indexRange, SegmentTimeline,
+- All forms of segment addressing: SegmentBase@indexRange, SegmentTimeline,
   SegmentTemplate@duration, SegmentTemplate@index, SegmentList.
 
 - Media containers of types supported by mkvmerge, ffmpeg, VLC or MP4Box (this includes ISO-BMFF /
@@ -142,7 +143,7 @@ Linux, Microsoft Windows and MacOS). It’s available in the GitHub Container Re
 > [!TIP]
 > What are the **advantages of running in a container**, instead of natively on your machine?
 >
-> - Much safer, because the container isn't able to modify your host machine, except for writing
+> - Much safer, because the container isn’t able to modify your host machine, except for writing
 >   downloaded media to the directory you specify. This is a very good idea when running random
 >   software you downloaded from the internet!
 >
@@ -336,7 +337,6 @@ not work with other applications:
 ## Building
 
 ```
-$ sudo apt install protobuf-compiler
 $ git clone https://github.com/emarsden/dash-mpd-cli
 $ cd dash-mpd-cli
 $ cargo build --release
