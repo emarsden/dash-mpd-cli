@@ -51,20 +51,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Rust
-        run: |
-          brew update
-          brew upgrade || true
-          brew install rustup
-          export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
-          rustup install stable-aarch64-apple-darwin
-          rustup target add x86_64-apple-darwin
-
-      - name: Build binary
-        run: cargo build --jobs 1 --verbose
-
-      # The "|| true" on upgrade is to work around homebrew conflicts between GitHub-installed Python versions
-      # and those required by our packages.
       - name: Install GPAC/MP4Box
         run: |
           HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1 brew install gpac
@@ -90,8 +76,18 @@ jobs:
       - name: Install xsltproc
         run: brew install libxslt
 
-      - name: Run tests
-        run: cargo test --jobs 1 -- --show-output
+      # The "|| true" on upgrade is to work around homebrew conflicts between GitHub-installed Python versions
+      # and those required by our packages.
+      - name: Install Rust and run tests
+        run: |
+          brew update
+          brew upgrade || true
+          brew install rustup
+          export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
+          rustup install stable-aarch64-apple-darwin
+          rustup target add x86_64-apple-darwin
+          cargo build --jobs 1 --verbose
+          cargo test --jobs 1 -- --show-output
 
 
   build-windows:
