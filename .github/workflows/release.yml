@@ -100,11 +100,6 @@ jobs:
       with:
          fetch-depth: 0
 
-    # This github-action fails on MacOS
-#     - uses: actions-rust-lang/setup-rust-toolchain@v1.17.0
-#       with:
-#          target: x86_64-apple-darwin,aarch64-apple-darwin
-
     - uses: mlugg/setup-zig@v2
 
     - run: |

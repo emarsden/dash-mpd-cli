@@ -51,6 +51,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install Rust
+        run: |
+          brew update
+          brew upgrade || true
+          brew install rustup
+          export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
+          rustup install stable-aarch64-apple-darwin
+          rustup target add x86_64-apple-darwin
+
       - name: Build binary
         run: cargo build --jobs 1 --verbose
 
@@ -58,8 +67,6 @@ jobs:
       # and those required by our packages.
       - name: Install GPAC/MP4Box
         run: |
-          brew update
-          brew upgrade || true
           HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1 brew install gpac
 
       - name: Install ffmpeg
@@ -82,12 +89,6 @@ jobs:
 
       - name: Install xsltproc
         run: brew install libxslt
-
-      - name: Install Rust
-        run: |
-          brew install rustup
-          rustup install stable-x86_64-apple-darwin
-          rustup install stable-aarch64-apple-darwin
 
       - name: Run tests
         run: cargo test --jobs 1 -- --show-output

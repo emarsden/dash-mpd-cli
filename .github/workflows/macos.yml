@@ -18,16 +18,18 @@ jobs:
       with:
         fetch-depth: 0
 
-    - uses: actions-rust-lang/setup-rust-toolchain@v1.17.0
-      with:
-        targets: x86_64-apple-darwin,aarch64-apple-darwin
-
     - uses: mlugg/setup-zig@v2
 
     - run: |
-        brew install protobuf
+        brew install rustup
+        export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
+        rustup install stable-aarch64-apple-darwin
+        rustup target add x86_64-apple-darwin
         cargo install --locked cargo-zigbuild
         cargo zigbuild --release --target universal2-apple-darwin
+
+
+
 
 #         podman pull docker.io/messense/cargo-zigbuild
 #         podman run --rm \
