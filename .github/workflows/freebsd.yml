@@ -13,7 +13,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v7.0.0
+    - uses: actions/checkout@v7.0.1
     - name: Run tests in FreeBSD VM
       uses: cross-platform-actions/action@v1.3.0
       with:
