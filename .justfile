@@ -49,6 +49,7 @@ duplicates:
     cargo tree --duplicates
 
 
+[env("RUSTFLAGS", "--cfg reqwest_unstable")]
 termux:
     cargo update
     cargo test --no-default-features -- --show-output
@@ -56,6 +57,7 @@ termux:
 # Build with the UCRT64 enviroment of MSYS, using a restricted PATH to limit the possibility of
 # conflicts with non-mingw applications (in particular for autoconf and the C compiler that are
 # needed to build the protobuf-src crate).
+[env("RUSTFLAGS", "--cfg reqwest_unstable")]
 mingw:
     PATH=/ucrt64/bin:/usr/local/bin:/usr/bin:/bin:/c/windows/System32:/c/ProgramData/chocolatey/bin cargo build --release
 
@@ -143,6 +145,7 @@ macos-universal:
        bash -c "curl -L --output /tmp/protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v34.0/protoc-34.0-linux-x86_64.zip && unzip /tmp/protoc.zip -d /tmp/protoc && mv /tmp/protoc/bin/protoc /usr/bin && cargo zigbuild --release --target universal2-apple-darwin"
 
 
+[env("RUSTFLAGS", "--cfg reqwest_unstable")]
 publish:
-  cargo test
-  cargo publish
+    cargo test
+    cargo publish
