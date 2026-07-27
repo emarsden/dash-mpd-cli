@@ -57,7 +57,7 @@ on the attributes of the available streams, similar to that shown below:
 10:45:17  INFO   subs          Wvtt/wvtt |    zh-hans | role=subtitle
 ```
 
-The list belows specifies the **order** in which these preferences are handled:
+The list below specifies the **order** in which these preferences are handled:
 
 - First filter out AdaptationSets in the manifest that do not correspond to our language
   preference. If not language preference is specified, no filtering takes place. If multiple

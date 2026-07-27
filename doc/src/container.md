@@ -129,7 +129,7 @@ podman run --rm --tty --pull=newer \
   -v <MPD-URL> -o foo.mp4
 ```
 
-If you don't use the `--rm` argument, you can later delete the image if you no longer need it using
+If you don’t use the `--rm` argument, you can later delete the image if you no longer need it using
 `podman image rm` with the image id shown by `podman images`, as illustrated below:
 
 > [!NOTE]
