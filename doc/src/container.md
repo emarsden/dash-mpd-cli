@@ -45,11 +45,12 @@ The container is currently available for the following **platforms**:
 >
 > Why run the application in a container, instead of natively on your machine?
 >
-> - Good internet hygiene. It’s much safer, because the container is **sandboxed**: it can’t modify
->   your host machine, except for writing downloaded media to the directory you specify. This
->   is a very good idea when running random software you downloaded from the internet! The xz
->   backdoor attempt discovered in 2024 shows how much effort malicious actors are willing to make to
->   compromise peoples’ computers; don’t make it easier than it should be.
+> - Good internet hygiene. Though not a bulletproof guarantee, it’s much safer, because the
+>   container is **sandboxed**: it can’t modify your host machine, except for writing downloaded
+>   media to the directory you specify. This is a very good idea when running random software you
+>   downloaded from the internet! The xz backdoor attempt discovered in 2024 shows how much effort
+>   malicious actors are willing to make to compromise peoples’ computers; don’t make it easier than
+>   it should be.
 >
 > - No need to install the various helper applications (ffmpeg, mkvmerge, mp4decrypt, MP4Box),
 >   which are already present in the container.
@@ -112,18 +113,19 @@ Then to download some content from an MPD manifest:
 > **Run dash-mpd-cli in the container**
 >
 > ```shell
-> podman run --rm --tty -v .:/content ghcr.io/emarsden/dash-mpd-cli https://example.com/manifest.mpd
+> podman run --rm --tty --tz=local -v .:/content ghcr.io/emarsden/dash-mpd-cli https://example.com/manifest.mpd
 > ```
 
 This should save the media to a file named something like `example.com_manifest.mp4` 💪 (you can
-change this name by adding `-o foo.mp4`). It will remove the container image from your local storage
-once the download is finished (`--rm`) and will use a terminal to show a progress bar (`--tty`).
+change this name by adding `-o foo.mp4` after the URL). It will remove the container image from your
+local storage once the download is finished (`--rm`) and will use a terminal to show a progress bar
+(`--tty`).
 
 If you want your local copy of the container image to be **updated if a newer one is available** from
 the registry, add `--pull=newer`:
 
 ```
-podman run --rm --tty --pull=newer \
+podman run --rm --tty --tz=local --pull=newer \
   -v .:/content \
   ghcr.io/emarsden/dash-mpd-cli \
   -v <MPD-URL> -o foo.mp4
