@@ -115,7 +115,7 @@ jobs:
     name: Push container to registry
     steps:
       - name: Log in to ghcr.io
-        uses: redhat-actions/podman-login@v1.7
+        uses: redhat-actions/podman-login@v2.0
         with:
           username: ${{ env.REGISTRY_USER }}
           password: ${{ env.REGISTRY_PASSWORD }}
