@@ -33,20 +33,24 @@ setup-coverage-tools:
 
 
 # Requires cargo-audit from https://crates.io/crates/cargo-audit
+[env("RUSTFLAGS", "--cfg reqwest_unstable")]
 audit:
     cargo audit
 
 # Requires cargo-udeps from https://github.com/est31/cargo-udeps
+[env("RUSTFLAGS", "--cfg reqwest_unstable")]
 udeps:
     cargo +nightly udeps
 
 
-pedantic:
-    cargo clippy -- -Wclippy::pedantic -Aclippy::manual_string_new -Aclippy::cast_precision_loss -Aclippy::cast_possible_truncation -Aclippy::cast_sign_loss -Aclippy::too_many_lines -Aclippy::doc_markdown
-
-
+[env("RUSTFLAGS", "--cfg reqwest_unstable")]
 duplicates:
     cargo tree --duplicates
+
+
+[env("RUSTFLAGS", "--cfg reqwest_unstable")]
+pedantic:
+    cargo clippy -- -Wclippy::pedantic -Aclippy::manual_string_new -Aclippy::cast_precision_loss -Aclippy::cast_possible_truncation -Aclippy::cast_sign_loss -Aclippy::too_many_lines -Aclippy::doc_markdown
 
 
 [env("RUSTFLAGS", "--cfg reqwest_unstable")]
