@@ -30,7 +30,7 @@ unit-prefix = "0.5.2"
 url = "2.5.8"
 anyhow = "1.0.104"
 tempfile = "3.27.0"
-decrypt-cookies = { version = "0.11.1", optional = true }
+decrypt-cookies = { version = "0.11.2", optional = true }
 
 
 [dev-dependencies]
@@ -70,4 +70,4 @@ codegen-units = 1
 
 
 [target.'cfg(target_os="macos")'.dependencies]
-decrypt-cookies = { version = "0.11.1", features = ["Safari"], optional = true }
+decrypt-cookies = { version = "0.11.2", features = ["Safari"], optional = true }
