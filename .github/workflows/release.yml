@@ -49,7 +49,7 @@ jobs:
         overwrite: true
 
     - name: Generate artifact attestation
-      uses: actions/attest-build-provenance@v4.1.1
+      uses: actions/attest-build-provenance@v4.2.2
       with:
         subject-path: target/x86_64-unknown-linux-musl/release/dash-mpd-cli
 
@@ -85,7 +85,7 @@ jobs:
         overwrite: true
 
     - name: Generate artifact attestation
-      uses: actions/attest-build-provenance@v4.1.1
+      uses: actions/attest-build-provenance@v4.2.2
       with:
         subject-path: target/aarch64-unknown-linux-gnu/release/dash-mpd-cli
 
@@ -127,7 +127,7 @@ jobs:
         overwrite: true
 
     - name: Generate artifact attestation
-      uses: actions/attest-build-provenance@v4.1.1
+      uses: actions/attest-build-provenance@v4.2.2
       with:
         subject-path: target/universal2-apple-darwin/release/dash-mpd-cli
 
@@ -173,6 +173,6 @@ jobs:
         overwrite: true
 
     - name: Generate artifact attestation
-      uses: actions/attest-build-provenance@v4.1.1
+      uses: actions/attest-build-provenance@v4.2.2
       with:
         subject-path: target/release/dash-mpd-cli.exe
