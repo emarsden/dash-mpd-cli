@@ -19,8 +19,9 @@
 //
 // Example usage: dash-mpd-cli --timeout 5 --output=/tmp/foo.mp4 https://v.redd.it/zv89llsvexdz/DASHPlaylist.mpd
 
+use std::fs::File;
 use std::env;
-use std::io::{self, Write};
+use std::io::{self, Write, BufRead, BufReader};
 use std::path::Path;
 use std::net::IpAddr;
 use std::str::FromStr;
@@ -30,6 +31,7 @@ use std::collections::HashMap;
 use url::Url;
 use fs_err as fs;
 use reqwest::header;
+use reqwest::cookie::Jar;
 use clap::{Arg, ArgAction, ValueHint};
 use unit_prefix::{NumberPrefix, Prefix};
 use indicatif::{ProgressBar, ProgressStyle};
@@ -134,6 +136,48 @@ async fn check_newer_version() -> Result<()> {
     }
     Ok(())
 }
+
+
+// Parse a Netscape-style cookies.txt file and return a cookie jar of the type accepted by reqwest.
+//
+// We do this parsing ourselves instead of using one of the several existing crates for this,
+// because it's simple, and because the cookies.txt format exported by the "Export Cookies" Firefox
+// extension uses floating point numbers for the expiration time, rather than seconds as originally
+// specified and as expected by cookiestxt-rs and netscape-cookie-file-parser crates.
+fn load_netscape_cookies(cookies_txt_path: &str, jar: &Jar) -> Result<()> {
+    let file = File::open(cookies_txt_path)
+        .context("opening Netscape cookie file")?;
+    let reader = BufReader::new(file);
+    for line in reader.lines() {
+        let line = line?;
+        // Netscape cookies.txt: domain  flag  path  secure  expiration  name  value
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+        let fields: Vec<&str> = line.split('\t').collect();
+        if fields.len() != 7 {
+            continue;
+        }
+        let domain = fields[0];
+        let path = fields[2];
+        let secure = fields[3].eq_ignore_ascii_case("TRUE");
+        let name = fields[5];
+        let value = fields[6];
+
+        // Jar::add_cookie_str needs a URL to determine the cookie's scope.
+        let scheme = if secure { "https" } else { "http" };
+        let url = Url::parse(&format!("{scheme}://{domain}{path}"))?;
+
+        let cookie = format!(
+            "{}={}; Domain={}; Path={}",
+            name, value, domain, path
+        );
+        jar.add_cookie_str(&cookie, &url);
+    }
+
+    Ok(())
+}
+
 
 
 #[tokio::main]
@@ -489,7 +533,12 @@ async fn main () -> Result<()> {
                  .action(ArgAction::SetTrue)
                  .num_args(0)
                  .exclusive(true)
-                 .help("Show valid values for BROWSER argument to --cookies-from-browser on this computer, then exit."));
+                 .help("Show valid values for BROWSER argument to --cookies-from-browser on this computer, then exit."))
+            .arg(Arg::new("cookies-from-file")
+                .long("cookies-from-file")
+                .value_name("COOKIES_TXT")
+                .num_args(1)
+                .help("Load cookies from Netscape cookies file COOKIES_TXT"));
     }
     #[cfg(feature = "sandbox")]
     {
@@ -562,12 +611,19 @@ async fn main () -> Result<()> {
     #[cfg(feature = "cookies")]
     if let Some(browser_name) = matches.get_one::<String>("cookies-from-browser") {
         let cookies = read_browser_cookies(browser_name).await?;
-        let jar =  reqwest::cookie::Jar::default();
+        let jar =  Jar::default();
         for (header, url_str) in &cookies {
             if let Ok(url) = reqwest::Url::parse(url_str) {
                 jar.add_cookie_str(header, &url);
             }
         }
+        cb = cb.cookie_store(true).cookie_provider(Arc::new(jar));
+    }
+    #[cfg(feature = "cookies")]
+    if let Some(netscape_cookie_file) = matches.get_one::<String>("cookies-from-file") {
+        let jar = Jar::default();
+        load_netscape_cookies(netscape_cookie_file, &jar)
+            .context("parsing Netscape cookie file")?;
         cb = cb.cookie_store(true).cookie_provider(Arc::new(jar));
     }
     if verbosity > 2 {

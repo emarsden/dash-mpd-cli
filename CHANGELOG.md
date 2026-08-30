@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.35] - Unreleased
+
+- New commandline option `--cookies-from-file` that accepts a Netscape-style cookies.txt file to
+  specify HTTP cookies to be used the authenticate network requests. This is a complement to the
+  existing `--cookies-from-browser` support for reading cookies from the cache of a locally
+  installed web browser.
+
+
 ## [0.2.34] - 2026-07-24
 
 - Implement support for TTML (Timed Text Markup Language) subtitles that are encoded using the STPP

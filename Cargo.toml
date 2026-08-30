@@ -19,7 +19,7 @@ tracing = { version = "0.1.44", features = ["attributes"] }
 tracing-subscriber = { version = "0.3.23", features = ["env-filter", "time", "json", "fmt", "std"] }
 time = { version = "0.3.54", features = ["local-offset"] }
 dash-mpd = { version = "0.20.4", default-features = false, features = ["fetch", "compression", "scte35", "http2", "http3"] }
-reqwest = { version = "0.13.4", default-features = false, features = ["gzip", "socks", "json", "cookies", "http2", "rustls"] }
+reqwest = { version = "0.13.4", default-features = false, features = ["gzip", "socks", "json", "cookies", "http2", "http3", "rustls"] }
 indicatif = "0.18.6"
 clap = { version = "4.5.60", features = ["cargo", "unicode", "wrap_help"] }
 serde_json = "1.0.151"
@@ -34,19 +34,19 @@ decrypt-cookies = { version = "0.11.2", optional = true }
 
 
 [dev-dependencies]
-rustls = { version = "0.23.42", features = ["aws_lc_rs"] }
+rustls = { version = "0.23.43", features = ["aws_lc_rs"] }
 rustls-pki-types = "1.15.1"
 tokio = { version = "1.53.1", features = ["rt-multi-thread", "time", "macros"] }
 tokio-rustls = "0.26.4"
 tracing-subscriber = { version = "0.3.23", features = ["env-filter", "json", "fmt", "time", "std"] }
 test-log = { version = "0.2.21", features = ["trace"] }
-http = "1.4.2"
+http = "1.5.0"
 hyper = "1.11.0"
 hyper-util = "0.1.20"
 axum = { version = "0.8.9", features = ["tokio", "http1"] }
 axum-auth = "0.8.1"
 axum-server = { version = "0.8.0", features = ["tls-rustls"] }
-quick-xml = { version = "0.41.0", features = ["serialize"] }
+quick-xml = { version = "0.42.0", features = ["serialize"] }
 mp4 = "0.14.0"
 lazy_static = "1.5.0"
 ffprobe = "0.4.0"
