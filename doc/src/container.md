@@ -93,46 +93,37 @@ used to run the container:
 
 This step is not necessary on Linux.
 
-You can then fetch the container image (currently around 220 MB, though this depends on the
-architecture) from the GitHub container registry `ghcr.io` and save it to your local disk for later
-use:
-
-> [!NOTE]
->
-> **Fetch the container image**
->
-> ```shell
-> podman pull ghcr.io/emarsden/dash-mpd-cli
-> ```
-
-
-Then to download some content from an MPD manifest:
+To download some content from an MPD manifest:
 
 > [!NOTE]
 >
 > **Run dash-mpd-cli in the container**
 >
 > ```shell
-> podman run --rm --tty --tz=local -v .:/content ghcr.io/emarsden/dash-mpd-cli https://example.com/manifest.mpd
+> podman run --rm --read-only --tty --tz=local -v .:/content ghcr.io/emarsden/dash-mpd-cli https://example.com/manifest.mpd
 > ```
 
 This should save the media to a file named something like `example.com_manifest.mp4` 💪 (you can
 change this name by adding `-o foo.mp4` after the URL). It will remove the container image from your
-local storage once the download is finished (`--rm`) and will use a terminal to show a progress bar
-(`--tty`).
+local storage once the download is finished (`--rm`), will use a terminal to show a progress bar
+(`--tty`), and not allow writing to the local container image (`--read-only`).
+
+The first time you run this, it will fetch the container image (currently around 220 MB, though this
+depends on the architecture) from the GitHub container registry `ghcr.io` and save it to your local
+disk for later use.
 
 If you want your local copy of the container image to be **updated if a newer one is available** from
 the registry, add `--pull=newer`:
 
 ```
-podman run --rm --tty --tz=local --pull=newer \
+podman run --rm --read-only --tty --tz=local --pull=newer \
   -v .:/content \
   ghcr.io/emarsden/dash-mpd-cli \
   -v <MPD-URL> -o foo.mp4
 ```
 
-If you don’t use the `--rm` argument, you can later delete the image if you no longer need it using
-`podman image rm` with the image id shown by `podman images`, as illustrated below:
+You can later delete the image from your local storage if you no longer need it using `podman image
+rm` with the image id shown by `podman images`, as illustrated below:
 
 > [!NOTE]
 >
