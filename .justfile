@@ -33,6 +33,8 @@ setup-coverage-tools:
 
 
 # Requires cargo-audit from https://crates.io/crates/cargo-audit
+#
+# Useful info on hardening container images: https://www.grepular.com/Hardening_Container_Images
 [env("RUSTFLAGS", "--cfg reqwest_unstable")]
 audit:
     cargo audit

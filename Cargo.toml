@@ -17,14 +17,14 @@ publish = true
 tokio = { version = "1.53.1", features = ["rt-multi-thread", "macros"] }
 tracing = { version = "0.1.44", features = ["attributes"] }
 tracing-subscriber = { version = "0.3.23", features = ["env-filter", "time", "json", "fmt", "std"] }
-time = { version = "0.3.54", features = ["local-offset"] }
-dash-mpd = { version = "0.20.4", default-features = false, features = ["fetch", "compression", "scte35", "http2", "http3"] }
-reqwest = { version = "0.13.4", default-features = false, features = ["gzip", "socks", "json", "cookies", "http2", "http3", "rustls"] }
+time = { version = "0.3.55", features = ["local-offset"] }
+dash-mpd = { version = "0.20.5", default-features = false, features = ["fetch", "compression", "scte35", "http2", "http3"] }
+reqwest = { version = "0.13.5", default-features = false, features = ["gzip", "socks", "json", "cookies", "http2", "http3", "rustls"] }
 indicatif = "0.18.6"
 clap = { version = "4.5.60", features = ["cargo", "unicode", "wrap_help"] }
 serde_json = "1.0.151"
 json-escape = "0.3.1"
-versions = "7.0.0"
+versions = "8.0.1"
 fs-err = "3.3.1"
 unit-prefix = "0.5.2"
 url = "2.5.8"
@@ -34,14 +34,14 @@ decrypt-cookies = { version = "0.11.2", optional = true }
 
 
 [dev-dependencies]
-rustls = { version = "0.23.43", features = ["aws_lc_rs"] }
+rustls = { version = "0.23.45", features = ["aws_lc_rs"] }
 rustls-pki-types = "1.15.1"
 tokio = { version = "1.53.1", features = ["rt-multi-thread", "time", "macros"] }
-tokio-rustls = "0.26.4"
+tokio-rustls = "0.26.5"
 tracing-subscriber = { version = "0.3.23", features = ["env-filter", "json", "fmt", "time", "std"] }
 test-log = { version = "0.2.21", features = ["trace"] }
 http = "1.5.0"
-hyper = "1.11.0"
+hyper = "1.11.1"
 hyper-util = "0.1.20"
 axum = { version = "0.8.9", features = ["tokio", "http1"] }
 axum-auth = "0.8.1"
