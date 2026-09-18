@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.35] - Unreleased
+## [0.2.35] - 2026-09-18
 
 - New commandline option `--cookies-from-file` that accepts a Netscape-style cookies.txt file to
   specify HTTP cookies to be used the authenticate network requests. This is a complement to the
