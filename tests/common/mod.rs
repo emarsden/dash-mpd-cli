@@ -6,15 +6,12 @@ use std::env;
 use std::path::Path;
 use std::process::Command;
 use std::io::Cursor;
+use std::sync::Once;
 use ffprobe::ffprobe;
 use anyhow::{Context, Result};
-use lazy_static::lazy_static;
-use std::sync::Once;
 
 
-lazy_static! {
-    static ref TRACING_INIT: Once = Once::new();
-}
+static TRACING_INIT: Once = Once::new();
 
 pub fn setup_logging() {
     use tracing_subscriber::{EnvFilter, fmt, prelude::*};
