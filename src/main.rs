@@ -19,9 +19,8 @@
 //
 // Example usage: dash-mpd-cli --timeout 5 --output=/tmp/foo.mp4 https://v.redd.it/zv89llsvexdz/DASHPlaylist.mpd
 
-use std::fs::File;
 use std::env;
-use std::io::{self, Write, BufRead, BufReader};
+use std::io::{self, Write};
 use std::path::Path;
 use std::net::IpAddr;
 use std::str::FromStr;
@@ -31,6 +30,7 @@ use std::collections::HashMap;
 use url::Url;
 use fs_err as fs;
 use reqwest::header;
+#[cfg(feature = "cookies")]
 use reqwest::cookie::Jar;
 use clap::{Arg, ArgAction, ValueHint};
 use unit_prefix::{NumberPrefix, Prefix};
@@ -146,6 +146,9 @@ async fn check_newer_version() -> Result<()> {
 // specified and as expected by cookiestxt-rs and netscape-cookie-file-parser crates.
 #[cfg(feature = "cookies")]
 fn load_netscape_cookies(cookies_txt_path: &str, jar: &Jar) -> Result<()> {
+    use std::io::{BufRead, BufReader};
+    use std::fs::File;
+
     let file = File::open(cookies_txt_path)
         .context("opening Netscape cookie file")?;
     let reader = BufReader::new(file);
