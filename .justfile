@@ -132,7 +132,7 @@ trivy-repository:
 # Run a grype vulnerability scan of our container image
 # https://github.com/anchore/grype
 grype-container:
-    podman run --rm -it docker.io/anchore/grype ghcr.io/emarsden/dash-mpd-cli:latest
+    podman run --rm --pull=newer -it docker.io/anchore/grype ghcr.io/emarsden/dash-mpd-cli:latest
 
 
 # Using cargo-zigbuild from https://github.com/rust-cross/cargo-zigbuild
