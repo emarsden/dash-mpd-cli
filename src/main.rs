@@ -144,6 +144,7 @@ async fn check_newer_version() -> Result<()> {
 // because it's simple, and because the cookies.txt format exported by the "Export Cookies" Firefox
 // extension uses floating point numbers for the expiration time, rather than seconds as originally
 // specified and as expected by cookiestxt-rs and netscape-cookie-file-parser crates.
+#[cfg(feature = "cookies")]
 fn load_netscape_cookies(cookies_txt_path: &str, jar: &Jar) -> Result<()> {
     let file = File::open(cookies_txt_path)
         .context("opening Netscape cookie file")?;
