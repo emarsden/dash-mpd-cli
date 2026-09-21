@@ -17,7 +17,7 @@ jobs:
       with:
         fetch-depth: 0
     - name: Run tests in Solaris VM
-      uses: vmactions/solaris-vm@v1.3.9
+      uses: vmactions/solaris-vm@v1.4.0
       with:
         usesh: true
         prepare: |
