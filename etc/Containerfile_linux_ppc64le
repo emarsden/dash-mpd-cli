@@ -13,7 +13,7 @@
 #   podman build -f etc/Containerfile_linux_ppc64le --platform linux/ppc64le --tag dash-mpd-cli-linux-ppc64le --manifest dash-mpd-cli .
 
 
-# We build shaka-packager from source, because it's not packaged for Alpine Linux and not
+# We build shaka-packager from source, because as of 2026-09 it's not packaged for Alpine Linux and not
 # distributed in binary form for ppc64le by upstream. It doesn't build on Alpine Linux (with musl-libc)
 # due to a missing function definition concerning UnscaledCycleClock::Frequency() used by the
 # third-party library abseil-cpp. We build on Debian instead and link statically with glibc.
@@ -72,11 +72,9 @@ LABEL org.opencontainers.image.licenses "MIT"
 #   - mp4decrypt (from bento4): GNU GPL v2
 #   - xsltproc (from libxslt): MIT
 #   - Shaka packager: MIT
-#
-# As of 2023-12, bento4 is not packaged for ppc64le in Alpine Linux. Use shaka-packager instead.
 RUN apk update && \
     apk upgrade && \
-    apk add --no-cache ca-certificates libc6-compat wget ffmpeg mkvtoolnix libxslt && \
+    apk add --no-cache ca-certificates libc6-compat wget ffmpeg mkvtoolnix libxslt bento4 && \
     update-ca-certificates && \
     mkdir /content && \
     chown root:root /content && \
