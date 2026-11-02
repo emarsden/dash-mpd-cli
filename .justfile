@@ -7,6 +7,11 @@ default:
 
 version := `git describe --tags`
 
+[env("RUSTFLAGS", "--cfg reqwest_unstable")]
+test:
+    cargo test --jobs 1
+
+
 grcov:
   @echo 'Running tests for coverage with grcov'
   rm -rf ${CARGO_TARGET_DIR}/coverage
