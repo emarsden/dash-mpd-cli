@@ -29,11 +29,6 @@ use test_log::test;
 use common::check_file_size_approx;
 
 
-// lazy_static! {
-//     // A directory inside $TMPDIR that is persisted.
-//     static ref TMP: PathBuf = tempfile::TempDir::new().unwrap().keep();
-// }
-
 // A directory inside $TMPDIR that is persisted.
 static TMP: LazyLock<PathBuf> = LazyLock::new(|| tempfile::TempDir::new().unwrap().keep());
 

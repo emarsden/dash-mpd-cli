@@ -27,7 +27,7 @@ use axum::response::{Response, IntoResponse};
 use axum::http;
 use axum::body::Body;
 use axum_auth::AuthBearer;
-use dash_mpd::{MPD, Period, AdaptationSet, Representation, SegmentTemplate};
+use dash_mpd_core::{MPD, Period, AdaptationSet, Representation, SegmentTemplate};
 use anyhow::{Context, Result};
 use test_log::test;
 use tracing::info;

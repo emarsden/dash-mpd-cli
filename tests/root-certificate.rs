@@ -43,7 +43,7 @@ use axum::response::{Response, IntoResponse};
 use axum::http::{header, StatusCode};
 use axum::body::Body;
 use axum_server::{bind_rustls, tls_rustls::RustlsConfig};
-use dash_mpd::{MPD, Period, AdaptationSet, Representation, BaseURL};
+use dash_mpd_core::{MPD, Period, AdaptationSet, Representation, BaseURL};
 use anyhow::{Context, Result};
 use test_log::test;
 

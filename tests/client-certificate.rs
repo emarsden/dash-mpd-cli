@@ -50,7 +50,7 @@ use axum_server::tls_rustls::RustlsConfig;
 use rustls::{RootCertStore, ServerConfig};
 use rustls_pki_types::{CertificateDer, PrivateKeyDer, PrivatePkcs8KeyDer, pem::PemObject};
 use rustls::server::WebPkiClientVerifier;
-use dash_mpd::{MPD, Period, AdaptationSet, Representation, BaseURL};
+use dash_mpd_core::{MPD, Period, AdaptationSet, Representation, BaseURL};
 use anyhow::{Context, Result};
 use test_log::test;
 

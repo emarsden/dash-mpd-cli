@@ -25,7 +25,6 @@ use file_format::FileFormat;
 use assert_fs::{prelude::*, TempDir};
 use anyhow::{Context, Result};
 use test_log::test;
-
 use common::{check_file_size_approx, generate_minimal_mp4};
 
 
