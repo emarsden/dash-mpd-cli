@@ -22,12 +22,12 @@ jobs:
       - run: cargo build --no-default-features
 
       - name: Install ffmpeg
-        run: sudo apt-get install ffmpeg wget
+        run: sudo apt install ffmpeg wget
 
       - name: Install GPAC
         run: |
           wget -q -O /tmp/gpac.deb https://download.tsi.telecom-paristech.fr/gpac/new_builds/gpac_latest_head_linux64.deb
-          sudo dpkg -i /tmp/gpac.deb
+          sudo apt install /tmp/gpac.deb
 
       - name: Install Bento4 mp4decrypt
         run: |
