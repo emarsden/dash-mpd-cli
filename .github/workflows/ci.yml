@@ -15,7 +15,7 @@ jobs:
         with:
            fetch-depth: 0
 
-      - uses: actions-rust-lang/setup-rust-toolchain@v2.0.0
+      - uses: actions-rust-lang/setup-rust-toolchain@v2.0.1
 
       - run: cargo check
       - run: cargo build
@@ -101,7 +101,7 @@ jobs:
     - uses: actions/checkout@v7.0.1
       with:
          fetch-depth: 0
-    - uses: actions-rust-lang/setup-rust-toolchain@v2.0.0
+    - uses: actions-rust-lang/setup-rust-toolchain@v2.0.1
 
     # We need path-type of inherit to include important utility applications such as podman,
     # mp4decrypt, shaka-packager, ffmpeg, xsltproc on the $PATH for our tests. To be more precise,
