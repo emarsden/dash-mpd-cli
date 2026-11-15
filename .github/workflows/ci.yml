@@ -9,7 +9,7 @@ env:
 jobs:
   check:
     name: dash-mpd-cli check/nightly
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7.0.1
         with:
