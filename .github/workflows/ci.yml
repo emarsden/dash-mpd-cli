@@ -33,7 +33,7 @@ jobs:
           sudo install -m 0755 -d /etc/apt/keyrings
           sudo curl -fsSL https://dist.gpac.io/gpac/linux/gpg.asc -o /etc/apt/keyrings/gpac.asc
           sudo chmod a+r /etc/apt/keyrings/gpac.asc
-          printf "Types: deb\nURIs: https://dist.gpac.io/gpac/linux/ubuntu\nSuites: noble\nComponents: nightly\nSigned-By: /etc/apt/keyrings/gpac.asc\n" > /etc/apt/sources.list.d/gpac.sources
+          sudo printf "Types: deb\nURIs: https://dist.gpac.io/gpac/linux/ubuntu\nSuites: noble\nComponents: nightly\nSigned-By: /etc/apt/keyrings/gpac.asc\n" > /etc/apt/sources.list.d/gpac.sources
           sudo apt update
           sudo apt -y install gpac
 
