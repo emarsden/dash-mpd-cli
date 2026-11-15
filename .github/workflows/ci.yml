@@ -22,12 +22,20 @@ jobs:
       - run: cargo build --no-default-features
 
       - name: Install ffmpeg
-        run: sudo apt install ffmpeg wget
+        run: |
+          sudo apt update
+          sudo apt install -y ffmpeg
 
+      # see https://gpac.io/downloads/gpac-nightly-builds/
       - name: Install GPAC
         run: |
-          wget -q -O /tmp/gpac.deb https://download.tsi.telecom-paristech.fr/gpac/new_builds/gpac_latest_head_linux64.deb
-          sudo apt install /tmp/gpac.deb
+          sudo apt install -y ca-certificates curl wget
+          sudo install -m 0755 -d /etc/apt/keyrings
+          sudo curl -fsSL https://dist.gpac.io/gpac/linux/gpg.asc -o /etc/apt/keyrings/gpac.asc
+          sudo chmod a+r /etc/apt/keyrings/gpac.asc
+          printf "Types: deb\nURIs: https://dist.gpac.io/gpac/linux/ubuntu\nSuites: noble\nComponents: nightly\nSigned-By: /etc/apt/keyrings/gpac.asc\n" > /etc/apt/sources.list.d/gpac.sources
+          sudo apt update
+          sudo apt -y install gpac
 
       - name: Install Bento4 mp4decrypt
         run: |
