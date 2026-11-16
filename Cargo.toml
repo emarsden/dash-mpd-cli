@@ -46,7 +46,7 @@ hyper = "1.12.0"
 hyper-util = "0.1.21"
 axum = { version = "0.8.9", features = ["tokio", "http1"] }
 axum-auth = "0.8.1"
-axum-server = { version = "0.8.0", features = ["tls-rustls"] }
+axum-server = { version = "0.9.0", features = ["tls-rustls"] }
 quick-xml = { version = "0.42.0", features = ["serialize"] }
 mp4 = "0.14.0"
 ffprobe = "0.4.0"
