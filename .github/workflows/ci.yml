@@ -24,19 +24,17 @@ jobs:
       - name: Install ffmpeg
         run: |
           sudo apt update
-          sudo apt install -y ffmpeg
+          sudo apt install -y ffmpeg curl wget
 
-      # see https://gpac.io/downloads/gpac-nightly-builds/
-      - name: Install GPAC
+      # Not packaged for Ubuntu, the project builds at
+      # https://gpac.io/downloads/gpac-nightly-builds/
+      # don't install on the GH runners, so we build MP4Box from source.
+      - name: Build and install GPAC
         run: |
-          sudo apt install -y ca-certificates curl wget
-          sudo install -m 0755 -d /etc/apt/keyrings
-          sudo curl -fsSL https://dist.gpac.io/gpac/linux/gpg.asc -o /etc/apt/keyrings/gpac.asc
-          sudo chmod a+r /etc/apt/keyrings/gpac.asc
-          printf "Types: deb\nURIs: https://dist.gpac.io/gpac/linux/ubuntu\nSuites: noble\nComponents: nightly\nSigned-By: /etc/apt/keyrings/gpac.asc\n" > ${HOME}/gpac.sources
-          sudo mv ${HOME}/gpac.sources /etc/apt/sources.list.d
-          sudo apt update
-          sudo apt -y install gpac
+          git clone --depth 1 https://github.com/gpac/gpac.git
+          cd gpac && ./configure --static-bin
+          make -j 3
+          sudo mv bin/gcc/MP4Box /usr/local/bin
 
       - name: Install Bento4 mp4decrypt
         run: |
